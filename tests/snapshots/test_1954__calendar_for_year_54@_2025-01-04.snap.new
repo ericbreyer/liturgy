@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+assertion_line: 51
+expression: line
+---
+2025-01-04|Sabbato week II of Christmas|Simple|Octave of the Holy Innocents Martyrs|BVM on Saturday

@@ -1,0 +1,241 @@
+/**
+ * Shared CSS styles for liturgical components
+ * Use these classes consistently across all views for uniform appearance
+ */
+
+/* Feast Card Styles */
+.feast-card {
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+.feast-card:hover {
+  border-color: var(--accent-color);
+  background: var(--surface-elevated);
+}
+
+.feast-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.feast-info {
+  flex: 1;
+}
+
+.feast-title {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+/* Feast Line Styles (for compact display) */
+.feast-line {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  min-height: 1.2rem;
+  margin-bottom: 0.15rem;
+  overflow: hidden;
+}
+
+.feast-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.feast-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  margin-bottom: 0.05rem;
+}
+
+/* Responsive feast title */
+.feast-title {
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.1;
+  word-break: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Calendar grid feast title (smaller) */
+.calendar-day .feast-title {
+  font-size: 0.625rem;
+}
+
+@media (min-width: 1200px) {
+  .calendar-day .feast-title {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+}
+
+@media (max-width: 767px) {
+  .calendar-day .feast-title {
+    font-size: 0.55rem;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+  }
+}
+
+/* Commemoration count badge */
+.commemoration-count {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface-elevated);
+  padding: 0.0625rem 0.1875rem;
+  border-radius: 0.1875rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+@media (min-width: 1200px) {
+  .commemoration-count {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .commemoration-count {
+    font-size: 0.45rem;
+    padding: 0.0625rem 0.125rem;
+  }
+}
+
+/* Loading and error states */
+.no-selection {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  background: var(--surface-primary);
+  border-radius: 4px;
+  border: 1px solid var(--border-primary);
+}
+
+.no-calendars {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  background: var(--surface-primary);
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+}
+
+/* Category sections */
+.category-section {
+  margin-bottom: 2rem;
+}
+
+.category-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+.category-title {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.category-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.category-count {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* Novena-specific styles */
+.feast-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.feast-date,
+.novena-start {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.days-away {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+/* Controls and settings */
+.controls-section {
+  background: var(--surface-primary);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-primary);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.toggle-switch {
+  background: var(--surface-interactive);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.toggle-switch:hover {
+  border-color: var(--accent-color);
+}
+
+.toggle-switch.active {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}

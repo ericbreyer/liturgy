@@ -1,0 +1,196 @@
+name = "USA"
+
+# ---------- Feasts ----------
+# US-specific feast days and memorials
+
+[[feasts]]
+name = "St. Elizabeth Ann Seton"
+date_rule = "Fixed(1,4)"
+rank = "III"
+color = "White"
+titles = ["Religious"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. John Neumann"
+date_rule = "Fixed(1,5)"
+rank = "III"
+color = "White"
+titles = ["Bishop"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. André Bessette"
+date_rule = "Fixed(1,6)"
+rank = "IV"
+color = "White"
+titles = ["Religious"]
+day_type = "feast"
+
+[[feasts]]
+name = "Day of Prayer for the Legal Protection of Unborn Children"
+date_rule = "AvoidSunday(Fixed(1,22))"
+rank = "I"
+color = "White"
+titles = []
+day_type = "feria"
+
+[[feasts]]
+name = "St. Vincent"
+date_rule = "Fixed(1,23)"
+rank = "IV"
+color = "Red"
+titles = ["Deacon", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Marianne Cope"
+date_rule = "Fixed(1,23)"
+rank = "IV"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Katharine Drexel"
+date_rule = "Fixed(3,3)"
+rank = "IV"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Damien de Veuster"
+date_rule = "Fixed(5,10)"
+rank = "IV"
+color = "White"
+titles = ["Priest"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Isidore"
+date_rule = "Fixed(5,15)"
+rank = "IV"
+color = "White"
+titles = []
+day_type = "feast"
+
+[[feasts]]
+name = "St. Junípero Serra"
+date_rule = "Fixed(7,1)"
+rank = "IV"
+color = "White"
+titles = ["Priest"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Elizabeth of Portugal"
+date_rule = "Fixed(7,5)"
+rank = "IV"
+color = "White"
+titles = []
+day_type = "feast"
+
+[[feasts]]
+name = "St. Kateri Tekakwitha"
+date_rule = "Fixed(7,14)"
+rank = "III"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Camillus de Lellis"
+date_rule = "Fixed(7,18)"
+rank = "IV"
+color = "White"
+titles = ["Priest"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Peter Claver"
+date_rule = "Fixed(9,9)"
+rank = "III"
+color = "White"
+titles = ["Priest"]
+day_type = "feast"
+
+[[feasts]]
+name = "Blessed Francis Xavier Seelos"
+date_rule = "Fixed(10,5)"
+rank = "IV"
+color = "White"
+titles = ["Priest"]
+day_type = "feast"
+
+[[feasts]]
+name = "Blessed Marie-Rose Durocher"
+date_rule = "Fixed(10,6)"
+rank = "IV"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "Sts. John de Brébeuf and Isaac Jogues and Companions"
+date_rule = "Fixed(10,19)"
+rank = "III"
+color = "Red"
+titles = ["Priests", "Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Paul of the Cross"
+date_rule = "Fixed(10,20)"
+rank = "IV"
+color = "White"
+titles = ["Priest"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Frances Xavier Cabrini"
+date_rule = "Fixed(11,13)"
+rank = "III"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Rose Philippine Duchesne"
+date_rule = "Fixed(11,18)"
+rank = "IV"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "Blessed Miguel Agustín Pro"
+date_rule = "Fixed(11,23)"
+rank = "IV"
+color = "Red"
+titles = ["Priest", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "Our Lady of Guadalupe"
+date_rule = "Fixed(12,12)"
+rank = "II"
+color = "White"
+titles = []
+day_type = "feast"
+
+[[feasts]]
+name = "The Epiphany of the Lord"
+date_rule = "OffsetSundays(Fixed(1,1), 1)"
+rank = "I"
+color = "White"
+titles = []
+day_type = "feast"
+
+[[feasts]]
+name = "The Ascension of the Lord"
+date_rule = "OffsetSundays(OffsetDays(Easter, 39), 1)"
+rank = "I"
+color = "White"
+titles = []
+day_type = "feast"

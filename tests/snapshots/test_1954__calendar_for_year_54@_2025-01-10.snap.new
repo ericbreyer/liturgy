@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+assertion_line: 51
+expression: line
+---
+2025-01-10|Feria VI of Epiphany|Semidouble|Of the V day within the Octave of the Epiphany|

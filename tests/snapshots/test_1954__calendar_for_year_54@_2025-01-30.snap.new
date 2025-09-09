@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+assertion_line: 51
+expression: line
+---
+2025-01-30|Feria V week III after Epiphany|Semidouble|St. Martina Virgin and Martyr|

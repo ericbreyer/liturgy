@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+assertion_line: 51
+expression: line
+---
+2025-04-01|Feria III week IV of Lent|Greater Non-Privileged Feria of Lent|Feria III week IV of Lent|

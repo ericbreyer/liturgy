@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+assertion_line: 51
+expression: line
+---
+2025-01-01|Feria IV in the Octave of Christmas|In an Octave of the Second Class|Feria IV in the Octave of Christmas|The Circumcision of Our Lord

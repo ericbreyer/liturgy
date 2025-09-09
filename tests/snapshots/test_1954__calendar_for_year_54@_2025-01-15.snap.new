@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+assertion_line: 51
+expression: line
+---
+2025-01-15|Feria IV week I after Epiphany|Double|St. Paul first hermit, Confessor|St. Maurus Abbot

@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+assertion_line: 51
+expression: line
+---
+2025-02-27|Feria V after Sexagesima|Double|St. Gabriel of Our Lady of Sorrows|

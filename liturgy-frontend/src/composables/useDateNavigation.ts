@@ -35,12 +35,16 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
   })
 
   function updateSelectedDate(newDate: string) {
-    router.push({ name: routeName, query: { date: newDate } })
+    // keep other query params intact
+    // but update the date param
+      const newQuery = { ...route.query }
+      newQuery.date = newDate
+      router.push({ name: routeName, query: newQuery })
   }
 
   function goToToday() {
     const today = new Date().toISOString().split('T')[0]
-    router.push({ name: routeName, query: { date: today } })
+    updateSelectedDate(today)
   }
 
   function goToPrevious() {
@@ -56,7 +60,7 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     }
     
     const dateString = date.toISOString().split('T')[0]
-    router.push({ name: routeName, query: { date: dateString } })
+    updateSelectedDate(dateString)
   }
 
   function goToNext() {
@@ -72,7 +76,7 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     }
     
     const dateString = date.toISOString().split('T')[0]
-    router.push({ name: routeName, query: { date: dateString } })
+    updateSelectedDate(dateString)
   }
 
   return {

@@ -1,0 +1,1 @@
+cargo:warning=Skipping frontend build (enable feature 'build-frontend' or set BUILD_FRONTEND=1 to enable)

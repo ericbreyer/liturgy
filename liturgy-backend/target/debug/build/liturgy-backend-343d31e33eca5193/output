@@ -1,0 +1,23 @@
+cargo:warning=Running frontend build in ../liturgy-frontend
+
+> liturgy-frontend@0.0.0 build
+> run-p type-check "build-only {@}" --
+
+
+> liturgy-frontend@0.0.0 type-check
+> vue-tsc --build
+
+
+> liturgy-frontend@0.0.0 build-only
+> vite build
+
+vite v7.1.4 building for production...
+transforming...
+✓ 87 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.43 kB │ gzip:  0.28 kB
+dist/assets/index-Shrmdr3p.css   65.67 kB │ gzip: 10.33 kB
+dist/assets/index-BFTNTUFc.js   141.83 kB │ gzip: 50.38 kB
+✓ built in 2.02s
+cargo:warning=Frontend build completed successfully

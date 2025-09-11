@@ -1,0 +1,26 @@
+[package]
+name = "liturgy-backend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# local crates
+calendar_calc = { path = "../calendar_calc" }
+
+chrono = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+anyhow = "*"
+clap = { version = "4", features = ["derive"] }
+
+# Web dependencies
+axum = "0.7"
+tokio = { version = "1.0", features = ["full"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["fs", "cors", "trace"] }
+tracing-subscriber = "0.3"
+
+[dev-dependencies]
+test-case = "3.3"
+insta = "1.43"
+reqwest = { version = "0.11", features = ["json", "native-tls"] }
+tempfile = "3.6"

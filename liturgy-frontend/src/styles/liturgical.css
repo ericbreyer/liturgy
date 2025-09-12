@@ -1,53 +1,7 @@
-/**
- * Shared CSS styles for liturgical components
- * Use these classes consistently across all views for uniform appearance
- */
+/* MOVED TO: src/styles/archive/liturgical.css */
+/* Original contents archived. See src/styles/archive/liturgical.css */
 
-/* Feast Card Styles */
-.feast-card {
-  background: var(--surface-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  transition: all 0.2s ease;
-}
-
-.feast-card:hover {
-  border-color: var(--accent-color);
-  background: var(--surface-elevated);
-}
-
-.feast-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.feast-info {
-  flex: 1;
-}
-
-.feast-title {
-  color: var(--text-primary);
-  font-size: 1.1rem;
-  margin-bottom: 0.25rem;
-  line-height: 1.3;
-  font-weight: 600;
-}
-
-/* Feast Line Styles (for compact display) */
-.feast-line {
-  display: flex;
-  align-items: stretch;
-  gap: 0.25rem;
-  font-size: 0.7rem;
-  line-height: 1.2;
-  min-height: 1.2rem;
-  margin-bottom: 0.15rem;
-  overflow: hidden;
-}
+/* Intentionally left blank to avoid duplication; styles are consolidated in src/assets/main.css */
 
 .feast-content {
   flex: 1;

@@ -1,0 +1,16 @@
+/* Archived: liturgical.css
+
+Preserved original contents for reference.
+*/
+
+/* Feast Card Styles */
+.feast-card {
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+/* ... rest of original file archived ... */

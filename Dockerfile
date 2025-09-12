@@ -44,4 +44,4 @@ COPY --from=node-builder /app/frontend/dist /app/liturgy-frontend/dist
 EXPOSE 3000
 # ENTRYPOINT is the binary; CMD holds default args so users can override at docker run
 ENTRYPOINT ["/app/liturgy-backend"]
-CMD ["--host","0.0.0.0","--port","80","--calendar-data-dir","/app/calendar_calc/calendar_data","--frontend-dir","/app/liturgy-frontend"]
+CMD ["--host","0.0.0.0","--port","8080","--calendar-data-dir","/app/calendar_calc/calendar_data","--frontend-dir","/app/liturgy-frontend"]

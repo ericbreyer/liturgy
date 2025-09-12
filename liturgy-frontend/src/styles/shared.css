@@ -1,25 +1,7 @@
-/* Shared liturgical calendar styles */
+/* MOVED TO: src/styles/archive/shared.css */
+/* Original contents archived. See src/styles/archive/shared.css */
 
-/* Liturgical season colors only - main theme colors are in App.vue */
-:root {
-  --liturgical-red: #dc3545;
-  --liturgical-white: #ffffff;
-  --liturgical-green: #28a745;
-  --liturgical-purple: #6f42c1;
-  --liturgical-violet: #6f42c1;
-  --liturgical-rose: #e83e8c;
-  --liturgical-black: #343a40;
-  --liturgical-gold: #ffc107;
-  --liturgical-blue: #007bff;
-}
-
-/* Layout utilities */
-.view-container {
-  padding: 1rem;
-  max-width: 100%;
-  margin: 0 auto;
-  overflow-x: auto;
-}
+/* Intentionally left blank; theme variables and layout utilities are in src/assets/main.css */
 
 .view-header {
   margin-bottom: 2rem;

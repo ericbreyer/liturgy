@@ -348,7 +348,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
+@import '../assets/main.css';
 
 .view-container {
   padding: 1rem;

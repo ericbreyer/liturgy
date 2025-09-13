@@ -1,0 +1,83 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "⛪ Liturgical Calendar" [level=1] [ref=e6]:
+        - generic [ref=e7]: ⛪
+        - text: Liturgical Calendar
+      - paragraph [ref=e8]: Comprehensive liturgical calendar and devotional tracker
+  - banner [ref=e9]:
+    - generic [ref=e10]:
+      - heading "📖 Daily Liturgy" [level=2] [ref=e11]:
+        - generic [ref=e12]: 📖
+        - text: Daily Liturgy
+      - paragraph [ref=e13]: Today's liturgical celebrations and readings
+  - navigation [ref=e14]:
+    - generic [ref=e15]:
+      - generic [ref=e17]:
+        - link "Daily View" [ref=e18] [cursor=pointer]:
+          - /url: /today?calendars=ef,of-us
+          - generic [ref=e19] [cursor=pointer]: Daily View
+        - link "Week View" [ref=e20] [cursor=pointer]:
+          - /url: /week?calendars=ef,of-us
+          - generic [ref=e21] [cursor=pointer]: Week View
+        - link "Month View" [ref=e22] [cursor=pointer]:
+          - /url: /month?calendars=ef,of-us
+          - generic [ref=e23] [cursor=pointer]: Month View
+        - link "Search" [ref=e24] [cursor=pointer]:
+          - /url: /search?calendars=ef,of-us
+          - generic [ref=e25] [cursor=pointer]: Search
+        - link "Novenas" [ref=e26] [cursor=pointer]:
+          - /url: /novena?calendars=ef,of-us
+          - generic [ref=e27] [cursor=pointer]: Novenas
+        - link "Advanced" [ref=e28] [cursor=pointer]:
+          - /url: /nerd?calendars=ef,of-us
+          - generic [ref=e29] [cursor=pointer]: Advanced
+        - link "About" [ref=e30] [cursor=pointer]:
+          - /url: /about?calendars=ef,of-us
+          - generic [ref=e31] [cursor=pointer]: About
+      - generic [ref=e32]:
+        - generic [ref=e35]:
+          - button "← Prev Day" [ref=e36] [cursor=pointer]
+          - textbox [ref=e38]: 2025-09-12
+          - button "Next Day →" [ref=e39] [cursor=pointer]
+          - button "Today" [ref=e40] [cursor=pointer]
+        - button "2 of 4 calendars selected ▼" [ref=e44] [cursor=pointer]:
+          - generic [ref=e45] [cursor=pointer]: 2 of 4 calendars selected
+          - generic [ref=e46] [cursor=pointer]: ▼
+  - main [ref=e47]:
+    - table [ref=e54]:
+      - rowgroup [ref=e55]:
+        - row "Date 1962 Roman Calendar Ordinary Form of the Roman Calendar with USA Extensions" [ref=e56]:
+          - cell "Date" [ref=e57]
+          - cell "1962 Roman Calendar" [ref=e58]
+          - cell "Ordinary Form of the Roman Calendar with USA Extensions" [ref=e59]
+      - rowgroup [ref=e60]:
+        - row "Friday Sep 12 The Most Holy Name of Mary III Feria VI week XIII after the octave of Pentecost (Week 1 of September) Feria VI week XXIII of Ordinary Time Feria Feria VI week XXIII of Ordinary Time Optional Memorial The Most Holy Name of Mary Optional Memorial" [ref=e61]:
+          - cell "Friday Sep 12" [ref=e62]:
+            - generic [ref=e63]:
+              - generic [ref=e64]: Friday
+              - generic [ref=e65]: Sep 12
+          - cell "The Most Holy Name of Mary III Feria VI week XIII after the octave of Pentecost (Week 1 of September)" [ref=e66]:
+            - generic [ref=e67]:
+              - generic [ref=e70]: The Most Holy Name of Mary
+              - generic [ref=e71]: III
+              - generic [ref=e72]: Feria VI week XIII after the octave of Pentecost (Week 1 of September)
+          - cell "Feria VI week XXIII of Ordinary Time Feria Feria VI week XXIII of Ordinary Time Optional Memorial The Most Holy Name of Mary Optional Memorial" [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e77]: Feria VI week XXIII of Ordinary Time
+              - generic [ref=e78]: Feria
+              - generic [ref=e79]: Feria VI week XXIII of Ordinary Time
+              - generic [ref=e80]:
+                - generic [ref=e81]: Optional Memorial
+                - generic [ref=e82]:
+                  - generic [ref=e84]: The Most Holy Name of Mary
+                  - generic [ref=e85]: Optional Memorial
+  - contentinfo [ref=e86]:
+    - paragraph [ref=e87]:
+      - text: "Backend API:"
+      - code [ref=e88]: /api/*
+      - text: "| Built with Vue 3 + Rust/Axum"
+```

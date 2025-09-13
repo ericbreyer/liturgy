@@ -1,0 +1,4 @@
+@import './global.css';
+@import '../styles/liturgical.css'; /* domain-specific styles */
+
+/* main.css is the bundler entry only; app-level overrides were moved to global.css */

@@ -1,0 +1,75 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TodayView snapshot > renders consistent DOM structure 1`] = `
+"<div data-v-d5962d35="" data-v-40ea1c4f="" class="page-layout" style="max-width: 1200px;">
+  <!--v-if-->
+  <div data-v-d5962d35="" class="page-content">
+    <div data-v-40ea1c4f="" class="view-container">
+      <!--v-if-->
+      <!-- Background loading indicator -->
+      <!--v-if-->
+      <!-- Content with smooth transitions -->
+      <div data-v-40ea1c4f="" class="content-area">
+        <!-- Mobile Card View -->
+        <div data-v-40ea1c4f="" class="mobile-view">
+          <div data-v-17eb3e3c="" data-v-40ea1c4f="" class="liturgical-day-card selected">
+            <div data-v-17eb3e3c="" class="day-header">
+              <h3 data-v-17eb3e3c="" class="day-name">Friday</h3>
+              <p data-v-17eb3e3c="" class="day-date">Sep 12</p>
+            </div>
+            <div data-v-17eb3e3c="" class="calendars-container">
+              <div data-v-17eb3e3c="" class="calendar-section">
+                <h4 data-v-17eb3e3c="" class="calendar-title"></h4>
+                <div data-v-17eb3e3c="" class="liturgy-content">
+                  <div data-v-17eb3e3c="" class="liturgy-header"><span data-v-17eb3e3c="" class="color-bar" style="background-color: green;"></span><span data-v-17eb3e3c="" class="feast-text">Test Feast</span></div>
+                  <div data-v-17eb3e3c="" class="rank-text">Feast</div>
+                  <div data-v-17eb3e3c="" class="season-text">Season Day 123</div><!-- Commemorations -->
+                  <div data-v-17eb3e3c="" class="commemorations">
+                    <div data-v-17eb3e3c="" class="commemorations-header">Commemorations</div>
+                    <div data-v-17eb3e3c="" class="commemoration-item"><span data-v-17eb3e3c="" class="color-bar small" style="background-color: white;"></span><span data-v-17eb3e3c="" class="commemoration-desc">Commemoration A</span><span data-v-17eb3e3c="" class="commemoration-rank">Memorial</span></div>
+                    <div data-v-17eb3e3c="" class="commemoration-item"><span data-v-17eb3e3c="" class="color-bar small" style="background-color: blue;"></span><span data-v-17eb3e3c="" class="commemoration-desc">Commemoration B</span><span data-v-17eb3e3c="" class="commemoration-rank">Optional</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- Desktop Table View -->
+        <div data-v-40ea1c4f="" class="desktop-view">
+          <div data-v-05a5897a="" data-v-40ea1c4f="" class="liturgical-table-container">
+            <table data-v-05a5897a="" class="liturgical-table">
+              <thead data-v-05a5897a="">
+                <tr data-v-05a5897a="">
+                  <th data-v-05a5897a="" class="day-column">Date</th>
+                  <th data-v-05a5897a="" class="calendar-column"></th>
+                </tr>
+              </thead>
+              <tbody data-v-05a5897a="">
+                <tr data-v-05a5897a="" class="liturgical-row selected-row">
+                  <td data-v-05a5897a="" class="day-cell">
+                    <div data-v-05a5897a="" class="day-info">
+                      <div data-v-05a5897a="" class="day-name">Friday</div>
+                      <div data-v-05a5897a="" class="day-date">Sep 12</div>
+                    </div>
+                  </td>
+                  <td data-v-05a5897a="" class="liturgy-cell">
+                    <div data-v-05a5897a="" class="liturgy-content">
+                      <div data-v-05a5897a="" class="liturgy-header"><span data-v-05a5897a="" class="color-bar" style="background-color: green;"></span><span data-v-05a5897a="" class="feast-text">Test Feast</span></div>
+                      <div data-v-05a5897a="" class="rank-text">Feast</div>
+                      <div data-v-05a5897a="" class="season-text">Season Day 123</div><!-- Commemorations -->
+                      <div data-v-05a5897a="" class="commemorations">
+                        <div data-v-05a5897a="" class="commemorations-header">Commemorations</div>
+                        <div data-v-05a5897a="" class="commemoration-item"><span data-v-05a5897a="" class="color-bar small" style="background-color: white;"></span><span data-v-05a5897a="" class="commemoration-desc">Commemoration A</span><span data-v-05a5897a="" class="commemoration-rank">Memorial</span></div>
+                        <div data-v-05a5897a="" class="commemoration-item"><span data-v-05a5897a="" class="color-bar small" style="background-color: blue;"></span><span data-v-05a5897a="" class="commemoration-desc">Commemoration B</span><span data-v-05a5897a="" class="commemoration-rank">Optional</span></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

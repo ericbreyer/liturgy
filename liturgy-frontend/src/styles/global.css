@@ -1,0 +1,224 @@
+/* Global stylesheet: variables, reset, layout tokens, and responsive helpers */
+/* This file consolidates what used to be in base.css, shared.css, and App.vue :root */
+
+/* CSS variables (theme + layout) */
+:root {
+  --accent-color: rgb(141, 83, 255);
+  --secondary-color: rgb(41, 214, 185);
+
+  /* Base colors */
+  --background-color: #000000;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-muted: #aaa;
+
+  /* Surface colors */
+  --surface-primary: #111;
+  --surface-secondary: #222;
+  --surface-elevated: #333;
+
+  /* Borders */
+  --border-primary: #333;
+  --border-subtle: #555;
+
+  /* Layout tokens */
+  --layout-max-width: 1200px;
+  --layout-padding: 1rem;
+  --layout-gap: 1rem;
+  --layout-fixed-width: 1200px;
+  --layout-min-height: 100vh;
+}
+
+/* Liturgical color helpers (kept from shared.css) */
+:root {
+  --liturgical-red: #dc3545;
+  --liturgical-white: #ffffff;
+  --liturgical-green: #28a745;
+  --liturgical-purple: #6f42c1;
+  --liturgical-violet: #6f42c1;
+  --liturgical-rose: #e83e8c;
+  --liturgical-black: #343a40;
+  --liturgical-gold: #ffc107;
+  --liturgical-blue: #007bff;
+}
+
+/* Reset and sensible defaults (from base.css) */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body,#app{height:100%}
+body{
+  min-height:100vh;
+  color:var(--text-primary);
+  background:var(--background-color);
+  transition: color .5s, background-color .5s;
+  line-height:1.6;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size:15px;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Utility layout container used throughout components */
+.page-layout { padding: var(--layout-padding); max-width: 100%; margin: 0 auto; box-sizing: border-box; }
+
+/* Fixed-width system with responsive fallbacks */
+@media (max-width: 1440px){:root{--layout-fixed-width:1200px}}
+@media (max-width:1240px){:root{--layout-fixed-width:1000px}}
+@media (max-width:1040px){:root{--layout-fixed-width:900px}}
+@media (max-width:940px){:root{--layout-fixed-width:100vw;--layout-padding:.5rem}}
+
+/* Small helpers */
+img{max-width:100%;height:auto;display:block}
+a{color:var(--accent-color);text-decoration:none}
+button{cursor:pointer;color:var(--text-primary)}
+
+/* Mobile / Desktop utility classes (used across components) */
+.desktop-only{display:block}
+@media (max-width:768px){.desktop-only{display:none}}
+
+/* Keep domain-specific styles in src/styles/liturgical.css */
+
+/* Accessibility: focus outlines */
+:focus{outline:2px solid color-mix(in srgb, var(--accent-color) 40%, transparent);outline-offset:2px}
+
+/* Basic header/footer layout tokens */
+.app-header .app-header-content, .header-content { max-width: var(--layout-fixed-width); margin: 0 auto; padding: 0 var(--layout-padding); }
+
+/* Small responsive tweaks for typography */
+@media (max-width:768px){
+  .app-title{font-size:18px}
+  .header-title{font-size:16px}
+}
+
+/* App header and page header styles restored from original layout */
+.app-header {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.app-header .app-header-content {
+  max-width: var(--layout-fixed-width);
+  margin: 0 auto;
+  padding: 0 var(--layout-padding);
+}
+
+.app-title {
+  margin-bottom: 4px;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+}
+
+.app-icon { font-size: 1.1em; color: var(--accent-color); }
+
+.app-tagline {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.page-header {
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.header-content {
+  max-width: var(--layout-fixed-width);
+  margin: 0 auto;
+  padding: 0 var(--layout-padding);
+}
+
+.header-title {
+  margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--text-primary);
+}
+
+.header-icon { font-size: 1em; color: var(--accent-color); }
+
+.header-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+main {
+  flex: 1;
+  padding: 20px;
+  max-width: var(--layout-fixed-width);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+footer {
+  background: var(--surface-primary);
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 16px 20px;
+  margin-top: auto;
+  border-top: 1px solid var(--border-primary);
+}
+
+footer p { margin: 0; font-size: 13px; }
+
+footer code {
+  background: var(--surface-secondary);
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .app-title { font-size: 18px; flex-direction: column; gap: 0.25rem; }
+  .app-tagline { font-size: 11px; }
+  .header-title { font-size: 16px; flex-direction: column; gap: 0.2rem; }
+  .header-subtitle { font-size: 11px; }
+  main { padding: 16px; }
+}
+
+/* End of global.css */
+
+/* --- App-level overrides (moved from main.css) --- */
+#app {
+  max-width: var(--layout-fixed-width);
+  margin: 0 auto;
+  font-weight: normal;
+  min-height: var(--layout-min-height);
+}
+
+a, .green {
+  text-decoration: none;
+  color: var(--accent-color);
+  transition: 0.24s ease;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover { background-color: color-mix(in srgb, var(--accent-color) 20%, transparent); }
+}
+
+@media (min-width: 1240px) {
+  #app { display: grid; grid-template-columns: 1fr 1fr; gap: var(--layout-gap); }
+}
+
+/* End app-level overrides */

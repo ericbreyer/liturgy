@@ -1,7 +1,53 @@
-/* MOVED TO: src/styles/archive/liturgical.css */
-/* Original contents archived. See src/styles/archive/liturgical.css */
+/**
+ * Shared CSS styles for liturgical components
+ * Use these classes consistently across all views for uniform appearance
+ */
 
-/* Intentionally left blank to avoid duplication; styles are consolidated in src/assets/main.css */
+/* Feast Card Styles */
+.feast-card {
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+.feast-card:hover {
+  border-color: var(--accent-color);
+  background: var(--surface-elevated);
+}
+
+.feast-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.feast-info {
+  flex: 1;
+}
+
+.feast-title {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+/* Feast Line Styles (for compact display) */
+.feast-line {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  min-height: 1.2rem;
+  margin-bottom: 0.15rem;
+  overflow: hidden;
+}
 
 .feast-content {
   flex: 1;
@@ -93,6 +139,28 @@
   border-radius: 4px;
   border: 1px solid var(--border-primary);
 }
+
+/* Layout utility: view container used by several views (moved from archived shared.css) */
+.view-container {
+  padding: 1rem;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+/* Shared view header baseline (components may override specifics in scoped styles) */
+.view-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 3px solid var(--border-primary);
+  background: var(--surface-primary);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s ease;
+}
+
+.view-header:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); }
 
 .no-calendars {
   text-align: center;
@@ -193,3 +261,202 @@
   color: white;
   border-color: var(--accent-color);
 }
+
+/* --- Merged chunk: feast/day display (from archived shared.css) --- */
+.feast-item {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  min-height: 1.2rem;
+}
+
+.liturgical-color-bar {
+  width: 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-light);
+}
+
+.feast-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.feast-title {
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+.feast-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.feast-rank {
+  font-size: 0.55rem;
+  color: #aaa;
+  font-weight: 500;
+  background-color: #333;
+  padding: 1px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.calendar-initial {
+  background-color: var(--text-primary);
+  color: white;
+  font-size: 0.55rem;
+  font-weight: 500;
+  padding: 1px 4px;
+  border-radius: 2px;
+  line-height: 1.1;
+  min-width: 20px;
+  text-align: center;
+}
+
+.day-card {
+  background-color: #111;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.day-card.clickable {
+  cursor: pointer;
+}
+
+.day-card.clickable:hover {
+  background-color: #222;
+}
+
+.day-card.today {
+  background-color: #222;
+  border: 2px solid var(--accent-color);
+}
+
+.day-card.selected {
+  background-color: #332817;
+  border: 2px solid var(--accent-color);
+}
+
+.day-card.has-feasts {
+  background-color: var(--bg-lighter);
+}
+
+.day-number {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.day-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 0.125rem;
+}
+
+/* Responsive helpers from archive */
+@media (max-width: 640px) {
+  .feast-item { margin-bottom: 0.25rem; }
+  .feast-title { font-size: 0.875rem; line-height: 1.3; }
+  .feast-meta { gap: 0.5rem; }
+  .day-number { font-size: 1.25rem; font-weight: 700; min-width: 2rem; flex-shrink: 0; }
+}
+
+@media (max-width: 480px) {
+  .view-container { padding: 0.25rem; }
+  .day-number { font-size: 1rem; }
+  .feast-rank, .calendar-initial { font-size: 0.5rem; padding: 1px 3px; min-width: 14px; }
+  .liturgical-color-bar { width: 4px; }
+}
+
+/* --- end merged chunk --- */
+
+/* --- Merged chunk: detail panels, loading/error states, and mobile utilities --- */
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-state {
+  color: #ff6b6b;
+  background-color: #3a1a1a;
+  border: 1px solid #4a2828;
+  border-radius: 0.375rem;
+}
+
+.detail-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #111;
+  border-radius: 4px;
+  border: 1px solid #333;
+  max-width: 500px;
+  width: 90vw;
+  max-height: 70vh;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--bg-light, var(--surface-secondary));
+  border-bottom: 1px solid var(--border-light, #444);
+}
+
+.detail-header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.close-button:hover { background-color: var(--border-lighter, #444); }
+
+.detail-content {
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: calc(70vh - 4rem);
+}
+
+/* Mobile utilities */
+.mobile-only { display: none; }
+.desktop-only { display: block; }
+
+@media (max-width: 768px) {
+  .mobile-only { display: block; }
+  .desktop-only { display: none; }
+}
+
+/* --- end merged chunk --- */

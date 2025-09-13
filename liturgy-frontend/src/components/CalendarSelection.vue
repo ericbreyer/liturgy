@@ -324,3 +324,9 @@ function handleSelectNone() {
   }
 }
 </style>
+
+<script lang="ts">
+// Provide a runtime default export for environments/tools that expect one
+// (keeps compatibility with older import behaviors / typecheckers)
+export default {}
+</script>

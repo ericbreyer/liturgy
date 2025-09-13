@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const sizeMap = {
-  small: { width: '3px', height: '1.5rem' },
+  small: { width: '3px', height: '2rem' },
   medium: { width: '4px', height: '3rem' },
   large: { width: '6px', height: '4rem' }
 }

@@ -74,6 +74,12 @@ const datePickerVariant = computed(() => {
 })
 </script>
 
+<script lang="ts">
+// Provide a runtime default export for environments/tools that expect one
+// (keeps compatibility with older import behaviors / typecheckers)
+export default {}
+</script>
+
 <template>
   <nav class="app-nav">
     <div class="nav-container">

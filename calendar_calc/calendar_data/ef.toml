@@ -2060,6 +2060,7 @@ date_rule = "Fixed(9,14)"
 rank = "II"
 color = "Red"
 day_type = "feast"
+of_our_lord = true
 
 [[feasts]]
 name = "Seven Sorrows of the Blessed Virgin Mary (Our Lady of Sorrows)"

@@ -957,6 +957,7 @@ onUnmounted(() => {
   border-radius: 2px;
   flex-shrink: 0;
   border: 1px solid var(--border-secondary);
+  height: 100%;
 }
 
 .feast-content {
@@ -978,7 +979,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  margin-top: 0.25rem;
+
 }
 
 .feast-rank {

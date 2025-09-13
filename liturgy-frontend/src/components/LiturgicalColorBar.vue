@@ -10,13 +10,13 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'medium',
-  orientation: 'vertical'
+  orientation: 'vertical',
 })
 
 const sizeMap = {
   small: { width: '3px', height: '2rem' },
   medium: { width: '4px', height: '3rem' },
-  large: { width: '6px', height: '4rem' }
+  large: { width: '6px', height: '4rem' },
 }
 
 const style = computed(() => {
@@ -24,21 +24,21 @@ const style = computed(() => {
   const baseStyle = {
     backgroundColor: getColorValue(props.color),
     borderRadius: '2px',
-    flexShrink: '0'
+    flexShrink: '0',
   }
-  
+
   if (props.orientation === 'horizontal') {
     return {
       ...baseStyle,
       width: dimensions.height,
-      height: dimensions.width
+      height: dimensions.width,
     }
   }
-  
+
   return {
     ...baseStyle,
     width: dimensions.width,
-    height: dimensions.height
+    height: dimensions.height,
   }
 })
 </script>
@@ -48,7 +48,9 @@ const style = computed(() => {
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
 .liturgical-color-bar {
-  border: 1px solid var(--border-secondary);
+  /* any local one-off tweaks can go here; base styling lives in liturgical.css */
+  border-radius: 2px;
 }
 </style>

@@ -10,7 +10,7 @@ export function addDays(dateStr: string, days: number): string {
   const date = new Date(year, month - 1, day)
   date.setUTCDate(date.getUTCDate() + days)
   return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(
-    date.getUTCDate()
+    date.getUTCDate(),
   ).padStart(2, '0')}`
 }
 
@@ -30,11 +30,11 @@ export function daysBetween(date1: string, date2: string): number {
 export function formatDate(dateStr: string): string {
   const [year, month, day] = dateStr.split('-').map(Number)
   const date = new Date(year, month - 1, day)
-  return date.toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   })
 }
 

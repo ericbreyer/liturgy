@@ -25,11 +25,7 @@ const displayedCalendars = ref<string[]>([])
 const abortController = ref<AbortController | null>(null)
 
 // Use shared calendar selection state
-const {
-  selectedCalendars,
-  loadCalendars,
-  selectedCalendarInfos
-} = useCalendarSelection()
+const { selectedCalendars, loadCalendars, selectedCalendarInfos } = useCalendarSelection()
 
 // Use shared date navigation
 const {
@@ -39,28 +35,28 @@ const {
   goToToday,
   goToPrevious: goToPreviousWeek,
   goToNext: goToNextWeek,
-  route
+  route,
 } = useDateNavigation('Week')
 
 // Get week dates centered around displayed date
 const weekDates = computed(() => {
   if (!displayedDate.value) return []
-  
+
   const centerDateString = displayedDate.value
   const [year, month, day] = centerDateString.split('-').map(Number)
   const centerDate = new Date(year, month - 1, day)
   const dates = []
-  
+
   for (let i = -3; i <= 3; i++) {
     const date = new Date(centerDate.getTime() + i * 24 * 60 * 60 * 1000)
     dates.push({
       dateString: date.toISOString().split('T')[0],
-      displayDate: date.toLocaleDateString('en-US', { 
-        weekday: 'short', 
-        month: 'short', 
-        day: 'numeric' 
+      displayDate: date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
       }),
-      isSelected: date.toISOString().split('T')[0] === centerDateString
+      isSelected: date.toISOString().split('T')[0] === centerDateString,
     })
   }
   return dates
@@ -68,7 +64,7 @@ const weekDates = computed(() => {
 
 // Get the displayed calendar infos
 const displayedCalendarInfos = computed(() => {
-  return selectedCalendarInfos.value.filter(cal => displayedCalendars.value.includes(cal.name))
+  return selectedCalendarInfos.value.filter((cal) => displayedCalendars.value.includes(cal.name))
 })
 
 async function loadWeekInfo() {
@@ -76,7 +72,7 @@ async function loadWeekInfo() {
   if (loading.value) {
     return
   }
-  
+
   if (selectedCalendars.value.length === 0) {
     displayedWeekData.value = null
     displayedCalendars.value = []
@@ -88,20 +84,20 @@ async function loadWeekInfo() {
     abortController.value.abort()
   }
   abortController.value = new AbortController()
-  
+
   try {
     loading.value = true
     const newWeekMap: Record<string, Record<string, DayInfo>> = {}
-    
+
     // Compute dates around the NEW selectedDate, not the old displayedDate
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     const centerDate = new Date(year, month - 1, day)
-    
+
     for (let i = -3; i <= 3; i++) {
       const currentDate = new Date(centerDate.getTime() + i * 24 * 60 * 60 * 1000)
       const dateString = currentDate.toISOString().split('T')[0]
       const dayMap: Record<string, DayInfo> = {}
-      
+
       for (const calendarName of selectedCalendars.value) {
         try {
           const [dayYear, dayMonth, dayDay] = dateString.split('-').map(Number)
@@ -113,18 +109,18 @@ async function loadWeekInfo() {
           }
         }
       }
-      
+
       if (Object.keys(dayMap).length > 0) {
         newWeekMap[dateString] = dayMap
       }
     }
-    
+
     if (!abortController.value.signal.aborted) {
       // Only update displayed state when new data is successfully loaded
       displayedWeekData.value = newWeekMap
       displayedCalendars.value = [...selectedCalendars.value]
       displayedDate.value = selectedDate.value
-      
+
       // Also update the original weekInfoMap for compatibility
       weekInfoMap.value = newWeekMap
     }
@@ -140,14 +136,21 @@ async function loadWeekInfo() {
 }
 
 // Watch for changes in selected calendars from shared state
-watch(selectedCalendars, () => {
-  loadWeekInfo()
-}, { immediate: true, deep: true })
+watch(
+  selectedCalendars,
+  () => {
+    loadWeekInfo()
+  },
+  { immediate: true, deep: true },
+)
 
 // Watch for route changes (date parameter changes)
-watch(() => route.query.date, () => {
-  loadWeekInfo()
-})
+watch(
+  () => route.query.date,
+  () => {
+    loadWeekInfo()
+  },
+)
 
 // Watch for changes in selected date
 watch(selectedDate, () => {
@@ -157,7 +160,7 @@ watch(selectedDate, () => {
 onMounted(async () => {
   // Initialize displayed date to current selected date (like TodayView)
   displayedDate.value = selectedDate.value
-  
+
   // Load the week info if calendars are selected
   if (selectedCalendars.value.length > 0) {
     loadWeekInfo()
@@ -168,8 +171,8 @@ onMounted(async () => {
 <template>
   <PageLayout>
     <div class="view-container">
-      <ErrorDisplay 
-        v-if="error" 
+      <ErrorDisplay
+        v-if="error"
         :message="error"
         type="error"
         :dismissible="true"
@@ -201,7 +204,7 @@ onMounted(async () => {
 
         <!-- Desktop Table View -->
         <div v-if="displayedCalendarInfos.length > 0 && displayedDate" class="desktop-view">
-          <LiturgicalTable 
+          <LiturgicalTable
             :dates="weekDates"
             :calendars="displayedCalendarInfos"
             :data-map="displayedWeekData || {}"
@@ -211,7 +214,8 @@ onMounted(async () => {
         </div>
 
         <div v-else-if="!loading && selectedCalendars.length === 0" class="no-selection">
-          📋 Please select at least one calendar from the dropdown above to view the liturgy for this week
+          📋 Please select at least one calendar from the dropdown above to view the liturgy for
+          this week
         </div>
       </div>
     </div>
@@ -219,8 +223,10 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
+
 .view-container {
-  width: var(--layout-fixed-width);
+  /* width: var(--layout-fixed-width); */
   max-width: 100vw; /* Fallback for very small screens */
   margin: 0 auto;
   padding: 0 var(--layout-padding);
@@ -335,7 +341,7 @@ onMounted(async () => {
   .mobile-view {
     display: none;
   }
-  
+
   .desktop-view {
     display: block;
   }
@@ -348,21 +354,21 @@ onMounted(async () => {
     gap: 16px;
     padding: 16px;
   }
-  
+
   .header-title {
     font-size: 24px;
     text-align: center;
   }
-  
+
   .header-icon {
     font-size: 28px;
   }
-  
+
   .header-subtitle {
     font-size: 14px;
     text-align: center;
   }
-  
+
   .no-selection {
     padding: 32px 16px;
     font-size: 14px;
@@ -374,19 +380,19 @@ onMounted(async () => {
     padding: 12px;
     border-radius: 8px;
   }
-  
+
   .header-title {
     font-size: 20px;
   }
-  
+
   .header-icon {
     font-size: 24px;
   }
-  
+
   .header-subtitle {
     font-size: 13px;
   }
-  
+
   .day-cards {
     gap: 8px;
   }

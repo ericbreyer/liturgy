@@ -26,19 +26,19 @@ export interface YearCalendarData {
 }
 
 export interface LitugicalUnit {
-    desc: string
-    rank: string
-    date: string
-    color: string
+  desc: string
+  rank: string
+  date: string
+  color: string
 }
 
 export interface DayInfo {
   desc: {
     date: string
-    day_in_season: string,
-    day_rank: string,
-    day: LitugicalUnit,
-    commemorations: LitugicalUnit[],
+    day_in_season: string
+    day_rank: string
+    day: LitugicalUnit
+    commemorations: LitugicalUnit[]
   }
 }
 

@@ -3,19 +3,7 @@
     <div class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title">Liturgical Calendar</h1>
-        <p class="hero-subtitle">.calendar-item {
-  margin-bottom: 20px;
-  padding: 16px;
-  border-left: 3px solid var(--accent-color);
-  background: var(--surface-primary);
-}
-
-.calendar-item h3 {
-  color: var(--text-primary);
-  margin-bottom: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-}gical calendars across different traditions and forms</p>
+        <p class="hero-subtitle">Liturgical calendars across different traditions and forms</p>
       </div>
     </div>
 
@@ -23,9 +11,9 @@
       <div class="section">
         <h2>About This Application</h2>
         <p>
-          This application provides a comprehensive comparison tool for liturgical calendars, 
-          allowing users to explore and compare feast days, commemorations, and liturgical 
-          seasons across different forms of the Roman Rite and other traditions.
+          This application provides a comprehensive comparison tool for liturgical calendars,
+          allowing users to explore and compare feast days, commemorations, and liturgical seasons
+          across different forms of the Roman Rite and other traditions.
         </p>
       </div>
 
@@ -36,20 +24,22 @@
             <h3>Daily View</h3>
             <p>View liturgical information for any specific day across selected calendars</p>
           </div>
-          
+
           <div class="feature-card">
             <h3>Week & Month Views</h3>
             <p>Browse liturgical calendars by week or month for broader planning</p>
           </div>
-          
+
           <div class="feature-card">
             <h3>Search</h3>
             <p>Search for specific feasts and commemorations across all calendars</p>
           </div>
-          
+
           <div class="feature-card">
             <h3>Detailed Comparison</h3>
-            <p>Advanced comparison showing differences, transfers, and rank changes between calendars</p>
+            <p>
+              Advanced comparison showing differences, transfers, and rank changes between calendars
+            </p>
           </div>
         </div>
       </div>
@@ -61,12 +51,12 @@
             <h3>Ordinary Form (OF)</h3>
             <p>The Roman Calendar as reformed after Vatican II (1969)</p>
           </div>
-          
+
           <div class="calendar-item">
             <h3>Extraordinary Form (EF)</h3>
             <p>The Traditional Roman Calendar (1962 Missal)</p>
           </div>
-          
+
           <div class="calendar-item">
             <h3>OF with US Extensions</h3>
             <p>Ordinary Form calendar with United States proper celebrations</p>
@@ -78,13 +68,16 @@
         <h2>How to Use</h2>
         <ol class="steps-list">
           <li>
-            <strong>Select Calendars:</strong> Choose which liturgical calendars you want to compare using the calendar selector
+            <strong>Select Calendars:</strong> Choose which liturgical calendars you want to compare
+            using the calendar selector
           </li>
           <li>
-            <strong>Navigate Dates:</strong> Use the date selector to browse different days, weeks, or months
+            <strong>Navigate Dates:</strong> Use the date selector to browse different days, weeks,
+            or months
           </li>
           <li>
-            <strong>Compare & Analyze:</strong> View liturgical information side by side, search for specific feasts, or use the detailed comparison view
+            <strong>Compare & Analyze:</strong> View liturgical information side by side, search for
+            specific feasts, or use the detailed comparison view
           </li>
         </ol>
       </div>
@@ -92,24 +85,26 @@
       <div class="section">
         <h2>Technical Information</h2>
         <p>
-          This application is built with modern web technologies to provide fast, responsive 
-          access to liturgical calendar data. The backend is written in Rust using the Axum 
-          framework, while the frontend uses Vue 3 with TypeScript for a smooth user experience.
+          This application is built with modern web technologies to provide fast, responsive access
+          to liturgical calendar data. The backend is written in Rust using the Axum framework,
+          while the frontend uses Vue 3 with TypeScript for a smooth user experience.
         </p>
-        
+
         <ul class="tech-list">
           <li><strong>Backend:</strong> Rust + Axum + TOML data format</li>
           <li><strong>Frontend:</strong> Vue 3 + TypeScript + Vite</li>
-          <li><strong>Features:</strong> Custom fuzzy search, responsive design, real-time comparison</li>
+          <li>
+            <strong>Features:</strong> Custom fuzzy search, responsive design, real-time comparison
+          </li>
         </ul>
       </div>
 
       <div class="section">
         <h2>Data Sources</h2>
         <p>
-          The liturgical calendar data is compiled from official sources and traditional 
-          liturgical references, ensuring accuracy and authenticity in the representation 
-          of feast days, commemorations, and liturgical seasons.
+          The liturgical calendar data is compiled from official sources and traditional liturgical
+          references, ensuring accuracy and authenticity in the representation of feast days,
+          commemorations, and liturgical seasons.
         </p>
       </div>
     </div>
@@ -117,8 +112,10 @@
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
+
 .about-view {
-  width: var(--layout-fixed-width);
+  /* width: var(--layout-fixed-width); */
   max-width: 100vw; /* Fallback for very small screens */
   margin: 0 auto;
   padding: var(--layout-padding);
@@ -253,15 +250,15 @@
   .about-view {
     padding: 16px;
   }
-  
+
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .section h2 {
     font-size: 1.3rem;
   }

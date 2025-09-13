@@ -88,12 +88,12 @@ describe('dateUtils', () => {
       const result = getCurrentDate()
       // Check format is correct (YYYY-MM-DD)
       expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/)
-      
+
       // Check it's a valid date string
       const resultDate = new Date(result)
       expect(resultDate).toBeInstanceOf(Date)
       expect(resultDate.toString()).not.toBe('Invalid Date')
-      
+
       // Check it's reasonably close to now (within a day)
       const now = new Date()
       const diffMs = Math.abs(now.getTime() - resultDate.getTime())

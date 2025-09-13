@@ -7,8 +7,10 @@ vi.mock('../../composables/useCalendarSelection', () => ({
   useCalendarSelection: () => ({
     selectedCalendars: { value: ['default'] },
     loadCalendars: () => Promise.resolve(),
-    selectedCalendarInfos: { value: [{ name: 'default', commemoration_interpretation: 'Commemorations' }] }
-  })
+    selectedCalendarInfos: {
+      value: [{ name: 'default', commemoration_interpretation: 'Commemorations' }],
+    },
+  }),
 }))
 
 vi.mock('../../composables/useDateNavigation', () => ({
@@ -19,8 +21,8 @@ vi.mock('../../composables/useDateNavigation', () => ({
     goToToday: () => {},
     goToPrevious: () => {},
     goToNext: () => {},
-    route: { query: {} }
-  })
+    route: { query: {} },
+  }),
 }))
 
 vi.mock('../../services/api', () => ({
@@ -30,14 +32,29 @@ vi.mock('../../services/api', () => ({
         date: new Date().toISOString().split('T')[0],
         day_in_season: 'Season Day 123',
         day_rank: 'Feast',
-        day: { desc: 'Test Feast', rank: 'Feast', date: new Date().toISOString().split('T')[0], color: 'green' },
+        day: {
+          desc: 'Test Feast',
+          rank: 'Feast',
+          date: new Date().toISOString().split('T')[0],
+          color: 'green',
+        },
         commemorations: [
-          { desc: 'Commemoration A', rank: 'Memorial', date: new Date().toISOString().split('T')[0], color: 'white' },
-          { desc: 'Commemoration B', rank: 'Optional', date: new Date().toISOString().split('T')[0], color: 'blue' }
-        ]
-      }
-    })
-  }
+          {
+            desc: 'Commemoration A',
+            rank: 'Memorial',
+            date: new Date().toISOString().split('T')[0],
+            color: 'white',
+          },
+          {
+            desc: 'Commemoration B',
+            rank: 'Optional',
+            date: new Date().toISOString().split('T')[0],
+            color: 'blue',
+          },
+        ],
+      },
+    }),
+  },
 }))
 
 describe('TodayView snapshot', () => {

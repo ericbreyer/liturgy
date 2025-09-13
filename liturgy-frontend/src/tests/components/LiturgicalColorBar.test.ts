@@ -6,13 +6,13 @@ describe('LiturgicalColorBar', () => {
   it('renders with default props', () => {
     const wrapper = mount(LiturgicalColorBar, {
       props: {
-        color: 'red'
-      }
+        color: 'red',
+      },
     })
 
     expect(wrapper.exists()).toBe(true)
     expect(wrapper.classes()).toContain('liturgical-color-bar')
-    
+
     // Check inline styles instead of classes for size/orientation
     const style = wrapper.attributes('style')
     expect(style).toContain('background-color: rgb(220, 38, 38)')
@@ -24,8 +24,8 @@ describe('LiturgicalColorBar', () => {
     const wrapper = mount(LiturgicalColorBar, {
       props: {
         color: 'white',
-        size: 'small'
-      }
+        size: 'small',
+      },
     })
 
     const style = wrapper.attributes('style')
@@ -37,8 +37,8 @@ describe('LiturgicalColorBar', () => {
     const wrapper = mount(LiturgicalColorBar, {
       props: {
         color: 'green',
-        orientation: 'horizontal'
-      }
+        orientation: 'horizontal',
+      },
     })
 
     const style = wrapper.attributes('style')
@@ -50,8 +50,8 @@ describe('LiturgicalColorBar', () => {
   it('applies correct background color style', () => {
     const wrapper = mount(LiturgicalColorBar, {
       props: {
-        color: 'violet'
-      }
+        color: 'violet',
+      },
     })
 
     const style = wrapper.attributes('style')
@@ -61,8 +61,8 @@ describe('LiturgicalColorBar', () => {
   it('handles unknown colors with default', () => {
     const wrapper = mount(LiturgicalColorBar, {
       props: {
-        color: 'unknown'
-      }
+        color: 'unknown',
+      },
     })
 
     const style = wrapper.attributes('style')
@@ -74,8 +74,8 @@ describe('LiturgicalColorBar', () => {
       props: {
         color: 'gold',
         size: 'large',
-        orientation: 'horizontal'
-      }
+        orientation: 'horizontal',
+      },
     })
 
     const style = wrapper.attributes('style')

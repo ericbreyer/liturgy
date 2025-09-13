@@ -9,7 +9,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   type: 'error',
   dismissible: false,
-  compact: false
+  compact: false,
 })
 
 const emit = defineEmits<{
@@ -23,7 +23,7 @@ function handleDismiss() {
 const iconMap = {
   error: '❌',
   warning: '⚠️',
-  info: 'ℹ️'
+  info: 'ℹ️',
 }
 </script>
 
@@ -33,18 +33,14 @@ const iconMap = {
       <span class="error-icon">{{ iconMap[type] }}</span>
       <span class="error-message">{{ message }}</span>
     </div>
-    <button 
-      v-if="dismissible" 
-      @click="handleDismiss"
-      class="dismiss-button"
-      aria-label="Dismiss"
-    >
+    <button v-if="dismissible" @click="handleDismiss" class="dismiss-button" aria-label="Dismiss">
       ✕
     </button>
   </div>
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
 .error-display {
   display: flex;
   align-items: center;
@@ -131,7 +127,7 @@ const iconMap = {
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .dismiss-button {
     align-self: flex-end;
     margin-left: 0;

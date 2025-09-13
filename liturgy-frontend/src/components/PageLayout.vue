@@ -9,7 +9,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   maxWidth: '1200px',
-  padding: true
+  padding: true,
 })
 
 const emit = defineEmits<{
@@ -24,17 +24,12 @@ function handleBack() {
 <template>
   <div class="page-layout" :style="{ maxWidth, padding: padding ? undefined : '0' }">
     <header v-if="title || showBackButton" class="page-header">
-      <button 
-        v-if="showBackButton" 
-        @click="handleBack"
-        class="back-button"
-        aria-label="Go back"
-      >
+      <button v-if="showBackButton" @click="handleBack" class="back-button" aria-label="Go back">
         ← Back
       </button>
       <h2 v-if="title" class="page-title">{{ title }}</h2>
     </header>
-    
+
     <div class="page-content">
       <slot />
     </div>
@@ -42,8 +37,10 @@ function handleBack() {
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
+
 .page-layout {
-  width: var(--layout-fixed-width);
+  /* width: var(--layout-fixed-width); */
   max-width: 100vw; /* Fallback for very small screens */
   margin: 0 auto;
   padding: 0 20px;
@@ -94,16 +91,16 @@ function handleBack() {
   .page-layout {
     padding: 0 16px;
   }
-  
+
   .page-header {
     padding: 12px 0;
     margin-bottom: 16px;
   }
-  
+
   .page-title {
     font-size: 20px;
   }
-  
+
   .back-button {
     padding: 6px 10px;
     font-size: 13px;
@@ -114,18 +111,18 @@ function handleBack() {
   .page-layout {
     padding: 0 12px;
   }
-  
+
   .page-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .page-title {
     font-size: 18px;
     width: 100%;
   }
-  
+
   .back-button {
     align-self: flex-start;
   }

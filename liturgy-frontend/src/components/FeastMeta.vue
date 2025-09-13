@@ -10,7 +10,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 'medium'
+  size: 'medium',
 })
 
 const calendarList = computed(() => {
@@ -19,27 +19,26 @@ const calendarList = computed(() => {
 })
 
 const sizeClasses = computed(() => ({
-  [`feast-meta--${props.size}`]: true
+  [`feast-meta--${props.size}`]: true,
 }))
 </script>
 
 <template>
   <div class="feast-meta" :class="sizeClasses">
     <span class="feast-rank">{{ rank }}</span>
-    
+
     <span v-if="calendarList.length > 0" class="feast-calendars">
       (<span v-for="(cal, index) in calendarList" :key="cal"
         >{{ getCalendarName(cal) }}<span v-if="index < calendarList.length - 1">, </span></span
       >)
     </span>
-    
-    <span v-if="commemorationCount" class="commemoration-count">
-      +{{ commemorationCount }}
-    </span>
+
+    <span v-if="commemorationCount" class="commemoration-count"> +{{ commemorationCount }} </span>
   </div>
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
 .feast-meta {
   display: flex;
   align-items: center;

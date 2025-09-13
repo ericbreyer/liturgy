@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { getColorValue, isFeria, getStatusIcon, getStatusLabel, getRankPriority, getRankValue, getCalendarName } from '../../utils/liturgical'
+import {
+  getColorValue,
+  isFeria,
+  getStatusIcon,
+  getStatusLabel,
+  getRankPriority,
+  getRankValue,
+  getCalendarName,
+} from '../../utils/liturgical'
 
 describe('liturgical utils', () => {
   describe('getColorValue', () => {
@@ -59,7 +67,7 @@ describe('liturgical utils', () => {
       expect(isFeria('Blessed Virgin Mary')).toBe(false)
       expect(isFeria('Our Lady of Sorrows')).toBe(false)
       expect(isFeria('Mary of the Incarnation')).toBe(false)
-      
+
       // These SHOULD be ferias with Saturday/Memorial context (starting with BVM patterns)
       expect(isFeria('BVM on Saturday')).toBe(true)
       expect(isFeria('Blessed Virgin Mary on Saturday')).toBe(true)

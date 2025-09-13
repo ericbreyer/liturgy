@@ -10,14 +10,14 @@ const error = ref<string>('')
 
 // Computed properties
 const selectedCalendarInfos = computed(() => {
-  return calendars.value.filter(cal => selectedCalendars.value.includes(cal.name))
+  return calendars.value.filter((cal) => selectedCalendars.value.includes(cal.name))
 })
 
 // Helper functions for URL persistence
 function getCalendarsFromUrl(route: any): string[] {
   const calendarsParam = route.query.calendars
   if (typeof calendarsParam === 'string') {
-    return calendarsParam.split(',').filter(name => name.length > 0)
+    return calendarsParam.split(',').filter((name) => name.length > 0)
   }
   return []
 }
@@ -29,7 +29,7 @@ function updateUrlWithCalendars(router: any, route: any, calendarsToSelect: stri
   } else {
     delete newQuery.calendars
   }
-  
+
   // Only update if the query actually changed
   const currentCalendarsParam = route.query.calendars || ''
   const newCalendarsParam = newQuery.calendars || ''
@@ -44,40 +44,47 @@ async function loadCalendars(router?: any, route?: any) {
     loading.value = true
     error.value = ''
     calendars.value = await api.getCalendars()
-    
+
     if (router && route) {
       // Get calendars from URL query parameters
       const urlCalendars = getCalendarsFromUrl(route)
-      
+
       if (urlCalendars.length > 0) {
         // Use calendars from URL, but only include valid ones
-        const validCalendars = urlCalendars.filter(name => 
-          calendars.value.some(cal => cal.name === name)
+        const validCalendars = urlCalendars.filter((name) =>
+          calendars.value.some((cal) => cal.name === name),
         )
         selectedCalendars.value = validCalendars
-        
+
         // If URL had invalid calendars, clean up the URL
         if (validCalendars.length !== urlCalendars.length) {
           updateUrlWithCalendars(router, route, validCalendars)
         }
       } else if (calendars.value.length > 0 && selectedCalendars.value.length === 0) {
         // No URL calendars, use default selection
-        const defaultCalendars = calendars.value.map(cal => cal.name).filter(name => (name == "of-us" || name == "ef"))
+        const defaultCalendars = calendars.value
+          .map((cal) => cal.name)
+          .filter((name) => name == 'of-us' || name == 'ef')
         selectedCalendars.value = defaultCalendars
         updateUrlWithCalendars(router, route, defaultCalendars)
       }
-      
+
       // Watch for changes to selectedCalendars and update URL
-      watch(selectedCalendars, (newCalendars) => {
-        updateUrlWithCalendars(router, route, newCalendars)
-      }, { deep: true })
+      watch(
+        selectedCalendars,
+        (newCalendars) => {
+          updateUrlWithCalendars(router, route, newCalendars)
+        },
+        { deep: true },
+      )
     } else {
       // Fallback when no router/route provided
       if (calendars.value.length > 0 && selectedCalendars.value.length === 0) {
-        selectedCalendars.value = calendars.value.map(cal => cal.name).filter(name => (name == "of-us" || name == "ef"))
+        selectedCalendars.value = calendars.value
+          .map((cal) => cal.name)
+          .filter((name) => name == 'of-us' || name == 'ef')
       }
     }
-    
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load calendars'
   } finally {
@@ -87,14 +94,14 @@ async function loadCalendars(router?: any, route?: any) {
 
 function toggleCalendar(calendarName: string) {
   if (selectedCalendars.value.includes(calendarName)) {
-    selectedCalendars.value = selectedCalendars.value.filter(name => name !== calendarName)
+    selectedCalendars.value = selectedCalendars.value.filter((name) => name !== calendarName)
   } else {
     selectedCalendars.value = [...selectedCalendars.value, calendarName]
   }
 }
 
 function selectAll() {
-  selectedCalendars.value = [...calendars.value.map(cal => cal.name)]
+  selectedCalendars.value = [...calendars.value.map((cal) => cal.name)]
 }
 
 function selectNone() {
@@ -103,13 +110,13 @@ function selectNone() {
 
 function syncWithRoute(route?: any) {
   if (!route) return
-  
+
   const urlCalendars = getCalendarsFromUrl(route)
-  
+
   if (urlCalendars.length > 0) {
     // Filter to only valid calendars
-    const validCalendars = urlCalendars.filter(name => 
-      calendars.value.some(cal => cal.name === name)
+    const validCalendars = urlCalendars.filter((name) =>
+      calendars.value.some((cal) => cal.name === name),
     )
     selectedCalendars.value = validCalendars
   }
@@ -122,15 +129,15 @@ export function useCalendarSelection() {
     selectedCalendars,
     loading,
     error,
-    
+
     // Computed
     selectedCalendarInfos,
-    
+
     // Actions
     loadCalendars,
     toggleCalendar,
     selectAll,
     selectNone,
-    syncWithRoute
+    syncWithRoute,
   }
 }

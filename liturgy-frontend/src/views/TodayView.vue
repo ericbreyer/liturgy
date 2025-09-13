@@ -24,11 +24,7 @@ const displayedCalendars = ref<string[]>([])
 const abortController = ref<AbortController | null>(null)
 
 // Use shared calendar selection state
-const {
-  selectedCalendars,
-  loadCalendars,
-  selectedCalendarInfos
-} = useCalendarSelection()
+const { selectedCalendars, loadCalendars, selectedCalendarInfos } = useCalendarSelection()
 
 // Use shared date navigation
 const {
@@ -38,51 +34,60 @@ const {
   goToToday,
   goToPrevious: goToPreviousDay,
   goToNext: goToNextDay,
-  route
+  route,
 } = useDateNavigation('Today')
 
 // Create a single date array for the LiturgicalTable component using displayed data
 const singleDateArray = computed(() => {
   if (!displayedDate.value) return []
-  
+
   const [year, month, day] = displayedDate.value.split('-').map(Number)
   const date = new Date(year, month - 1, day)
-  
-  return [{
-    dateString: displayedDate.value,
-    displayDate: date.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    }),
-    isSelected: true
-  }]
+
+  return [
+    {
+      dateString: displayedDate.value,
+      displayDate: date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      isSelected: true,
+    },
+  ]
 })
 
 // Convert displayed data to the format expected by LiturgicalTable
 const dataMapForTable = computed(() => {
   if (!displayedDate.value) return {}
-  
+
   return {
-    [displayedDate.value]: displayedData.value
+    [displayedDate.value]: displayedData.value,
   }
 })
 
 // Get the displayed calendar infos
 const displayedCalendarInfos = computed(() => {
-  return selectedCalendarInfos.value.filter(cal => displayedCalendars.value.includes(cal.name))
+  return selectedCalendarInfos.value.filter((cal) => displayedCalendars.value.includes(cal.name))
 })
 
 // Watch for changes in selected calendars from shared state
-watch(selectedCalendars, () => {
-  loadDayInfo()
-}, { immediate: false, deep: true })
+watch(
+  selectedCalendars,
+  () => {
+    loadDayInfo()
+  },
+  { immediate: false, deep: true },
+)
 
 // Watch for route changes (date parameter changes)
-watch(() => route.query.date, () => {
-  loadDayInfo()
-})
+watch(
+  () => route.query.date,
+  () => {
+    loadDayInfo()
+  },
+)
 
 // Watch for changes in selected date
 watch(selectedDate, () => {
@@ -90,14 +95,17 @@ watch(selectedDate, () => {
 })
 
 // Watch for route changes (date parameter changes)
-watch(() => route.query.date, () => {
-  loadDayInfo()
-})
+watch(
+  () => route.query.date,
+  () => {
+    loadDayInfo()
+  },
+)
 
 onMounted(async () => {
   // Initialize displayed date to current selected date
   displayedDate.value = selectedDate.value
-  
+
   // Calendar loading is now handled by AppNavigation
   // Just load the day info if calendars are already selected
   if (selectedCalendars.value.length > 0) {
@@ -107,33 +115,35 @@ onMounted(async () => {
 
 async function loadDayInfo() {
   if (selectedCalendars.value.length === 0) return
-  
+
   // Cancel any existing request
   if (abortController.value) {
     abortController.value.abort()
   }
   abortController.value = new AbortController()
-  
+
   try {
     backgroundLoading.value = true
     loading.value = true
     error.value = ''
-    
+
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     const newMap: Record<string, DayInfo> = {}
-    
-    await Promise.all(selectedCalendars.value.map(async (calendarName) => {
-      try {
-        const dayInfo = await api.getDayInfo(calendarName, year, month, day)
-        newMap[calendarName] = dayInfo
-      } catch (err) {
-        if (err instanceof Error && err.name === 'AbortError') {
-          return // Request was cancelled
+
+    await Promise.all(
+      selectedCalendars.value.map(async (calendarName) => {
+        try {
+          const dayInfo = await api.getDayInfo(calendarName, year, month, day)
+          newMap[calendarName] = dayInfo
+        } catch (err) {
+          if (err instanceof Error && err.name === 'AbortError') {
+            return // Request was cancelled
+          }
+          console.warn(`Could not load day info for ${calendarName}:`, err)
         }
-        console.warn(`Could not load day info for ${calendarName}:`, err)
-      }
-    }))
-    
+      }),
+    )
+
     // Only update displayed content if this request wasn't cancelled
     if (!abortController.value?.signal.aborted) {
       todayInfoMap.value = newMap
@@ -156,8 +166,8 @@ async function loadDayInfo() {
 <template>
   <PageLayout>
     <div class="view-container">
-      <ErrorDisplay 
-        v-if="error" 
+      <ErrorDisplay
+        v-if="error"
         :message="error"
         type="error"
         :dismissible="true"
@@ -185,7 +195,7 @@ async function loadDayInfo() {
 
         <!-- Desktop Table View -->
         <div v-if="displayedCalendarInfos.length > 0 && displayedDate" class="desktop-view">
-          <LiturgicalTable 
+          <LiturgicalTable
             :dates="singleDateArray"
             :calendars="displayedCalendarInfos"
             :data-map="dataMapForTable"
@@ -195,9 +205,10 @@ async function loadDayInfo() {
         </div>
 
         <div v-else-if="selectedCalendars.length === 0" class="no-selection">
-          📋 Please select at least one calendar from the dropdown above to view the liturgy for this day
+          📋 Please select at least one calendar from the dropdown above to view the liturgy for
+          this day
         </div>
-        
+
         <div v-else-if="!displayedDate && !backgroundLoading" class="no-selection">
           📅 Loading liturgical information...
         </div>
@@ -207,22 +218,9 @@ async function loadDayInfo() {
 </template>
 
 <style scoped>
-.view-container {
-  width: var(--layout-fixed-width);
-  max-width: 100vw; /* Fallback for very small screens */
-  margin: 0 auto;
-  padding: 0 var(--layout-padding);
-  box-sizing: border-box;
-}
+@import '../styles/liturgical.css';
 
-.view-header {
-  background: var(--surface-primary);
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid var(--border-primary);
-}
-
+/* TodayView-specific overrides (keep truly local rules here) */
 .header-content {
   display: flex;
   justify-content: space-between;
@@ -258,16 +256,6 @@ async function loadDayInfo() {
 
 .header-controls {
   flex-shrink: 0;
-}
-
-.no-selection {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-secondary);
-  font-size: 16px;
-  background: var(--surface-primary);
-  border-radius: 4px;
-  border: 1px solid var(--border-primary);
 }
 
 .background-loading {
@@ -308,7 +296,6 @@ async function loadDayInfo() {
 .mobile-view {
   display: block;
 }
-
 .desktop-view {
   display: none;
 }
@@ -317,7 +304,6 @@ async function loadDayInfo() {
   .mobile-view {
     display: none;
   }
-  
   .desktop-view {
     display: block;
   }
@@ -330,24 +316,16 @@ async function loadDayInfo() {
     gap: 16px;
     padding: 16px;
   }
-  
   .header-title {
     font-size: 24px;
     text-align: center;
   }
-  
   .header-icon {
     font-size: 28px;
   }
-  
   .header-subtitle {
     font-size: 14px;
     text-align: center;
-  }
-  
-  .no-selection {
-    padding: 32px 16px;
-    font-size: 14px;
   }
 }
 
@@ -356,15 +334,12 @@ async function loadDayInfo() {
     padding: 12px;
     border-radius: 4px;
   }
-  
   .header-title {
     font-size: 20px;
   }
-  
   .header-icon {
     font-size: 24px;
   }
-  
   .header-subtitle {
     font-size: 13px;
   }
@@ -374,11 +349,9 @@ async function loadDayInfo() {
   .calendar-checkboxes {
     flex-direction: column;
   }
-  
   .checkbox-label {
     flex: 1;
   }
-  
   .selection-buttons {
     flex-direction: column;
   }

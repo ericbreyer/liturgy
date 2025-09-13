@@ -43,51 +43,124 @@
 }
 
 /* Reset and sensible defaults (from base.css) */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body,#app{height:100%}
-body{
-  min-height:100vh;
-  color:var(--text-primary);
-  background:var(--background-color);
-  transition: color .5s, background-color .5s;
-  line-height:1.6;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size:15px;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html,
+body,
+#app {
+  height: 100%;
+}
+body {
+  min-height: 100vh;
+  color: var(--text-primary);
+  background: var(--background-color);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
 /* Utility layout container used throughout components */
-.page-layout { padding: var(--layout-padding); max-width: 100%; margin: 0 auto; box-sizing: border-box; }
+.page-layout {
+  padding: var(--layout-padding);
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 
 /* Fixed-width system with responsive fallbacks */
-@media (max-width: 1440px){:root{--layout-fixed-width:1200px}}
-@media (max-width:1240px){:root{--layout-fixed-width:1000px}}
-@media (max-width:1040px){:root{--layout-fixed-width:900px}}
-@media (max-width:940px){:root{--layout-fixed-width:100vw;--layout-padding:.5rem}}
+@media (max-width: 1440px) {
+  :root {
+    --layout-fixed-width: 1200px;
+  }
+}
+@media (max-width: 1240px) {
+  :root {
+    --layout-fixed-width: 1000px;
+  }
+}
+@media (max-width: 1040px) {
+  :root {
+    --layout-fixed-width: 900px;
+  }
+}
+@media (max-width: 940px) {
+  :root {
+    --layout-fixed-width: 100vw;
+    --layout-padding: 0.5rem;
+  }
+}
 
 /* Small helpers */
-img{max-width:100%;height:auto;display:block}
-a{color:var(--accent-color);text-decoration:none}
-button{cursor:pointer;color:var(--text-primary)}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+  color: var(--text-primary);
+}
 
 /* Mobile / Desktop utility classes (used across components) */
-.desktop-only{display:block}
-@media (max-width:768px){.desktop-only{display:none}}
+.desktop-only {
+  display: block;
+}
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+}
 
 /* Keep domain-specific styles in src/styles/liturgical.css */
 
 /* Accessibility: focus outlines */
-:focus{outline:2px solid color-mix(in srgb, var(--accent-color) 40%, transparent);outline-offset:2px}
+:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent-color) 40%, transparent);
+  outline-offset: 2px;
+}
 
 /* Basic header/footer layout tokens */
-.app-header .app-header-content, .header-content { max-width: var(--layout-fixed-width); margin: 0 auto; padding: 0 var(--layout-padding); }
+.app-header .app-header-content,
+.header-content {
+  max-width: var(--layout-fixed-width);
+  margin: 0 auto;
+  padding: 0 var(--layout-padding);
+}
 
 /* Small responsive tweaks for typography */
-@media (max-width:768px){
-  .app-title{font-size:18px}
-  .header-title{font-size:16px}
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 18px;
+  }
+  .header-title {
+    font-size: 16px;
+  }
 }
 
 /* App header and page header styles restored from original layout */
@@ -117,7 +190,10 @@ button{cursor:pointer;color:var(--text-primary)}
   color: var(--text-primary);
 }
 
-.app-icon { font-size: 1.1em; color: var(--accent-color); }
+.app-icon {
+  font-size: 1.1em;
+  color: var(--accent-color);
+}
 
 .app-tagline {
   margin: 0;
@@ -151,7 +227,10 @@ button{cursor:pointer;color:var(--text-primary)}
   color: var(--text-primary);
 }
 
-.header-icon { font-size: 1em; color: var(--accent-color); }
+.header-icon {
+  font-size: 1em;
+  color: var(--accent-color);
+}
 
 .header-subtitle {
   margin: 0;
@@ -178,7 +257,10 @@ footer {
   border-top: 1px solid var(--border-primary);
 }
 
-footer p { margin: 0; font-size: 13px; }
+footer p {
+  margin: 0;
+  font-size: 13px;
+}
 
 footer code {
   background: var(--surface-secondary);
@@ -189,24 +271,39 @@ footer code {
 }
 
 @media (max-width: 768px) {
-  .app-title { font-size: 18px; flex-direction: column; gap: 0.25rem; }
-  .app-tagline { font-size: 11px; }
-  .header-title { font-size: 16px; flex-direction: column; gap: 0.2rem; }
-  .header-subtitle { font-size: 11px; }
-  main { padding: 16px; }
+  .app-title {
+    font-size: 18px;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .app-tagline {
+    font-size: 11px;
+  }
+  .header-title {
+    font-size: 16px;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .header-subtitle {
+    font-size: 11px;
+  }
+  main {
+    padding: 16px;
+  }
 }
 
 /* End of global.css */
 
 /* --- App-level overrides (moved from main.css) --- */
 #app {
-  max-width: var(--layout-fixed-width);
+  /* max-width: var(--layout-fixed-width); */
   margin: 0 auto;
   font-weight: normal;
   min-height: var(--layout-min-height);
 }
 
-a, .green {
+a,
+.green {
   text-decoration: none;
   color: var(--accent-color);
   transition: 0.24s ease;
@@ -214,11 +311,17 @@ a, .green {
 }
 
 @media (hover: hover) {
-  a:hover { background-color: color-mix(in srgb, var(--accent-color) 20%, transparent); }
+  a:hover {
+    background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
+  }
 }
 
 @media (min-width: 1240px) {
-  #app { display: grid; grid-template-columns: 1fr 1fr; gap: var(--layout-gap); }
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--layout-gap);
+  }
 }
 
 /* End app-level overrides */

@@ -19,12 +19,12 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   loading: false,
   showDateColumn: true,
-  dateColumnTitle: 'Date'
+  dateColumnTitle: 'Date',
 })
 
 // Get commemoration interpretation for a calendar
 function getCommemorationInterpretation(calendarName: string): string {
-  const calendar = props.calendars.find(cal => cal.name === calendarName)
+  const calendar = props.calendars.find((cal) => cal.name === calendarName)
   return calendar?.commemoration_interpretation || 'Also:'
 }
 </script>
@@ -35,18 +35,14 @@ function getCommemorationInterpretation(calendarName: string): string {
       <thead>
         <tr>
           <th v-if="showDateColumn" class="day-column">{{ dateColumnTitle }}</th>
-          <th 
-            v-for="calendar in calendars" 
-            :key="calendar.name"
-            class="calendar-column"
-          >
+          <th v-for="calendar in calendars" :key="calendar.name" class="calendar-column">
             {{ calendar.display_name }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr 
-          v-for="dateInfo in dates" 
+        <tr
+          v-for="dateInfo in dates"
           :key="dateInfo.dateString"
           class="liturgical-row"
           :class="{ 'selected-row': dateInfo.isSelected }"
@@ -54,39 +50,62 @@ function getCommemorationInterpretation(calendarName: string): string {
           <td v-if="showDateColumn" class="day-cell">
             <div class="day-info">
               <div class="day-name">{{ dateInfo.displayDate.split(',')[0] }}</div>
-              <div v-if="dateInfo.displayDate.includes(',')" class="day-date">{{ dateInfo.displayDate.split(',')[1]?.trim() }}</div>
+              <div v-if="dateInfo.displayDate.includes(',')" class="day-date">
+                {{ dateInfo.displayDate.split(',')[1]?.trim() }}
+              </div>
             </div>
           </td>
-          <td 
-            v-for="calendar in calendars" 
+          <td
+            v-for="calendar in calendars"
             :key="`${dateInfo.dateString}-${calendar.name}`"
             class="liturgy-cell"
           >
             <div v-if="dataMap[dateInfo.dateString]?.[calendar.name]" class="liturgy-content">
               <div class="liturgy-header">
-                <span class="color-bar" :style="{ backgroundColor: dataMap[dateInfo.dateString][calendar.name].desc.day.color }"></span>
-                <span class="feast-text">{{ dataMap[dateInfo.dateString][calendar.name].desc.day.desc }}</span>
+                <span
+                  class="color-bar"
+                  :style="{
+                    backgroundColor: dataMap[dateInfo.dateString][calendar.name].desc.day.color,
+                  }"
+                ></span>
+                <span class="feast-text">{{
+                  dataMap[dateInfo.dateString][calendar.name].desc.day.desc
+                }}</span>
               </div>
-              <div class="rank-text">{{ dataMap[dateInfo.dateString][calendar.name].desc.day.rank }}</div>
-              <div class="season-text">{{ dataMap[dateInfo.dateString][calendar.name].desc.day_in_season }}</div>
-              
+              <div class="rank-text">
+                {{ dataMap[dateInfo.dateString][calendar.name].desc.day.rank }}
+              </div>
+              <div class="season-text">
+                {{ dataMap[dateInfo.dateString][calendar.name].desc.day_in_season }}
+              </div>
+
               <!-- Commemorations -->
-              <div v-if="dataMap[dateInfo.dateString][calendar.name].desc.commemorations && dataMap[dateInfo.dateString][calendar.name].desc.commemorations.length > 0" class="commemorations">
-                <div class="commemorations-header">{{ getCommemorationInterpretation(calendar.name) }}</div>
-                <div 
-                  v-for="commemoration in dataMap[dateInfo.dateString][calendar.name].desc.commemorations" 
+              <div
+                v-if="
+                  dataMap[dateInfo.dateString][calendar.name].desc.commemorations &&
+                  dataMap[dateInfo.dateString][calendar.name].desc.commemorations.length > 0
+                "
+                class="commemorations"
+              >
+                <div class="commemorations-header">
+                  {{ getCommemorationInterpretation(calendar.name) }}
+                </div>
+                <div
+                  v-for="commemoration in dataMap[dateInfo.dateString][calendar.name].desc
+                    .commemorations"
                   :key="commemoration.desc"
                   class="commemoration-item"
                 >
-                  <span class="color-bar small" :style="{ backgroundColor: commemoration.color }"></span>
+                  <span
+                    class="color-bar small"
+                    :style="{ backgroundColor: commemoration.color }"
+                  ></span>
                   <span class="commemoration-desc">{{ commemoration.desc }}</span>
                   <span class="commemoration-rank">{{ commemoration.rank }}</span>
                 </div>
               </div>
             </div>
-            <div v-else class="no-data-cell">
-              ❌ No data
-            </div>
+            <div v-else class="no-data-cell">❌ No data</div>
           </td>
         </tr>
       </tbody>
@@ -95,6 +114,9 @@ function getCommemorationInterpretation(calendarName: string): string {
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
+
+/* Table-specific layout; shared feast/feast-line/color-bar styles live in liturgical.css */
 .liturgical-table-container {
   overflow-x: auto;
   border-radius: 4px;
@@ -195,24 +217,12 @@ function getCommemorationInterpretation(calendarName: string): string {
   gap: 8px;
 }
 
-.color-bar {
-  width: 6px;
-  height: 20px;
-  border-radius: 3px;
-  flex-shrink: 0;
-  border: 1px solid #444;
-}
-
 .color-bar.small {
   width: 4px;
   height: 14px;
   border-radius: 2px;
 }
-
 .feast-text {
-  color: #fff;
-  font-size: 14px;
-  line-height: 1.3;
   font-weight: 600;
 }
 
@@ -276,7 +286,7 @@ function getCommemorationInterpretation(calendarName: string): string {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   .liturgical-table {
     min-width: 800px;
   }
@@ -287,42 +297,42 @@ function getCommemorationInterpretation(calendarName: string): string {
     border-radius: 6px;
     margin-bottom: 16px;
   }
-  
+
   .liturgical-table {
     min-width: 700px;
   }
-  
+
   .day-column {
     width: 90px;
     min-width: 90px;
   }
-  
+
   .calendar-column {
     min-width: 180px;
   }
-  
+
   .liturgical-table th,
   .day-cell,
   .liturgy-cell {
     padding: 10px 6px;
   }
-  
+
   .feast-text {
     font-size: 13px;
   }
-  
+
   .rank-text {
     font-size: 10px;
   }
-  
+
   .season-text {
     font-size: 10px;
   }
-  
+
   .day-name {
     font-size: 13px;
   }
-  
+
   .day-date {
     font-size: 11px;
   }
@@ -335,58 +345,58 @@ function getCommemorationInterpretation(calendarName: string): string {
     border-left: none;
     border-right: none;
   }
-  
+
   .liturgical-table {
     min-width: 600px;
   }
-  
+
   .day-column {
     width: 80px;
     min-width: 80px;
   }
-  
+
   .calendar-column {
     min-width: 160px;
   }
-  
+
   .liturgical-table th,
   .day-cell,
   .liturgy-cell {
     padding: 8px 4px;
   }
-  
+
   .liturgical-table th {
     font-size: 12px;
   }
-  
+
   .feast-text {
     font-size: 12px;
   }
-  
+
   .rank-text {
     font-size: 9px;
   }
-  
+
   .season-text {
     font-size: 9px;
   }
-  
+
   .day-name {
     font-size: 12px;
   }
-  
+
   .day-date {
     font-size: 10px;
   }
-  
+
   .commemorations-header {
     font-size: 9px;
   }
-  
+
   .commemoration-desc {
     font-size: 9px;
   }
-  
+
   .commemoration-rank {
     font-size: 8px;
   }

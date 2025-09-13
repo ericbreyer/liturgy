@@ -13,12 +13,12 @@ const {
   hasSearched,
   hasResults,
   performSearch,
-  clearSearch
+  clearSearch,
 } = useSearch()
 
 // Group results by calendar
 const getResultsForCalendar = (calendarName: string) => {
-  return searchResults.value.filter(result => result.calendarName === calendarName)
+  return searchResults.value.filter((result) => result.calendarName === calendarName)
 }
 </script>
 
@@ -32,22 +32,20 @@ const getResultsForCalendar = (calendarName: string) => {
           placeholder="Search for feasts, saints, seasons..."
           class="search-input"
           @keyup.enter="performSearch"
+        />
+        <button
+          @click="performSearch"
+          class="search-btn"
+          :disabled="!searchQuery.trim() || isLoading"
         >
-        <button @click="performSearch" class="search-btn" :disabled="!searchQuery.trim() || isLoading">
           🔍 Search
         </button>
-        <button @click="clearSearch" class="clear-btn" v-if="searchQuery">
-          ✖️ Clear
-        </button>
+        <button @click="clearSearch" class="clear-btn" v-if="searchQuery">✖️ Clear</button>
       </div>
 
-      <div v-if="isLoading" class="loading">
-        ⏳ Searching...
-      </div>
-      
-      <div v-if="error" class="error">
-        ❌ {{ error }}
-      </div>
+      <div v-if="isLoading" class="loading">⏳ Searching...</div>
+
+      <div v-if="error" class="error">❌ {{ error }}</div>
 
       <div v-if="!hasResults && hasSearched && !isLoading && !error" class="no-results">
         📭 No results found for "{{ searchQuery }}"
@@ -58,9 +56,7 @@ const getResultsForCalendar = (calendarName: string) => {
         <p v-if="selectedCalendars.length === 0" class="warning">
           ⚠️ Please select at least one calendar to search
         </p>
-        <p v-else class="selected-calendars">
-          📚 Searching in: {{ selectedCalendars.join(', ') }}
-        </p>
+        <p v-else class="selected-calendars">📚 Searching in: {{ selectedCalendars.join(', ') }}</p>
         <ul>
           <li>🎉 Search for feast names (e.g., "Christmas", "Easter")</li>
           <li>👼 Look up saints (e.g., "Saint Joseph", "Mary")</li>
@@ -72,18 +68,18 @@ const getResultsForCalendar = (calendarName: string) => {
       <!-- Search Results -->
       <div v-if="hasResults" class="search-results">
         <h3>Search Results ({{ searchResults.length }})</h3>
-        
+
         <!-- Group results by calendar -->
         <div class="calendar-columns">
-          <div 
-            v-for="calendarName in selectedCalendars" 
+          <div
+            v-for="calendarName in selectedCalendars"
             :key="calendarName"
             class="calendar-column"
           >
             <h4 class="calendar-header">{{ calendarName.toUpperCase() }}</h4>
             <div class="calendar-results">
-              <div 
-                v-for="result in getResultsForCalendar(calendarName)" 
+              <div
+                v-for="result in getResultsForCalendar(calendarName)"
                 :key="`${result.calendarName}-${result.name}`"
                 class="result-card"
               >
@@ -91,18 +87,24 @@ const getResultsForCalendar = (calendarName: string) => {
                   <h5 class="result-title">{{ result.name }}</h5>
                   <span class="result-score">{{ result.score.toFixed(2) }}</span>
                 </div>
-                
+
                 <!-- Color bar -->
-                <div class="color-bar" :style="{ backgroundColor: getColorValue(result.color) }"></div>
-                
+                <div
+                  class="color-bar"
+                  :style="{ backgroundColor: getColorValue(result.color) }"
+                ></div>
+
                 <p class="result-description">{{ result.description }}</p>
                 <div class="result-meta">
                   <span v-if="result.date" class="result-date">📅 {{ result.date }}</span>
                   <span v-if="result.rank" class="result-rank">⭐ {{ result.rank }}</span>
                 </div>
               </div>
-              
-              <div v-if="getResultsForCalendar(calendarName).length === 0" class="no-calendar-results">
+
+              <div
+                v-if="getResultsForCalendar(calendarName).length === 0"
+                class="no-calendar-results"
+              >
                 No results in {{ calendarName }}
               </div>
             </div>
@@ -114,8 +116,10 @@ const getResultsForCalendar = (calendarName: string) => {
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
+
 .search-view {
-  width: var(--layout-fixed-width);
+  /* width: var(--layout-fixed-width); */
   max-width: 100vw; /* Fallback for very small screens */
   margin: 0 auto;
   padding: 0 var(--layout-padding);
@@ -357,7 +361,7 @@ const getResultsForCalendar = (calendarName: string) => {
   width: 100%;
   border-radius: 2px;
   margin: 8px 0;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .result-calendar {
@@ -404,26 +408,26 @@ const getResultsForCalendar = (calendarName: string) => {
   .search-box {
     flex-direction: column;
   }
-  
+
   .search-input {
     min-width: 100%;
   }
-  
+
   .calendar-columns {
     flex-direction: column;
     gap: 16px;
   }
-  
+
   .calendar-column {
     min-width: 100%;
   }
-  
+
   .result-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .result-score {
     align-self: flex-end;
   }

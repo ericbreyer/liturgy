@@ -19,14 +19,14 @@ const state = ref<SearchState>({
   results: [],
   loading: false,
   error: null,
-  hasSearched: false
+  hasSearched: false,
 })
 
 let abortController: AbortController | null = null
 
 export function useSearch() {
   const { selectedCalendars } = useCalendarSelection()
-  
+
   const searchQuery = computed({
     get: () => state.value.query,
     set: (value: string) => {
@@ -34,7 +34,7 @@ export function useSearch() {
       if (!value.trim()) {
         clearResults()
       }
-    }
+    },
   })
 
   const searchResults = computed(() => state.value.results)
@@ -57,7 +57,7 @@ export function useSearch() {
     if (abortController) {
       abortController.abort()
     }
-    
+
     abortController = new AbortController()
     state.value.loading = true
     state.value.error = null
@@ -65,16 +65,16 @@ export function useSearch() {
 
     try {
       console.log(`Searching for "${query}" in calendars:`, selectedCalendars.value)
-      
+
       // Search across all selected calendars
       const searchPromises = selectedCalendars.value.map(async (calendarName) => {
         try {
           console.log(`Searching in ${calendarName}...`)
           const results = await api.searchFeasts(calendarName, query)
           console.log(`Found ${results.length} results in ${calendarName}:`, results)
-          return results.map(result => ({
+          return results.map((result) => ({
             ...result,
-            calendarName
+            calendarName,
           }))
         } catch (error) {
           console.warn(`Search failed for calendar ${calendarName}:`, error)
@@ -83,7 +83,7 @@ export function useSearch() {
       })
 
       const allResults = await Promise.all(searchPromises)
-      
+
       // Check if request was aborted
       if (abortController.signal.aborted) return
 
@@ -92,13 +92,12 @@ export function useSearch() {
       console.log(`Total flat results:`, flatResults)
       const uniqueResults = deduplicateResults(flatResults)
       console.log(`Final unique results:`, uniqueResults)
-      
+
       state.value.results = uniqueResults
       state.value.loading = false
-      
     } catch (error) {
       if (abortController.signal.aborted) return
-      
+
       state.value.error = error instanceof Error ? error.message : 'Search failed'
       state.value.loading = false
       state.value.results = []
@@ -109,7 +108,7 @@ export function useSearch() {
     if (abortController) {
       abortController.abort()
     }
-    
+
     state.value.results = []
     state.value.error = null
     state.value.hasSearched = false
@@ -128,11 +127,11 @@ export function useSearch() {
       // First sort by calendar name
       const calendarDiff = a.calendarName.localeCompare(b.calendarName)
       if (calendarDiff !== 0) return calendarDiff
-      
+
       // Then by score (higher scores first)
       const scoreDiff = (b.score || 0) - (a.score || 0)
       if (scoreDiff !== 0) return scoreDiff
-      
+
       // Finally by name alphabetically
       return a.name.localeCompare(b.name)
     })
@@ -147,6 +146,6 @@ export function useSearch() {
     hasResults,
     performSearch,
     clearSearch,
-    clearResults
+    clearResults,
   }
 }

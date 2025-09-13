@@ -6,8 +6,8 @@ describe('FeastMeta', () => {
   it('renders with rank only', () => {
     const wrapper = mount(FeastMeta, {
       props: {
-        rank: 'solemnity'
-      }
+        rank: 'solemnity',
+      },
     })
 
     expect(wrapper.exists()).toBe(true)
@@ -20,8 +20,8 @@ describe('FeastMeta', () => {
     const wrapper = mount(FeastMeta, {
       props: {
         rank: 'feast',
-        calendars: 'grc'
-      }
+        calendars: 'grc',
+      },
     })
 
     expect(wrapper.find('.feast-rank').text()).toBe('feast')
@@ -32,8 +32,8 @@ describe('FeastMeta', () => {
     const wrapper = mount(FeastMeta, {
       props: {
         rank: 'memorial',
-        calendars: ['grc', 'grc-us']
-      }
+        calendars: ['grc', 'grc-us'],
+      },
     })
 
     expect(wrapper.find('.feast-rank').text()).toBe('memorial')
@@ -44,8 +44,8 @@ describe('FeastMeta', () => {
     const wrapper = mount(FeastMeta, {
       props: {
         rank: 'optional memorial',
-        commemorationCount: 3
-      }
+        commemorationCount: 3,
+      },
     })
 
     expect(wrapper.find('.feast-rank').text()).toBe('optional memorial')
@@ -57,8 +57,8 @@ describe('FeastMeta', () => {
       props: {
         rank: 'solemnity',
         calendars: ['grc', 'grc-us'],
-        commemorationCount: 2
-      }
+        commemorationCount: 2,
+      },
     })
 
     expect(wrapper.find('.feast-rank').text()).toBe('solemnity')
@@ -70,8 +70,8 @@ describe('FeastMeta', () => {
     const wrapper = mount(FeastMeta, {
       props: {
         rank: 'feast',
-        size: 'small'
-      }
+        size: 'small',
+      },
     })
 
     expect(wrapper.classes()).toContain('feast-meta--small')
@@ -80,8 +80,8 @@ describe('FeastMeta', () => {
   it('applies default medium size when no size specified', () => {
     const wrapper = mount(FeastMeta, {
       props: {
-        rank: 'feast'
-      }
+        rank: 'feast',
+      },
     })
 
     expect(wrapper.classes()).toContain('feast-meta--medium')
@@ -91,8 +91,8 @@ describe('FeastMeta', () => {
     const wrapper = mount(FeastMeta, {
       props: {
         rank: 'feast',
-        size: 'large'
-      }
+        size: 'large',
+      },
     })
 
     expect(wrapper.classes()).toContain('feast-meta--large')
@@ -101,8 +101,8 @@ describe('FeastMeta', () => {
   it('applies correct base classes', () => {
     const wrapper = mount(FeastMeta, {
       props: {
-        rank: 'feast'
-      }
+        rank: 'feast',
+      },
     })
 
     expect(wrapper.classes()).toContain('feast-meta')

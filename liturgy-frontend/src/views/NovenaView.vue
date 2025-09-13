@@ -188,11 +188,11 @@ async function loadNovenaData() {
 
     // Categorize the feasts (no overlap between categories)
     const currentNovenas = allFeasts.filter(
-      (f) => f.daysAway <= novenaDays.value - 1 && f.daysAway >= 1
+      (f) => f.daysAway <= novenaDays.value - 1 && f.daysAway >= 1,
     )
     const startToday = allFeasts.filter((f) => f.daysAway === novenaDays.value)
     const upcoming = allFeasts.filter(
-      (f) => f.daysAway > novenaDays.value && f.daysAway <= novenaDays.value + 6
+      (f) => f.daysAway > novenaDays.value && f.daysAway <= novenaDays.value + 6,
     )
 
     novenas.value = [
@@ -232,7 +232,7 @@ watch(
   () => {
     loadNovenaData()
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 // Watch for novena days setting changes
@@ -301,11 +301,7 @@ onMounted(() => {
                 <LiturgicalColorBar :color="feast.color" size="medium" />
                 <div class="feast-info">
                   <h3 class="feast-title">{{ feast.title }}</h3>
-                  <FeastMeta 
-                    :rank="feast.rank" 
-                    :calendars="feast.calendars" 
-                    size="medium"
-                  />
+                  <FeastMeta :rank="feast.rank" :calendars="feast.calendars" size="medium" />
                 </div>
               </div>
 
@@ -332,8 +328,8 @@ onMounted(() => {
                         getNovenaStartDaysAway(feast.novenaStartDate) < 0
                           ? 'ago'
                           : getNovenaStartDaysAway(feast.novenaStartDate) === 0
-                          ? ''
-                          : 'away'
+                            ? ''
+                            : 'away'
                       }})</span
                     ></span
                   >
@@ -579,5 +575,97 @@ onMounted(() => {
   .feast-dates {
     font-size: 0.85rem;
   }
+}
+
+/* Component-scoped category / novena / control styles (moved from liturgical.css)
+   These are kept here because they apply only to the Novena view. */
+.category-section {
+  margin-bottom: 2rem;
+}
+
+.category-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+.category-title {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.category-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.category-count {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* Novena-specific styles */
+.feast-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.feast-date,
+.novena-start {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.days-away {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+/* Controls and settings */
+.controls-section {
+  background: var(--surface-primary);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-primary);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.toggle-switch {
+  background: var(--surface-interactive);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.toggle-switch:hover {
+  border-color: var(--accent-color);
+}
+
+.toggle-switch.active {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
 }
 </style>

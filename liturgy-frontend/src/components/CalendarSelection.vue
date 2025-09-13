@@ -12,7 +12,7 @@ const {
   selectedCalendarInfos,
   toggleCalendar,
   selectAll,
-  selectNone
+  selectNone,
 } = useCalendarSelection()
 
 // Props for customization
@@ -25,7 +25,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   title: 'Select Calendars:',
   showTitle: true,
-  variant: 'dropdown'
+  variant: 'dropdown',
 })
 
 function handleCalendarToggle(calendarName: string) {
@@ -44,16 +44,18 @@ function handleSelectNone() {
 <template>
   <div class="calendar-selection">
     <h3 v-if="showTitle">{{ title }}</h3>
-    
-    <div v-if="error" class="error">
-      ❌ {{ error }}
-    </div>
+
+    <div v-if="error" class="error">❌ {{ error }}</div>
 
     <!-- Dropdown variant -->
     <div v-if="variant === 'dropdown'" class="calendar-dropdown">
-      <button @click="showCalendarDropdown = !showCalendarDropdown" class="dropdown-toggle" :disabled="loading">
+      <button
+        @click="showCalendarDropdown = !showCalendarDropdown"
+        class="dropdown-toggle"
+        :disabled="loading"
+      >
         <span>{{ selectedCalendars.length }} of {{ calendars.length }} calendars selected</span>
-        <span class="dropdown-arrow" :class="{ 'open': showCalendarDropdown }">▼</span>
+        <span class="dropdown-arrow" :class="{ open: showCalendarDropdown }">▼</span>
       </button>
       <div v-if="showCalendarDropdown" class="dropdown-content">
         <div class="selection-buttons">
@@ -61,18 +63,14 @@ function handleSelectNone() {
           <button @click="handleSelectNone" class="select-btn">Select None</button>
         </div>
         <div class="calendar-checkboxes">
-          <label 
-            v-for="calendar in calendars" 
-            :key="calendar.name" 
-            class="checkbox-label"
-          >
+          <label v-for="calendar in calendars" :key="calendar.name" class="checkbox-label">
             <input
               type="checkbox"
               :value="calendar.name"
               :checked="selectedCalendars.includes(calendar.name)"
               @change="handleCalendarToggle(calendar.name)"
               :disabled="loading"
-            >
+            />
             <span class="checkbox-text">{{ calendar.display_name }}</span>
           </label>
         </div>
@@ -86,30 +84,25 @@ function handleSelectNone() {
         <button @click="handleSelectNone" class="select-btn">Select None</button>
       </div>
       <div class="calendar-checkboxes">
-        <label 
-          v-for="calendar in calendars" 
-          :key="calendar.name" 
-          class="checkbox-label"
-        >
+        <label v-for="calendar in calendars" :key="calendar.name" class="checkbox-label">
           <input
             type="checkbox"
             :value="calendar.name"
             :checked="selectedCalendars.includes(calendar.name)"
             @change="handleCalendarToggle(calendar.name)"
             :disabled="loading"
-          >
+          />
           <span class="checkbox-text">{{ calendar.display_name }}</span>
         </label>
       </div>
     </div>
 
-    <div v-if="loading" class="loading-calendars">
-      ⏳ Loading calendars...
-    </div>
+    <div v-if="loading" class="loading-calendars">⏳ Loading calendars...</div>
   </div>
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
 .calendar-selection h3 {
   margin-top: 0;
   margin-bottom: 15px;
@@ -245,37 +238,37 @@ function handleSelectNone() {
   .calendar-selection {
     margin-bottom: 16px;
   }
-  
+
   .dropdown-toggle {
     padding: 12px 16px;
     font-size: 14px;
   }
-  
+
   .dropdown-content {
     padding: 12px;
   }
-  
+
   .calendar-checkboxes {
     flex-direction: column;
     max-height: 300px;
     overflow-y: auto;
   }
-  
+
   .checkbox-label {
     flex: 1;
     padding: 10px;
     margin: 2px 0;
   }
-  
+
   .checkbox-text {
     font-size: 14px;
   }
-  
+
   .selection-buttons {
     flex-direction: row;
     gap: 8px;
   }
-  
+
   .select-btn {
     flex: 1;
     padding: 10px 12px;
@@ -289,35 +282,35 @@ function handleSelectNone() {
     font-size: 16px;
     width: 100%;
   }
-  
+
   .dropdown-content {
     padding: 16px;
     margin: 0 -12px;
     border-radius: 0;
   }
-  
+
   .selection-buttons {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .select-btn {
     width: 100%;
     padding: 12px;
     font-size: 14px;
   }
-  
+
   .checkbox-label {
     padding: 12px;
     border: 1px solid #333;
     border-radius: 6px;
     margin: 4px 0;
   }
-  
+
   .checkbox-text {
     font-size: 15px;
   }
-  
+
   h3 {
     font-size: 16px;
     margin-bottom: 12px;

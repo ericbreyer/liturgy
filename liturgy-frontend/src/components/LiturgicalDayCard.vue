@@ -12,54 +12,66 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   isSelected: false,
-  showDate: true
+  showDate: true,
 })
 
 // Get commemoration interpretation for a calendar
 function getCommemorationInterpretation(calendarName: string): string {
-  const calendar = props.calendars.find(cal => cal.name === calendarName)
+  const calendar = props.calendars.find((cal) => cal.name === calendarName)
   return calendar?.commemoration_interpretation || 'Also:'
 }
 </script>
 
 <template>
-  <div class="liturgical-day-card" :class="{ 'selected': isSelected }">
+  <div class="liturgical-day-card" :class="{ selected: isSelected }">
     <div v-if="showDate" class="day-header">
       <h3 class="day-name">{{ displayDate.split(',')[0] }}</h3>
-      <p v-if="displayDate.includes(',')" class="day-date">{{ displayDate.split(',')[1]?.trim() }}</p>
+      <p v-if="displayDate.includes(',')" class="day-date">
+        {{ displayDate.split(',')[1]?.trim() }}
+      </p>
     </div>
-    
+
     <div class="calendars-container">
-      <div 
-        v-for="calendar in calendars" 
-        :key="calendar.name"
-        class="calendar-section"
-      >
+      <div v-for="calendar in calendars" :key="calendar.name" class="calendar-section">
         <h4 class="calendar-title">{{ calendar.display_name }}</h4>
-        
+
         <div v-if="dayData[calendar.name]" class="liturgy-content">
           <div class="liturgy-header">
-            <span class="color-bar" :style="{ backgroundColor: dayData[calendar.name].desc.day.color }"></span>
+            <span
+              class="color-bar"
+              :style="{ backgroundColor: dayData[calendar.name].desc.day.color }"
+            ></span>
             <span class="feast-text">{{ dayData[calendar.name].desc.day.desc }}</span>
           </div>
           <div class="rank-text">{{ dayData[calendar.name].desc.day.rank }}</div>
           <div class="season-text">{{ dayData[calendar.name].desc.day_in_season }}</div>
-          
+
           <!-- Commemorations -->
-          <div v-if="dayData[calendar.name].desc.commemorations && dayData[calendar.name].desc.commemorations.length > 0" class="commemorations">
-            <div class="commemorations-header">{{ getCommemorationInterpretation(calendar.name) }}</div>
-            <div 
-              v-for="commemoration in dayData[calendar.name].desc.commemorations" 
+          <div
+            v-if="
+              dayData[calendar.name].desc.commemorations &&
+              dayData[calendar.name].desc.commemorations.length > 0
+            "
+            class="commemorations"
+          >
+            <div class="commemorations-header">
+              {{ getCommemorationInterpretation(calendar.name) }}
+            </div>
+            <div
+              v-for="commemoration in dayData[calendar.name].desc.commemorations"
               :key="commemoration.desc"
               class="commemoration-item"
             >
-              <span class="color-bar small" :style="{ backgroundColor: commemoration.color }"></span>
+              <span
+                class="color-bar small"
+                :style="{ backgroundColor: commemoration.color }"
+              ></span>
               <span class="commemoration-desc">{{ commemoration.desc }}</span>
               <span class="commemoration-rank">{{ commemoration.rank }}</span>
             </div>
           </div>
         </div>
-        
+
         <div v-else class="no-data">
           <span class="no-data-text">❌ No data</span>
         </div>
@@ -69,6 +81,9 @@ function getCommemorationInterpretation(calendarName: string): string {
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
+
+/* Component-specific overrides only. Shared selectors (feast-title, liturgical-color-bar, commemoration-count, day-number) live in liturgical.css */
 .liturgical-day-card {
   background: #111;
   border-radius: 4px;
@@ -139,14 +154,7 @@ function getCommemorationInterpretation(calendarName: string): string {
   gap: 8px;
 }
 
-.color-bar {
-  width: 6px;
-  height: 20px;
-  border-radius: 3px;
-  flex-shrink: 0;
-  border: 1px solid #444;
-}
-
+/* color-bar size handled by shared .liturgical-color-bar rules; keep small-size tweak here */
 .color-bar.small {
   width: 4px;
   height: 14px;
@@ -154,9 +162,6 @@ function getCommemorationInterpretation(calendarName: string): string {
 }
 
 .feast-text {
-  color: var(--text-primary);
-  font-size: 15px;
-  line-height: 1.3;
   font-weight: 600;
 }
 
@@ -232,11 +237,11 @@ function getCommemorationInterpretation(calendarName: string): string {
   .liturgical-day-card {
     padding: 20px;
   }
-  
+
   .day-name {
     font-size: 20px;
   }
-  
+
   .feast-text {
     font-size: 16px;
   }

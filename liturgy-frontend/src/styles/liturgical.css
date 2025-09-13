@@ -3,39 +3,9 @@
  * Use these classes consistently across all views for uniform appearance
  */
 
-/* Feast Card Styles */
-.feast-card {
-  background: var(--surface-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  transition: all 0.2s ease;
-}
-
-.feast-card:hover {
-  border-color: var(--accent-color);
-  background: var(--surface-elevated);
-}
-
-.feast-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.feast-info {
-  flex: 1;
-}
-
-.feast-title {
-  color: var(--text-primary);
-  font-size: 1.1rem;
-  margin-bottom: 0.25rem;
-  line-height: 1.3;
-  font-weight: 600;
-}
+/* Feast card and header styles that were component-specific have been
+   moved into their respective components (for example, NovenaView.vue).
+   Keep other shared feast/feast-meta rules here. */
 
 /* Feast Line Styles (for compact display) */
 .feast-line {
@@ -55,13 +25,6 @@
   flex-direction: column;
   gap: 0.125rem;
   min-width: 0;
-}
-
-.feast-title-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.25rem;
-  margin-bottom: 0.05rem;
 }
 
 /* Responsive feast title */
@@ -160,7 +123,9 @@
   transition: box-shadow 0.2s ease;
 }
 
-.view-header:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); }
+.view-header:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
 
 .no-calendars {
   text-align: center;
@@ -172,119 +137,24 @@
 }
 
 /* Category sections */
-.category-section {
-  margin-bottom: 2rem;
-}
-
-.category-header {
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--border-subtle);
-}
-
-.category-title {
-  color: var(--text-primary);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.category-description {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.category-count {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin-left: 0.5rem;
-}
-
-/* Novena-specific styles */
-.feast-dates {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.feast-date,
-.novena-start {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.days-away {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  font-style: italic;
-}
-
-/* Controls and settings */
-.controls-section {
-  background: var(--surface-primary);
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--border-primary);
-}
-
-.control-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.control-group:last-child {
-  margin-bottom: 0;
-}
-
-.toggle-switch {
-  background: var(--surface-interactive);
-  border: 1px solid var(--border-subtle);
-  border-radius: 1rem;
-  padding: 0.25rem 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.85rem;
-}
-
-.toggle-switch:hover {
-  border-color: var(--accent-color);
-}
-
-.toggle-switch.active {
-  background: var(--accent-color);
-  color: white;
-  border-color: var(--accent-color);
-}
+/* Category / novena / control-specific rules intentionally moved to their
+   component's scoped styles (NovenaView) to keep component-specific rules
+   local. */
 
 /* --- Merged chunk: feast/day display (from archived shared.css) --- */
-.feast-item {
-  display: flex;
-  align-items: stretch;
-  gap: 0.25rem;
-  font-size: 0.7rem;
-  line-height: 1.2;
-  min-height: 1.2rem;
-}
+/*
+  The following per-view or unused rules were removed from the global
+  stylesheet and moved into their consuming components (for example,
+  MonthView.vue contains the calendar/day detail panel rules and
+  feast-specific layout). This keeps the global file focused on
+  truly shared primitives (color bar, feast-title, feast-meta, etc.).
+*/
 
 .liturgical-color-bar {
   width: 6px;
   border-radius: 2px;
   flex-shrink: 0;
   border: 1px solid var(--border-light);
-}
-
-.feast-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  min-width: 0;
 }
 
 .feast-title {
@@ -310,77 +180,6 @@
   white-space: nowrap;
   line-height: 1.1;
 }
-
-.calendar-initial {
-  background-color: var(--text-primary);
-  color: white;
-  font-size: 0.55rem;
-  font-weight: 500;
-  padding: 1px 4px;
-  border-radius: 2px;
-  line-height: 1.1;
-  min-width: 20px;
-  text-align: center;
-}
-
-.day-card {
-  background-color: #111;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.day-card.clickable {
-  cursor: pointer;
-}
-
-.day-card.clickable:hover {
-  background-color: #222;
-}
-
-.day-card.today {
-  background-color: #222;
-  border: 2px solid var(--accent-color);
-}
-
-.day-card.selected {
-  background-color: #332817;
-  border: 2px solid var(--accent-color);
-}
-
-.day-card.has-feasts {
-  background-color: var(--bg-lighter);
-}
-
-.day-number {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-}
-
-.day-name {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-top: 0.125rem;
-}
-
-/* Responsive helpers from archive */
-@media (max-width: 640px) {
-  .feast-item { margin-bottom: 0.25rem; }
-  .feast-title { font-size: 0.875rem; line-height: 1.3; }
-  .feast-meta { gap: 0.5rem; }
-  .day-number { font-size: 1.25rem; font-weight: 700; min-width: 2rem; flex-shrink: 0; }
-}
-
-@media (max-width: 480px) {
-  .view-container { padding: 0.25rem; }
-  .day-number { font-size: 1rem; }
-  .feast-rank, .calendar-initial { font-size: 0.5rem; padding: 1px 3px; min-width: 14px; }
-  .liturgical-color-bar { width: 4px; }
-}
-
-/* --- end merged chunk --- */
 
 /* --- Merged chunk: detail panels, loading/error states, and mobile utilities --- */
 .loading-state,
@@ -442,7 +241,9 @@
   transition: background-color 0.2s ease;
 }
 
-.close-button:hover { background-color: var(--border-lighter, #444); }
+.close-button:hover {
+  background-color: var(--border-lighter, #444);
+}
 
 .detail-content {
   padding: 1rem;
@@ -451,12 +252,20 @@
 }
 
 /* Mobile utilities */
-.mobile-only { display: none; }
-.desktop-only { display: block; }
+.mobile-only {
+  display: none;
+}
+.desktop-only {
+  display: block;
+}
 
 @media (max-width: 768px) {
-  .mobile-only { display: block; }
-  .desktop-only { display: none; }
+  .mobile-only {
+    display: block;
+  }
+  .desktop-only {
+    display: none;
+  }
 }
 
 /* --- end merged chunk --- */

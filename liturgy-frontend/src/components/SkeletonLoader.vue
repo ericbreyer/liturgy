@@ -6,7 +6,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'card',
-  count: 1
+  count: 1,
 })
 </script>
 
@@ -69,6 +69,7 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
 .skeleton-container {
   display: flex;
   flex-direction: column;
@@ -234,7 +235,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -246,24 +248,24 @@ const props = withDefaults(defineProps<Props>(), {
   .card-skeleton {
     padding: 12px;
   }
-  
+
   .skeleton-section {
     padding: 8px;
   }
-  
+
   .skeleton-cell {
     padding: 8px 4px;
   }
-  
+
   .skeleton-date-cell {
     width: 90px;
     min-width: 90px;
   }
-  
+
   .skeleton-calendar-header {
     min-width: 180px;
   }
-  
+
   .skeleton-liturgy-cell {
     min-width: 180px;
   }

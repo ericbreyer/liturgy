@@ -8,18 +8,19 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   text: 'Loading...',
   size: 'medium',
-  inline: false
+  inline: false,
 })
 </script>
 
 <template>
-  <div class="loading-container" :class="{ 'inline': inline, [`size-${size}`]: true }">
+  <div class="loading-container" :class="{ inline: inline, [`size-${size}`]: true }">
     <div class="spinner"></div>
     <p class="loading-text">{{ text }}</p>
   </div>
 </template>
 
 <style scoped>
+@import '../styles/liturgical.css';
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -95,15 +96,19 @@ const props = withDefaults(defineProps<Props>(), {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 480px) {
   .loading-text {
     font-size: 12px;
   }
-  
+
   .size-medium .spinner {
     width: 24px;
     height: 24px;

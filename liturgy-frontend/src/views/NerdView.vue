@@ -10,26 +10,29 @@ import DateSelector from '../components/DateSelector.vue'
 const route = useRoute()
 const router = useRouter()
 const { selectedCalendars } = useCalendarSelection()
-const { 
-  selectedDate, 
-  formattedDate, 
+const {
+  selectedDate,
+  formattedDate,
   updateSelectedDate,
   goToToday,
   goToPrevious: goToPreviousDay,
-  goToNext: goToNextDay
+  goToNext: goToNextDay,
 } = useDateNavigation('Nerd')
 
 interface FeastComparison {
   name: string
-  calendars: Record<string, {
-    present: boolean
-    description?: string
-    rank?: string
-    color?: string
-    date?: string
-    transferred?: boolean
-    rankChanged?: boolean
-  }>
+  calendars: Record<
+    string,
+    {
+      present: boolean
+      description?: string
+      rank?: string
+      color?: string
+      date?: string
+      transferred?: boolean
+      rankChanged?: boolean
+    }
+  >
   baseCalendar?: string // The calendar where this feast was first found
 }
 
@@ -55,7 +58,7 @@ const gridTemplateColumns = computed(() => {
 const minTableWidth = computed(() => {
   const baseWidth = 300 // Base width for feast name column
   const calendarColumnWidth = 150 // Width per calendar column
-  return baseWidth + (selectedCalendars.value.length * calendarColumnWidth)
+  return baseWidth + selectedCalendars.value.length * calendarColumnWidth
 })
 
 // Get day data for all selected calendars
@@ -68,9 +71,9 @@ async function loadAllCalendarData() {
   // Parse the date string manually to avoid timezone issues
   const [year, month, day] = selectedDate.value.split('-').map(Number)
 
-  calendarData.value = selectedCalendars.value.map(calendar => ({
+  calendarData.value = selectedCalendars.value.map((calendar) => ({
     calendar,
-    loading: true
+    loading: true,
   }))
 
   try {
@@ -80,13 +83,13 @@ async function loadAllCalendarData() {
         calendarData.value[index] = {
           calendar,
           dayInfo,
-          loading: false
+          loading: false,
         }
       } catch (err) {
         calendarData.value[index] = {
           calendar,
           loading: false,
-          error: err instanceof Error ? err.message : 'Failed to load'
+          error: err instanceof Error ? err.message : 'Failed to load',
         }
       }
     })
@@ -118,7 +121,7 @@ async function generateFeastComparisons() {
         present: true,
         description: dayData.desc.day.desc || '',
         rank: dayData.desc.day.rank || '',
-        color: dayData.desc.day.color || ''
+        color: dayData.desc.day.color || '',
       })
     }
 
@@ -129,7 +132,7 @@ async function generateFeastComparisons() {
           present: true,
           description: commemoration.desc,
           rank: commemoration.rank || '',
-          color: commemoration.color || ''
+          color: commemoration.color || '',
         })
       }
     }
@@ -140,21 +143,22 @@ async function generateFeastComparisons() {
     await findFeastInOtherCalendars(feastName, comparison)
   }
 
-  feastComparisons.value = Array.from(allFeasts.values())
-    .sort((a, b) => a.name.localeCompare(b.name))
+  feastComparisons.value = Array.from(allFeasts.values()).sort((a, b) =>
+    a.name.localeCompare(b.name),
+  )
 }
 
 function addFeastToComparison(
   allFeasts: Map<string, FeastComparison>,
   feastName: string,
   calendar: string,
-  data: any
+  data: any,
 ) {
   if (!allFeasts.has(feastName)) {
     allFeasts.set(feastName, {
       name: feastName,
       calendars: {},
-      baseCalendar: calendar
+      baseCalendar: calendar,
     })
   }
 
@@ -165,20 +169,21 @@ function addFeastToComparison(
 // Search for a feast in calendars where it wasn't found on this date
 async function findFeastInOtherCalendars(feastName: string, comparison: FeastComparison) {
   const calendarsWithoutFeast = selectedCalendars.value.filter(
-    cal => !comparison.calendars[cal]?.present
+    (cal) => !comparison.calendars[cal]?.present,
   )
 
   for (const calendar of calendarsWithoutFeast) {
     try {
       const searchResults = await api.searchFeasts(calendar, feastName)
-      
+
       if (searchResults.length > 0) {
         // Find the best match (highest score)
-        const bestMatch = searchResults.reduce((best, current) => 
-          (current.score || 0) > (best.score || 0) ? current : best
+        const bestMatch = searchResults.reduce((best, current) =>
+          (current.score || 0) > (best.score || 0) ? current : best,
         )
 
-        if ((bestMatch.score || 0) > 0.9) { // Only if it's a good match
+        if ((bestMatch.score || 0) > 0.9) {
+          // Only if it's a good match
           comparison.calendars[calendar] = {
             present: false,
             description: bestMatch.description,
@@ -186,7 +191,7 @@ async function findFeastInOtherCalendars(feastName: string, comparison: FeastCom
             color: bestMatch.color,
             date: bestMatch.date,
             transferred: comparison.baseCalendar !== calendar,
-            rankChanged: comparison.calendars[comparison.baseCalendar!]?.rank !== bestMatch.rank
+            rankChanged: comparison.calendars[comparison.baseCalendar!]?.rank !== bestMatch.rank,
           }
         }
       }
@@ -200,7 +205,7 @@ async function findFeastInOtherCalendars(feastName: string, comparison: FeastCom
 function getFeastStatus(comparison: FeastComparison, calendar: string): string {
   const calData = comparison.calendars[calendar]
   if (!calData) return 'absent'
-  
+
   if (calData.present) {
     return 'present'
   } else if (calData.transferred) {
@@ -224,16 +229,15 @@ onMounted(() => {
   <div class="nerd-view">
     <div class="content-section">
       <p class="date-display">{{ formattedDate }}</p>
-      <p class="subtitle">Compare feasts and commemorations across calendars (excludes weekdays and optional BVM commemorations)</p>
+      <p class="subtitle">
+        Compare feasts and commemorations across calendars (excludes weekdays and optional BVM
+        commemorations)
+      </p>
     </div>
 
-    <div v-if="isLoading" class="loading">
-      ⏳ Loading calendar data...
-    </div>
+    <div v-if="isLoading" class="loading">⏳ Loading calendar data...</div>
 
-    <div v-if="error" class="error">
-      ❌ {{ error }}
-    </div>
+    <div v-if="error" class="error">❌ {{ error }}</div>
 
     <div v-if="selectedCalendars.length === 0" class="no-calendars">
       📚 Please select at least one calendar to compare
@@ -251,33 +255,23 @@ onMounted(() => {
         </div>
       </div>
 
-      <div 
-        class="feast-comparison-table"
-        :style="{ '--min-table-width': minTableWidth + 'px' }"
-      >
-        <div 
-          class="table-header"
-          :style="{ gridTemplateColumns }"
-        >
+      <div class="feast-comparison-table" :style="{ '--min-table-width': minTableWidth + 'px' }">
+        <div class="table-header" :style="{ gridTemplateColumns }">
           <div class="feast-name-col">Feast</div>
-          <div 
-            v-for="calendar in selectedCalendars" 
-            :key="calendar"
-            class="calendar-col"
-          >
+          <div v-for="calendar in selectedCalendars" :key="calendar" class="calendar-col">
             {{ calendar.toUpperCase() }}
           </div>
         </div>
 
-        <div 
-          v-for="comparison in feastComparisons" 
+        <div
+          v-for="comparison in feastComparisons"
           :key="comparison.name"
           class="feast-row"
           :style="{ gridTemplateColumns }"
         >
           <div class="feast-name">{{ comparison.name }}</div>
-          
-          <div 
+
+          <div
             v-for="calendar in selectedCalendars"
             :key="calendar"
             class="feast-cell"
@@ -291,25 +285,32 @@ onMounted(() => {
                 {{ getStatusLabel(getFeastStatus(comparison, calendar)) }}
               </span>
             </div>
-            
-            <div 
-              v-if="comparison.calendars[calendar]" 
-              class="feast-details"
-            >
-              <div 
+
+            <div v-if="comparison.calendars[calendar]" class="feast-details">
+              <div
                 v-if="comparison.calendars[calendar].color"
-                class="color-bar" 
-                :style="{ backgroundColor: getColorValue(comparison.calendars[calendar].color || '') }"
+                class="color-bar"
+                :style="{
+                  backgroundColor: getColorValue(comparison.calendars[calendar].color || ''),
+                }"
               ></div>
-              
+
               <div class="feast-info">
                 <div v-if="comparison.calendars[calendar].rank" class="rank">
                   Rank: {{ comparison.calendars[calendar].rank }}
                 </div>
-                <div v-if="comparison.calendars[calendar].date && !comparison.calendars[calendar].present" class="alt-date">
+                <div
+                  v-if="
+                    comparison.calendars[calendar].date && !comparison.calendars[calendar].present
+                  "
+                  class="alt-date"
+                >
                   Date: {{ comparison.calendars[calendar].date }}
                 </div>
-                <div v-if="comparison.calendars[calendar].description !== comparison.name" class="description">
+                <div
+                  v-if="comparison.calendars[calendar].description !== comparison.name"
+                  class="description"
+                >
                   {{ comparison.calendars[calendar].description }}
                 </div>
               </div>
@@ -325,7 +326,9 @@ onMounted(() => {
   </div>
 </template>
 
+.style scoped>
 <style scoped>
+@import '../styles/liturgical.css';
 .nerd-view {
   width: var(--layout-fixed-width-wide);
   max-width: 100vw; /* Fallback for very small screens */
@@ -352,7 +355,10 @@ onMounted(() => {
   margin-bottom: 16px;
 }
 
-.loading, .error, .no-calendars, .no-feasts {
+.loading,
+.error,
+.no-calendars,
+.no-feasts {
   text-align: center;
   padding: 40px;
   color: var(--text-secondary);
@@ -485,7 +491,7 @@ onMounted(() => {
   width: 100%;
   border-radius: 2px;
   margin-bottom: 8px;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .feast-info {
@@ -514,12 +520,12 @@ onMounted(() => {
   .feast-comparison-table {
     overflow-x: auto;
   }
-  
+
   .table-header,
   .feast-row {
     min-width: var(--min-table-width, 600px);
   }
-  
+
   .legend-items {
     flex-direction: column;
     gap: 8px;

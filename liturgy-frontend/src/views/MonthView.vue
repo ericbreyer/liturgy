@@ -12,7 +12,7 @@ import { useCalendarSelection } from '../composables/useCalendarSelection'
 import { useDateNavigation } from '../composables/useDateNavigation'
 import { getColorValue, getCalendarName, getRankValue } from '../utils/liturgical'
 
-const monthInfoMap = ref<Record<string, Record<string, DayInfo>>>({}) // { date: { calendar: dayInfo } }
+const monthInfoMap = ref<Record<string, Record<string, DayInfo>>>({})
 const loading = ref(false)
 const error = ref<string>('')
 const selectedDetailDate = ref<string | null>(null)
@@ -23,12 +23,8 @@ const router = useRouter()
 const currentRoute = useRoute()
 
 // Use shared calendar selection state
-const {
-  selectedCalendars,
-  loadCalendars,
-  selectedCalendarInfos,
-  syncWithRoute
-} = useCalendarSelection()
+const { selectedCalendars, loadCalendars, selectedCalendarInfos, syncWithRoute } =
+  useCalendarSelection()
 
 // Use shared date navigation
 const {
@@ -38,7 +34,7 @@ const {
   goToToday,
   goToPrevious: goToPreviousMonth,
   goToNext: goToNextMonth,
-  route
+  route,
 } = useDateNavigation('Month')
 
 // Get month year and days for calendar grid
@@ -47,18 +43,14 @@ const monthData = computed(() => {
   const firstDay = new Date(year, month - 1, 1)
   const lastDay = new Date(year, month, 0)
   const daysInMonth = lastDay.getDate()
-  
-  // Get the first day of the week (0 = Sunday, 1 = Monday, etc.)
+
   const startDay = firstDay.getDay()
-  
-  // Create array of all days in the calendar grid
-  const days = []
-  
-  // Add days from previous month to fill the grid
+  const days: Array<any> = []
+
+  // previous month fillers
   const prevMonth = month === 1 ? 12 : month - 1
   const prevYear = month === 1 ? year - 1 : year
   const daysInPrevMonth = new Date(prevYear, prevMonth, 0).getDate()
-  
   for (let i = startDay - 1; i >= 0; i--) {
     const day = daysInPrevMonth - i
     const date = new Date(prevYear, prevMonth - 1, day)
@@ -69,11 +61,11 @@ const monthData = computed(() => {
       isToday: dateString === new Date().toISOString().split('T')[0],
       isSelected: dateString === selectedDate.value,
       isOtherMonth: true,
-      isPrevMonth: true
+      isPrevMonth: true,
     })
   }
-  
-  // Add all days of the current month
+
+  // current month days
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month - 1, day)
     const dateString = date.toISOString().split('T')[0]
@@ -82,15 +74,14 @@ const monthData = computed(() => {
       date: dateString,
       isToday: dateString === new Date().toISOString().split('T')[0],
       isSelected: dateString === selectedDate.value,
-      isOtherMonth: false
+      isOtherMonth: false,
     })
   }
-  
-  // Add days from next month to complete the grid (ensure we have full weeks)
+
+  // next month fillers
   const nextMonth = month === 12 ? 1 : month + 1
   const nextYear = month === 12 ? year + 1 : year
   const totalCells = Math.ceil(days.length / 7) * 7
-  
   for (let day = 1; days.length < totalCells; day++) {
     const date = new Date(nextYear, nextMonth - 1, day)
     const dateString = date.toISOString().split('T')[0]
@@ -100,144 +91,112 @@ const monthData = computed(() => {
       isToday: dateString === new Date().toISOString().split('T')[0],
       isSelected: dateString === selectedDate.value,
       isOtherMonth: true,
-      isNextMonth: true
+      isNextMonth: true,
     })
   }
-  
+
   return {
     year,
     month,
     days,
-    monthName: firstDay.toLocaleDateString('en-US', { month: 'long' })
+    monthName: firstDay.toLocaleDateString('en-US', { month: 'long' }),
   }
 })
 
 // Get all dates we need to load for the month (only current month)
 const monthDates = computed(() => {
   return monthData.value.days
-    .filter(day => day && !day.isOtherMonth)
-    .map(day => day!.date)
+    .filter((day: any) => day && !day.isOtherMonth)
+    .map((day: any) => day!.date)
 })
 
-// Get liturgical info for a specific date and calendar
 function getDayInfo(date: string, calendar: string): DayInfo | null {
   return monthInfoMap.value[date]?.[calendar] || null
 }
 
-// Get all feasts for a day across all selected calendars
-function getDayFeasts(date: string): Array<{ title: string, rank: string, calendar: string, color: string, commemorationCount?: number }> {
+function getDayFeasts(date: string) {
   const dayData = monthInfoMap.value[date]
   if (!dayData) return []
-  
-  const feasts = []
-  
+  const feasts: Array<any> = []
   for (const [calendar, info] of Object.entries(dayData)) {
     if (!selectedCalendars.value.includes(calendar)) continue
-    
     if (info.desc?.day) {
       const commemorationCount = info.desc.commemorations?.length || 0
       feasts.push({
         title: info.desc.day.desc,
         rank: info.desc.day.rank,
-        calendar: calendar,
+        calendar,
         color: info.desc.day.color || 'green',
-        commemorationCount: commemorationCount > 0 ? commemorationCount : undefined
+        commemorationCount: commemorationCount > 0 ? commemorationCount : undefined,
       })
     }
   }
-  
-  // Sort by rank priority
   return feasts.sort((a, b) => getRankValue(b.rank) - getRankValue(a.rank))
 }
 
-// Get commemoration interpretation for a calendar
 function getCommemorationInterpretation(calendarName: string): string {
-  const calendar = selectedCalendarInfos.value.find(cal => cal.name === calendarName)
+  const calendar = selectedCalendarInfos.value.find((cal: any) => cal.name === calendarName)
   return calendar?.commemoration_interpretation || 'Commemorations'
 }
 
-// Handle day selection for detailed view
 function selectDay(date: string) {
   selectedDetailDate.value = selectedDetailDate.value === date ? null : date
 }
 
-// Handle day hover
 function hoverDay(date: string | null) {
   hoveredDate.value = date
 }
 
-// Close detail panel
 function closeDetailPanel() {
   selectedDetailDate.value = null
 }
 
-// Handle escape key to close detail panel
 function handleKeyDown(event: KeyboardEvent) {
   if (event.key === 'Escape' && selectedDetailDate.value) {
     closeDetailPanel()
   }
 }
 
-// Handle click outside detail panel
 function handleClickOutside(event: MouseEvent) {
   const target = event.target as HTMLElement
   const detailPanel = document.querySelector('.detail-panel')
   const dayCell = target.closest('.calendar-day')
-  
-  // Don't close if clicking on a day cell or inside the detail panel
   if (selectedDetailDate.value && detailPanel && !detailPanel.contains(target) && !dayCell) {
     closeDetailPanel()
   }
 }
 
-// Add event listeners when detail panel is open
 watch(selectedDetailDate, (newValue, oldValue) => {
   if (newValue && !oldValue) {
-    // Panel opened, add listeners with a small delay to avoid immediate closing
     document.addEventListener('keydown', handleKeyDown)
-    // Use setTimeout to add click listener after current event loop
     setTimeout(() => {
       document.addEventListener('click', handleClickOutside)
     }, 0)
   } else if (!newValue && oldValue) {
-    // Panel closed, remove listeners
     document.removeEventListener('keydown', handleKeyDown)
     document.removeEventListener('click', handleClickOutside)
   }
 })
 
-// Get detailed day information for the detail panel
 function getDetailedDayInfo(date: string) {
   const dayData = monthInfoMap.value[date]
   if (!dayData) return null
-  
-  const details = []
+  const details: Array<any> = []
   for (const [calendar, info] of Object.entries(dayData)) {
     if (!selectedCalendars.value.includes(calendar)) continue
-    
-    details.push({
-      calendar,
-      info
-    })
+    details.push({ calendar, info })
   }
-  
   return details
 }
 
-// Load month data for all selected calendars
 async function loadMonthData() {
   if (selectedCalendars.value.length === 0 || monthDates.value.length === 0) return
-  
   loading.value = true
   error.value = ''
-  
   try {
     monthInfoMap.value = {}
-    
-    // Load all dates for the month
     for (const date of monthDates.value) {
       monthInfoMap.value[date] = {}
-      
       for (const calendar of selectedCalendars.value) {
         try {
           const [year, month, day] = date.split('-').map(Number)
@@ -256,33 +215,27 @@ async function loadMonthData() {
   }
 }
 
-// Watch for changes in selected calendars from shared state
-watch(selectedCalendars, () => {
-  loadMonthData()
-}, { immediate: false, deep: true })
-
-// Watch for changes in the selected date
-watch(selectedDate, () => {
-  loadMonthData()
-}, { immediate: true })
-
-// Load calendars on component mount
-onMounted(async () => {
-  // Load calendars with URL persistence
-  await loadCalendars(router, currentRoute)
-  
-  // Sync with route changes
-  if (syncWithRoute) {
-    syncWithRoute(currentRoute)
-  }
-  
-  // Load the month data if calendars are selected
-  if (selectedCalendars.value.length > 0) {
+watch(
+  selectedCalendars,
+  () => {
     loadMonthData()
-  }
+  },
+  { immediate: false, deep: true },
+)
+watch(
+  selectedDate,
+  () => {
+    loadMonthData()
+  },
+  { immediate: true },
+)
+
+onMounted(async () => {
+  await loadCalendars(router, currentRoute)
+  if (syncWithRoute) syncWithRoute(currentRoute)
+  if (selectedCalendars.value.length > 0) loadMonthData()
 })
 
-// Cleanup event listeners on unmount
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeyDown)
   document.removeEventListener('click', handleClickOutside)
@@ -293,14 +246,10 @@ onUnmounted(() => {
   <PageLayout>
     <div class="view-container">
       <!-- Loading/Error States -->
-      <LoadingSpinner 
-        v-if="loading" 
-        text="Loading month data..."
-        size="medium"
-      />
-      
-      <ErrorDisplay 
-        v-if="error" 
+      <LoadingSpinner v-if="loading" text="Loading month data..." size="medium" />
+
+      <ErrorDisplay
+        v-if="error"
         :message="error"
         type="error"
         :dismissible="true"
@@ -314,71 +263,69 @@ onUnmounted(() => {
 
       <!-- Monthly Calendar Grid -->
       <div v-if="!loading && !error && selectedCalendars.length > 0" class="month-layout">
-      <div class="calendar-grid">
-        <!-- Month/Year Header -->
-        <div class="calendar-header">
-          <h2>{{ monthData.monthName }} {{ monthData.year }}</h2>
-        </div>
+        <div class="calendar-grid">
+          <!-- Month/Year Header -->
+          <div class="calendar-header">
+            <h2>{{ monthData.monthName }} {{ monthData.year }}</h2>
+          </div>
 
-        <!-- Day of week headers -->
-        <div class="weekday-headers">
-          <div class="weekday-header">Sun</div>
-          <div class="weekday-header">Mon</div>
-          <div class="weekday-header">Tue</div>
-          <div class="weekday-header">Wed</div>
-          <div class="weekday-header">Thu</div>
-          <div class="weekday-header">Fri</div>
-          <div class="weekday-header">Sat</div>
-        </div>
+          <!-- Day of week headers -->
+          <div class="weekday-headers">
+            <div class="weekday-header">Sun</div>
+            <div class="weekday-header">Mon</div>
+            <div class="weekday-header">Tue</div>
+            <div class="weekday-header">Wed</div>
+            <div class="weekday-header">Thu</div>
+            <div class="weekday-header">Fri</div>
+            <div class="weekday-header">Sat</div>
+          </div>
 
-        <!-- Calendar days -->
-        <div class="calendar-days">
-          <div
-            v-for="(day, index) in monthData.days"
-            :key="index"
-            :class="[
-              'calendar-day',
-              {
-                'other-month': day?.isOtherMonth,
-                'today': day?.isToday,
-                'selected': day?.isSelected,
-                'detail-selected': day && selectedDetailDate === day.date,
-                'hovered': day && hoveredDate === day.date,
-                'has-feast': day && !day.isOtherMonth && getDayFeasts(day.date).length > 0
-              }
-            ]"
-            @click="day && !day.isOtherMonth && selectDay(day.date)"
-            @mouseenter="day && !day.isOtherMonth && hoverDay(day.date)"
-            @mouseleave="hoverDay(null)"
-          >
-            <div v-if="day" class="day-content">
-              <div class="day-number">
-                {{ day.day }}
-                <div class="day-name mobile-only">
-                  {{ new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' }) }}
+          <!-- Calendar days -->
+          <div class="calendar-days">
+            <div
+              v-for="(day, index) in monthData.days"
+              :key="index"
+              :class="[
+                'calendar-day',
+                {
+                  'other-month': day?.isOtherMonth,
+                  today: day?.isToday,
+                  selected: day?.isSelected,
+                  'detail-selected': day && selectedDetailDate === day.date,
+                  hovered: day && hoveredDate === day.date,
+                  'has-feast': day && !day.isOtherMonth && getDayFeasts(day.date).length > 0,
+                },
+              ]"
+              @click="day && !day.isOtherMonth && selectDay(day.date)"
+              @mouseenter="day && !day.isOtherMonth && hoverDay(day.date)"
+              @mouseleave="hoverDay(null)"
+            >
+              <div v-if="day" class="day-content">
+                <div class="day-number">
+                  {{ day.day }}
+                  <div class="day-name mobile-only">
+                    {{ new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' }) }}
+                  </div>
                 </div>
-              </div>
-              
-              <!-- Simple feast display with liturgical colors (only for current month) -->
-              <div v-if="!day.isOtherMonth && getDayFeasts(day.date).length > 0" class="day-feasts">
+
+                <!-- Simple feast display with liturgical colors (only for current month) -->
                 <div
-                  v-for="(feast, idx) in getDayFeasts(day.date)"
-                  :key="idx"
-                  class="feast-line"
+                  v-if="!day.isOtherMonth && getDayFeasts(day.date).length > 0"
+                  class="day-feasts"
                 >
-                  <LiturgicalColorBar :color="feast.color" size="small" />
-                  <div class="feast-content">
-                    <div class="feast-title-row">
-                      <div class="feast-title">
-                        {{ feast.title }}
+                  <div v-for="(feast, idx) in getDayFeasts(day.date)" :key="idx" class="feast-line">
+                    <LiturgicalColorBar :color="feast.color" size="small" />
+                    <div class="feast-content">
+                      <div class="feast-title-row">
+                        <div class="feast-title">
+                          {{ feast.title }}
+                        </div>
+                        <span v-if="feast.commemorationCount" class="commemoration-count"
+                          >+{{ feast.commemorationCount }}</span
+                        >
                       </div>
-                      <span v-if="feast.commemorationCount" class="commemoration-count">+{{ feast.commemorationCount }}</span>
+                      <FeastMeta :rank="feast.rank" :calendars="feast.calendar" size="small" />
                     </div>
-                    <FeastMeta 
-                      :rank="feast.rank" 
-                      :calendars="feast.calendar"
-                      size="small"
-                    />
                   </div>
                 </div>
               </div>
@@ -386,93 +333,85 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Detailed Day View Panel -->
-    <div v-if="selectedDetailDate" class="detail-panel">
-      <div class="detail-header">
-        <h3>{{ new Date(selectedDetailDate).toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        }) }}</h3>
-        <button @click="closeDetailPanel" class="close-button">×</button>
-      </div>
-      
-      <div class="detail-content">
-        <div v-if="getDetailedDayInfo(selectedDetailDate)" class="calendar-details">
-          <div
-            v-for="{ calendar, info } in getDetailedDayInfo(selectedDetailDate)"
-            :key="calendar"
-            class="calendar-detail"
-          >
-            <h4 class="calendar-name">{{ calendar.toUpperCase() }}</h4>
-            
-            <!-- Main feast/day info -->
-            <div v-if="info.desc?.day" class="feast-detail">
-              <div class="feast-name">
-                {{ info.desc.day.desc }}
-                <span v-if="info.desc?.commemorations && info.desc.commemorations.length > 0" class="commemoration-count">
-                  +{{ info.desc.commemorations.length }}
-                </span>
+      <!-- Detailed Day View Panel -->
+      <div v-if="selectedDetailDate" class="detail-panel">
+        <div class="detail-header">
+          <h3>
+            {{
+              new Date(selectedDetailDate).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            }}
+          </h3>
+          <button @click="closeDetailPanel" class="close-button">×</button>
+        </div>
+
+        <div class="detail-content">
+          <div v-if="getDetailedDayInfo(selectedDetailDate)" class="calendar-details">
+            <div
+              v-for="{ calendar, info } in getDetailedDayInfo(selectedDetailDate)"
+              :key="calendar"
+              class="calendar-detail"
+            >
+              <h4 class="calendar-name">{{ calendar.toUpperCase() }}</h4>
+
+              <!-- Main feast/day info -->
+              <div v-if="info.desc?.day" class="feast-detail">
+                <div class="feast-name">
+                  {{ info.desc.day.desc }}
+                  <span
+                    v-if="info.desc?.commemorations && info.desc.commemorations.length > 0"
+                    class="commemoration-count"
+                  >
+                    +{{ info.desc.commemorations.length }}
+                  </span>
+                </div>
+                <div class="feast-rank">{{ info.desc.day.rank }}</div>
+                <div
+                  v-if="info.desc.day.color"
+                  class="feast-color"
+                  :style="{ backgroundColor: info.desc.day.color }"
+                >
+                  {{ info.desc.day.color }}
+                </div>
               </div>
-              <div class="feast-rank">{{ info.desc.day.rank }}</div>
-              <div v-if="info.desc.day.color" class="feast-color" :style="{ backgroundColor: info.desc.day.color }">
-                {{ info.desc.day.color }}
+
+              <!-- Season info -->
+              <div v-if="info.desc?.day_in_season" class="season-info">
+                <h5>Season</h5>
+                <div>{{ info.desc.day_in_season }}</div>
               </div>
-            </div>
-            
-            <!-- Season info -->
-            <div v-if="info.desc?.day_in_season" class="season-info">
-              <h5>Season</h5>
-              <div>{{ info.desc.day_in_season }}</div>
-            </div>
-            
-            <!-- Additional commemorations -->
-            <div v-if="info.desc?.commemorations && info.desc.commemorations.length > 0" class="commemorations">
-              <h5>{{ getCommemorationInterpretation(calendar) }}</h5>
-              <ul>
-                <li v-for="comm in info.desc.commemorations" :key="comm.desc">
-                  <div class="commemoration-name">{{ comm.desc }}</div>
-                  <div class="commemoration-rank">{{ comm.rank }}</div>
-                </li>
-              </ul>
+
+              <!-- Additional commemorations -->
+              <div
+                v-if="info.desc?.commemorations && info.desc.commemorations.length > 0"
+                class="commemorations"
+              >
+                <h5>{{ getCommemorationInterpretation(calendar) }}</h5>
+                <ul>
+                  <li v-for="comm in info.desc.commemorations" :key="comm.desc">
+                    <div class="commemoration-name">{{ comm.desc }}</div>
+                    <div class="commemoration-rank">{{ comm.rank }}</div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div v-else class="no-detail">
-          No detailed information available for this date.
+
+          <div v-else class="no-detail">No detailed information available for this date.</div>
         </div>
       </div>
-    </div>
     </div>
   </PageLayout>
 </template>
 
 <style scoped>
-.view-header {
-  background: var(--surface-primary);
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  border: 1px solid var(--border-primary);
-}
-
-.view-header .header-content {
-  background: transparent;
-}
-
-.view-header h1, 
-.view-header .header-title {
-  color: var(--text-primary);
-}
-
-.view-header p,
-.view-header .header-subtitle {
-  color: var(--text-secondary);
-}
+@import '../styles/liturgical.css';
+/* Note: view-header and feast-title-row are defined in liturgical.css; kept only component-specific overrides here. */
 
 .month-view {
   padding: 0.5rem;
@@ -505,7 +444,8 @@ onUnmounted(() => {
   margin-bottom: 1rem;
 }
 
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 2rem;
 }
@@ -545,17 +485,17 @@ onUnmounted(() => {
   .month-layout {
     flex-direction: column;
   }
-  
+
   .calendar-grid {
     width: 100%;
   }
-  
+
   .month-header {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
   }
-  
+
   .month-header h1 {
     text-align: center;
     font-size: 1.25rem;
@@ -663,7 +603,7 @@ onUnmounted(() => {
     max-width: 100%;
     padding: 0 0.5rem;
   }
-  
+
   .calendar-day {
     height: auto;
     min-height: 80px;
@@ -673,7 +613,7 @@ onUnmounted(() => {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .calendar-day.other-month {
     display: none;
   }
@@ -749,11 +689,11 @@ onUnmounted(() => {
     -webkit-line-clamp: 3;
     line-clamp: 3;
   }
-  
+
   .feast-meta {
     font-size: 0.6rem;
   }
-  
+
   .commemoration-count {
     font-size: 0.6rem;
   }
@@ -768,11 +708,11 @@ onUnmounted(() => {
     text-overflow: ellipsis;
     display: block;
   }
-  
+
   .feast-meta {
     font-size: 0.45rem;
   }
-  
+
   .commemoration-count {
     font-size: 0.45rem;
     padding: 0.0625rem 0.125rem;
@@ -834,11 +774,11 @@ onUnmounted(() => {
   .calendar-day {
     min-height: 120px;
   }
-  
+
   .day-content {
     padding: 0.375rem;
   }
-  
+
   .day-number {
     font-size: 0.875rem;
   }
@@ -848,11 +788,11 @@ onUnmounted(() => {
   .calendar-day {
     min-height: 80px;
   }
-  
+
   .day-content {
     padding: 0.2rem;
   }
-  
+
   .day-number {
     font-size: 0.7rem;
   }
@@ -979,7 +919,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-
 }
 
 .feast-rank {
@@ -1182,56 +1121,56 @@ onUnmounted(() => {
   .month-view {
     padding: 0.5rem;
   }
-  
+
   .month-layout {
     flex-direction: column;
   }
-  
+
   .month-header {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .month-header h1 {
     font-size: 1.25rem;
     text-align: center;
   }
-  
+
   .detail-panel {
     width: 95vw;
     max-height: 80vh;
   }
-  
+
   .calendar-days {
     min-width: 280px;
   }
-  
+
   .calendar-day {
     min-height: 80px;
   }
-  
+
   .day-content {
     padding: 0.25rem;
     gap: 0.125rem;
   }
-  
+
   .day-number {
     font-size: 0.8rem;
   }
-  
+
   .feast-title {
     font-size: 0.6rem;
   }
-  
+
   .feast-rank {
     font-size: 0.55rem;
   }
-  
+
   .weekday-header {
     padding: 0.25rem;
     font-size: 0.7rem;
   }
-  
+
   .calendar-pip,
   .calendar-indicator {
     font-size: 0.45rem;
@@ -1244,38 +1183,38 @@ onUnmounted(() => {
   .month-view {
     padding: 0.25rem;
   }
-  
+
   .calendar-days {
     min-width: 260px;
   }
-  
+
   .calendar-day {
     min-height: 70px;
   }
-  
+
   .day-content {
     padding: 0.125rem;
   }
-  
+
   .day-number {
     font-size: 0.75rem;
     margin-bottom: 0.125rem;
   }
-  
+
   .feast-title {
     font-size: 0.55rem;
   }
-  
+
   .feast-rank {
     font-size: 0.5rem;
     padding: 0px 2px;
   }
-  
+
   .weekday-header {
     padding: 0.125rem;
     font-size: 0.65rem;
   }
-  
+
   .calendar-pip,
   .calendar-indicator {
     font-size: 0.4rem;
@@ -1287,27 +1226,27 @@ onUnmounted(() => {
   .calendar-days {
     min-width: 240px;
   }
-  
+
   .calendar-day {
     min-height: 60px;
   }
-  
+
   .day-number {
     font-size: 0.7rem;
   }
-  
+
   .feast-title {
     font-size: 0.5rem;
   }
-  
+
   .feast-rank {
     font-size: 0.45rem;
   }
-  
+
   .weekday-header {
     font-size: 0.6rem;
   }
-  
+
   .calendar-pip,
   .calendar-indicator {
     font-size: 0.35rem;

@@ -12,65 +12,65 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/today'
+      redirect: '/today',
     },
     {
       path: '/today',
       name: 'Today',
       component: TodayView,
       meta: {
-        title: 'Daily Liturgy'
-      }
+        title: 'Daily Liturgy',
+      },
     },
     {
       path: '/week',
       name: 'Week',
       component: WeekView,
       meta: {
-        title: 'Week View'
-      }
+        title: 'Week View',
+      },
     },
     {
       path: '/month',
       name: 'Month',
       component: MonthView,
       meta: {
-        title: 'Month View'
-      }
+        title: 'Month View',
+      },
     },
     {
       path: '/search',
       name: 'Search',
       component: SearchView,
       meta: {
-        title: 'Search'
-      }
+        title: 'Search',
+      },
     },
     {
       path: '/nerd',
       name: 'Nerd',
       component: NerdView,
       meta: {
-        title: 'Advanced View'
-      }
+        title: 'Advanced View',
+      },
     },
     {
       path: '/novena',
       name: 'Novena',
       component: NovenaView,
       meta: {
-        title: 'Upcoming Novenas'
-      }
+        title: 'Upcoming Novenas',
+      },
     },
     {
       path: '/about',
       name: 'About',
       component: AboutView,
       meta: {
-        title: 'About'
-      }
-    }
-  ]
+        title: 'About',
+      },
+    },
+  ],
 })
 
 // Optional: Update document title based on route
@@ -78,7 +78,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta?.title) {
     document.title = `${to.meta.title} - Liturgy Calendar`
   }
-  
+
   // Set CSS variables based on route
   const app = document.documentElement
   switch (to.name) {
@@ -106,7 +106,7 @@ router.beforeEach((to, from, next) => {
     default:
       app.style.setProperty('--accent-color', 'rgb(141, 83, 255)')
   }
-  
+
   next()
 })
 

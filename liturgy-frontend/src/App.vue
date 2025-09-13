@@ -7,50 +7,52 @@ const route = useRoute()
 
 // Define page header information for each route
 const pageHeaders: Record<string, { title: string; subtitle: string; icon: string }> = {
-  'Today': {
+  Today: {
     title: 'Daily Liturgy',
-    subtitle: 'Today\'s liturgical celebrations and readings',
-    icon: '📖'
+    subtitle: "Today's liturgical celebrations and readings",
+    icon: '📖',
   },
-  'Week': {
+  Week: {
     title: 'Weekly Calendar',
     subtitle: 'Week-by-week liturgical calendar overview',
-    icon: '📅'
+    icon: '📅',
   },
-  'Month': {
+  Month: {
     title: 'Monthly Calendar',
     subtitle: 'Month-by-month liturgical calendar with feast details',
-    icon: '🗓️'
+    icon: '🗓️',
   },
-  'Search': {
+  Search: {
     title: 'Search Liturgical Data',
     subtitle: 'Find specific feasts, commemorations, and liturgical information',
-    icon: '🔍'
+    icon: '🔍',
   },
-  'Nerd': {
+  Nerd: {
     title: 'Advanced Comparison',
     subtitle: 'Detailed comparison and analysis of liturgical calendars',
-    icon: '🤓'
+    icon: '🤓',
   },
-  'Novena': {
+  Novena: {
     title: 'Upcoming Novenas',
     subtitle: 'Track nine-day prayer devotions and feast preparations',
-    icon: '🙏'
+    icon: '🙏',
   },
-  'About': {
+  About: {
     title: 'About Liturgical Calendar',
     subtitle: 'Information about this application and liturgical traditions',
-    icon: 'ℹ️'
-  }
+    icon: 'ℹ️',
+  },
 }
 
 const currentHeader = computed(() => {
   const routeName = route.name as string
-  return pageHeaders[routeName] || {
-    title: 'Liturgical Calendar',
-    subtitle: 'Comprehensive liturgical calendar interface',
-    icon: '📅'
-  }
+  return (
+    pageHeaders[routeName] || {
+      title: 'Liturgical Calendar',
+      subtitle: 'Comprehensive liturgical calendar interface',
+      icon: '📅',
+    }
+  )
 })
 </script>
 
@@ -91,8 +93,6 @@ const currentHeader = computed(() => {
 </template>
 
 <style>
-@import './styles/global.css';
 @import './styles/liturgical.css';
-/* Global variables, resets and layout helpers have been moved to
-  `src/assets/global.css`. Keep App-specific overrides here only. */
+/* App-specific overrides kept minimal; global tokens live in src/assets/global.css */
 </style>

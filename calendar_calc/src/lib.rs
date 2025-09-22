@@ -39,8 +39,7 @@
 
 pub mod calender;
 mod date_calc;
+mod types;
 
 // Re-export main public API types
-pub use calender::{LiturgicalUnit, GenericCalendarHandle, YearCalendarHandle};
-
-
+pub use calender::{GenericCalendarHandle, LiturgicalUnit, YearCalendarHandle};

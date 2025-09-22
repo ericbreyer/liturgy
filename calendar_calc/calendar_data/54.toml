@@ -8,7 +8,6 @@ name = "Advent"
 begin = "OffsetSundays(PreviousYear(Fixed(12,25)), -4)"
 end = "PreviousYear(Fixed(12,24))"
 color = "violet"
-
 sunday_rank = "II"
 
 [[feasts]]
@@ -52,13 +51,6 @@ is_octave = true
 octave_rank = "privileged3"
 color = "white"
 
-[[feasts]]
-name = "Sunday within the Octave of Christmas"
-date_rule = "OffsetSundays(PreviousYear(Fixed(12,25)), 1)"
-rank = "II"
-color = "white"
-day_type = "sunday"
-
 [[seasons]]
 name = "Time after Epiphany"
 begin = "Fixed(1,14)"
@@ -76,6 +68,7 @@ color = "violet"
 dont_show_week_of_season = true
 count_sundays_suffix = "Septuagesima"
 count_ferias_suffix = "after Septuagesima"
+sunday_rank = "II"
 
 [[seasons]]
 name = "Sexagesima"
@@ -85,6 +78,7 @@ color = "violet"
 dont_show_week_of_season = true
 count_sundays_suffix = "Sexagesima"
 count_ferias_suffix = "after Sexagesima"
+sunday_rank = "II"
 
 [[seasons]]
 name = "Quinquagesima"
@@ -94,6 +88,7 @@ color = "violet"
 dont_show_week_of_season = true
 count_sundays_suffix = "Quinquagesima"
 count_ferias_suffix = "after Quinquagesima"
+sunday_rank = "II"
 
 [[seasons]]
 name = "Lent"
@@ -102,7 +97,6 @@ end = "OffsetDays(Easter, -1)"
 count_sundays_from = "OffsetSundays(OffsetDays(Easter, -46), 1)"
 count_ferias_from = "OffsetSundays(OffsetDays(Easter, -46), 1)"
 color = "violet"
-
 sunday_rank = "I"
 
 [[seasons.ferial_rules]]
@@ -118,7 +112,6 @@ name = "Passion Week Ferias"
 begin = "OffsetDays(Easter, -14)"
 end = "OffsetDays(Easter, -1)"
 rank = "greater non-privileged"
-
 
 
 [[seasons.ferial_rules]]
@@ -138,7 +131,7 @@ color = "violet"
 parent_season = "Lent"
 count_ferias_suffix = "of Passion Week"
 count_sundays_suffix = "of the Passion"
-
+sunday_rank = "I"
 
 [[seasons]]
 name = "Holy Week"
@@ -151,7 +144,7 @@ parent_season = "Passiontide"
 dont_show_week_of_season = true
 count_sundays_suffix = "Palm Sunday"
 count_ferias_suffix = "of Holy Week"
-
+sunday_rank = "I"
 
 [[seasons.ferial_rules]]
 name = "Holy Week Ferias"
@@ -164,7 +157,7 @@ name = "Eastertide"
 begin = "Easter"
 end = "OffsetDays(Easter, 48)"
 color = "white"
-
+sunday_rank = "III"
 count_sundays_from = "OffsetDays(Easter, 7)"
 count_sundays_suffix = "after Easter Sunday"
 count_ferias_from = "OffsetDays(Easter, 7)"
@@ -199,21 +192,28 @@ color = "red"
 is_octave = true
 octave_rank = "I"
 octave_type = "privileged-1"
-sunday_rank = "I"
 parent_season = "Eastertide"
 dont_show_week_of_season = true
 count_sundays_suffix = "in the Octave of Pentecost"
 count_ferias_suffix = "in the Octave of Pentecost"
+
+[[octaves]]
+name = "Pentecost"
+begin = "OffsetDays(Easter, 50)"
+end = "OffsetDays(Easter, 55)"
+color = "red"
+octave_rank = "privileged1"
 
 [[seasons]]
 name = "Time after Pentecost"
 begin = "OffsetDays(Easter, 56)"
 end = "OffsetDays(OffsetSundays(Fixed(12,25), -4), -1)"
 color = "green"
-
+sunday_rank = "III"
 count_sundays_suffix = "after Pentecost"
 count_ferias_suffix = "after the octave of Pentecost"
 append_week_of_month = "OffsetSundays(Fixed(8,1), 1)"
+week_of_month_old_scheme = true
 
 # Ember Days and Rogation Days as greater non-privileged ferias
 [[seasons.ferial_rules]]
@@ -238,7 +238,6 @@ rank = "second class double"
 color = "white"
 of_our_lord = true
 
- 
 
 # The most holy Name of Jesus - occurs on Sunday between Circumcision and Epiphany, or Jan 2 when no such Sunday
 [[feasts]]
@@ -606,13 +605,7 @@ color = "white"
 titles = ["Confessor"]
 
 
-[[feasts]]
-name = "Vigil of St. Matthias"
-date_rule = "Fixed(2,23)"
-rank = "minor"
-color = "violet"
-day_type = "vigil"
-titles = ["Apostle"]
+
 
 
 [[feasts]]
@@ -674,7 +667,7 @@ name = "St. Frances of Rome"
 date_rule = "Fixed(3,9)"
 rank = "double"
 color = "white"
-titles = ["widow"]
+titles = ["Widow"]
 
 
 [[feasts]]
@@ -926,7 +919,11 @@ name = "Solemnity of St. Joseph"
 date_rule = "OffsetDays(OffsetSundays(Easter, 2), 3)"
 rank = "first class double"
 color = "white"
-titles = ["Spouse of the Vlessed Virgin Mary", "Confessor", "Patron of the Universal Church"]
+titles = [
+    "Spouse of the Vlessed Virgin Mary",
+    "Confessor",
+    "Patron of the Universal Church",
+]
 
 [[octaves]]
 name = "St. Joseph"
@@ -979,7 +976,7 @@ name = "St. Monica"
 date_rule = "Fixed(5,4)"
 rank = "double"
 color = "white"
-titles = ["widow"]
+titles = ["Widow"]
 
 
 [[feasts]]
@@ -1187,11 +1184,10 @@ titles = ["Pope", "Martyr"]
 
 
 [[feasts]]
-name = "Blessed Virgin Mary"
+name = "Queenship of the Blessed Virgin Mary"
 date_rule = "Fixed(5,31)"
 rank = "second class double"
 color = "white"
-titles = ["queen"]
 
 
 [[feasts]]
@@ -1255,7 +1251,7 @@ name = "St. Margaret"
 date_rule = "Fixed(6,10)"
 rank = "semidouble"
 color = "white"
-titles = ["queen", "widow"]
+titles = ["Queen", "Widow"]
 
 
 [[feasts]]
@@ -1272,6 +1268,13 @@ date_rule = "Fixed(6,12)"
 rank = "double"
 color = "white"
 titles = ["Confessor"]
+
+[[feasts]]
+name = "St. Basilides, Cyrinus, Nabor, and Nazarius"
+date_rule = "Fixed(6,12)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 
 [[feasts]]
@@ -1305,6 +1308,12 @@ rank = "double"
 color = "white"
 titles = ["Doctor of the Church"]
 
+[[feasts]]
+name = "Ss. Mark and Marcellian"
+date_rule = "Fixed(6,18)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Juliana Falconieri"
@@ -1312,7 +1321,6 @@ date_rule = "Fixed(6,19)"
 rank = "double"
 color = "white"
 titles = ["Virgin"]
-
 
 [[feasts]]
 name = "St. Silverius"
@@ -1351,6 +1359,14 @@ date_rule = "Fixed(6,24)"
 rank = "first class double"
 color = "white"
 
+[[octaves]]
+name = "Nativity of St. John the Baptist"
+begin = "Fixed(6,25)"
+end = "Fixed(7,1)"
+is_octave = true
+octave_rank = "common"
+color = "white"
+
 [[feasts]]
 name = "St. William"
 date_rule = "Fixed(6,25)"
@@ -1368,12 +1384,6 @@ titles = ["Martyrs"]
 
 
 [[feasts]]
-name = "Of the IV day within the Octave of St. John the Baptist"
-date_rule = "Fixed(6,27)"
-rank = "semidouble"
-color = "white"
-
-[[feasts]]
 name = "St. Irenaeus"
 date_rule = "Fixed(6,28)"
 rank = "double"
@@ -1388,6 +1398,13 @@ rank = "first class double"
 color = "red"
 titles = ["Apostles"]
 
+[[octaves]]
+name = "Ss. Peter and Paul"
+begin = "Fixed(6,30)"
+end = "Fixed(7,6)"
+is_octave = true
+octave_rank = "common"
+color = "red"
 
 [[feasts]]
 name = "Commemoration of St. Paul"
@@ -1405,11 +1422,17 @@ color = "red"
 of_our_lord = true
 
 [[feasts]]
-name = "Visitation"
+name = "Visitation of the Blessed Virgin Mary"
 date_rule = "Fixed(7,2)"
 rank = "second class double"
 color = "white"
-titles = ["of the blessed Virgin mary"]
+
+[[feasts]]
+name = "Ss. Processus and Martinian"
+date_rule = "Fixed(7,2)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Leo II"
@@ -1426,15 +1449,6 @@ rank = "double"
 color = "white"
 titles = ["Confessor"]
 
-
-[[feasts]]
-name = "Octave of Ss. Peter and Paul"
-date_rule = "Fixed(7,6)"
-rank = "major double"
-color = "red"
-titles = ["Apostles"]
-
-
 [[feasts]]
 name = "Ss. Cyril and Methodius"
 date_rule = "Fixed(7,7)"
@@ -1448,7 +1462,7 @@ name = "St. Elizabeth"
 date_rule = "Fixed(7,8)"
 rank = "semidouble"
 color = "white"
-titles = ["queen", "widow"]
+titles = ["Queen", "Widow"]
 
 
 [[feasts]]
@@ -1474,6 +1488,12 @@ rank = "double"
 color = "white"
 titles = ["Abbot"]
 
+[[feasts]]
+name = "Ss. Nabor and Felix"
+date_rule = "Fixed(7,12)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Anacletus"
@@ -1500,7 +1520,7 @@ titles = ["Confessor"]
 
 
 [[feasts]]
-name = "Commemoration of the Blessed Virgin Mary"
+name = "Commemoration of the Blessed Virgin Mary of Mt. Carmel"
 date_rule = "Fixed(7,16)"
 rank = "major double"
 color = "white"
@@ -1520,6 +1540,12 @@ rank = "double"
 color = "white"
 titles = ["Confessor"]
 
+[[feasts]]
+name = "Ss. Symphorosa and Her Seven Sons"
+date_rule = "Fixed(7,18)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Vincent de Paul"
@@ -1536,6 +1562,12 @@ rank = "double"
 color = "white"
 titles = ["Confessor"]
 
+[[feasts]]
+name = "St. Margaret"
+date_rule = "Fixed(7,20)"
+rank = "commemoration"
+color = "white"
+titles = ["Virgin", "Martyr"]
 
 [[feasts]]
 name = "St. Praxedes"
@@ -1567,19 +1599,32 @@ color = "red"
 day_type = "vigil"
 
 [[feasts]]
+name = "St. Christine"
+date_rule = "Fixed(7,24)"
+rank = "commemoration"
+color = "red"
+titles = ["Virgin", "Martyr"]
+
+[[feasts]]
 name = "St. James"
 date_rule = "Fixed(7,25)"
 rank = "second class double"
 color = "red"
 titles = ["Apostle"]
 
+[[feasts]]
+name = "St. Christopher"
+date_rule = "Fixed(7,25)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. Anne"
 date_rule = "Fixed(7,26)"
 rank = "second class double"
 color = "white"
-titles = ["mother of the blessed Virgin mary"]
+titles = ["Mother of the Blessed Virgin Mary"]
 
 [[feasts]]
 name = "St. Pantaleon"
@@ -1604,6 +1649,12 @@ rank = "semidouble"
 color = "white"
 titles = ["Virgin"]
 
+[[feasts]]
+name = "Ss. Felicis, Simplicii, Faustini, and Beatrix"
+date_rule = "Fixed(7,29)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "Ss. Abdon and Sennen"
@@ -1628,18 +1679,32 @@ rank = "major double"
 color = "white"
 
 [[feasts]]
-name = "St. Alphonsus Mary of Liguori Bishop, Confessor, and"
+name = "Maccabees"
+date_rule = "Fixed(8,1)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
+
+[[feasts]]
+name = "St. Alphonsus Mary of Liguori"
 date_rule = "Fixed(8,2)"
 rank = "double"
 color = "white"
-titles = ["Doctor of the Church"]
-
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
 
 [[feasts]]
-name = "Invention of St. Stephen ProtoMartyr"
+name = "St. Stephen"
+date_rule = "Fixed(8,2)"
+rank = "commemoration"
+color = "red"
+titles = ["Pope", "Martyr"]
+
+[[feasts]]
+name = "Invention of St. Stephen"
 date_rule = "Fixed(8,3)"
 rank = "semidouble"
 color = "red"
+titles = ["Protomartyr"]
 
 [[feasts]]
 name = "St. Dominic"
@@ -1663,12 +1728,25 @@ color = "white"
 of_our_lord = true
 
 [[feasts]]
+name = "St. Sixtus II, Pope, Felicissimus and Agapitus"
+date_rule = "Fixed(8,6)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
+
+[[feasts]]
 name = "St. Cajetan"
 date_rule = "Fixed(8,7)"
 rank = "double"
 color = "white"
 titles = ["Confessor"]
 
+[[feasts]]
+name = "St. Donatus"
+date_rule = "Fixed(8,7)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "Ss. Cyriacus, Largus and Smaragdus"
@@ -1685,6 +1763,12 @@ rank = "double"
 color = "white"
 titles = ["Confessor", "Priest"]
 
+[[feasts]]
+name = "St. Romanus"
+date_rule = "Fixed(8,9)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. Laurence"
@@ -1693,6 +1777,13 @@ rank = "second class double"
 color = "red"
 titles = ["Martyr"]
 
+[[octaves]]
+name = "St. Laurence"
+begin = "Fixed(8,11)"
+end = "Fixed(8,17)"
+is_octave = true
+octave_rank = "simple"
+color = "red"
 
 [[feasts]]
 name = "Ss. Tiburtius and Susanna"
@@ -1726,11 +1817,18 @@ rank = "minor"
 color = "violet"
 
 [[feasts]]
-name = "Assumption"
+name = "Assumption of the Blessed Virgin Mary"
 date_rule = "Fixed(8,15)"
 rank = "first class double"
 color = "white"
-titles = ["of the blessed Virgin mary"]
+
+[[octaves]]
+name = "Assumption of the Blessed Virgin Mary"
+begin = "Fixed(8,16)"
+end = "Fixed(8,22)"
+is_octave = true
+octave_rank = "common"
+color = "white"
 
 [[feasts]]
 name = "St. Joachim Father of the Blessed Virgin Mary"
@@ -1747,12 +1845,12 @@ rank = "double"
 color = "white"
 titles = ["Confessor"]
 
-
 [[feasts]]
-name = "Of the IV day within the Octave of the Assumption"
+name = "St. Agapitus"
 date_rule = "Fixed(8,18)"
-rank = "semidouble"
-color = "white"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. John Eudes"
@@ -1775,15 +1873,14 @@ name = "St. Jane Frances de Chantal"
 date_rule = "Fixed(8,21)"
 rank = "double"
 color = "white"
-titles = ["widow"]
+titles = ["Widow"]
 
 
 [[feasts]]
-name = "Immaculate Heart"
+name = "Immaculate Heart of the Blessed Virgin Mary"
 date_rule = "Fixed(8,22)"
 rank = "second class double"
 color = "white"
-titles = ["of the blessed Virgin mary"]
 
 [[feasts]]
 name = "St. Philip Benizi"
@@ -1806,7 +1903,7 @@ name = "St. Louis"
 date_rule = "Fixed(8,25)"
 rank = "semidouble"
 color = "white"
-titles = ["king", "Confessor"]
+titles = ["King", "Confessor"]
 
 
 [[feasts]]
@@ -1832,6 +1929,12 @@ rank = "double"
 color = "white"
 titles = ["Doctor of the Church"]
 
+[[feasts]]
+name = "St. Hermes"
+date_rule = "Fixed(8,28)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "Beheading of St. John the Baptist"
@@ -1840,10 +1943,25 @@ rank = "major double"
 color = "red"
 
 [[feasts]]
-name = "St. Rose of St. Mary Virgin of Lima"
+name = "St. Sabina"
+date_rule = "Fixed(8,29)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
+
+[[feasts]]
+name = "St. Rose of St. Mary of Lima"
 date_rule = "Fixed(8,30)"
 rank = "double"
 color = "white"
+titles = ["Virgin"]
+
+[[feasts]]
+name = "Ss. Felix and Adauctus"
+date_rule = "Fixed(8,30)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Raymond Nonnatus"
@@ -1860,13 +1978,19 @@ rank = "simple"
 color = "white"
 titles = ["Abbot"]
 
+[[feasts]]
+name = "Holy Twelve Brothers"
+date_rule = "Fixed(9,1)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Stephen"
 date_rule = "Fixed(9,2)"
 rank = "semidouble"
 color = "white"
-titles = ["king", "Confessor"]
+titles = ["King", "Confessor"]
 
 
 [[feasts]]
@@ -1886,11 +2010,17 @@ titles = ["Bishop", "Confessor"]
 
 
 [[feasts]]
-name = "Nativity"
+name = "Nativity of the Blessed Virgin Mary"
 date_rule = "Fixed(9,8)"
 rank = "second class double"
 color = "white"
-titles = ["of the blessed Virgin mary"]
+
+[[feasts]]
+name = "St. Adrian"
+date_rule = "Fixed(9,8)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. Gorgonius"
@@ -1927,6 +2057,20 @@ name = "Exaltation of the Holy Cross"
 date_rule = "Fixed(9,14)"
 rank = "major double"
 color = "red"
+of_our_lord = true
+
+[[feasts]]
+name = "Seven Sorrows of the Blessed Virgin Mary (Our Lady of Sorrows)"
+date_rule = "Fixed(9,15)"
+rank = "second class double"
+color = "blue"
+
+[[feasts]]
+name = "St. Nicomedes"
+date_rule = "Fixed(9,15)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. Cornelius Pope and St. Cyprian"
@@ -1935,6 +2079,12 @@ rank = "semidouble"
 color = "red"
 titles = ["Bishop", "Martyrs"]
 
+[[feasts]]
+name = "Ss. Euphemia Virgin, Lucy and Geminian"
+date_rule = "Fixed(9,16)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "Impression of the sacred Stigmata of St. Francis"
@@ -1983,6 +2133,12 @@ rank = "double"
 color = "white"
 titles = ["Bishop", "Confessor"]
 
+[[feasts]]
+name = "St. Maurice and Companions"
+date_rule = "Fixed(9,22)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Linus"
@@ -1991,6 +2147,12 @@ rank = "semidouble"
 color = "red"
 titles = ["Pope", "Martyr"]
 
+[[feasts]]
+name = "St. Thecla"
+date_rule = "Fixed(9,23)"
+rank = "commemoration"
+color = "red"
+titles = ["Virgin", "Martyr"]
 
 [[feasts]]
 name = "Our Lady of Ransom"
@@ -2085,18 +2247,31 @@ titles = ["Confessor"]
 
 
 [[feasts]]
-name = "The most Holy Rosary"
+name = "The most Holy Rosary of the Blessed Virgin Mary"
 date_rule = "Fixed(10,7)"
 rank = "second class double"
 color = "white"
-titles = ["of the blessed Virgin mary"]
+
+[[feasts]]
+name = "St. Mark"
+date_rule = "Fixed(10,7)"
+rank = "commemoration"
+color = "white"
+titles = ["Pope", "Confessor"]
+
+[[feasts]]
+name = "Ss. Sergius, Bacchus, Marcellus and Apuleius"
+date_rule = "Fixed(10,7)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Bridget"
 date_rule = "Fixed(10,8)"
 rank = "double"
 color = "white"
-titles = ["widow"]
+titles = ["Widow"]
 
 
 [[feasts]]
@@ -2106,6 +2281,12 @@ rank = "double"
 color = "white"
 titles = ["Confessor"]
 
+[[feasts]]
+name = "Ss. Denis Bishop, Rusticus Priest, and Eleutherius"
+date_rule = "Fixed(10,9)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Francis Borgia"
@@ -2116,18 +2297,17 @@ titles = ["Confessor"]
 
 
 [[feasts]]
-name = "The Maternity"
+name = "The Maternity of the Blessed Virgin Mary"
 date_rule = "Fixed(10,11)"
 rank = "second class double"
 color = "white"
-titles = ["of the blessed Virgin mary"]
 
 [[feasts]]
 name = "St. Edward"
 date_rule = "Fixed(10,13)"
 rank = "semidouble"
 color = "white"
-titles = ["king", "Confessor"]
+titles = ["King", "Confessor"]
 
 
 [[feasts]]
@@ -2151,7 +2331,7 @@ name = "St. Hedwig"
 date_rule = "Fixed(10,16)"
 rank = "semidouble"
 color = "white"
-titles = ["widow"]
+titles = ["Widow"]
 
 
 [[feasts]]
@@ -2192,6 +2372,13 @@ date_rule = "Fixed(10,21)"
 rank = "simple"
 color = "white"
 titles = ["Abbot"]
+
+[[feasts]]
+name = "St. Ursula and Companions"
+date_rule = "Fixed(10,21)"
+rank = "commemoration"
+color = "red"
+titles = ["Virgin", "Martyrs"]
 
 
 [[feasts]]
@@ -2242,13 +2429,11 @@ day_type = "vigil"
 
 # Movable feast - Last Sunday in October
 [[feasts]]
-name = "The Feast of our Lord Jesus Christ the"
+name = "Our Lord Jesus Christ the King"
 date_rule = "OffsetSundays(Fixed(10,31), -1)"
 rank = "first class double"
 color = "white"
 of_our_lord = true
-titles = ["king"]
-
 
 [[feasts]]
 name = "All Saints"
@@ -2256,9 +2441,17 @@ date_rule = "Fixed(11,1)"
 rank = "first class double"
 color = "white"
 
+[[octaves]]
+name = "All Saints"
+begin = "Fixed(11,2)"
+end = "Fixed(11,8)"
+is_octave = true
+octave_rank = "common"
+color = "white"
+
 [[feasts]]
 name = "Commemoration of all the Faithful Departed"
-date_rule = "Fixed(11,2)"
+date_rule = "AvoidSunday(Fixed(11,2))"
 rank = "double"
 color = "black"
 
@@ -2270,6 +2463,12 @@ rank = "double"
 color = "white"
 titles = ["Bishop", "Confessor"]
 
+[[feasts]]
+name = "Holy Four Crowned Martyrs"
+date_rule = "Fixed(11,8)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "Dedication of the Archbasilica of the most Holy Saviour"
@@ -2278,12 +2477,25 @@ rank = "second class double"
 color = "white"
 
 [[feasts]]
+name = "St. Theodore"
+date_rule = "Fixed(11,9)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
+
+[[feasts]]
 name = "St. Andrew Avellino"
 date_rule = "Fixed(11,10)"
 rank = "double"
 color = "white"
 titles = ["Confessor"]
 
+[[feasts]]
+name = "Ss. Tryphon, Respicius, and Nympha"
+date_rule = "Fixed(11,10)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
 
 [[feasts]]
 name = "St. Martin"
@@ -2292,6 +2504,12 @@ rank = "double"
 color = "white"
 titles = ["Bishop", "Confessor"]
 
+[[feasts]]
+name = "St. Mennas"
+date_rule = "Fixed(11,11)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. Martin I"
@@ -2352,7 +2570,14 @@ name = "St. Elisabeth"
 date_rule = "Fixed(11,19)"
 rank = "double"
 color = "white"
-titles = ["widow"]
+titles = ["Widow"]
+
+[[feasts]]
+name = "St. Pontianus"
+date_rule = "Fixed(11,19)"
+rank = "commemoration"
+color = "red"
+titles = ["Pope", "Martyr"]
 
 
 [[feasts]]
@@ -2364,11 +2589,10 @@ titles = ["Confessor"]
 
 
 [[feasts]]
-name = "Presentation"
+name = "Presentation of the Blessed Virgin Mary"
 date_rule = "Fixed(11,21)"
 rank = "major double"
 color = "white"
-titles = ["of the blessed Virgin mary"]
 
 [[feasts]]
 name = "St. Cecilia"
@@ -2385,6 +2609,12 @@ rank = "double"
 color = "red"
 titles = ["Pope", "Martyr"]
 
+[[feasts]]
+name = "St. Felicitas"
+date_rule = "Fixed(11,23)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. John of the Cross"
@@ -2393,6 +2623,12 @@ rank = "double"
 color = "white"
 titles = ["Confessor", "Doctor of the Church"]
 
+[[feasts]]
+name = "St. Chrysogonus"
+date_rule = "Fixed(11,24)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyr"]
 
 [[feasts]]
 name = "St. Catherine"
@@ -2409,6 +2645,13 @@ rank = "double"
 color = "white"
 titles = ["Abbot"]
 
+[[feasts]]
+name = "St. Peter of Alexandria"
+date_rule = "Fixed(11,26)"
+rank = "commemoration"
+color = "red"
+titles = ["Bishop", "Martyr"]
+
 
 [[feasts]]
 name = "Vigil of St. Andrew"
@@ -2416,6 +2659,13 @@ date_rule = "Fixed(11,29)"
 rank = "minor"
 color = "red"
 day_type = "vigil"
+
+[[feasts]]
+name = "St. Saturninus"
+date_rule = "Fixed(11,29)"
+rank = "commemoration"
+color = "red"
+titles = ["Bishop", "Martyr"]
 
 [[feasts]]
 name = "St. Andrew"
@@ -2788,9 +3038,10 @@ day_type = "feria"
 [[feasts]]
 name = "Easter Sunday"
 date_rule = "Easter"
-rank = "first class double"
+rank = "I"
 color = "white"
 of_our_lord = true
+day_type = "sunday"
 
 [[feasts]]
 name = "Low Sunday"
@@ -2816,12 +3067,12 @@ rank = "first class double"
 color = "white"
 of_our_lord = true
 
-[[feasts]]
-name = "The Octave of the Ascension"
-date_rule = "OffsetDays(Easter,  46)"
-rank = "major double"
+[[octaves]]
+name = "The Ascension"
+begin = "OffsetDays(Easter, 40)"
+end = "OffsetDays(Easter, 46)"
 color = "white"
-of_our_lord = true
+octave_rank = "privileged3"
 
 [[feasts]]
 name = "The Vigil of Pentecost"
@@ -2833,9 +3084,10 @@ day_type = "vigil"
 [[feasts]]
 name = "Pentecost"
 date_rule = "OffsetDays(Easter, 49)"
-rank = "first class double"
+rank = "I"
 color = "red"
 of_our_lord = true
+day_type = "sunday"
 
 [[feasts]]
 name = "Whit Monday"
@@ -2854,9 +3106,10 @@ of_our_lord = true
 [[feasts]]
 name = "Holy Trinity and the Octave of Pentecost"
 date_rule = "OffsetDays(Easter, 56)"
-rank = "first class double"
+rank = "I"
 color = "white"
 of_our_lord = true
+day_type = "sunday"
 
 [[feasts]]
 name = "Corpus Christi"
@@ -2865,12 +3118,13 @@ rank = "first class double"
 color = "white"
 of_our_lord = true
 
-[[feasts]]
-name = "Octave of Corpus Christi"
-date_rule = "OffsetDays(Easter, 67)"
-rank = "major double"
+[[octaves]]
+name = "Corpus Christi"
+begin = "OffsetDays(Easter, 61)"
+end = "OffsetDays(Easter, 67)"
+octave_rank = "privileged2"
 color = "white"
-of_our_lord = true
+is_octave = true
 
 [[feasts]]
 name = "Sacred Heart of Jesus"
@@ -2879,12 +3133,14 @@ rank = "first class double"
 color = "white"
 of_our_lord = true
 
-[[feasts]]
-name = "Octave of the Sacred Heart of Jesus"
-date_rule = "OffsetDays(Easter, 75)"
-rank = "major double"
-color = "red"
-of_our_lord = true
+[[octaves]]
+name = "Sacred Heart of Jesus"
+begin = "OffsetDays(Easter, 69)"
+end = "OffsetDays(Easter, 75)"
+octave_rank = "privileged3"
+color = "white"
+is_octave = true
+
 
 # ---------- Vigils ----------
 
@@ -2902,7 +3158,6 @@ date_rule = "OffsetDays(Fixed(6,29), -1)"
 day_type = "vigil"
 rank = "minor"
 color = "violet"
-
 
 [[feasts]]
 name = "Vigil of St. Laurence"
@@ -2926,10 +3181,10 @@ rank = "minor"
 color = "violet"
 
 
-
 [[feasts]]
 name = "Vigil of St. Matthias"
 date_rule = "LeapYearConditional(Fixed(2,23), Fixed(2,24))"
 day_type = "vigil"
 rank = "minor"
+titles = ["Apostle"]
 color = "violet"

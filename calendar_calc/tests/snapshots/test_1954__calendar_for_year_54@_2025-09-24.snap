@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"Our Lady of Ransom\", rank: \"Major Double\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Feria IV week XV after the octave of Pentecost (Week 4 of September)\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-09-24|Feria IV week XV after the octave of Pentecost (Week 4 of September)|Major Double|Our Lady of Ransom|

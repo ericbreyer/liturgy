@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. Clare, Virgin\", rank: \"Double\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Feria III week IX after the octave of Pentecost (Week 2 of August)\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-08-12|Feria III week IX after the octave of Pentecost (Week 2 of August)|Double|St. Clare, Virgin|

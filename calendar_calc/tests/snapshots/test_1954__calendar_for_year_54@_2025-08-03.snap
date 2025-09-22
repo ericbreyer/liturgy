@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"Invention of St. Stephen, Protomartyr\", rank: \"Semidouble\" }) and Sunday { rank: 3 } (LiturgicalUnit { desc: \"Dominica VIII after Pentecost (Week 1 of August)\", rank: \"Lesser Sunday\" }) |     -> Occurrence result: SecondCommemorationOfFirst"
+expression: split_line.0
+---
+2025-08-03|Dominica VIII after Pentecost (Week 1 of August)|Lesser Sunday|Dominica VIII after Pentecost (Week 1 of August)|Invention of St. Stephen, Protomartyr

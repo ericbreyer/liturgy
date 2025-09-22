@@ -2989,6 +2989,7 @@ name = " The Most Sacred Heart of Jesus"
 date_rule = "OffsetDays(Easter, 68)"
 rank = "I"
 color = "White"
+of_our_lord = true
 day_type = "feast"
 
 

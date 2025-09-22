@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
-2025-04-27|Dominica II of Easter|Sunday|Dominica II of Easter|
+2025-04-27|Dominica II of Easter|Sunday|Octave Day of Easter|

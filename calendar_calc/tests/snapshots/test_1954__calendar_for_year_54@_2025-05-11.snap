@@ -1,5 +1,6 @@
 ---
 source: tests/test_1954.rs
-expression: line
+description: "Resolving between Sunday { rank: 3 } (LiturgicalUnit { desc: \"Dominica III after Easter Sunday\", rank: \"Lesser Sunday\" }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: \"Sunday in the Octave of St. Joseph \", rank: \"Day within a Common Octave\" }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
-2025-05-11|Dominica III after Easter Sunday|Greater Sunday of the Second Class|Dominica III after Easter Sunday|
+2025-05-11|Dominica III after Easter Sunday|Lesser Sunday|Dominica III after Easter Sunday|Sunday in the Octave of St. Joseph

@@ -1,25 +1,22 @@
 use std::collections::HashMap;
 
-use chrono::{Datelike, NaiveDate};
+use chrono::{Datelike, Days, NaiveDate, TimeDelta};
 
 use crate::{
     calender::{
-        feast_rank::{BVMOnSaturdayResult, FeastRank},
-        generic_calendar::{CalendarType, FeastRule, SeasonRule},
-        year_calendar::{DayDescription, YearCalendar},
-        DayType, LiturgicalContext, LiturgicalUnit,
+        DayType, LiturgicalContext, LiturgicalUnit, feast_rank::{BVMOnSaturdayResult, FeastRank}, generic_calendar::{CalendarType, FeastRule, SeasonRule}, year_calendar::{DayDescription, YearCalendar}
     },
     date_calc::{
         get_following_sunday, get_preceding_sunday, num_sundays_after_date_inclusive,
         num_weeks_after_date, to_month_string, to_roman_numeral,
-    },
+    }, types::ArcStr,
 };
 
 #[derive(Debug, Clone)]
 pub struct YearCalendarBuilder {
     pub year: i32,
     #[cfg(test)]
-    pub name: String,
+    pub name: ArcStr,
     pub seasons: Vec<SeasonRule<NaiveDate>>,
     pub feasts: HashMap<NaiveDate, Vec<FeastRule<NaiveDate>>>,
     pub first_advent: NaiveDate,
@@ -35,24 +32,6 @@ impl YearCalendarBuilder {
     {
         let mut days = Vec::new();
         // Diagnostic: print instantiated seasons and octaves to help debug range coverage
-        eprintln!("Instantiated seasons for lit year {}:", self.year);
-        for s in &self.seasons {
-            eprintln!(
-                "  Season '{}' -> begin: {} end: {}",
-                s.name(),
-                s.begin(),
-                s.end()
-            );
-        }
-        eprintln!("Instantiated octaves for lit year {}:", self.year);
-        for o in &self.octaves {
-            eprintln!(
-                "  Octave '{}' -> begin: {} end: {}",
-                o.name(),
-                o.begin(),
-                o.end()
-            );
-        }
         // The start date should be the first Sunday of Advent
         let start = self.first_advent;
 
@@ -83,51 +62,37 @@ impl YearCalendarBuilder {
                 .iter()
                 .any(|(r, _)| r.is_ferial_or_sunday_rank());
 
-
             // If an octave exists on this date, create an octave competitor but do not replace the season
-            let octave_competitor: Option<(R, LiturgicalUnit)> = self
+            let octave_competitors: Vec<(R, LiturgicalUnit)> = self
                 .octaves
                 .iter()
-                .find(|s| date >= *s.begin() && date <= *s.end())
+                .filter(|s| date >= *s.begin() && date <= *s.end())
                 .map(|oct| {
-                    if date.weekday() == chrono::Weekday::Sun {
-                        let ctx = LiturgicalContext::new()
-                            .season(oct.name())
-                            .of_lent(oct.is_of_lent())
-                            .octave_day(date == *oct.end());
-
-                        let rank = oct.octave_rank().as_deref().unwrap_or("I");
-                        let r = R::new_with_context(rank, &DayType::Octave, &ctx.also_sunday());
-                        let unit = LiturgicalUnit {
-                            desc: self.get_octave_descriptor(&date, oct),
-                            rank: r.clone().get_rank_string(),
-                            date,
-                            color: oct.color().to_string(),
-                        };
-                        (r, unit)
+                    let ctx = LiturgicalContext::new()
+                        .season(oct.name())
+                        .of_lent(oct.is_of_lent())
+                        .feast(self.get_octave_descriptor(&date, oct))
+                        .octave_day(date == *oct.end())
+                        .first_3_days(date <= *oct.begin() + chrono::Duration::days(1));
+                    let ctx = if date.weekday() == chrono::Weekday::Sun {
+                        ctx.also_sunday()
                     } else {
-                        let ctx = LiturgicalContext::new()
-                            .season(oct.name())
-                            .of_lent(oct.is_of_lent())
-                            .feast(self.get_octave_descriptor(&date, oct)).octave_day(date == *oct.end());
-                        let rank = oct.octave_rank().as_deref().unwrap_or("I");
-                        let r = R::new_with_context(rank, &DayType::Octave, &ctx.also_ferial());
-                        let unit = LiturgicalUnit {
-                            desc: self.get_octave_descriptor(&date, oct),
-                            rank: r.clone().get_rank_string(),
-                            date,
-                            color: oct.color().to_string(),
-                        };
-                        (r, unit)
-                    }
-                });
+                        ctx.also_ferial()
+                    };
+                    let rank = oct.octave_rank().as_deref().unwrap_or("I");
+                    let r = R::new_with_context(rank, &DayType::Octave, &ctx);
+                    let unit = LiturgicalUnit {
+                        desc: self.get_octave_descriptor(&date, oct),
+                        rank: r.clone().get_rank_string(),
+                        date,
+                        color: oct.color().into(),
+                    };
+                    (r, unit)
+                })
+                .collect();
 
-            let has_high_festival = feast_competitors.iter().any(|(r, _)| r.is_high_festial()) ||
-                octave_competitor
-                    .as_ref()
-                    .map(|(r, _)| r.is_high_festial())
-                    .unwrap_or(false);
-
+            let has_high_festival = feast_competitors.iter().any(|(r, _)| r.is_high_festial())
+                || octave_competitors.iter().any(|(r, _)| r.is_high_festial());
 
             let competitors: Vec<_> = feast_competitors
                 .into_iter()
@@ -137,7 +102,7 @@ impl YearCalendarBuilder {
                         .then(|| (season_rank.clone(), season_liturgical_unit.clone())),
                 )
                 // Add octave competitor if present (do not replace season)
-                .chain(octave_competitor.clone())
+                .chain(octave_competitors.into_iter())
                 // Add transfer if present and no high festival competitors exist
                 .chain(
                     transfer
@@ -152,7 +117,7 @@ impl YearCalendarBuilder {
                 transfer = None;
             }
 
-            let mut result = R::resolve_conflicts(&competitors);
+            let mut result = R::resolve_conflicts(&competitors).unwrap();
 
             // Add BVM on Saturday commemoration for ferial Saturdays
             let is_ferial_saturday = date.weekday() == chrono::Weekday::Sat;
@@ -161,13 +126,41 @@ impl YearCalendarBuilder {
                 match result.winner_rank.admits_bvm_on_saturday() {
                     BVMOnSaturdayResult::NotAdmitted => {}
                     BVMOnSaturdayResult::Admitted => {
-                        // Add BVM on Saturday as a commemoration
-                        result.winner.bvm_on_saturday();
+                        // Add BVM on Saturday
+                        result.winner.bvm_on_saturday::<R>();
                     }
                     BVMOnSaturdayResult::Commemorated => {
                         result
                             .commemorations
                             .push(LiturgicalUnit::bvm_on_saturday_commemoration::<R>(date));
+                    }
+                    BVMOnSaturdayResult::OtherCommemorated => {
+                        result.commemorations.push(result.winner.clone());
+                        result.winner.bvm_on_saturday::<R>();
+                    }
+                }
+            }
+
+            // if winner is a sunday in an octave, change its description to reflect that
+            if let Some(oct) = self
+                .octaves
+                .iter()
+                .find(|s| date >= *s.begin() && date < *s.end())
+            {
+                if date.weekday() == chrono::Weekday::Sun
+                    && result.winner_rank.is_ferial_or_sunday_rank()
+                {
+                    let oct_rank = R::new_with_context(
+                        oct.octave_rank().as_deref().unwrap_or("I"),
+                        &DayType::Octave,
+                        &LiturgicalContext::new()
+                            .season(oct.name())
+                            .of_lent(oct.is_of_lent())
+                            .octave_day(date == *oct.end())
+                            .also_sunday(),
+                    );
+                    if oct_rank.is_high_festial() {
+                        result.winner.desc = self.get_octave_descriptor(&date, oct);
                     }
                 }
             }
@@ -178,6 +171,7 @@ impl YearCalendarBuilder {
                 day_rank: result.winner.rank.clone(),
                 day: result.winner,
                 commemorations: result.commemorations,
+                debug_trace: result.debug_trace.join(" | ").into(),
             });
 
             transfer = transfer.or(result.transferred);
@@ -190,33 +184,33 @@ impl YearCalendarBuilder {
             __marker: std::marker::PhantomData,
         }
     }
-    pub fn get_season_color(&self, date: &NaiveDate) -> String {
+    pub fn get_season_color(&self, date: &NaiveDate) -> ArcStr {
         let season = self.get_season(date);
-        season.color().to_string()
+        season.color().into()
     }
 
     pub fn get_octave_descriptor(
         &self,
         date: &NaiveDate,
         octave: &SeasonRule<NaiveDate>,
-    ) -> String {
+    ) -> ArcStr {
         let day_in_octave = date.signed_duration_since(*octave.begin()).num_days() + 1 + 1;
 
         // if its the octave day
         if date == octave.end() {
-            return format!("Octave Day of {}", octave.name());
+            return format!("Octave Day of {}", octave.name()).into();
         }
 
         // if its a sunday in the octave
         if date.weekday() == chrono::Weekday::Sun {
-            return format!("Sunday in the Octave of {} ", octave.name());
+            return format!("Sunday in the Octave of {} ", octave.name()).into();
         }
-    
+
         // else its a feria in the octave
-        format!("Day {} in the Octave of {}", day_in_octave, octave.name())
+        format!("Day {} in the Octave of {}", day_in_octave, octave.name()).into()
     }
 
-    pub fn get_season_descriptor(&self, date: &chrono::NaiveDate) -> String {
+    pub fn get_season_descriptor(&self, date: &chrono::NaiveDate) -> ArcStr {
         let season = self.get_season(date);
 
         let weekday = date.weekday().number_from_monday();
@@ -233,39 +227,78 @@ impl YearCalendarBuilder {
         } else {
             season.get_count_ferias_suffix()
         }
-        .map(|s| s.to_string())
+        .map(|s| s.into())
         .unwrap_or_else(|| format!("of {}", season.name()));
 
         let week_of_month = if let Some(lower_bound) = season.append_week_of_month().as_ref() {
             if lower_bound > date {
-                "".to_string()
+                "".into()
             } else {
-                let preceding_sunday = get_preceding_sunday(*date);
-                let month = preceding_sunday.month();
-                let first_sunday_of_month = {
-                    let first_of_month =
-                        NaiveDate::from_ymd_opt(preceding_sunday.year(), month, 1).unwrap();
-                    get_following_sunday(first_of_month)
-                };
-                let week_of_month =
-                    num_sundays_after_date_inclusive(first_sunday_of_month, preceding_sunday);
-                format!(" (Week {} of {})", week_of_month, to_month_string(month))
+                match season.week_of_month_old_scheme() {
+                    false => {
+                        // New scheme: count from the preceding Sunday
+                        let preceding_sunday = get_preceding_sunday(*date);
+                        let month = preceding_sunday.month();
+                        let first_sunday_of_month = {
+                            let first_of_month =
+                                NaiveDate::from_ymd_opt(preceding_sunday.year(), month, 1).unwrap();
+                            get_following_sunday(first_of_month)
+                        };
+                        let week_of_month = num_sundays_after_date_inclusive(
+                            first_sunday_of_month,
+                            preceding_sunday,
+                        );
+                        format!(" (Week {} of {})", week_of_month, to_month_string(month))
+                    }
+                    true => {
+                        // Old scheme: count from the closest sunday to the first of the month
+                        let preceding_sunday = get_preceding_sunday(*date);
+                        let mut month = date.month();
+                        let first_of_next_month = if month == 12 {
+                            NaiveDate::from_ymd_opt(date.year() + 1, 1, 1).unwrap()
+                        } else {
+                            NaiveDate::from_ymd_opt(date.year(), month + 1, 1).unwrap()
+                        };
+
+                        if first_of_next_month - preceding_sunday
+                            <= preceding_sunday + Days::new(7) - first_of_next_month
+                        {
+                            month += 1;
+                        };
+
+                        let first_of_month =
+                            NaiveDate::from_ymd_opt(date.year(), month, 1).unwrap();
+
+                        let first_sunday_before = get_preceding_sunday(first_of_month);
+                        let first_sunday_after = get_following_sunday(first_of_month);
+                        let first_sunday = if first_of_month - first_sunday_before
+                            < first_sunday_after - first_of_month
+                        {
+                            first_sunday_before
+                        } else {
+                            first_sunday_after
+                        };
+                        let week_of_month =
+                            num_sundays_after_date_inclusive(first_sunday, preceding_sunday);
+                        format!(" (Week {} of {})", week_of_month, to_month_string(month))
+                    }
+                }
             }
         } else {
-            "".to_string()
+            "".into()
         };
 
         let week_ordinal_str = if season.dont_show_week_of_season() {
-            "".to_string()
+            "".into()
         } else if week_ordinal == 0 {
-            "after start ".to_string()
+            "after start ".into()
         } else if weekday == 7 {
             format!("{} ", to_roman_numeral(week_ordinal))
         } else {
             format!("week {} ", to_roman_numeral(week_ordinal))
         };
 
-        format!("{feria} {week_ordinal_str}{suffix}{week_of_month}")
+        format!("{feria} {week_ordinal_str}{suffix}{week_of_month}").into()
     }
 
     pub fn get_season(&self, date: &NaiveDate) -> &SeasonRule<NaiveDate> {
@@ -484,12 +517,12 @@ mod test {
 
     fn create_test_feast(name: &str, date: NaiveDate, rank: &str) -> FeastRule<NaiveDate> {
         FeastRule {
-            name: name.to_string(),
+            name: name.into(),
             date_rule: date,
-            rank: Some(rank.to_string()),
+            rank: Some(rank.into()),
             of_our_lord: false,
             day_type: Some(DayType::Feast),
-            color: "red".to_string(),
+            color: "red".into(),
             titles: vec![],
             movable: false,
         }
@@ -513,7 +546,7 @@ mod test {
 
         YearCalendarBuilder {
             year: 2025,
-            name: "Test Calendar".to_string(),
+            name: "Test Calendar".into(),
             seasons: vec![season],
             feasts: feasts_map,
             first_advent: NaiveDate::from_ymd_opt(2025, 11, 30).unwrap(),
@@ -564,7 +597,7 @@ mod test {
     fn test_additional_edge_cases(date_str: &str) {
         let year_calendar = YearCalendarBuilder {
             year: 2025,
-            name: "Coverage Test".to_string(),
+            name: "Coverage Test".into(),
             seasons: vec![create_test_season(
                 "Coverage Season",
                 NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),

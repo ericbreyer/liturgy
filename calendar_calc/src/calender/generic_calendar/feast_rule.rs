@@ -1,19 +1,19 @@
 use chrono::{Datelike, NaiveDate};
 use serde::{Deserialize, Serialize};
 
-use crate::calender::{
-    feast_rank::FeastRank, DateRule, DayType, LiturgicalContext, LiturgicalUnit,
-};
+use crate::{calender::{
+    DateRule, DayType, LiturgicalContext, LiturgicalUnit, feast_rank::FeastRank
+}, types::ArcStr};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FeastRule<DateType> {
-    pub name: String,
+    pub name: ArcStr,
     pub date_rule: DateType,
     pub rank: Option<String>,
     #[serde(default)]
     pub of_our_lord: bool,
     pub day_type: Option<DayType>,
-    pub color: String,
+    pub color: ArcStr,
     #[serde(default)]
     pub titles: Vec<String>,
     #[serde(default)]
@@ -27,7 +27,7 @@ impl<DateType> FeastRule<DateType> {
     {
         let rank = self.get_feastrank::<R>().get_rank_string();
         LiturgicalUnit {
-            desc: self.to_string(),
+            desc: self.to_string().into(),
             rank,
             date,
             color: self.color,
@@ -106,7 +106,7 @@ impl FeastRule<DateRule> {
     }
 
     pub fn add_extensions_prefix(mut self, prefix: &str) -> Self {
-        self.name = format!("{}: {}", prefix, self.name);
+        self.name = format!("{}: {}", prefix, self.name).into();
         self
     }
 }

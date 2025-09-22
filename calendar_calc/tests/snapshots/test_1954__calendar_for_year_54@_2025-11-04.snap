@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. Charles, Bishop and Confessor\", rank: \"Double\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Feria III week XXI after the octave of Pentecost (Week 1 of November)\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. Charles, Bishop and Confessor\", rank: \"Double\" }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: \"Day 4 in the Octave of All Saints\", rank: \"Day within a Common Octave\" }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2025-11-04|Feria III week XXI after the octave of Pentecost (Week 1 of November)|Double|St. Charles, Bishop and Confessor|Day 4 in the Octave of All Saints

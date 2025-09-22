@@ -1,14 +1,25 @@
+use std::fmt::Debug;
+
 use chrono::NaiveDate;
-use serde::{Serialize, ser::SerializeStruct};
+use serde::{ser::SerializeStruct, Serialize};
 
-use crate::calender::feast_rank::FeastRank;
+use crate::{calender::feast_rank::FeastRank, types::ArcStr};
 
-#[derive(Debug, Clone,)]
+#[derive(Clone)]
 pub struct LiturgicalUnit {
-    pub desc: String,
-    pub rank: String,
+    pub desc: ArcStr,
+    pub rank: ArcStr,
     pub date: NaiveDate,
-    pub color: String,
+    pub color: ArcStr,
+}
+
+impl Debug for LiturgicalUnit {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("LiturgicalUnit")
+            .field("desc", &self.desc)
+            .field("rank", &self.rank)
+            .finish()
+    }
 }
 
 impl Serialize for LiturgicalUnit {
@@ -25,27 +36,27 @@ impl Serialize for LiturgicalUnit {
     }
 }
 
-impl LiturgicalUnit
-{
+impl LiturgicalUnit {
     pub fn transfered(&self) -> Self {
         Self {
-            desc: format!("{} (transferred)", self.desc),
+            desc: format!("{} (transferred)", self.desc).into(),
             rank: self.rank.clone(),
             date: self.date,
             color: self.color.clone(),
         }
     }
 
-    pub fn bvm_on_saturday(&mut self) {
-        self.desc = "BVM on Saturday".to_string();
+    pub fn bvm_on_saturday<R: FeastRank>(&mut self) {
+        self.desc = "BVM on Saturday".into();
+        self.rank = R::get_bvm_on_saturday_rank().unwrap().get_rank_string();
     }
 
     pub fn bvm_on_saturday_commemoration<R: FeastRank>(date: NaiveDate) -> Self {
         Self {
-            desc: "BVM on Saturday".to_string(),
+            desc: "BVM on Saturday".into(),
             rank: R::get_bvm_on_saturday_rank().unwrap().get_rank_string(),
             date,
-            color: "white".to_string(),
+            color: "white".into(),
         }
     }
 }

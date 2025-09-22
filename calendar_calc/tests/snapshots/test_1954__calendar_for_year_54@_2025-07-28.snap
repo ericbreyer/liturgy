@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"Ss. Nazarius and Celsus Martyrs, Victor I Pope and Martyr, and St. Innocent I, Pope and Confessor\", rank: \"Semidouble\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Feria II week VII after the octave of Pentecost\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-07-28|Feria II week VII after the octave of Pentecost|Semidouble|Ss. Nazarius and Celsus Martyrs, Victor I Pope and Martyr, and St. Innocent I, Pope and Confessor|

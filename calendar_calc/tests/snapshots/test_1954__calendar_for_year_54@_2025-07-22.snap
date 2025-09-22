@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. Mary Magdalene Penitent\", rank: \"Double\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Feria III week VI after the octave of Pentecost\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-07-22|Feria III week VI after the octave of Pentecost|Double|St. Mary Magdalene Penitent|

@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. John Cantius, Confessor\", rank: \"Double\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Feria II week XIX after the octave of Pentecost (Week 4 of October)\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-10-20|Feria II week XIX after the octave of Pentecost (Week 4 of October)|Double|St. John Cantius, Confessor|

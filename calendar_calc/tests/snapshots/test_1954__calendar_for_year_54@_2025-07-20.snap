@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. Jerome Emiliani, Confessor\", rank: \"Double\" }) and Sunday { rank: 3 } (LiturgicalUnit { desc: \"Dominica VI after Pentecost\", rank: \"Lesser Sunday\" }) |     -> Occurrence result: SecondCommemorationOfFirst"
+expression: split_line.0
+---
+2025-07-20|Dominica VI after Pentecost|Lesser Sunday|Dominica VI after Pentecost|St. Jerome Emiliani, Confessor, St. Margaret, Virgin and Martyr

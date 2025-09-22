@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Vigil { major: false } (LiturgicalUnit { desc: \"Vigil of the Assumption\", rank: \"Minor Vigil\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Feria V week IX after the octave of Pentecost (Week 2 of August)\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-08-14|Feria V week IX after the octave of Pentecost (Week 2 of August)|Minor Vigil|Vigil of the Assumption|

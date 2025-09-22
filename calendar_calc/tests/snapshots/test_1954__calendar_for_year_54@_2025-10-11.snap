@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"The Maternity of the Blessed Virgin Mary\", rank: \"Second Class Double\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Sabbato week XVII after the octave of Pentecost (Week 2 of October)\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-10-11|Sabbato week XVII after the octave of Pentecost (Week 2 of October)|Second Class Double|The Maternity of the Blessed Virgin Mary|

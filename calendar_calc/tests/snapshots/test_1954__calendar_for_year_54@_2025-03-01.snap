@@ -1,5 +1,6 @@
 ---
 source: tests/test_1954.rs
-expression: line
+description: ""
+expression: split_line.0
 ---
-2025-03-01|Sabbato after Sexagesima|Ordinary Feria|BVM on Saturday|
+2025-03-01|Sabbato after Sexagesima|Simple|BVM on Saturday|

@@ -1,12 +1,31 @@
 use std::fmt::Debug;
 
-use crate::calender::DayType;
+use anyhow::Result;
+use serde::{Deserialize, Serialize};
+
+use crate::{calender::DayType, types::{ArcStr, RcStr}};
 mod feast_rank54;
 mod feast_rank62;
 mod feast_rank_of;
+mod test;
 pub use feast_rank54::FeastRank54;
 pub use feast_rank62::FeastRank62;
 pub use feast_rank_of::FeastRankOf;
+
+bitflags::bitflags! {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
+    /// Flags describing octave-related properties for a liturgical day
+    pub struct OctaveFlags: u8 {
+        const OCTAVE_DAY = 0b00000001;
+        const FIRST_3_DAYS = 0b00000010;
+    }
+}
+
+impl Default for OctaveFlags {
+    fn default() -> Self {
+        OctaveFlags::empty()
+    }
+}
 
 /// Context information for creating FeastRank62 from legacy data
 #[derive(Debug, Clone, Default)]
@@ -21,7 +40,7 @@ pub struct LiturgicalContext {
     of_our_lord: bool,
     of_lent: bool,
     secondary_day_type: Option<DayType>,
-    is_octave_day: bool,
+    octave_flags: OctaveFlags,
 }
 
 impl LiturgicalContext {
@@ -49,7 +68,21 @@ impl LiturgicalContext {
     }
 
     pub fn octave_day(mut self, is_octave_day: bool) -> Self {
-        self.is_octave_day = is_octave_day;
+        if is_octave_day {
+            self.octave_flags.insert(OctaveFlags::OCTAVE_DAY);
+        } else {
+            self.octave_flags.remove(OctaveFlags::OCTAVE_DAY);
+        }
+        self
+    }
+
+    /// Mark that this day is within the first three days of an octave
+    pub fn first_3_days(mut self, is_first_3_days: bool) -> Self {
+        if is_first_3_days {
+            self.octave_flags.insert(OctaveFlags::FIRST_3_DAYS);
+        } else {
+            self.octave_flags.remove(OctaveFlags::FIRST_3_DAYS);
+        }
         self
     }
 
@@ -76,11 +109,13 @@ impl LiturgicalContext {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ResolveConflictsResult<R: FeastRank, T: Clone> {
     pub winner: T,
     pub winner_rank: R,
     pub transferred: Option<(R, T)>,
     pub commemorations: Vec<T>,
+    pub debug_trace: Vec<String>,
 }
 
 pub enum BVMOnSaturdayResult {
@@ -90,9 +125,11 @@ pub enum BVMOnSaturdayResult {
     Admitted,
     /// The rank admits BVM on Saturday, but this is a feast of the Lord that takes precedence
     Commemorated,
+    /// The rank admits BVM on Saturday, and the current feast is commemorated
+    OtherCommemorated,
 }
 pub trait FeastRank: Clone + Debug {
-    fn resolve_conflicts<T>(competetors: &[(Self, T)]) -> ResolveConflictsResult<Self, T>
+    fn resolve_conflicts<T>(competetors: &[(Self, T)]) -> Result<ResolveConflictsResult<Self, T>>
     where
         // Self: Sized,
         T: Clone + Debug;
@@ -101,9 +138,10 @@ pub trait FeastRank: Clone + Debug {
         Self: Sized;
     fn is_ferial_or_sunday_rank(&self) -> bool;
     fn is_high_festial(&self) -> bool;
-    fn get_rank_string(&self) -> String;
+    fn get_rank_string(&self) -> ArcStr;
     fn get_bvm_on_saturday_rank() -> Option<Self>
     where
         Self: Sized;
     fn admits_bvm_on_saturday(&self) -> BVMOnSaturdayResult;
+    fn id(&self) -> RcStr;
 }

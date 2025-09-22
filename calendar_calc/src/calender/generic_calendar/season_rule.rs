@@ -1,14 +1,16 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
+use crate::types::ArcStr;
+
 use super::super::date_rule::DateRule;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FerialRule<DateType> {
-    name: String,
+    name: ArcStr,
     begin: DateType,
     end: DateType,
-    rank: String,
+    rank: ArcStr,
 }
 
 /// Configuration for counting days and weeks within a season
@@ -28,6 +30,7 @@ pub struct CountingConfig<DateType> {
 pub struct DisplayConfig<DateType> {
     pub append_week_of_month: Option<DateType>,
     pub dont_show_week_of_season: bool,
+    pub week_of_month_old_scheme: bool,
 }
 
 /// Octave-specific configuration
@@ -46,11 +49,11 @@ pub struct HierarchyConfig {
 /// Core season information that's always present
 #[derive(Debug, Clone)]
 pub struct SeasonCore<DateType> {
-    pub name: String,
+    pub name: ArcStr,
     pub begin: DateType,
     pub end: DateType,
-    pub color: String,
-    pub sunday_rank: Option<String>,
+    pub color: ArcStr,
+    pub sunday_rank: Option<ArcStr>,
     pub ferial_rules: Vec<FerialRule<DateType>>,
 }
 
@@ -170,6 +173,7 @@ where
                 let mut is_octave = false;
                 let mut octave_rank = None;
                 let mut parent_season = None;
+                let mut week_of_month_old_scheme = false;
 
                 while let Some(key) = map.next_key::<String>()? {
                     match key.as_str() {
@@ -193,6 +197,10 @@ where
                         "is_octave" => is_octave = map.next_value()?,
                         "octave_rank" => octave_rank = Some(map.next_value()?),
                         "parent_season" => parent_season = Some(map.next_value()?),
+                        "week_of_month_old_scheme" => {
+                            week_of_month_old_scheme = map.next_value()?
+                        }
+
                         _ => {
                             let _: serde::de::IgnoredAny = map.next_value()?;
                         }
@@ -223,6 +231,7 @@ where
                     display: DisplayConfig {
                         append_week_of_month,
                         dont_show_week_of_season,
+                        week_of_month_old_scheme,
                     },
                     octave: OctaveConfig {
                         is_octave,
@@ -260,10 +269,10 @@ where
 impl<DateType> SeasonRule<DateType> {
     #[cfg(test)]
     pub fn new(
-        name: String,
+        name: ArcStr,
         begin: DateType,
         end: DateType,
-        color: String,
+        color: ArcStr,
         count_sundays_suffix: Option<String>,
         count_ferias_suffix: Option<String>,
         count_sundays_from: Option<DateType>,
@@ -275,6 +284,7 @@ impl<DateType> SeasonRule<DateType> {
         is_octave: bool,
         octave_rank: Option<String>,
         parent_season: Option<String>,
+        week_of_month_old_scheme: bool,
     ) -> Self {
         Self {
             core: SeasonCore {
@@ -282,7 +292,7 @@ impl<DateType> SeasonRule<DateType> {
                 begin,
                 end,
                 color,
-                sunday_rank,
+                sunday_rank: sunday_rank.map(|s| s.into()),
                 ferial_rules,
             },
             counting: CountingConfig {
@@ -295,6 +305,7 @@ impl<DateType> SeasonRule<DateType> {
             display: DisplayConfig {
                 append_week_of_month,
                 dont_show_week_of_season,
+                week_of_month_old_scheme,
             },
             octave: OctaveConfig {
                 is_octave,
@@ -354,7 +365,7 @@ impl<DateType> SeasonRule<DateType> {
     }
 
     #[cfg(test)]
-    pub fn sunday_rank(&self) -> &Option<String> {
+    pub fn sunday_rank(&self) -> &Option<ArcStr> {
         &self.core.sunday_rank
     }
 
@@ -375,9 +386,13 @@ impl<DateType> SeasonRule<DateType> {
         &self.hierarchy.parent_season
     }
 
+    pub fn week_of_month_old_scheme(&self) -> bool {
+        self.display.week_of_month_old_scheme
+    }
+
     #[cfg(test)]
     // Setters
-    pub fn set_name(&mut self, name: String) {
+    pub fn set_name(&mut self, name: ArcStr) {
         self.core.name = name;
     }
 
@@ -392,7 +407,7 @@ impl<DateType> SeasonRule<DateType> {
     }
 
     #[cfg(test)]
-    pub fn set_color(&mut self, color: String) {
+    pub fn set_color(&mut self, color: ArcStr) {
         self.core.color = color;
     }
 
@@ -427,7 +442,7 @@ impl<DateType> SeasonRule<DateType> {
     }
 
     #[cfg(test)]
-    pub fn set_sunday_rank(&mut self, sunday_rank: Option<String>) {
+    pub fn set_sunday_rank(&mut self, sunday_rank: Option<ArcStr>) {
         self.core.sunday_rank = sunday_rank;
     }
 
@@ -511,6 +526,7 @@ impl SeasonRule<DateRule> {
             display: DisplayConfig {
                 append_week_of_month,
                 dont_show_week_of_season: self.display.dont_show_week_of_season,
+                week_of_month_old_scheme: self.display.week_of_month_old_scheme,
             },
             octave: OctaveConfig {
                 is_octave: self.octave.is_octave,
@@ -615,6 +631,7 @@ impl SeasonRule<DateRule> {
             display: DisplayConfig {
                 append_week_of_month,
                 dont_show_week_of_season: self.display.dont_show_week_of_season,
+                week_of_month_old_scheme: self.display.week_of_month_old_scheme,
             },
             octave: OctaveConfig {
                 is_octave: self.octave.is_octave,
@@ -629,7 +646,7 @@ impl SeasonRule<DateRule> {
 
 impl SeasonRule<NaiveDate> {
     /// Gets the ferial rank for a given date within this season
-    pub fn get_ferial_rank_for_date(&self, date: &NaiveDate) -> String {
+    pub fn get_ferial_rank_for_date(&self, date: &NaiveDate) -> ArcStr {
         // Check if the date is within this season
         if date < &self.core.begin || date > &self.core.end {
             panic!(
@@ -644,13 +661,13 @@ impl SeasonRule<NaiveDate> {
             .ferial_rules
             .iter()
             .find(|r| *date >= r.begin && *date <= r.end)
-            .map(|rule| rule.rank.to_string())
-            .unwrap_or("IV".to_string())
+            .map(|rule| rule.rank.clone())
+            .unwrap_or("IV".into())
     }
 
     /// Gets the Sunday rank for this season
-    pub fn get_sunday_rank(&self) -> String {
-        self.core.sunday_rank.clone().unwrap_or("II".to_string())
+    pub fn get_sunday_rank(&self) -> ArcStr {
+        self.core.sunday_rank.clone().unwrap_or("II".into())
     }
 
     /// Check if this season is "of Lent" (either Lent itself or a child of Lent)
@@ -689,7 +706,7 @@ pub mod test {
 
     impl<DateType> FerialRule<DateType> {
         // Constructor
-        fn new(name: String, begin: DateType, end: DateType, rank: String) -> Self {
+        fn new(name: ArcStr, begin: DateType, end: DateType, rank: ArcStr) -> Self {
             Self {
                 name,
                 begin,
@@ -704,28 +721,29 @@ pub mod test {
     #[test_case("2025-01-15", "IV"; "date outside ferial rule uses default")]
     fn test_season_ferial_ranking(date_str: &str, expected_rank: &str) {
         let ferial_rule = FerialRule::new(
-            "Special Period".to_string(),
+            "Special Period".into(),
             NaiveDate::from_ymd_opt(2025, 2, 1).unwrap(),
             NaiveDate::from_ymd_opt(2025, 2, 28).unwrap(),
-            "II".to_string(),
+            "II".into(),
         );
 
         let season_rule = SeasonRule::new(
-            "Test Season".to_string(),
+            "Test Season".into(),
             NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),
             NaiveDate::from_ymd_opt(2025, 3, 31).unwrap(),
-            "green".to_string(),
-            Some("after Epiphany".to_string()),
-            Some("in Ordinary Time".to_string()),
+            "green".into(),
+            Some("after Epiphany".into()),
+            Some("in Ordinary Time".into()),
             Some(NaiveDate::from_ymd_opt(2025, 1, 6).unwrap()),
             Some(NaiveDate::from_ymd_opt(2025, 1, 7).unwrap()),
             Some(NaiveDate::from_ymd_opt(2025, 2, 1).unwrap()),
             false,
-            Some("III".to_string()),
+            Some("III".into()),
             vec![ferial_rule],
             false,
             None,
             None,
+            false,
         );
 
         let test_date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
@@ -735,14 +753,14 @@ pub mod test {
     }
 
     /// Tests SeasonRule sunday ranking with different configurations
-    #[test_case(Some("I".to_string()), "I"; "explicit sunday rank")]
+    #[test_case(Some("I".into()), "I"; "explicit sunday rank")]
     #[test_case(None, "II"; "default sunday rank")]
     fn test_season_sunday_ranking(sunday_rank: Option<String>, expected: &str) {
         let season_rule = SeasonRule::new(
-            "Test Season".to_string(),
+            "Test Season".into(),
             NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),
             NaiveDate::from_ymd_opt(2025, 3, 31).unwrap(),
-            "green".to_string(),
+            "green".into(),
             None,
             None,
             None,
@@ -754,6 +772,7 @@ pub mod test {
             false,
             None,
             None,
+            false,
         );
 
         let actual_rank = season_rule.get_sunday_rank();
@@ -765,10 +784,10 @@ pub mod test {
     #[should_panic(expected = "Date")]
     fn test_season_rule_out_of_range_panic() {
         let season_rule = SeasonRule::new(
-            "Limited Season".to_string(),
+            "Limited Season".into(),
             NaiveDate::from_ymd_opt(2025, 6, 1).unwrap(),
             NaiveDate::from_ymd_opt(2025, 6, 30).unwrap(),
-            "green".to_string(),
+            "green".into(),
             None,
             None,
             None,
@@ -780,6 +799,7 @@ pub mod test {
             false,
             None,
             None,
+            false,
         );
 
         // This should panic - date outside the season range
@@ -802,7 +822,7 @@ pub mod test {
         end_day: u8,
     ) {
         let ferial_date_rule = FerialRule::new(
-            expected_name.to_string(),
+            expected_name.into(),
             DateRule::Fixed {
                 month: begin_month,
                 day: begin_day,
@@ -811,7 +831,7 @@ pub mod test {
                 month: end_month,
                 day: end_day,
             },
-            expected_rank.to_string(),
+            expected_rank.into(),
         );
 
         let instantiated = ferial_date_rule.instantiate_for_lit_year(lit_year);
@@ -838,28 +858,29 @@ pub mod test {
         expected_sunday_rank: &str,
     ) {
         let ferial_rule = FerialRule::new(
-            "Inner Ferial".to_string(),
+            "Inner Ferial".into(),
             DateRule::Fixed { month: 2, day: 1 },
             DateRule::Fixed { month: 2, day: 28 },
-            "III".to_string(),
+            "III".into(),
         );
 
         let season_date_rule = SeasonRule::new(
-            expected_name.to_string(),
+            expected_name.into(),
             DateRule::Fixed { month: 1, day: 1 },
             DateRule::Fixed { month: 3, day: 31 },
-            "purple".to_string(),
-            Some("after Epiphany".to_string()),
-            Some("in Ordinary Time".to_string()),
+            "purple".into(),
+            Some("after Epiphany".into()),
+            Some("in Ordinary Time".into()),
             Some(DateRule::Fixed { month: 1, day: 6 }),
             Some(DateRule::Fixed { month: 1, day: 7 }),
             Some(DateRule::Fixed { month: 2, day: 1 }),
             false,
-            Some(expected_sunday_rank.to_string()),
+            Some(expected_sunday_rank.into()),
             vec![ferial_rule],
             false,
             None,
             None,
+            false,
         );
 
         let instantiated = season_date_rule.instantiate_for_lit_year(lit_year);
@@ -872,7 +893,7 @@ pub mod test {
         assert!(instantiated.append_week_of_month().is_some());
         assert_eq!(
             instantiated.sunday_rank(),
-            &Some(expected_sunday_rank.to_string())
+            &Some(expected_sunday_rank.into())
         );
         assert_eq!(instantiated.ferial_rules().len(), 1);
     }
@@ -885,11 +906,11 @@ pub mod test {
     ) -> SeasonRule<NaiveDate> {
         SeasonRule {
             core: SeasonCore {
-                name: name.to_string(),
+                name: name.into(),
                 begin,
                 end,
-                color: "green".to_string(),
-                sunday_rank: Some("III".to_string()),
+                color: "green".into(),
+                sunday_rank: Some("III".into()),
                 ferial_rules: vec![],
             },
             counting: CountingConfig::default(),
@@ -904,10 +925,10 @@ pub mod test {
     #[test]
     fn test_season_rule_accessors() {
         let season = SeasonRule::new(
-            "Test Season".to_string(),
+            "Test Season".into(),
             DateRule::Fixed { month: 1, day: 1 },
             DateRule::Fixed { month: 6, day: 30 },
-            "green".to_string(),
+            "green".into(),
             None,
             None,
             None,
@@ -919,6 +940,7 @@ pub mod test {
             false, // is_octave
             None,
             None,
+            false,
         );
 
         assert_eq!(season.name(), "Test Season");
@@ -934,10 +956,10 @@ pub mod test {
     #[test]
     fn test_season_rule_setters() {
         let mut season = SeasonRule::new(
-            "Test Season".to_string(),
+            "Test Season".into(),
             DateRule::Fixed { month: 1, day: 1 },
             DateRule::Fixed { month: 6, day: 30 },
-            "green".to_string(),
+            "green".into(),
             None,
             None,
             None,
@@ -949,34 +971,35 @@ pub mod test {
             false, // is_octave
             None,
             None,
+            false,
         );
 
-        season.set_name("Updated Season".to_string());
+        season.set_name("Updated Season".into());
         season.set_begin(DateRule::Fixed { month: 2, day: 1 });
         season.set_end(DateRule::Fixed { month: 7, day: 31 });
-        season.set_color("red".to_string());
-        season.set_count_sundays_suffix(Some("after Epiphany".to_string()));
-        season.set_count_ferias_suffix(Some("in Lent".to_string()));
+        season.set_color("red".into());
+        season.set_count_sundays_suffix(Some("after Epiphany".into()));
+        season.set_count_ferias_suffix(Some("in Lent".into()));
         season.set_count_sundays_from(Some(DateRule::Fixed { month: 1, day: 6 }));
         season.set_count_ferias_from(Some(DateRule::Fixed { month: 2, day: 1 }));
         season.set_append_week_of_month(Some(DateRule::Fixed { month: 1, day: 6 }));
         season.set_dont_show_week_of_season(false);
-        season.set_sunday_rank(Some("II".to_string()));
+        season.set_sunday_rank(Some("II".into()));
         season.set_ferial_rules(vec![]);
         season.set_is_octave(true);
-        season.set_octave_rank(Some("Simple".to_string()));
-        season.set_parent_season(Some("Ordinary Time".to_string()));
+        season.set_octave_rank(Some("Simple".into()));
+        season.set_parent_season(Some("Ordinary Time".into()));
 
         assert_eq!(season.name(), "Updated Season");
         assert_eq!(season.color(), "red");
         assert_eq!(
             season.count_sundays_suffix(),
-            &Some("after Epiphany".to_string())
+            &Some("after Epiphany".into())
         );
-        assert_eq!(season.count_ferias_suffix(), &Some("in Lent".to_string()));
+        assert_eq!(season.count_ferias_suffix(), &Some("in Lent".into()));
         assert!(season.count_sundays_from().is_some());
         assert!(season.count_ferias_from().is_some());
-        assert_eq!(season.sunday_rank(), &Some("II".to_string()));
+        assert_eq!(season.sunday_rank(), &Some("II".into()));
     }
 
     #[test]
@@ -984,45 +1007,47 @@ pub mod test {
         // Skip testing ferial rules since FerialRule fields are private
         // and constructor is not public. Just test a basic season.
         let season = SeasonRule::new(
-            "Lent".to_string(),
+            "Lent".into(),
             DateRule::Fixed { month: 2, day: 1 },
             DateRule::Fixed { month: 4, day: 15 },
-            "purple".to_string(),
+            "purple".into(),
             None,
             None,
             None,
             None,
             None,
             false, // dont_show_week_of_season
-            Some("I".to_string()),
+            Some("I".into()),
             vec![], // Empty ferial rules
             false,  // is_octave
             None,
             None,
+            false,
         );
 
         assert_eq!(season.ferial_rules().len(), 0);
-        assert_eq!(season.sunday_rank(), &Some("I".to_string()));
+        assert_eq!(season.sunday_rank(), &Some("I".into()));
     }
 
     #[test]
     fn test_season_rule_get_sunday_rank() {
         let season = SeasonRule::new(
-            "Test Season".to_string(),
+            "Test Season".into(),
             DateRule::Fixed { month: 1, day: 1 },
             DateRule::Fixed { month: 6, day: 30 },
-            "green".to_string(),
+            "green".into(),
             None,
             None,
             None,
             None,
             None,
             false, // dont_show_week_of_season
-            Some("II".to_string()),
+            Some("II".into()),
             vec![],
             false,
             None,
             None,
+            false,
         );
 
         // Instantiate to test get_sunday_rank method
@@ -1034,10 +1059,10 @@ pub mod test {
     #[test]
     fn test_season_rule_get_effective_color() {
         let season = SeasonRule::new(
-            "Test Season".to_string(),
+            "Test Season".into(),
             DateRule::Fixed { month: 1, day: 1 },
             DateRule::Fixed { month: 6, day: 30 },
-            "green".to_string(),
+            "green".into(),
             None,
             None,
             None,
@@ -1049,6 +1074,7 @@ pub mod test {
             false,
             None,
             None,
+            false,
         );
 
         let instantiated = season.instantiate_for_lit_year(2025);

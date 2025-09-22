@@ -1,5 +1,7 @@
 use chrono::{Datelike, NaiveDate};
 
+use crate::types::ArcStr;
+
 pub(crate) fn get_preceding_sunday(date: NaiveDate) -> NaiveDate {
     let weekday = date.weekday();
     date - chrono::Days::new(((weekday.num_days_from_sunday()) % 7).into())
@@ -44,9 +46,9 @@ pub fn num_weeks_after_date(my_date: NaiveDate, other: NaiveDate) -> i32 {
     (days_diff / 7 + 1).try_into().unwrap()
 }
 
-pub fn to_roman_numeral(mut n: i32) -> String {
+pub fn to_roman_numeral(mut n: i32) -> ArcStr {
     if n <= 0 {
-        return String::new();
+        return String::new().into();
     }
     let mut result = String::new();
     let roman_numerals = [
@@ -71,23 +73,23 @@ pub fn to_roman_numeral(mut n: i32) -> String {
             n -= value;
         }
     }
-    result
+    result.into()
 }
 
-pub fn to_month_string(month: u32) -> String {
+pub fn to_month_string(month: u32) -> ArcStr {
     match month {
-        1 => "January".to_string(),
-        2 => "February".to_string(),
-        3 => "March".to_string(),
-        4 => "April".to_string(),
-        5 => "May".to_string(),
-        6 => "June".to_string(),
-        7 => "July".to_string(),
-        8 => "August".to_string(),
-        9 => "September".to_string(),
-        10 => "October".to_string(),
-        11 => "November".to_string(),
-        12 => "December".to_string(),
+        1 => "January".into(),
+        2 => "February".into(),
+        3 => "March".into(),
+        4 => "April".into(),
+        5 => "May".into(),
+        6 => "June".into(),
+        7 => "July".into(),
+        8 => "August".into(),
+        9 => "September".into(),
+        10 => "October".into(),
+        11 => "November".into(),
+        12 => "December".into(),
         _ => panic!("Invalid month: {}", month),
     }
 }

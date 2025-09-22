@@ -168,7 +168,10 @@ impl DateRule {
 
                 // Compute Advent start (First Sunday of Advent)
                 let advent_start = DateRule::OffsetSundays {
-                    rule: Box::new(DateRule::PreviousYear(Box::new(DateRule::Fixed { month: 12, day: 25 }))),
+                    rule: Box::new(DateRule::PreviousYear(Box::new(DateRule::Fixed {
+                        month: 12,
+                        day: 25,
+                    }))),
                     offset: -4,
                 };
                 let advent_sun = advent_start.to_day(year)?;
@@ -352,7 +355,10 @@ mod test {
         // We don't assert a specific date for every year; we assert consistency:
         // if Some(date) is returned, it must be the day before Septuagesima.
         if let Some(d) = res_2025 {
-            let sept = DateRule::OffsetDays { rule: Box::new(DateRule::Easter), offset: -63 };
+            let sept = DateRule::OffsetDays {
+                rule: Box::new(DateRule::Easter),
+                offset: -63,
+            };
             let septd = sept.to_day(2025).unwrap();
             assert_eq!(d, septd - chrono::Duration::days(1));
         }
@@ -360,7 +366,10 @@ mod test {
         // 2016: choose a year likely to have a different distribution
         let res_2016 = rule.to_day(2016);
         if let Some(d) = res_2016 {
-            let sept = DateRule::OffsetDays { rule: Box::new(DateRule::Easter), offset: -63 };
+            let sept = DateRule::OffsetDays {
+                rule: Box::new(DateRule::Easter),
+                offset: -63,
+            };
             let septd = sept.to_day(2016).unwrap();
             assert_eq!(d, septd - chrono::Duration::days(1));
         }
@@ -368,7 +377,10 @@ mod test {
         // 2000: another anchor year
         let res_2000 = rule.to_day(2000);
         if let Some(d) = res_2000 {
-            let sept = DateRule::OffsetDays { rule: Box::new(DateRule::Easter), offset: -63 };
+            let sept = DateRule::OffsetDays {
+                rule: Box::new(DateRule::Easter),
+                offset: -63,
+            };
             let septd = sept.to_day(2000).unwrap();
             assert_eq!(d, septd - chrono::Duration::days(1));
         }
@@ -376,7 +388,10 @@ mod test {
         // 2030: future year
         let res_2030 = rule.to_day(2030);
         if let Some(d) = res_2030 {
-            let sept = DateRule::OffsetDays { rule: Box::new(DateRule::Easter), offset: -63 };
+            let sept = DateRule::OffsetDays {
+                rule: Box::new(DateRule::Easter),
+                offset: -63,
+            };
             let septd = sept.to_day(2030).unwrap();
             assert_eq!(d, septd - chrono::Duration::days(1));
         }

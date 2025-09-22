@@ -5,13 +5,9 @@ pub use feast_rule::FeastRule;
 pub use season_rule::SeasonRule;
 use serde::{Deserialize, Serialize};
 
-use crate::calender::{
-    feast_rank::{FeastRank, FeastRank54, FeastRank62, FeastRankOf},
-    fuzzy_search::fuzzy_search_best_n,
-    year_calendar::YearCalendar,
-    year_calendar_builder::YearCalendarBuilder,
-    DateRule,
-};
+use crate::{calender::{
+    DateRule, feast_rank::{FeastRank, FeastRank54, FeastRank62, FeastRankOf}, fuzzy_search::fuzzy_search_best_n, year_calendar::YearCalendar, year_calendar_builder::YearCalendarBuilder
+}, types::ArcStr};
 
 mod feast_rule;
 mod season_rule;
@@ -30,9 +26,9 @@ pub enum CalendarType {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GenericCalendar {
     #[serde(default)]
-    pub name: String,
+    pub name: ArcStr,
     #[serde(default = "default_commemoration_interpretation")]
-    pub commemoration_interpretation: String,
+    pub commemoration_interpretation: ArcStr,
     #[serde(default)]
     pub seasons: Vec<SeasonRule<DateRule>>,
     #[serde(default)]
@@ -40,8 +36,8 @@ pub struct GenericCalendar {
     pub feasts: Vec<FeastRule<DateRule>>,
 }
 
-fn default_commemoration_interpretation() -> String {
-    "Commemoration".to_string()
+fn default_commemoration_interpretation() -> ArcStr {
+    "Commemoration".into()
 }
 
 impl GenericCalendar {
@@ -114,7 +110,7 @@ impl GenericCalendar {
             }
         }
 
-        self.name = format!("{} with {} Extensions", self.name, other.name);
+        self.name = format!("{} with {} Extensions", self.name, other.name).into();
     }
 
     /// Load and merge additional feasts from a TOML file
@@ -393,7 +389,7 @@ impl GenericCalendar {
     }
 
     /// Get feast info by exact name match (case-insensitive)
-    pub fn get_feast_info(&self, name: &str) -> Option<(FeastRule<DateRule>, String)> {
+    pub fn get_feast_info(&self, name: &str) -> Option<(FeastRule<DateRule>, ArcStr)> {
         let name_lower = name.to_lowercase();
         self.feasts
             .iter()
@@ -417,14 +413,14 @@ impl GenericCalendar {
     }
 
     /// Suggest feast names using fuzzy matching (case-insensitive, substring or fuzzy search)
-    pub fn suggest_feast_names(&self, name: &str) -> Vec<(String, f32)> {
+    pub fn suggest_feast_names(&self, name: &str) -> Vec<(ArcStr, f32)> {
         let feast_names_and_titles: Vec<String> = self
             .feasts
             .iter()
             .map(|f| format!("{}\\{}", f.name, f.titles.join(",")))
             .collect();
-        let feast_names: Vec<String> = self.feasts.iter().map(|f| f.name.clone()).collect();
-        let feast_names_str: Vec<&str> = feast_names.iter().map(|s| s.as_str()).collect();
+        let feast_names: Vec<ArcStr> = self.feasts.iter().map(|f| f.name.clone()).collect();
+        let feast_names_str: Vec<&str> = feast_names.iter().map(|s| &**s).collect();
 
         // Use rust-fuzzy-search for better fuzzy matching, get top 8 results
         let binding = feast_names_and_titles
@@ -446,9 +442,9 @@ impl GenericCalendar {
         }
 
         // Keep results with scores for proper ordering
-        let mut scored_results: Vec<(String, f32)> = combined_results
+        let mut scored_results: Vec<(ArcStr, f32)> = combined_results
             .iter()
-            .map(|(feast_name, score)| (feast_name.to_string(), *score))
+            .map(|(feast_name, score)| (feast_name.to_string().into(), *score))
             .collect();
 
         // If we have very few results, try some manual matching for partial words

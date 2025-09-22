@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"Ss. Chrysanthus and Daria, Martyrs\", rank: \"Simple\" }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: \"Sabbato week XIX after the octave of Pentecost (Week 4 of October)\", rank: \"Ordinary Feria\" }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2025-10-25|Sabbato week XIX after the octave of Pentecost (Week 4 of October)|Simple|BVM on Saturday|Ss. Chrysanthus and Daria, Martyrs

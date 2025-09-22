@@ -1,4 +1,3 @@
-
 // === Module declarations ===
 mod date_rule;
 mod day_type;
@@ -10,17 +9,20 @@ pub mod year_calendar;
 mod year_calendar_builder;
 
 // === Use statements ===
+use std::path::Path;
+
 use anyhow::Result;
 use date_rule::DateRule;
 use day_type::DayType;
 use feast_rank::LiturgicalContext;
-use std::path::Path;
-use crate::calender::feast_rank::{FeastRank54, FeastRank62, FeastRankOf};
-use crate::calender::generic_calendar::{CalendarType, FeastRule, GenericCalendar};
-use crate::calender::year_calendar::{DayDescription, YearCalendar};
-
 // === Re-exports for external use ===
 pub use liturgical_unit::LiturgicalUnit;
+
+use crate::{calender::{
+    feast_rank::{FeastRank54, FeastRank62, FeastRankOf},
+    generic_calendar::{CalendarType, FeastRule, GenericCalendar},
+    year_calendar::{DayDescription, YearCalendar},
+}, types::ArcStr};
 
 #[derive(Debug, Clone)]
 /// Handle for working with liturgical calendars loaded from configuration files
@@ -91,7 +93,7 @@ impl GenericCalendarHandle {
     /// assert_eq!(cal.get_feast_info("St. Joseph").is_ok(), true);
     /// assert!(cal.get_feast_info("St. Jospeh").unwrap_err().to_string().contains("Did you mean: St. Joseph"));
     /// ```
-    pub fn get_feast_info(&self, name: &str) -> Result<(FeastRule<DateRule>, String)> {
+    pub fn get_feast_info(&self, name: &str) -> Result<(FeastRule<DateRule>, ArcStr)> {
         match self.0.get_feast_info(name) {
             Some(info) => Ok(info),
             None => {
@@ -99,7 +101,15 @@ impl GenericCalendarHandle {
                 if suggestions.is_empty() {
                     Err(anyhow::anyhow!("Feast '{}' not found.", name))
                 } else {
-                    Err(anyhow::anyhow!("Feast '{}' not found. Did you mean: {}?", name, suggestions.into_iter().map(|(n, _)| n).collect::<Vec<_>>().join(", ")))
+                    Err(anyhow::anyhow!(
+                        "Feast '{}' not found. Did you mean: {}?",
+                        name,
+                        suggestions
+                            .into_iter()
+                            .map(|(n, _)| n.to_string())
+                            .collect::<Vec<_>>()
+                            .join(", ")
+                    ))
                 }
             }
         }
@@ -107,7 +117,7 @@ impl GenericCalendarHandle {
 
     /// Get feast name suggestions using fuzzy matching
     pub fn suggest_feast_names(&self, name: &str) -> Vec<(String, f32)> {
-        self.0.suggest_feast_names(name)
+        self.0.suggest_feast_names(name).into_iter().map(|(n, score)| (n.to_string(), score)).collect()
     }
 
     pub fn commemoration_interpretation(&self) -> &str {
@@ -154,22 +164,24 @@ impl YearCalendarHandle {
 mod test {
     //! Integration tests for the calendar functionality
 
-    use super::*;
-    use chrono::NaiveDate;
-    use generic_calendar::{FeastRule, tests::*, GenericCalendar};
-    use feast_rank::{FeastRank, FeastRank62};
-    use year_calendar_builder::YearCalendarBuilder;
     use std::collections::HashMap;
+
+    use chrono::NaiveDate;
+    use feast_rank::{FeastRank, FeastRank62};
+    use generic_calendar::{tests::*, FeastRule, GenericCalendar};
     use test_case::test_case;
+    use year_calendar_builder::YearCalendarBuilder;
+
+    use super::*;
 
     fn create_test_feast(name: &str, date: NaiveDate, rank: &str) -> FeastRule<NaiveDate> {
         FeastRule {
-            name: name.to_string(),
+            name: name.into(),
             date_rule: date,
             rank: Some(rank.to_string()),
             of_our_lord: false,
             day_type: Some(DayType::Feast),
-            color: "red".to_string(),
+            color: "red".into(),
             titles: vec![],
             movable: false,
         }
@@ -193,7 +205,7 @@ mod test {
 
         YearCalendarBuilder {
             year: 2025,
-            name: "Test Calendar".to_string(),
+            name: "Test Calendar".into(),
             seasons: vec![season],
             octaves: vec![],
             feasts: feasts_map,
@@ -242,12 +254,12 @@ mod test {
     #[test_case("Simple Feast", vec![] => "Simple Feast"; "feast without titles")]
     fn test_feast_rule_display(name: &str, titles: Vec<&str>) -> String {
         let feast_rule = FeastRule {
-            name: name.to_string(),
+            name: name.into(),
             date_rule: NaiveDate::from_ymd_opt(2025, 3, 19).unwrap(),
             rank: Some("II".to_string()),
             of_our_lord: false,
             day_type: Some(DayType::Feast),
-            color: "white".to_string(),
+            color: "white".into(),
             titles: titles.into_iter().map(|s| s.to_string()).collect(),
             movable: false,
         };
@@ -267,12 +279,12 @@ mod test {
         description: &str,
     ) {
         let feast_rule = FeastRule {
-            name: "Test Feast".to_string(),
+            name: "Test Feast".into(),
             date_rule: NaiveDate::from_ymd_opt(2025, 3, 19).unwrap(),
             rank: rank.map(|r| r.to_string()),
             of_our_lord,
             day_type,
-            color: "white".to_string(),
+            color: "white".into(),
             titles: vec!["Test Title".to_string()],
             movable,
         };
@@ -295,12 +307,12 @@ mod test {
         expected_movable: bool,
     ) {
         let feast_rule = FeastRule {
-            name: name.to_string(),
+            name: name.into(),
             date_rule,
             rank: Some("I".to_string()),
             of_our_lord,
             day_type: Some(DayType::Feast),
-            color: "white".to_string(),
+            color: "white".into(),
             titles: if name == "Christmas" {
                 vec!["Birth of Our Lord".to_string()]
             } else {
@@ -341,7 +353,7 @@ color = "white"
     fn test_additional_edge_cases(date_str: &str) {
         let year_calendar = YearCalendarBuilder {
             year: 2025,
-            name: "Coverage Test".to_string(),
+            name: "Coverage Test".into(),
             seasons: vec![create_test_season(
                 "Coverage Season",
                 NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),

@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Sunday { rank: 3 } (LiturgicalUnit { desc: \"Dominica XXI after Pentecost (Week 1 of November)\", rank: \"Lesser Sunday\" }) and Octave { rank: Common, flags: OctaveFlags(FIRST_3_DAYS) } (LiturgicalUnit { desc: \"Sunday in the Octave of All Saints \", rank: \"Day within a Common Octave\" }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2025-11-02|Dominica XXI after Pentecost (Week 1 of November)|Lesser Sunday|Dominica XXI after Pentecost (Week 1 of November)|Sunday in the Octave of All Saints

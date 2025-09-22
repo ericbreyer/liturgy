@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: ""
+expression: split_line.0
 ---
-2025-03-22|Sabbato week II of Lent|Greater Non-Privileged Feria of Lent|Sabbato week II of Lent|
+2025-03-22|Sabbato week II of Lent|Greater Non-Privileged Feria|Sabbato week II of Lent|

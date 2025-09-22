@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. Matthew, Apostle and Evangelist\", rank: \"Second Class Double\" }) and Sunday { rank: 3 } (LiturgicalUnit { desc: \"Dominica XV after Pentecost (Week 4 of September)\", rank: \"Lesser Sunday\" }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2025-09-21|Dominica XV after Pentecost (Week 4 of September)|Second Class Double|St. Matthew, Apostle and Evangelist|Dominica XV after Pentecost (Week 4 of September)

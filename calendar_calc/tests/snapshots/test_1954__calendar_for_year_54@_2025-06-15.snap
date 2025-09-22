@@ -1,0 +1,6 @@
+---
+source: tests/test_1954.rs
+description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"Ss. Vitus, Modestus, and Crescentia, Martyrs\", rank: \"Simple\" }) and Sunday { rank: 1 } (LiturgicalUnit { desc: \"Holy Trinity and the Octave of Pentecost\", rank: \"Greater Sunday of the First Class\" }) |     -> Occurrence result: SecondNothingOfFirst"
+expression: split_line.0
+---
+2025-06-15|Dominica I after Pentecost|Greater Sunday of the First Class|Holy Trinity and the Octave of Pentecost|

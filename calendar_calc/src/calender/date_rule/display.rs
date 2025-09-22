@@ -333,7 +333,6 @@ mod test {
         rules
     }
 
-
     // ---------- Hardcoded display tests ----------
     #[test_case(DateRule::Easter, "Easter"; "display_easter")]
     #[test_case(DateRule::Fixed { month: 1, day: 1 }, "1/1"; "display_fixed_jan_1")]

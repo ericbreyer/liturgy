@@ -1,7 +1,7 @@
 use std::cell::OnceCell;
 
-use insta::{assert_snapshot, with_settings};
 use calendar_calc::{GenericCalendarHandle, YearCalendarHandle};
+use insta::{assert_snapshot, with_settings};
 use rayon::prelude::*;
 use test_case::test_matrix;
 
@@ -30,7 +30,6 @@ pub fn initialize() {
                     .expect("Failed to parse calendar data");
 
             (START..=END)
-                .par_bridge()
                 .map(|year| calendar.create_year_calendar(year))
                 .collect()
         });
@@ -45,7 +44,6 @@ pub fn initialize() {
             .expect("Failed to load calendar with US extensions");
 
             (START..=END)
-                .par_bridge()
                 .map(|year| calendar.create_year_calendar(year))
                 .collect()
         });
@@ -73,11 +71,15 @@ fn test_calendar_for_year(year: i32, cal: CalendarType) {
 
     desc.lines().skip(1).par_bridge().for_each(|line| {
         let date = line.split('|').next().unwrap();
-
+        // split the line at the 5th '|'
+        let idx_5 = line.match_indices('|').nth(4).unwrap().0;
+        let (part1, part2) = line.split_at(idx_5);
+        let split_line = (part1, &part2[1..]); // skip the '|'
         with_settings!(
-            {snapshot_suffix => format!("_{}_of_{:?}", date, cal)},
+            {snapshot_suffix => format!("_{}_of_{:?}", date, cal), description => split_line.1
+        },
             {
-                assert_snapshot!(line);
+                assert_snapshot!(split_line.0);
             }
         );
     });

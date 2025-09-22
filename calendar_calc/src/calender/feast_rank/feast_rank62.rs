@@ -1,16 +1,19 @@
 use std::fmt::Debug;
 
-use anyhow::{bail, Result};
+use anyhow::{bail, Context, Result};
+use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 
-use crate::calender::feast_rank::BVMOnSaturdayResult;
+use super::{DayType, FeastRank, LiturgicalContext, OctaveFlags, ResolveConflictsResult};
+use crate::{
+    calender::feast_rank::BVMOnSaturdayResult,
+    types::{ArcStr, RcStr},
+};
 
-use super::{DayType, FeastRank, LiturgicalContext, ResolveConflictsResult};
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Copy)]
 pub struct FeastRank62(FeastRank62Inner);
 impl FeastRank for FeastRank62 {
-    fn resolve_conflicts<T>(competetors: &[(Self, T)]) -> ResolveConflictsResult<Self, T>
+    fn resolve_conflicts<T>(competetors: &[(Self, T)]) -> Result<ResolveConflictsResult<Self, T>>
     where
         Self: Sized,
         T: Clone + Debug,
@@ -44,7 +47,7 @@ impl FeastRank for FeastRank62 {
         )
     }
 
-    fn get_rank_string(&self) -> String {
+    fn get_rank_string(&self) -> ArcStr {
         self.0.get_rank_string()
     }
 
@@ -66,6 +69,9 @@ impl FeastRank for FeastRank62 {
             BVMOnSaturdayResult::NotAdmitted
         }
     }
+    fn id(&self) -> RcStr {
+        self.0.get_rank_string_verbose().into()
+    }
 }
 
 bitflags::bitflags! {
@@ -86,7 +92,7 @@ bitflags::bitflags! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Copy)]
 enum FeastRank62Inner {
     /// Feria (weekday) with rank 1-3 (1 being highest)
     Feria { rank: u8, flags: FeriaFlags },
@@ -104,87 +110,157 @@ enum FeastRank62Inner {
 impl FeastRank62Inner {
     fn resolve_conflicts<T: Clone + Debug>(
         competetors: &[(Self, T)],
-    ) -> ResolveConflictsResult<FeastRank62, T> {
+    ) -> Result<ResolveConflictsResult<FeastRank62, T>> {
+        let mut debug_trace = Vec::new();
         if competetors.is_empty() {
-            panic!("No competetors provided for conflict resolution");
+            bail!("No competitors provided for conflict resolution");
         }
 
-        let mut sorted_competetors = competetors.to_vec();
+        let mut sorted_competetors = competetors.iter().collect_vec();
+        // sorted_competetors.sort_by(|(rank_a, _), (rank_b, _)| {
+        //     rank_a.get_numeric_rank().cmp(&rank_b.get_numeric_rank())
+        // });
+
+        // any 4th class feast automatically is a commemoration
+        let mut base_commemorations = Vec::new();
+        sorted_competetors.retain(|(rank, name)| {
+            if let FeastRank62Inner::Feast { rank: 4, .. } = *rank {
+                base_commemorations.push(name.clone());
+                return false;
+            }
+            true
+        });
+        // for (i, (rank, name)) in sorted_competetors.iter().enumerate() {
+        //     if let FeastRank62Inner::Feast {
+        //         rank: FeastClass::Commemoration,
+        //         ..
+        //     } = *rank
+        //     {
+        //         base_commemorations.push(name.clone());
+        //         indices_to_remove.push(i);
+        //     }
+        //     if let FeastRank62Inner::Octave {
+        //         rank: OctaveType::Simple,
+        //         flags,
+        //     } = rank
+        //     {
+        //         if !flags.contains(OctaveFlags::OCTAVE_DAY) {
+        //             indices_to_remove.push(i);
+        //         }
+        //     }
+        // }
+        // // Remove in reverse order to avoid index shifting
+        // for i in indices_to_remove.into_iter().rev() {
+        //     sorted_competetors.remove(i);
+        // }
+
+        // Sort competitors by numeric rank (1 is highest) so higher precedence items
+        // are considered first. This prevents order-dependent resolution errors.
         sorted_competetors.sort_by(|(rank_a, _), (rank_b, _)| {
             rank_a.get_numeric_rank().cmp(&rank_b.get_numeric_rank())
         });
 
-        // any 4th class feast automatically is a commemoration
-        let mut base_commemorations = Vec::new();
-        let mut indices_to_remove = Vec::new();
-        for (i, (rank, name)) in sorted_competetors.iter().enumerate() {
-            if let FeastRank62Inner::Feast { rank: 4, .. } = *rank {
-                base_commemorations.push(name.clone());
-                indices_to_remove.push(i);
-            }
-        }
-        // Remove in reverse order to avoid index shifting
-        for i in indices_to_remove.into_iter().rev() {
-            sorted_competetors.remove(i);
-        }
-
         // If all competitors were commemorations, pick the first one as winner
         if sorted_competetors.is_empty() {
-            panic!("No competetors provided for conflict resolution");
+            bail!("No competitors provided for conflict resolution after filtering");
         }
+        // Two-pass resolution:
+        // 1) Determine the final winner by comparing competitors in sequence.
+        // 2) With the final winner fixed, compute commemorations, axed entries and any transfer.
         let mut commemorations = Vec::new();
         let mut winner = sorted_competetors[0].1.clone();
         let mut winning_rank = &sorted_competetors[0].0;
-        let mut transferred = None;
-        for i in 1..sorted_competetors.len() {
-            let (current_rank, current_name) = &sorted_competetors[i];
-            match sorted_competetors[0]
-                .0
+        let mut transferred: Option<(FeastRank62, T)> = None;
+
+        // First pass: pick the winner (provisionally update winner when an outcome would
+        // make the current competitor take precedence).
+        for (current_rank, current_name) in sorted_competetors.iter() {
+            // let (current_rank, current_name) = &sorted_competetors[i];
+            if std::ptr::eq(current_rank, winning_rank) {
+                continue;
+            }
+            debug_trace.push(format!(
+                "Resolving between {:?} ({:?}) and {:?} ({:?})",
+                winning_rank, winner, current_rank, current_name
+            ));
+
+            // During the initial winner selection we want to propagate any internal
+            // resolution errors as panics (tests expect a panic on ambiguous same-rank cases).
+            let occurrence = winning_rank
                 .resolve_occurrence(current_rank, true)
-            {
-                Ok(occurrence) => {
-                    match occurrence {
-                        OccurrenceResult::FirstNothingOfSecond => {
-                            // Winner remains the same, nothing changes
-                        }
-                        OccurrenceResult::SecondNothingOfFirst => {
-                            // Current becomes the new winner
-                            winner = current_name.clone();
-                            winning_rank = current_rank;
-                        }
-                        OccurrenceResult::FirstCommemorationOfSecondAtLaudsAndVespers
-                        | OccurrenceResult::FirstCommemorationOfSecondAtLauds => {
-                            commemorations.push(current_name.clone());
-                        }
-                        OccurrenceResult::SecondCommemorationOfFirstAtLaudsAndVespers
-                        | OccurrenceResult::SecondCommemorationOfFirstAtLauds => {
-                            commemorations.push(winner.clone());
-                            winner = current_name.clone();
-                            winning_rank = current_rank;
-                        }
-                        OccurrenceResult::FirstTransferOfSecond => {
-                            transferred =
-                                Some((FeastRank62(current_rank.clone()), current_name.clone()));
-                        }
-                        OccurrenceResult::SecondTransferOfFirst => {
-                            transferred = Some((FeastRank62(winning_rank.clone()), winner.clone()));
-                            winner = current_name.clone();
-                            winning_rank = current_rank;
-                        }
-                    }
+                .context(format!(
+                    "Error resolving occurrence between {:?} ({:?}) and {:?} ({:?})",
+                    winner, winning_rank, current_name, current_rank
+                ))?;
+            debug_trace.push(format!("    -> Occurrence result: {:?}", occurrence));
+
+            // Only outcomes that would switch the provisional winner are considered
+            // in this pass; we don't record commemorations/transfers here.
+            match occurrence {
+                OccurrenceResult::SecondNothingOfFirst
+                | OccurrenceResult::SecondCommemorationOfFirstAtLauds
+                | OccurrenceResult::SecondTransferOfFirst
+                | OccurrenceResult::SecondCommemorationOfFirstAtLaudsAndVespers => {
+                    winner = current_name.clone();
+                    winning_rank = current_rank;
                 }
-                Err(e) => {
-                    panic!(
-                        "Error resolving occurrence between {:?} and {:?}: {}",
-                        sorted_competetors[0].1, current_name, e
-                    );
+                _ => {
+                    // winner remains the same
                 }
             }
         }
 
-        let winner_rank = winning_rank.clone().get_numeric_rank();
+        // Second pass: determine commemorations, transfers relative to
+        // the final winner. We skip the winner entry itself.
+        for (rank, name) in sorted_competetors.iter() {
+            // Skip the entry that corresponds to the final winner. Use pointer equality
+            // to avoid requiring PartialEq on the generic contestant payload `T`.
+            if std::ptr::eq(rank, winning_rank) {
+                continue;
+            }
 
-        // add base commemorations to commemorations if winner is not a sunday or a 1st or 2nd class movable feast
+            debug_trace.push(format!(
+                "Comparing final winner {:?} ({:?}) to {:?} ({:?})",
+                winning_rank, winner, rank, name
+            ));
+
+            let occurrence = winning_rank
+                .resolve_occurrence(rank, true)
+                .context(format!(
+                    "Error resolving occurrence between {:?} and {:?}",
+                    winner, name
+                ))?;
+
+            debug_trace.push(format!("    -> Occurrence result: {:?}", occurrence));
+            match occurrence {
+                OccurrenceResult::FirstCommemorationOfSecondAtLauds
+                | OccurrenceResult::FirstCommemorationOfSecondAtLaudsAndVespers => {
+                    commemorations.push(name.clone());
+                }
+                OccurrenceResult::FirstTransferOfSecond => {
+                    if transferred.is_some() {
+                        bail!("Multiple transfers detected in conflict resolution");
+                    }
+                    transferred = Some((FeastRank62(rank.clone()), name.clone()));
+                }
+                OccurrenceResult::SecondCommemorationOfFirstAtLauds
+                | OccurrenceResult::SecondCommemorationOfFirstAtLaudsAndVespers => {
+                    commemorations.push(winner.clone());
+                }
+                OccurrenceResult::SecondTransferOfFirst => {
+                    if transferred.is_some() {
+                        bail!("Multiple transfers detected in conflict resolution");
+                    }
+                    transferred = Some((FeastRank62(winning_rank.clone()), winner.clone()));
+                }
+                _ => {
+                    // Nothing to do for other outcomes
+                }
+            }
+        }
+
+        let _winner_rank = winning_rank.get_numeric_rank();
+
         if let FeastRank62Inner::Feast { rank, flags } = winning_rank {
             if !(*rank < 3 && flags.contains(FeastFlags::MOVABLE)) {
                 commemorations.extend(base_commemorations);
@@ -199,12 +275,13 @@ impl FeastRank62Inner {
             commemorations.extend(base_commemorations);
         }
 
-        super::ResolveConflictsResult {
+        Ok(super::ResolveConflictsResult {
             winner,
             winner_rank: FeastRank62(winning_rank.clone()),
             transferred,
             commemorations,
-        }
+            debug_trace,
+        })
     }
 
     /// Convert from legacy rank string and day type with context
@@ -279,30 +356,117 @@ impl FeastRank62Inner {
         }
     }
 
+    fn get_rank_string(&self) -> ArcStr {
+        self._get_rank_string(false)
+    }
+
+    fn get_rank_string_verbose(&self) -> ArcStr {
+        self._get_rank_string(true)
+    }
+
     /// Get the rank as a Roman numeral string (for backward compatibility)
     #[allow(dead_code)] // Used by FeastRule wrapper and tests
-    fn get_rank_string(&self) -> String {
+    fn _get_rank_string(&self, v: bool) -> ArcStr {
         match self {
-            FeastRank62Inner::Feria { rank, .. }
-            | FeastRank62Inner::Sunday { rank }
-            | FeastRank62Inner::Vigil { rank }
-            | FeastRank62Inner::Octave { rank } => match rank {
-                1 => "I".to_string(),
-                2 => "II".to_string(),
-                3 => "III".to_string(),
-                _ => "III".to_string(),
-            },
-            FeastRank62Inner::Feast { rank, .. } => {
-                if *rank == 4 {
-                    "Comm.".to_string()
+            FeastRank62Inner::Feria { rank, flags } => {
+                let rank_str = match rank {
+                    1 => "I".into(),
+                    2 => "II".into(),
+                    3 => "III".into(),
+                    _ => "III".into(),
+                };
+
+                if !v {
+                    return rank_str;
+                }
+
+                let flag_str = if flags.contains(FeriaFlags::OF_LENT) {
+                    " (Lent)"
+                } else if flags.contains(FeriaFlags::EMBER_DAY) {
+                    " (Ember Day)"
+                } else {
+                    ""
+                };
+
+                format!("Feria {} {}", rank_str, flag_str).into()
+            }
+            FeastRank62Inner::Sunday { rank } => {
+                let rank_str = match rank {
+                    1 => "I".into(),
+                    2 => "II".into(),
+                    3 => "III".into(),
+                    _ => "III".into(),
+                };
+
+                if !v {
+                    return rank_str;
+                }
+
+                format!("Sunday {}", rank_str).into()
+            }
+            FeastRank62Inner::Vigil { rank } => {
+                let rank_str = match rank {
+                    1 => "I".into(),
+                    2 => "II".into(),
+                    3 => "III".into(),
+                    _ => "III".into(),
+                };
+
+                if !v {
+                    return rank_str;
+                }
+
+                format!("Vigil {}", rank_str).into()
+            }
+            FeastRank62Inner::Octave { rank } => {
+                let rank_str = match rank {
+                    1 => "I".into(),
+                    2 => "II".into(),
+                    3 => "III".into(),
+                    _ => "III".into(),
+                };
+
+                if !v {
+                    return rank_str;
+                }
+
+                format!("Octave {}", rank_str).into()
+            }
+            FeastRank62Inner::Feast { rank, flags } => {
+                let rank_str = if *rank == 4 {
+                    "Comm.".into()
                 } else {
                     match rank {
-                        1 => "I".to_string(),
-                        2 => "II".to_string(),
-                        3 => "III".to_string(),
-                        _ => "III".to_string(),
+                        1 => "I".into(),
+                        2 => "II".into(),
+                        3 => "III".into(),
+                        _ => "III".into(),
                     }
+                };
+
+                if !v {
+                    return rank_str;
                 }
+
+                let mut flag_strs = Vec::new();
+                if flags.contains(FeastFlags::OF_OUR_LORD) {
+                    flag_strs.push("of Our Lord");
+                }
+                if flags.contains(FeastFlags::IMMACULATE_CONCEPTION) {
+                    flag_strs.push("Immaculate Conception");
+                }
+                if flags.contains(FeastFlags::MOVABLE) {
+                    flag_strs.push("Movable");
+                }
+                if flags.contains(FeastFlags::ALL_SOULS) {
+                    flag_strs.push("All Souls");
+                }
+                let flag_str = if !flag_strs.is_empty() {
+                    format!(" ({})", flag_strs.join(", "))
+                } else {
+                    "".into()
+                };
+                format!("Feast {}{}", rank_str, flag_str).into()
             }
         }
     }
@@ -388,10 +552,18 @@ impl FeastRank62Inner {
                 flags: flags2,
             } = other
             {
-                // If ranks are equal, ember day beats regular feria
+                // If ranks are equal, ember day beats regular feria and lent feria beats regular feria
                 if rank1 == rank2 {
                     let is_ember_day1 = flags1.contains(FeriaFlags::EMBER_DAY);
                     let is_ember_day2 = flags2.contains(FeriaFlags::EMBER_DAY);
+                    let is_lent1 = flags1.contains(FeriaFlags::OF_LENT);
+                    let is_lent2 = flags2.contains(FeriaFlags::OF_LENT);
+
+                    if is_lent1 && !is_lent2 {
+                        return Ok(OccurrenceResult::FirstNothingOfSecond);
+                    } else if !is_lent1 && is_lent2 {
+                        return Ok(OccurrenceResult::SecondNothingOfFirst);
+                    }
 
                     if is_ember_day1 && !is_ember_day2 {
                         return Ok(OccurrenceResult::FirstNothingOfSecond);
@@ -412,6 +584,21 @@ impl FeastRank62Inner {
             }
         };
 
+        // both Sundays - compare by numeric rank
+        if let FeastRank62Inner::Sunday { rank: rank1 } = self {
+            if let FeastRank62Inner::Sunday { rank: rank2 } = other {
+                match rank1.cmp(&rank2) {
+                    std::cmp::Ordering::Less => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    std::cmp::Ordering::Greater => {
+                        return Ok(OccurrenceResult::SecondNothingOfFirst)
+                    }
+                    std::cmp::Ordering::Equal => {
+                        bail!("Two days of the same rank cannot occur on the same day")
+                    }
+                }
+            }
+        }
+
         // self is feast
         if let FeastRank62Inner::Feast {
             rank: rank1,
@@ -424,6 +611,10 @@ impl FeastRank62Inner {
                 // Octaves rank 1-2 generally take precedence over feasts rank 3+
                 // Octaves rank 3 give way to feasts rank 2+
                 match (rank1, rank2) {
+                    (1 | 2, 1) if flags1.contains(FeastFlags::OF_OUR_LORD) => {
+                        return Ok(OccurrenceResult::FirstNothingOfSecond)
+                    }
+                    (1, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (1, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     (2, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (2, 2) => {
@@ -444,8 +635,20 @@ impl FeastRank62Inner {
             } = other
             {
                 match (rank1, rank2) {
-                    (1, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
-                    (_, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
+                    (1, 1)
+                        if _flags2.contains(FeastFlags::OF_OUR_LORD)
+                            && !flags1.contains(FeastFlags::OF_OUR_LORD) =>
+                    {
+                        return Ok(OccurrenceResult::SecondNothingOfFirst)
+                    }
+                    (1, 2)
+                        if _flags2.contains(FeastFlags::OF_OUR_LORD)
+                            && !flags1.contains(FeastFlags::OF_OUR_LORD) =>
+                    {
+                        return Ok(OccurrenceResult::SecondNothingOfFirst)
+                    }
+                    (1, 2 | 3 | 4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (2 | 3 | 4, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (2, 3) => return Ok(OccurrenceResult::FirstCommemorationOfSecondAtLauds),
                     (3, 2) => return Ok(OccurrenceResult::SecondCommemorationOfFirstAtLauds),
                     (_, 4) => return Ok(OccurrenceResult::FirstCommemorationOfSecondAtLauds),
@@ -463,6 +666,7 @@ impl FeastRank62Inner {
                     (1, 1) => return Ok(OccurrenceResult::SecondTransferOfFirst),
                     (1, 2) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     (2, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
+                    (2, 3) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     (2, 2) => return Ok(OccurrenceResult::FirstCommemorationOfSecondAtLauds),
                     (3, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (3, 2) => return Ok(OccurrenceResult::SecondCommemorationOfFirstAtLauds),
@@ -502,6 +706,7 @@ impl FeastRank62Inner {
                     (3, 3, false) => {
                         return Ok(OccurrenceResult::FirstCommemorationOfSecondAtLaudsAndVespers)
                     }
+                    (_, 4, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     _ => {}
                 }
             }
@@ -564,6 +769,17 @@ impl FeastRank62Inner {
 
             // other is a vigil
             // nothing
+            if let FeastRank62Inner::Vigil { rank: rank2 } = other {
+                match rank1.cmp(&rank2) {
+                    std::cmp::Ordering::Less => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    std::cmp::Ordering::Greater => {
+                        return Ok(OccurrenceResult::SecondNothingOfFirst)
+                    }
+                    std::cmp::Ordering::Equal => {
+                        bail!("Two days of the same rank cannot occur on the same day")
+                    }
+                }
+            }
             // other is a feria
             if let FeastRank62Inner::Feria {
                 rank: rank2,
@@ -571,8 +787,10 @@ impl FeastRank62Inner {
             } = other
             {
                 match (rank1, rank2) {
-                    (1, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
-                    (2, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (1, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
+                    (1, 2 | 3 | 4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (2, 1 | 2) => return Ok(OccurrenceResult::SecondNothingOfFirst),
+                    (1 | 2, 3 | 4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     _ => {}
                 }
             };
@@ -599,12 +817,13 @@ impl FeastRank62Inner {
             {
                 // Octaves take precedence over ferias
                 match (rank1, rank2) {
+                    (1, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (1, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
-                    (2, 1) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (2, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (2, 2) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     (2, 3) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     (3, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
-                    (3, 2) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (3, 2) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (3, 3) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     _ => return Ok(OccurrenceResult::FirstNothingOfSecond),
                 }
@@ -637,23 +856,17 @@ impl FeastRank62Inner {
             return other.resolve_occurrence(self, false).map(|r| r.reverse());
         };
 
-        // just pick higher rank or bail if equal
-        let rank1 = self.get_numeric_rank();
-        let rank2 = other.get_numeric_rank();
-
-        match rank1.cmp(&rank2) {
-            std::cmp::Ordering::Less => Ok(OccurrenceResult::FirstNothingOfSecond),
-            std::cmp::Ordering::Greater => Ok(OccurrenceResult::SecondNothingOfFirst),
-            std::cmp::Ordering::Equal => {
-                bail!("Two days of the same rank cannot occur on the same day")
-            }
-        }
+        bail!("Two days of the same rank cannot occur on the same day")
     }
 }
 
 #[cfg(test)]
 mod test {
-    use test_case::test_case;
+    use test_case::{test_case, test_matrix};
+
+    use crate::calender::feast_rank::test::{
+        test_feast_rank_enumeration_conflicts, test_feast_rank_enumeration_occurance_graph,
+    };
 
     use super::*;
 
@@ -959,7 +1172,7 @@ mod test {
     #[test]
     fn test_resolve_conflicts_single_feast() {
         let competitors = vec![(create_feast(1, false), "Christmas".to_string())];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         assert_eq!(result.winner, "Christmas");
         assert_eq!(result.transferred, None);
@@ -973,7 +1186,7 @@ mod test {
             (create_feast(1, false), "First Class Feast".to_string()),
             (create_feast(2, false), "Second Class Feast".to_string()),
         ];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         assert_eq!(result.winner, "First Class Feast");
     }
@@ -984,7 +1197,7 @@ mod test {
             (create_feast(4, false), "Commemoration".to_string()),
             (create_feast(1, false), "Major Feast".to_string()),
         ];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         assert_eq!(result.winner, "Major Feast");
         assert!(result.commemorations.contains(&"Commemoration".to_string()));
@@ -996,7 +1209,7 @@ mod test {
             (create_feast(1, false), "High Feast".to_string()),
             (create_feria(1, false), "High Feria".to_string()),
         ];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         // Based on the actual occurrence resolution: feria beats feast and feast is transferred
         assert_eq!(result.winner, "High Feria");
@@ -1015,7 +1228,7 @@ mod test {
             (create_feast(2, false), "Second Class Feast".to_string()),
             (create_feast(3, false), "Third Class Feast".to_string()),
         ];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         assert_eq!(result.winner, "Second Class Feast");
         assert!(result
@@ -1029,7 +1242,7 @@ mod test {
             (create_feast(1, true), "Our Lord Feast".to_string()),
             (create_sunday(1), "Major Sunday".to_string()),
         ];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         assert_eq!(result.winner, "Our Lord Feast");
         // Our Lord feast beats any sunday
@@ -1043,7 +1256,7 @@ mod test {
             (create_feast(4, false), "Commemoration 2".to_string()),
             (create_feast(3, false), "Minor Feast".to_string()),
         ];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         assert_eq!(result.winner, "Major Feast");
         assert!(result
@@ -1065,7 +1278,7 @@ mod test {
             (create_feast(4, false), "Commemoration".to_string()),
             (create_vigil(2), "Vigil".to_string()),
         ];
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
 
         assert_eq!(result.winner, "Second Class Feast");
     }
@@ -1082,7 +1295,7 @@ mod test {
     fn test_resolve_conflicts_single_winner(
         competitors: Vec<(FeastRank62Inner, String)>,
     ) -> String {
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
         result.winner
     }
 
@@ -1093,7 +1306,7 @@ mod test {
     #[test_case(vec![(create_sunday(2), "Lesser".to_string()), (create_sunday(1), "Major".to_string())] => "Major"; "major_sunday_beats_lesser")]
     #[test_case(vec![(create_feria(3, false), "Low".to_string()), (create_feria(1, false), "High".to_string())] => "High"; "high_feria_beats_low")]
     fn test_resolve_conflicts_rank_winners(competitors: Vec<(FeastRank62Inner, String)>) -> String {
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
         result.winner
     }
 
@@ -1104,7 +1317,7 @@ mod test {
     fn test_resolve_conflicts_our_lord_winners(
         competitors: Vec<(FeastRank62Inner, String)>,
     ) -> String {
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
         result.winner
     }
 
@@ -1115,7 +1328,7 @@ mod test {
     fn test_resolve_conflicts_transfers(
         competitors: Vec<(FeastRank62Inner, String)>,
     ) -> Option<String> {
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
         result.transferred.map(|(_, name)| name)
     }
 
@@ -1128,7 +1341,7 @@ mod test {
     fn test_resolve_conflicts_commemoration_counts(
         competitors: Vec<(FeastRank62Inner, String)>,
     ) -> usize {
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
         result.commemorations.len()
     }
 
@@ -1151,7 +1364,7 @@ mod test {
     fn test_resolve_conflicts_complex_scenarios(
         competitors: Vec<(FeastRank62Inner, String)>,
     ) -> (String, usize) {
-        let result = FeastRank62Inner::resolve_conflicts(&competitors);
+        let result = FeastRank62Inner::resolve_conflicts(&competitors).unwrap();
         (result.winner, result.commemorations.len())
     }
 
@@ -1238,7 +1451,8 @@ mod test {
         FeastRank62Inner::resolve_conflicts(&[
             (rank1, "Feria 1".to_string()),
             (rank2, "Feria 2".to_string()),
-        ]);
+        ])
+        .unwrap();
     }
 
     #[test]
@@ -1308,7 +1522,7 @@ mod test {
             of_our_lord: false,
             of_lent: false,
             secondary_day_type: None,
-            is_octave_day: false,
+            octave_flags: OctaveFlags::empty(),
         };
 
         // Create ranks that will exercise various code paths using valid rank strings
@@ -1324,5 +1538,55 @@ mod test {
         assert!(!result2.is_empty());
         assert!(result1 == "II" || result1 == "III"); // Default cases
         assert!(result2 == "II" || result2 == "III"); // Default cases
+    }
+
+    impl FeastRank62 {
+        fn enumerate() -> Vec<FeastRank62> {
+            let mut ranks = Vec::new();
+
+            // Feasts: Ranks 1-4, with and without "of our lord"
+            for rank in 1..=4 {
+                ranks.push(FeastRank62(create_feast(rank, false)));
+                ranks.push(FeastRank62(create_feast(rank, true)));
+            }
+
+            // Sundays: Ranks 1-2
+            for rank in 1..=2 {
+                ranks.push(FeastRank62(create_sunday(rank)));
+            }
+
+            // Vigils: Ranks 1-2
+            for rank in 1..=2 {
+                ranks.push(FeastRank62(create_vigil(rank)));
+            }
+
+            // Ferias: Ranks 1-3, with and without lent
+            for rank in 1..=3 {
+                ranks.push(FeastRank62(create_feria(rank, false)));
+                ranks.push(FeastRank62(create_feria(rank, true)));
+            }
+
+            // Ember Days: Ranks 2-3
+            for rank in 2..=3 {
+                ranks.push(FeastRank62(create_ember_day(rank)));
+            }
+
+            // Octaves: Ranks 1-3
+            for rank in 1..=2 {
+                ranks.push(FeastRank62(FeastRank62Inner::Octave { rank }));
+            }
+
+            ranks
+        }
+    }
+
+    #[test]
+    fn test_feast_rank_62_enumeration_occurance_graph() {
+        test_feast_rank_enumeration_occurance_graph(FeastRank62::enumerate());
+    }
+
+    #[test_matrix(2..=4)]
+    fn test_feast_rank_62_enumeration_conflicts(n: usize) {
+        test_feast_rank_enumeration_conflicts(FeastRank62::enumerate(), n);
     }
 }

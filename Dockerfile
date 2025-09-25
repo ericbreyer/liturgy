@@ -20,7 +20,7 @@ WORKDIR /usr/src
 # copy Rust workspaces
 COPY calendar_calc ./calendar_calc
 COPY liturgy-backend ./liturgy-backend
-
+COPY types ./types
 # copy the frontend 'dist' into the Rust crate where server expects it
 COPY --from=node-builder /app/frontend/dist ./liturgy-frontend/dist
 

@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: ""
+expression: split_line.0
 ---
 2025-06-16|Feria II week I after the octave of Pentecost|III|Feria II week I after the octave of Pentecost|

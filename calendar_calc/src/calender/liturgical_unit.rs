@@ -3,8 +3,8 @@ use std::fmt::Debug;
 use chrono::NaiveDate;
 use serde::{ser::SerializeStruct, Serialize};
 
-use crate::{calender::feast_rank::FeastRank, types::ArcStr};
-
+use crate::{calender::feast_rank::FeastRank};
+use types::ArcStr;
 #[derive(Clone)]
 pub struct LiturgicalUnit {
     pub desc: ArcStr,

@@ -114,6 +114,13 @@ function getDayInfo(date: string, calendar: string): DayInfo | null {
   return monthInfoMap.value[date]?.[calendar] || null
 }
 
+function sanitizeRank(rank: string): string {
+  switch (rank) {
+    case "Memorial" : return "Mem"
+    default: return rank
+  }
+}
+
 function getDayFeasts(date: string) {
   const dayData = monthInfoMap.value[date]
   if (!dayData) return []
@@ -124,7 +131,7 @@ function getDayFeasts(date: string) {
       const commemorationCount = info.desc.commemorations?.length || 0
       feasts.push({
         title: info.desc.day.desc,
-        rank: info.desc.day.rank,
+        rank: sanitizeRank(info.desc.day.rank),
         calendar,
         color: info.desc.day.color || 'green',
         commemorationCount: commemorationCount > 0 ? commemorationCount : undefined,
@@ -191,28 +198,92 @@ function getDetailedDayInfo(date: string) {
 
 async function loadMonthData() {
   if (selectedCalendars.value.length === 0 || monthDates.value.length === 0) return
+
+  // Cancel previous request and create a controller for this load
+  if ((window as any)._monthLoadController) {
+    try {
+      ;(window as any)._monthLoadController.abort()
+    } catch (e) {
+      // ignore
+    }
+  }
+  const currentController = new AbortController()
+  ;(window as any)._monthLoadController = currentController
+
   loading.value = true
   error.value = ''
   try {
     monthInfoMap.value = {}
+    console.debug('[MonthView] starting loadMonthData', { dates: monthDates.value.length })
+
+    // Build per-date promises so all dates are loaded in parallel (each date still parallelizes calendars)
+    const datePromises: Array<Promise<{ date: string; dayMap: Record<string, DayInfo> | null }>> =
+      []
     for (const date of monthDates.value) {
-      monthInfoMap.value[date] = {}
-      for (const calendar of selectedCalendars.value) {
-        try {
+      const datePromise = (async () => {
+        if (currentController.signal.aborted) return { date, dayMap: null }
+
+        const dayMap: Record<string, DayInfo> = {}
+
+        // Fire all calendar requests for this date in parallel
+        const calPromises = selectedCalendars.value.map(async (calendar) => {
           const [year, month, day] = date.split('-').map(Number)
-          const dayInfo = await api.getDayInfo(calendar, year, month, day)
-          monthInfoMap.value[date][calendar] = dayInfo
-        } catch (err) {
-          console.warn(`Failed to load data for ${date} in ${calendar}:`, err)
+          try {
+            const dayInfo = await api.getDayInfo(
+              calendar,
+              year,
+              month,
+              day,
+              currentController.signal
+            )
+            return { calendar, status: 'fulfilled', value: dayInfo }
+          } catch (err: any) {
+            return { calendar, status: 'rejected', reason: err }
+          }
+        })
+
+        const results = await Promise.all(calPromises)
+        for (const res of results) {
+          if (res.status === 'fulfilled' && res.value) {
+            dayMap[res.calendar] = res.value as DayInfo
+          } else {
+            const err = res.reason
+            if (err && err.name === 'AbortError') {
+              console.debug('[MonthView] request aborted', { date, calendar: res.calendar })
+            } else {
+              console.warn(`Failed to load data for ${date} in ${res.calendar}:`, err)
+            }
+          }
         }
-      }
+
+        return { date, dayMap: Object.keys(dayMap).length > 0 ? dayMap : null }
+      })()
+
+      datePromises.push(datePromise)
     }
+
+    const dateResults = await Promise.all(datePromises)
+    for (const dr of dateResults) {
+      if (dr.dayMap) monthInfoMap.value[dr.date] = dr.dayMap
+    }
+    console.debug('[MonthView] finished loadMonthData')
   } catch (err) {
     console.error('Error loading month data:', err)
     error.value = err instanceof Error ? err.message : 'Could not load month info'
   } finally {
-    loading.value = false
+    // Only clear loading if this controller is still the most recent
+    if ((window as any)._monthLoadController === currentController) {
+      loading.value = false
+      ;(window as any)._monthLoadController = null
+    }
   }
+}
+
+function changeMonth(prev: Boolean) {
+  console.debug('changeMonth', { prev })
+  
+  if (prev) goToPreviousMonth()
+  else goToNextMonth()
 }
 
 watch(
@@ -220,14 +291,14 @@ watch(
   () => {
     loadMonthData()
   },
-  { immediate: false, deep: true },
+  { immediate: false, deep: true }
 )
 watch(
   selectedDate,
   () => {
     loadMonthData()
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 onMounted(async () => {
@@ -296,7 +367,9 @@ onUnmounted(() => {
                   'has-feast': day && !day.isOtherMonth && getDayFeasts(day.date).length > 0,
                 },
               ]"
-              @click="day && !day.isOtherMonth && selectDay(day.date)"
+              @click="
+                day && (day.isOtherMonth ? changeMonth(day.isPrevMonth) : selectDay(day.date))
+              "
               @mouseenter="day && !day.isOtherMonth && hoverDay(day.date)"
               @mouseleave="hoverDay(null)"
             >
@@ -505,7 +578,7 @@ onUnmounted(() => {
 .calendar-grid {
   background: var(--surface-secondary);
   border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-primary);
   overflow: hidden;
   flex: 1;
   min-width: 0;
@@ -532,6 +605,7 @@ onUnmounted(() => {
   color: var(--text-primary);
   width: 100%;
   box-sizing: border-box;
+  border-bottom: 1px solid var(--border-secondary);
 }
 
 .weekday-header {
@@ -632,12 +706,6 @@ onUnmounted(() => {
   min-width: 2rem;
   flex-shrink: 0;
 }
-
-.day-feasts {
-  flex: 1;
-  overflow: hidden;
-}
-
 .feast-line {
   margin-bottom: 0.15rem;
   overflow: hidden;
@@ -880,6 +948,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
+  width: 100%;
 }
 
 /* Feast display with liturgical color bars */
@@ -890,14 +959,6 @@ onUnmounted(() => {
   font-size: 0.7rem;
   line-height: 1.2;
   min-height: 1.2rem;
-}
-
-.liturgical-color-bar {
-  width: 6px;
-  border-radius: 2px;
-  flex-shrink: 0;
-  border: 1px solid var(--border-secondary);
-  height: 100%;
 }
 
 .feast-content {

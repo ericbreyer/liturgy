@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2025-07-05|Sabbato week XIII of Ordinary Time|Feria|Sabbato week XIII of Ordinary Time|St. Anthony Zaccaria, Priest, BVM on Saturday

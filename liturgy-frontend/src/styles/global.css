@@ -20,6 +20,7 @@
   /* Borders */
   --border-primary: #333;
   --border-subtle: #555;
+  --border-secondary: #444;
 
   /* Layout tokens */
   --layout-max-width: 1200px;

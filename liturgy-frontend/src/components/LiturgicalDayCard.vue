@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DayInfo } from '../services/api'
+import LiturgicalColorBar from './LiturgicalColorBar.vue'
 
 interface Props {
   dateString: string
@@ -37,10 +38,10 @@ function getCommemorationInterpretation(calendarName: string): string {
 
         <div v-if="dayData[calendar.name]" class="liturgy-content">
           <div class="liturgy-header">
-            <span
-              class="color-bar"
-              :style="{ backgroundColor: dayData[calendar.name].desc.day.color }"
-            ></span>
+            <LiturgicalColorBar
+              :color="dayData[calendar.name].desc.day.color || 'green'"
+              size="small"
+            />
             <span class="feast-text">{{ dayData[calendar.name].desc.day.desc }}</span>
           </div>
           <div class="rank-text">{{ dayData[calendar.name].desc.day.rank }}</div>

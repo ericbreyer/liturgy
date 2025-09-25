@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI in the Octave of Easter, rank: Ordinary Feria }) and Octave { rank: Privileged1, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 6 in the Octave of Easter, rank: Day within a Privileged 1st Class Octave }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Octave { rank: Privileged1, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 6 in the Octave of Easter, rank: Day within a Privileged 1st Class Octave }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI in the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-04-10|Feria VI in the Octave of Easter|Day within a Privileged 1st Class Octave|Day 6 in the Octave of Easter|

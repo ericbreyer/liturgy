@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 1, flags: FeastFlags(OF_OUR_LORD | MOVABLE) } (LiturgicalUnit { desc:  The Most Sacred Heart of Jesus, rank: I }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John of San Facundo, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Feast { rank: 1, flags: FeastFlags(OF_OUR_LORD | MOVABLE) } (LiturgicalUnit { desc:  The Most Sacred Heart of Jesus, rank: I }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 1, flags: FeastFlags(OF_OUR_LORD | MOVABLE) } (LiturgicalUnit { desc:  The Most Sacred Heart of Jesus, rank: I }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John of San Facundo, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 1, flags: FeastFlags(OF_OUR_LORD | MOVABLE) } (LiturgicalUnit { desc:  The Most Sacred Heart of Jesus, rank: I }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2026-06-12|Feria VI week II after the octave of Pentecost|I| The Most Sacred Heart of Jesus|

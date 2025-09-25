@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Vincent Ferrer, Confessor, rank: Double }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week IV of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Vincent Ferrer, Confessor, rank: Double }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week IV of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
 2025-04-05|Sabbato week IV of Lent|Double|St. Vincent Ferrer, Confessor|Sabbato week IV of Lent

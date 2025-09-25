@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Felix of Valois, Confessor, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XXIII after the octave of Pentecost (Week 3 of November), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Felix of Valois, Confessor, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XXIII after the octave of Pentecost (Week 3 of November), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2025-11-20|Feria V week XXIII after the octave of Pentecost (Week 3 of November)|III|St. Felix of Valois, Confessor|

@@ -1,6 +1,6 @@
 ---
-source: tests/test_1954.rs
-description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"Dedication of the Archbasilica of the most Holy Saviour\", rank: \"Second Class Double\" }) and Sunday { rank: 3 } (LiturgicalUnit { desc: \"Dominica XXII after Pentecost (Week 2 of November)\", rank: \"Lesser Sunday\" }) |     -> Occurrence result: FirstCommemorationOfSecond"
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Dedication of the Archbasilica of the most Holy Saviour, rank: Second Class Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XXII after Pentecost (Week 2 of November), rank: Lesser Sunday }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Dedication of the Archbasilica of the most Holy Saviour, rank: Second Class Double }) to Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XXII after Pentecost (Week 2 of November), rank: Lesser Sunday }) |     -> Occurrence result: FirstCommemorationOfSecond"
 expression: split_line.0
 ---
 2025-11-09|Dominica XXII after Pentecost (Week 2 of November)|Second Class Double|Dedication of the Archbasilica of the most Holy Saviour|Dominica XXII after Pentecost (Week 2 of November), St. Theodore, Martyr

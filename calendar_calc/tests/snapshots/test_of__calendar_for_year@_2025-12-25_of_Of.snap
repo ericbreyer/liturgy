@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 1, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Nativity of the Lord, rank: Solemnity })) and Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria V week I of Christmas, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Nativity of the Lord, rank: Solemnity }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria V week I of Christmas, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-12-25|Feria V week I of Christmas|Solemnity|Nativity of the Lord|

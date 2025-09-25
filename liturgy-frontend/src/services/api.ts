@@ -68,12 +68,38 @@ export interface SeasonStats {
 class ApiClient {
   private baseURL = '/api'
 
-  private async fetch<T>(url: string): Promise<ApiResponse<T>> {
+  // Dev-only in-memory metrics for debugging network/race issues.
+  // Not persisted; useful during local dev or in-browser debugging.
+  private _metrics = {
+    requests: 0,
+    aborted: 0,
+    errors: 0,
+    totalDurationMs: 0,
+    lastRequests: [] as Array<{ url: string; durationMs: number; aborted?: boolean }>,
+  }
+
+  // Accept an optional AbortSignal so callers can cancel in-flight requests.
+  private async fetch<T>(url: string, signal?: AbortSignal): Promise<ApiResponse<T>> {
+    const start = Date.now()
+    this._metrics.requests += 1
     try {
-      const response = await fetch(`${this.baseURL}${url}`)
+      const response = await fetch(`${this.baseURL}${url}`, { signal })
       const data = await response.json()
+      const duration = Date.now() - start
+      this._metrics.totalDurationMs += duration
+      this._metrics.lastRequests.unshift({ url, durationMs: duration })
+      if (this._metrics.lastRequests.length > 50) this._metrics.lastRequests.pop()
       return data
-    } catch (error) {
+    } catch (error: any) {
+      const duration = Date.now() - start
+      this._metrics.totalDurationMs += duration
+      this._metrics.lastRequests.unshift({ url, durationMs: duration, aborted: error?.name === 'AbortError' })
+      if (this._metrics.lastRequests.length > 50) this._metrics.lastRequests.pop()
+      if (error?.name === 'AbortError') {
+        this._metrics.aborted += 1
+      } else {
+        this._metrics.errors += 1
+      }
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -105,12 +131,31 @@ class ApiClient {
     throw new Error(response.error || 'Failed to fetch year calendar')
   }
 
-  async getDayInfo(name: string, year: number, month: number, day: number): Promise<DayInfo> {
-    const response = await this.fetch<DayInfo>(`/calendars/${name}/day/${year}/${month}/${day}`)
+  // Accept an optional AbortSignal so callers can cancel the request.
+  async getDayInfo(
+    name: string,
+    year: number,
+    month: number,
+    day: number,
+    signal?: AbortSignal,
+  ): Promise<DayInfo> {
+    const url = `/calendars/${name}/day/${year}/${month}/${day}`
+    const start = Date.now()
+    const response = await this.fetch<DayInfo>(url, signal)
+    const duration = Date.now() - start
+    // additional metrics specific to getDayInfo
+    this._metrics.lastRequests.unshift({ url, durationMs: duration })
+    if (this._metrics.lastRequests.length > 50) this._metrics.lastRequests.pop()
+
     if (response.success && response.data) {
       return response.data
     }
     throw new Error(response.error || 'Failed to fetch day info')
+  }
+
+  // Expose metrics for dev debugging (not for production monitoring)
+  _getDebugMetrics() {
+    return { ...this._metrics }
   }
 
   async searchFeasts(name: string, query: string): Promise<SearchResult[]> {

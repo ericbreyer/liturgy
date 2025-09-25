@@ -130,7 +130,7 @@ const getResultsForCalendar = (calendarName: string) => {
   background: var(--surface-secondary);
   border-radius: 8px;
   padding: 30px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-primary);
   margin-top: 20px;
 }
 

@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Fabian, Pope, and Sebastian, Martyrs, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week II after Epiphany, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Fabian, Pope, and Sebastian, Martyrs, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week II after Epiphany, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2025-01-20|Feria II week II after Epiphany|Double|Ss. Fabian, Pope, and Sebastian, Martyrs|

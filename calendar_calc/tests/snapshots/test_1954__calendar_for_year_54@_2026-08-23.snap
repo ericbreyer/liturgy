@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Philip Benizi, Confessor, rank: Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XIII after Pentecost (Week 4 of August), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XIII after Pentecost (Week 4 of August), rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Philip Benizi, Confessor, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2026-08-23|Dominica XIII after Pentecost (Week 4 of August)|Lesser Sunday|Dominica XIII after Pentecost (Week 4 of August)|St. Philip Benizi, Confessor

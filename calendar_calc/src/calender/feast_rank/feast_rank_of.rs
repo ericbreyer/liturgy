@@ -1,12 +1,11 @@
-use core::num;
 use std::fmt::Debug;
 
 use anyhow::{bail, Context, Result};
 use serde::{Deserialize, Serialize};
 
-use crate::types::{ArcStr, RcStr};
+use types::{ArcStr, RcStr};
 
-use super::{DayType, FeastRank, LiturgicalContext, OctaveFlags, ResolveConflictsResult};
+use super::{DayType, FeastRank, LiturgicalContext, ResolveConflictsResult};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FeastRankOf(FeastRankOfInner);
@@ -242,8 +241,8 @@ impl FeastRankOfInner {
                 }
             }
         }
-        let (winner, winning_rank) = if winner.is_some() {
-            (winner.unwrap(), winning_rank)
+        let (winner, winning_rank) = if let Some(winner) = winner {
+            (winner, winning_rank)
         } else {
             // find the feria in the list, if any
             competetors
@@ -315,7 +314,7 @@ impl FeastRankOfInner {
         let commemorations = if matches!(
             winning_rank,
             FeastRankOfInner::Feria {
-                rank: 2 | 3 | 4,
+                rank: 2..=4,
                 ..
             }
         ) {
@@ -580,12 +579,11 @@ impl FeastRankOfInner {
                 if f1.contains(FeastFlags::OF_THE_LORD) && !f2.contains(FeastFlags::OF_THE_LORD) {
                     OccurrenceResult::FirstWinsSecondTransferred
                 } else if !f1.contains(FeastFlags::OF_THE_LORD)
-                    && f2.contains(FeastFlags::OF_THE_LORD)
+                    && f2.contains(FeastFlags::OF_THE_LORD) || f1.contains(FeastFlags::MOVABLE) && !f2.contains(FeastFlags::MOVABLE)
                 {
                     OccurrenceResult::SecondWinsFirstTransferred
-                } else if f1.contains(FeastFlags::MOVABLE) && !f2.contains(FeastFlags::MOVABLE) {
-                    OccurrenceResult::SecondWinsFirstTransferred
-                } else if !f1.contains(FeastFlags::MOVABLE) && f2.contains(FeastFlags::MOVABLE) {
+                } 
+                 else if !f1.contains(FeastFlags::MOVABLE) && f2.contains(FeastFlags::MOVABLE) {
                     OccurrenceResult::FirstWinsSecondTransferred
                 } else {
                     // No clear precedence rule - this should be rare
@@ -613,8 +611,8 @@ impl FeastRankOfInner {
                 }
             }
             (
-                FeastRankOfInner::Feast { rank: 3, flags: f1 },
-                FeastRankOfInner::Feast { rank: 3, flags: f2 },
+                FeastRankOfInner::Feast { rank: 3, flags: _f1 },
+                FeastRankOfInner::Feast { rank: 3, flags: _f2 },
             ) => OccurrenceResult::CommemorateBoth,
             (
                 FeastRankOfInner::Feria { flags, .. },
@@ -652,9 +650,9 @@ impl FeastRankOfInner {
 mod test {
     use test_case::test_matrix;
 
-    use crate::calender::feast_rank::test::{
+    use crate::calender::feast_rank::{OctaveFlags, test::{
         test_feast_rank_enumeration_conflicts, test_feast_rank_enumeration_occurance_graph,
-    };
+    }};
 
     use super::*;
 
@@ -665,6 +663,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -693,6 +692,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: true,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -703,6 +703,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -713,6 +714,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -750,6 +752,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -772,6 +775,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: true,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -794,6 +798,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: true,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -804,6 +809,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -829,6 +835,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: true,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -839,6 +846,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),
@@ -864,6 +872,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: Some(DayType::Feria),
             octave_flags: OctaveFlags::empty(),
@@ -873,6 +882,7 @@ mod test {
             feast_name: None,
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),

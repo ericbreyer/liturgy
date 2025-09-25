@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week VI after the octave of Pentecost, rank: Ordinary Feria }) and Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of Ss. Peter and Paul, rank: Major Double (Octave Day) }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of Ss. Peter and Paul, rank: Major Double (Octave Day) }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week VI after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-07-06|Feria II week VI after the octave of Pentecost|Major Double (Octave Day)|Octave Day of Ss. Peter and Paul|

@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of St. James, rank: Vigil }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week VIII after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of St. James, rank: Vigil }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week VIII after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-07-24|Feria VI week VIII after the octave of Pentecost|Vigil|Vigil of St. James|St. Christine, Virgin and Martyr

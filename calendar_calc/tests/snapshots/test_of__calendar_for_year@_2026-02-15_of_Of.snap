@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-02-15|Dominica VI of Ordinary Time|Sunday|Dominica VI of Ordinary Time|

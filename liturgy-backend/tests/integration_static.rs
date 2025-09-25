@@ -30,6 +30,7 @@ async fn serves_index_from_dist() {
         port,
         calendar_data_dir: "../calendar_calc/calendar_data".to_string(),
         frontend_dir: Some(dir.path().to_str().unwrap().to_string()),
+        debug_delay: false,
     };
 
     // Spawn the server in background

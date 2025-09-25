@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anne, Mother of the Blessed Virgin Mary, rank: II }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week VI after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anne, Mother of the Blessed Virgin Mary, rank: II }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week VI after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2025-07-26|Sabbato week VI after the octave of Pentecost|II|St. Anne, Mother of the Blessed Virgin Mary|

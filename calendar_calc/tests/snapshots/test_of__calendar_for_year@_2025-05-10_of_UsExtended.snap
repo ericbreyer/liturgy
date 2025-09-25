@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2025-05-10|Sabbato week III of Eastertide|Feria|Sabbato week III of Eastertide|St. John of Ávila, Priest and Doctor of the Church, St. Damien de Veuster, Priest

@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feria { rank: 4, flags: FerialFlags(0x0) } (Some(LiturgicalUnit { desc: Feria II week I of Eastertide, rank: Feria })) and Feria { rank: 1, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Day 2 in the Octave of Easter, rank: Feria }) |     -> Occurrence result: SecondWins | Comparing final winner Feria { rank: 1, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Day 2 in the Octave of Easter, rank: Feria }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria II week I of Eastertide, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-04-21|Feria II week I of Eastertide|Feria|Day 2 in the Octave of Easter|

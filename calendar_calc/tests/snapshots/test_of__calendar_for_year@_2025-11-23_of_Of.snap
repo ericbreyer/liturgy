@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (Some(LiturgicalUnit { desc: Our Lord Jesus Christ, King of the Universe, rank: Solemnity })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXXIV of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (LiturgicalUnit { desc: Our Lord Jesus Christ, King of the Universe, rank: Solemnity }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXXIV of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-11-23|Dominica XXXIV of Ordinary Time|Solemnity|Our Lord Jesus Christ, King of the Universe|

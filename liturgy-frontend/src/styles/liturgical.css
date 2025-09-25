@@ -150,12 +150,7 @@
   truly shared primitives (color bar, feast-title, feast-meta, etc.).
 */
 
-.liturgical-color-bar {
-  width: 6px;
-  border-radius: 2px;
-  flex-shrink: 0;
-  border: 1px solid var(--border-light);
-}
+
 
 .feast-title {
   color: var(--text-primary);

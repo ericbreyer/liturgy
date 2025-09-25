@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Vigil { rank: 2 } (LiturgicalUnit { desc: Vigil of the Ascension, rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Robert Bellarmine, Bishop and Confessor and Doctor of the Church, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds | Resolving between Vigil { rank: 2 } (LiturgicalUnit { desc: Vigil of the Ascension, rank: II }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week VI of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { rank: 2 } (LiturgicalUnit { desc: Vigil of the Ascension, rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Robert Bellarmine, Bishop and Confessor and Doctor of the Church, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds | Comparing final winner Vigil { rank: 2 } (LiturgicalUnit { desc: Vigil of the Ascension, rank: II }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week VI of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2026-05-13|Feria IV week VI of Eastertide|II|Vigil of the Ascension|St. Robert Bellarmine, Bishop and Confessor and Doctor of the Church

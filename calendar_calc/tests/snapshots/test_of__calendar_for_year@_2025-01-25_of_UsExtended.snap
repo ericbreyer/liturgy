@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Conversion of St. Paul the Apostle, rank: Feast })) and Feria { rank: 4, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Sabbato week II of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Conversion of St. Paul the Apostle, rank: Feast }) to Feria { rank: 4, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Sabbato week II of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-01-25|Sabbato week II of Ordinary Time|Feast|The Conversion of St. Paul the Apostle|

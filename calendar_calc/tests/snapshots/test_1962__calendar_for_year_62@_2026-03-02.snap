@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: ""
+expression: split_line.0
 ---
 2026-03-02|Feria II week II of Lent|III|Feria II week II of Lent|

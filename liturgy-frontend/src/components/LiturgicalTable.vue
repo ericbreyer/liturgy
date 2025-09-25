@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CalendarInfo, DayInfo } from '../services/api'
+import LiturgicalColorBar from './LiturgicalColorBar.vue'
 
 interface DateInfo {
   dateString: string
@@ -62,12 +63,10 @@ function getCommemorationInterpretation(calendarName: string): string {
           >
             <div v-if="dataMap[dateInfo.dateString]?.[calendar.name]" class="liturgy-content">
               <div class="liturgy-header">
-                <span
-                  class="color-bar"
-                  :style="{
-                    backgroundColor: dataMap[dateInfo.dateString][calendar.name].desc.day.color,
-                  }"
-                ></span>
+                <LiturgicalColorBar
+                  :color="dataMap[dateInfo.dateString][calendar.name].desc.day.color"
+                  size="small"
+                />
                 <span class="feast-text">{{
                   dataMap[dateInfo.dateString][calendar.name].desc.day.desc
                 }}</span>
@@ -128,7 +127,6 @@ function getCommemorationInterpretation(calendarName: string): string {
 .liturgical-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;
 }
 
 .liturgical-table th {
@@ -217,6 +215,12 @@ function getCommemorationInterpretation(calendarName: string): string {
   gap: 8px;
 }
 
+.color-bar {
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+}
+
 .color-bar.small {
   width: 4px;
   height: 14px;
@@ -287,19 +291,12 @@ function getCommemorationInterpretation(calendarName: string): string {
     -webkit-overflow-scrolling: touch;
   }
 
-  .liturgical-table {
-    min-width: 800px;
-  }
 }
 
 @media (max-width: 768px) {
   .liturgical-table-container {
     border-radius: 6px;
     margin-bottom: 16px;
-  }
-
-  .liturgical-table {
-    min-width: 700px;
   }
 
   .day-column {
@@ -346,9 +343,6 @@ function getCommemorationInterpretation(calendarName: string): string {
     border-right: none;
   }
 
-  .liturgical-table {
-    min-width: 600px;
-  }
 
   .day-column {
     width: 80px;

@@ -1,5 +1,0 @@
----
-source: src/web/backend.rs
-expression: data.total_days
----
-371

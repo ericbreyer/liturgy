@@ -17,6 +17,10 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::net::TcpListener;
 use tower::ServiceBuilder;
+use axum::middleware::{from_fn, Next};
+use axum::body::Body;
+use axum::http::Request;
+use axum::response::Response;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tower_http::services::{ServeDir, ServeFile};
 use std::path::PathBuf;
@@ -30,6 +34,7 @@ pub struct AppState {
 }
 
 impl AppState {
+    #[cfg(test)]
     pub fn new(config: WebConfig) -> Self {
         Self {
             gen_calendars: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
@@ -74,7 +79,14 @@ pub async fn start_server(config: WebConfig) -> Result<()> {
 
 /// Create the main router with all routes
 fn create_router(state: AppState) -> Router {
-    let mut router = Router::new().nest("/api", create_api_router());
+    // Create the api router and attach middleware to it (route_layer must be applied after routes)
+    let api_router = create_api_router();
+    let api_router = if state.config.debug_delay {
+        api_router.route_layer(from_fn(delay_middleware))
+    } else {
+        api_router
+    };
+    let mut router = Router::new().nest("/api", api_router);
 
     // If frontend_dir is provided, serve built assets from `<frontend_dir>/dist` at root
     if let Some(frontend_dir) = &state.config.frontend_dir {
@@ -99,18 +111,31 @@ fn create_router(state: AppState) -> Router {
             println!("⚠️  Frontend dist directory not found: {:?}", dist_path);
         }
     }
-    // Add middleware
-    let router = router.layer(
-        ServiceBuilder::new()
-            .layer(TraceLayer::new_for_http())
-            .layer(
-                CorsLayer::permissive(), // Allow all origins, methods, and headers for development
-            ),
-    )
-    .with_state(state);
-
-    router
+    // Add middleware (Trace and CORS). Note: delay middleware is attached to the API router
+    router.layer(
+            ServiceBuilder::new()
+                .layer(TraceLayer::new_for_http())
+                .layer(
+                    CorsLayer::permissive(), // Allow all origins, methods, and headers for development
+                ),
+        )
+        .with_state(state)
 }
+
+/// debug middleware that delays requests by a fixed duration
+/// (useful for simulating slow network conditions during development)
+/// not used in production
+#[allow(dead_code)]
+async fn delay_middleware(req: Request<Body>, next: Next) -> Response {
+    use std::time::Duration;
+    use tokio::time::sleep;
+    // Delay every request by 500ms
+    // Log and delay to help confirm middleware runs
+    println!("⏳ Delaying request by 500ms: {}", req.uri());
+    sleep(Duration::from_millis(500)).await;
+    next.run(req).await
+}
+
 
 /// Create API router
 fn create_api_router() -> Router<AppState> {
@@ -147,7 +172,6 @@ async fn load_default_calendars(state: &AppState) -> Result<()> {
                 &path,
                 extensions_paths
                     .iter()
-                    .map(|s| s)
                     .collect::<Vec<_>>()
                     .as_slice(),
             ) {
@@ -391,9 +415,9 @@ async fn api_search_feasts(
                                 name: feast_name.clone(),
                                 description: info.to_string(),
                                 date: info.date_rule.to_string().into(), // Convert date rule to string
-                                rank: rankstr,
+                                rank: rankstr.to_string(),
                                 score: *score,
-                                color: info.color.clone(),
+                                color: info.color.clone().to_string(),
                             };
                             results.push(result);
                         }

@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2024-12-22|Dominica IV of Advent|Major Sunday|Dominica IV of Advent|

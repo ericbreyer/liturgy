@@ -33,6 +33,9 @@ const loading = ref(false)
 const error = ref<string>('')
 const novenas = ref<NovenaCategory[]>([])
 
+// Abort controller for cancelling requests
+const abortController = ref<AbortController | null>(null)
+
 // Novena timing setting: 8 days (modern) or 9 days (traditional)
 const novenaDays = ref(8) // Default to 8 days as currently implemented
 
@@ -99,6 +102,17 @@ async function loadNovenaData() {
     return
   }
 
+  // Cancel previous request and create a controller for this load
+  if (abortController.value) {
+    try {
+      abortController.value.abort()
+    } catch (e) {
+      // ignore
+    }
+  }
+  const currentController = new AbortController()
+  abortController.value = currentController
+
   console.log('Selected calendars:', selectedCalendars.value)
   loading.value = true
   error.value = ''
@@ -117,7 +131,7 @@ async function loadNovenaData() {
         console.log(`Processing calendar: ${calendar} for date ${date}`)
         try {
           const [year, month, day] = date.split('-').map(Number)
-          const dayInfo = await api.getDayInfo(calendar, year, month, day)
+          const dayInfo = await api.getDayInfo(calendar, year, month, day, currentController.signal)
 
           if (dayInfo.desc.commemorations && dayInfo.desc.commemorations.length > 0) {
             for (const commemoration of dayInfo.desc.commemorations) {
@@ -372,7 +386,7 @@ onMounted(() => {
 
 .novena-settings {
   background: var(--surface-secondary);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 2rem;
@@ -433,7 +447,7 @@ onMounted(() => {
   padding: 2rem;
   background: var(--surface-secondary);
   border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-primary);
 }
 
 .novena-sections {
@@ -446,7 +460,7 @@ onMounted(() => {
   background: var(--surface-secondary);
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-primary);
 }
 
 .novena-category.current-novenas {

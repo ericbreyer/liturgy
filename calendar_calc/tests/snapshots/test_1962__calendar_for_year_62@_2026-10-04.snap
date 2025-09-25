@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XIX after Pentecost (Week 1 of October), rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Francis of Assisi, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XIX after Pentecost (Week 1 of October), rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Francis of Assisi, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2026-10-04|Dominica XIX after Pentecost (Week 1 of October)|II|Dominica XIX after Pentecost (Week 1 of October)|

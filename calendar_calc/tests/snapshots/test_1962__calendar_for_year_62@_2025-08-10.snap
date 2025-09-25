@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Laurence, Martyr, rank: II }) and Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica IX after Pentecost (Week 2 of August), rank: II }) |     -> Occurrence result: SecondCommemorationOfFirstAtLauds | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica IX after Pentecost (Week 2 of August), rank: II }) to Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Laurence, Martyr, rank: II }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
+expression: split_line.0
 ---
 2025-08-10|Dominica IX after Pentecost (Week 2 of August)|II|Dominica IX after Pentecost (Week 2 of August)|St. Laurence, Martyr

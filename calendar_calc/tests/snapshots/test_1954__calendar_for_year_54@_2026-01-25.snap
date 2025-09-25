@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Conversion of St. Paul, Apostle, rank: Major Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica III after Epiphany, rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica III after Epiphany, rank: Lesser Sunday }) to Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Conversion of St. Paul, Apostle, rank: Major Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2026-01-25|Dominica III after Epiphany|Lesser Sunday|Dominica III after Epiphany|Conversion of St. Paul, Apostle, St. Peter, Apostle

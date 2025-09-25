@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: ""
+expression: split_line.0
 ---
 2026-07-30|Feria V week IX after the octave of Pentecost|III|Feria V week IX after the octave of Pentecost|Ss. Abdon and Sennen, Martyrs

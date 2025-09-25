@@ -1,6 +1,6 @@
 ---
-source: tests/test_1954.rs
-description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: \"St. Wenceslaus Duke, Martyr\", rank: \"Semidouble\" }) and Sunday { rank: 3 } (LiturgicalUnit { desc: \"Dominica XVI after Pentecost (Week 1 of October)\", rank: \"Lesser Sunday\" }) |     -> Occurrence result: SecondCommemorationOfFirst"
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Wenceslaus Duke, Martyr, rank: Semidouble }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XVI after Pentecost (Week 1 of October), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XVI after Pentecost (Week 1 of October), rank: Lesser Sunday }) to Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Wenceslaus Duke, Martyr, rank: Semidouble }) |     -> Occurrence result: FirstCommemorationOfSecond"
 expression: split_line.0
 ---
 2025-09-28|Dominica XVI after Pentecost (Week 1 of October)|Lesser Sunday|Dominica XVI after Pentecost (Week 1 of October)|St. Wenceslaus Duke, Martyr

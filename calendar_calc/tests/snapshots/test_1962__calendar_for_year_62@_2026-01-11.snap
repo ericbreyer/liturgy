@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(OF_OUR_LORD | MOVABLE) } (LiturgicalUnit { desc: The most holy Family of Jesus, Mary, Joseph, rank: II }) and Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica of Epiphany, rank: II }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 2, flags: FeastFlags(OF_OUR_LORD | MOVABLE) } (LiturgicalUnit { desc: The most holy Family of Jesus, Mary, Joseph, rank: II }) to Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica of Epiphany, rank: II }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2026-01-11|Dominica of Epiphany|II|The most holy Family of Jesus, Mary, Joseph|

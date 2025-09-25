@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feria { rank: 3, flags: FerialFlags(0x0) } (Some(LiturgicalUnit { desc: Feria II week II of Advent, rank: Feria })) and Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary (transferred), rank: Solemnity }) |     -> Occurrence result: SecondWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary (transferred), rank: Solemnity }) to Feria { rank: 3, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria II week II of Advent, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2024-12-09|Feria II week II of Advent|Solemnity|The Immaculate Conception of the Blessed Virgin Mary (transferred)|

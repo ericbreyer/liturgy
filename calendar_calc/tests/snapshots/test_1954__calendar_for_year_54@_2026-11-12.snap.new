@@ -1,0 +1,7 @@
+---
+source: calendar_calc/tests/test_1954.rs
+assertion_line: 55
+description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Martin I, Pope and Martyr, rank: Semidouble }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XXIV after the octave of Pentecost (Week 2 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Martin I, Pope and Martyr, rank: Semidouble }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XXIV after the octave of Pentecost (Week 2 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-11-12|Feria V week XXIV after the octave of Pentecost (Week 2 of November)|Semidouble|St. Martin I, Pope and Martyr|

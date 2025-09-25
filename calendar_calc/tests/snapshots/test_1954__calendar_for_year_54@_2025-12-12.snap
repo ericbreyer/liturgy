@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II of Advent, rank: Greater Non-Privileged Feria }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 5 in the Octave of The Immaculate Conception, rank: Day within a Common Octave }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 5 in the Octave of The Immaculate Conception, rank: Day within a Common Octave }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II of Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2025-12-12|Feria VI week II of Advent|Day within a Common Octave|Day 5 in the Octave of The Immaculate Conception|Feria VI week II of Advent

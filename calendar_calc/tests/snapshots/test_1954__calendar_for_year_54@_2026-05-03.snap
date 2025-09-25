@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Invention of the Holy Cross, rank: Second Class Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica IV after Easter Sunday, rank: Lesser Sunday }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Invention of the Holy Cross, rank: Second Class Double }) to Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica IV after Easter Sunday, rank: Lesser Sunday }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2026-05-03|Dominica IV after Easter Sunday|Second Class Double|Invention of the Holy Cross|Dominica IV after Easter Sunday, Ss. Alexander, Pope, Eventius and Theodulus, Martyrs, St. Juvenal, Bishop and Confessor

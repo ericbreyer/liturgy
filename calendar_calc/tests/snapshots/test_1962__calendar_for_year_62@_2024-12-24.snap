@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Vigil { rank: 1 } (LiturgicalUnit { desc: Vigil of the Nativity of our Lord Jesus Christ, rank: I }) and Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week IV of Advent, rank: II }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { rank: 1 } (LiturgicalUnit { desc: Vigil of the Nativity of our Lord Jesus Christ, rank: I }) to Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week IV of Advent, rank: II }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2024-12-24|Feria III week IV of Advent|I|Vigil of the Nativity of our Lord Jesus Christ|

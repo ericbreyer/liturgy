@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Ss. Perpetua and Felicity, Martyrs, rank: Memorial })) and Feria { rank: 3, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Feria VI after Ash Wednesday, rank: Feria }) |     -> Occurrence result: SecondWinsFirstCommemoration | Comparing final winner Feria { rank: 3, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Feria VI after Ash Wednesday, rank: Feria }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Perpetua and Felicity, Martyrs, rank: Memorial }) |     -> Occurrence result: FirstWinsSecondCommemoration"
+expression: split_line.0
 ---
 2025-03-07|Feria VI after Ash Wednesday|Feria|Feria VI after Ash Wednesday|Ss. Perpetua and Felicity, Martyrs

@@ -1,0 +1,4 @@
+[workspace]
+members = ["calendar_calc", "liturgy-backend", "types"]
+resolver = "3"
+

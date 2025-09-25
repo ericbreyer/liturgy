@@ -142,7 +142,7 @@ const datePickerVariant = computed(() => {
     case 'Today':
       return 'day'
     case 'Week':
-      return 'week'
+      return 'day'
     case 'Month':
       return 'month'
     case 'Nerd':
@@ -232,7 +232,7 @@ export default {}
 
 .app-nav {
   background: var(--surface-primary);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-primary);
   padding: 0 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;

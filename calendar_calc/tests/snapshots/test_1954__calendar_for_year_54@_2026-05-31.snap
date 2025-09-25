@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Queenship of the Blessed Virgin Mary, rank: Second Class Double }) and Sunday { rank: First, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Holy Trinity and the Octave of Pentecost, rank: Greater Sunday of the First Class }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: First, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Holy Trinity and the Octave of Pentecost, rank: Greater Sunday of the First Class }) to Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Queenship of the Blessed Virgin Mary, rank: Second Class Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2026-05-31|Dominica I after Pentecost|Greater Sunday of the First Class|Holy Trinity and the Octave of Pentecost|Queenship of the Blessed Virgin Mary, St. Petronilla, Virgin

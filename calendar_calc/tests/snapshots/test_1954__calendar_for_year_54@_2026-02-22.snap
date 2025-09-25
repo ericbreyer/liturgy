@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Chair of St. Peter at Antioch, rank: Major Double }) and Sunday { rank: First } (LiturgicalUnit { desc: Dominica I of Lent, rank: Greater Sunday of the First Class }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: First } (LiturgicalUnit { desc: Dominica I of Lent, rank: Greater Sunday of the First Class }) to Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Chair of St. Peter at Antioch, rank: Major Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2026-02-22|Dominica I of Lent|Greater Sunday of the First Class|Dominica I of Lent|Chair of St. Peter at Antioch

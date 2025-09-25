@@ -3,52 +3,58 @@ import { mount } from '@vue/test-utils'
 import TodayView from '../../views/TodayView.vue'
 
 // Mock composables and services used by TodayView
-vi.mock('../../composables/useCalendarSelection', () => ({
-  useCalendarSelection: () => ({
-    selectedCalendars: { value: ['default'] },
-    loadCalendars: () => Promise.resolve(),
-    selectedCalendarInfos: {
-      value: [{ name: 'default', commemoration_interpretation: 'Commemorations' }],
-    },
-  }),
-}))
+vi.mock('../../composables/useCalendarSelection', () => {
+  const { ref } = require('vue')
+  return {
+    useCalendarSelection: () => ({
+      selectedCalendars: ref(['default']),
+      loadCalendars: () => Promise.resolve(),
+      selectedCalendarInfos: ref([{ name: 'default', commemoration_interpretation: 'Commemorations' }]),
+    }),
+  }
+})
 
-vi.mock('../../composables/useDateNavigation', () => ({
-  useDateNavigation: () => ({
-    selectedDate: { value: new Date().toISOString().split('T')[0] },
-    formattedDate: { value: new Date().toDateString() },
-    updateSelectedDate: () => {},
-    goToToday: () => {},
-    goToPrevious: () => {},
-    goToNext: () => {},
-    route: { query: {} },
-  }),
-}))
+vi.mock('../../composables/useDateNavigation', () => {
+  const { ref } = require('vue')
+  // Use a fixed date so snapshot is stable
+  const fixedDate = '2025-09-13'
+  return {
+    useDateNavigation: () => ({
+      selectedDate: ref(fixedDate),
+      formattedDate: ref(new Date(fixedDate).toDateString()),
+      updateSelectedDate: () => {},
+      goToToday: () => {},
+      goToPrevious: () => {},
+      goToNext: () => {},
+      route: { query: {} },
+    }),
+  }
+})
 
 vi.mock('../../services/api', () => ({
   api: {
     getDayInfo: async () => ({
       desc: {
-        date: new Date().toISOString().split('T')[0],
+        date: '2025-09-13',
         day_in_season: 'Season Day 123',
         day_rank: 'Feast',
         day: {
           desc: 'Test Feast',
           rank: 'Feast',
-          date: new Date().toISOString().split('T')[0],
+          date: '2025-09-13',
           color: 'green',
         },
         commemorations: [
           {
             desc: 'Commemoration A',
             rank: 'Memorial',
-            date: new Date().toISOString().split('T')[0],
+            date: '2025-09-13',
             color: 'white',
           },
           {
             desc: 'Commemoration B',
             rank: 'Optional',
-            date: new Date().toISOString().split('T')[0],
+            date: '2025-09-13',
             color: 'blue',
           },
         ],

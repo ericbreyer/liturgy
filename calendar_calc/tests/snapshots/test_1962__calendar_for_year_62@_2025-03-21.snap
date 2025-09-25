@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Benedict, Abbot, rank: III }) and Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Feria VI week II of Lent, rank: III }) |     -> Occurrence result: SecondCommemorationOfFirstAtLauds | Comparing final winner Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Feria VI week II of Lent, rank: III }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Benedict, Abbot, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
+expression: split_line.0
 ---
 2025-03-21|Feria VI week II of Lent|III|Feria VI week II of Lent|St. Benedict, Abbot

@@ -1,0 +1,7 @@
+---
+source: calendar_calc/tests/test_1954.rs
+assertion_line: 55
+description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Raphael, archangel, rank: Major Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXI after the octave of Pentecost (Week 3 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Raphael, archangel, rank: Major Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXI after the octave of Pentecost (Week 3 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-10-24|Sabbato week XXI after the octave of Pentecost (Week 3 of October)|Major Double|St. Raphael, archangel|

@@ -1,7 +1,6 @@
 #![cfg(test)]
 
 use std::{
-    any::Any,
     collections::{HashMap, HashSet},
     sync::atomic::AtomicUsize,
 };
@@ -189,16 +188,16 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRank>(enumeration: V
         }
 
         let mut blocked = vec![false; nodes.len()];
-        let mut B: Vec<HashSet<usize>> = vec![HashSet::new(); nodes.len()];
+        let mut set_b: Vec<HashSet<usize>> = vec![HashSet::new(); nodes.len()];
         let mut stack: Vec<usize> = Vec::new();
         let mut cycles: Vec<Vec<String>> = Vec::new();
 
-        fn unblock(v: usize, blocked: &mut [bool], B: &mut [HashSet<usize>]) {
+        fn unblock(v: usize, blocked: &mut [bool], set_b: &mut [HashSet<usize>]) {
             if blocked[v] {
                 blocked[v] = false;
-                let to_unblock: Vec<usize> = B[v].drain().collect();
+                let to_unblock: Vec<usize> = set_b[v].drain().collect();
                 for w in to_unblock {
-                    unblock(w, blocked, B);
+                    unblock(w, blocked, set_b);
                 }
             }
         }
@@ -208,7 +207,7 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRank>(enumeration: V
             s: usize,
             adj: &Vec<Vec<usize>>,
             blocked: &mut [bool],
-            B: &mut [HashSet<usize>],
+            set_b: &mut [HashSet<usize>],
             stack: &mut Vec<usize>,
             cycles: &mut Vec<Vec<String>>,
             nodes: &Vec<String>,
@@ -224,18 +223,17 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRank>(enumeration: V
                     cycle.push(nodes[s].clone());
                     cycles.push(cycle);
                     found_cycle = true;
-                } else if !blocked[w] {
-                    if circuit(w, s, adj, blocked, B, stack, cycles, nodes) {
+                } else if !blocked[w]
+                    && circuit(w, s, adj, blocked, set_b, stack, cycles, nodes) {
                         found_cycle = true;
                     }
-                }
             }
 
             if found_cycle {
-                unblock(v, blocked, B);
+                unblock(v, blocked, set_b);
             } else {
                 for &w in adj[v].iter() {
-                    B[w].insert(v);
+                    set_b[w].insert(v);
                 }
             }
 
@@ -253,7 +251,7 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRank>(enumeration: V
 
             for i in s..n {
                 blocked[i] = false;
-                B[i].clear();
+                set_b[i].clear();
             }
             stack.clear();
 
@@ -263,7 +261,7 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRank>(enumeration: V
                 s,
                 &sub_adj,
                 &mut blocked,
-                &mut B,
+                &mut set_b,
                 &mut stack,
                 &mut cycles,
                 &nodes,

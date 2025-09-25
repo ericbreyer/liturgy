@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Forty Holy, Martyrs, rank: Semidouble }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week I of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Forty Holy, Martyrs, rank: Semidouble }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week I of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
 2025-03-10|Feria II week I of Lent|Semidouble|The Forty Holy, Martyrs|Feria II week I of Lent

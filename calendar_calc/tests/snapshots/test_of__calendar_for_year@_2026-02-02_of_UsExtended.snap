@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(OF_THE_LORD) } (Some(LiturgicalUnit { desc: The Presentation of the Lord, rank: Feast })) and Feria { rank: 4, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Feria II week IV of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 2, flags: FeastFlags(OF_THE_LORD) } (LiturgicalUnit { desc: The Presentation of the Lord, rank: Feast }) to Feria { rank: 4, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Feria II week IV of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2026-02-02|Feria II week IV of Ordinary Time|Feast|The Presentation of the Lord|

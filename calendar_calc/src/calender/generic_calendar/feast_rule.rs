@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{calender::{
     DateRule, DayType, LiturgicalContext, LiturgicalUnit, feast_rank::FeastRank
-}, types::ArcStr};
-
+}};
+use types::ArcStr;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FeastRule<DateType> {
     pub name: ArcStr,

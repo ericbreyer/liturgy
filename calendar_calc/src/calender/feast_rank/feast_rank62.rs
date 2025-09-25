@@ -4,12 +4,12 @@ use anyhow::{bail, Context, Result};
 use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 
-use super::{DayType, FeastRank, LiturgicalContext, OctaveFlags, ResolveConflictsResult};
+use super::{DayType, FeastRank, LiturgicalContext, ResolveConflictsResult};
 use crate::{
     calender::feast_rank::BVMOnSaturdayResult,
-    types::{ArcStr, RcStr},
+    
 };
-
+use types::{ArcStr, RcStr};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Copy)]
 pub struct FeastRank62(FeastRank62Inner);
 impl FeastRank for FeastRank62 {
@@ -21,7 +21,7 @@ impl FeastRank for FeastRank62 {
         FeastRank62Inner::resolve_conflicts(
             competetors
                 .iter()
-                .map(|(f, n)| (f.0.clone(), n.clone()))
+                .map(|(f, n)| (f.0, n.clone()))
                 .collect::<Vec<_>>()
                 .as_slice(),
         )
@@ -241,7 +241,7 @@ impl FeastRank62Inner {
                     if transferred.is_some() {
                         bail!("Multiple transfers detected in conflict resolution");
                     }
-                    transferred = Some((FeastRank62(rank.clone()), name.clone()));
+                    transferred = Some((FeastRank62(*rank), name.clone()));
                 }
                 OccurrenceResult::SecondCommemorationOfFirstAtLauds
                 | OccurrenceResult::SecondCommemorationOfFirstAtLaudsAndVespers => {
@@ -251,7 +251,7 @@ impl FeastRank62Inner {
                     if transferred.is_some() {
                         bail!("Multiple transfers detected in conflict resolution");
                     }
-                    transferred = Some((FeastRank62(winning_rank.clone()), winner.clone()));
+                    transferred = Some((FeastRank62(*winning_rank), winner.clone()));
                 }
                 _ => {
                     // Nothing to do for other outcomes
@@ -277,7 +277,7 @@ impl FeastRank62Inner {
 
         Ok(super::ResolveConflictsResult {
             winner,
-            winner_rank: FeastRank62(winning_rank.clone()),
+            winner_rank: FeastRank62(*winning_rank),
             transferred,
             commemorations,
             debug_trace,
@@ -587,7 +587,7 @@ impl FeastRank62Inner {
         // both Sundays - compare by numeric rank
         if let FeastRank62Inner::Sunday { rank: rank1 } = self {
             if let FeastRank62Inner::Sunday { rank: rank2 } = other {
-                match rank1.cmp(&rank2) {
+                match rank1.cmp(rank2) {
                     std::cmp::Ordering::Less => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     std::cmp::Ordering::Greater => {
                         return Ok(OccurrenceResult::SecondNothingOfFirst)
@@ -647,8 +647,8 @@ impl FeastRank62Inner {
                     {
                         return Ok(OccurrenceResult::SecondNothingOfFirst)
                     }
-                    (1, 2 | 3 | 4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
-                    (2 | 3 | 4, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
+                    (1, 2..=4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (2..=4, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                     (2, 3) => return Ok(OccurrenceResult::FirstCommemorationOfSecondAtLauds),
                     (3, 2) => return Ok(OccurrenceResult::SecondCommemorationOfFirstAtLauds),
                     (_, 4) => return Ok(OccurrenceResult::FirstCommemorationOfSecondAtLauds),
@@ -770,7 +770,7 @@ impl FeastRank62Inner {
             // other is a vigil
             // nothing
             if let FeastRank62Inner::Vigil { rank: rank2 } = other {
-                match rank1.cmp(&rank2) {
+                match rank1.cmp(rank2) {
                     std::cmp::Ordering::Less => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     std::cmp::Ordering::Greater => {
                         return Ok(OccurrenceResult::SecondNothingOfFirst)
@@ -788,9 +788,9 @@ impl FeastRank62Inner {
             {
                 match (rank1, rank2) {
                     (1, 1) => return Ok(OccurrenceResult::SecondNothingOfFirst),
-                    (1, 2 | 3 | 4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (1, 2..=4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     (2, 1 | 2) => return Ok(OccurrenceResult::SecondNothingOfFirst),
-                    (1 | 2, 3 | 4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    (2, 3 | 4) => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     _ => {}
                 }
             };
@@ -864,9 +864,9 @@ impl FeastRank62Inner {
 mod test {
     use test_case::{test_case, test_matrix};
 
-    use crate::calender::feast_rank::test::{
+    use crate::calender::feast_rank::{OctaveFlags, test::{
         test_feast_rank_enumeration_conflicts, test_feast_rank_enumeration_occurance_graph,
-    };
+    }};
 
     use super::*;
 
@@ -1520,6 +1520,7 @@ mod test {
             feast_name: Some("Test Feast".to_string()),
             is_movable: false,
             of_our_lord: false,
+            is_easter_or_pentecost: false,
             of_lent: false,
             secondary_day_type: None,
             octave_flags: OctaveFlags::empty(),

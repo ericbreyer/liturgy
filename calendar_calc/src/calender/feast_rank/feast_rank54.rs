@@ -2,7 +2,7 @@ use anyhow::{bail, Context, Result};
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 
-use crate::types::{ArcStr, RcStr};
+use types::{ArcStr, RcStr};
 
 use super::{DayType, FeastRank, LiturgicalContext, OctaveFlags, ResolveConflictsResult};
 
@@ -33,15 +33,26 @@ enum FeastRank54Inner {
         flags: FeastFlags,
     },
     Vigil {
-        major: bool,
+        kind: VigilKind,
     },
     Sunday {
         rank: SundayClass,
+        flags: SundayFlags,
     },
     Octave {
         rank: OctaveType,
         flags: OctaveFlags,
     },
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, Eq, Hash)]
+enum VigilKind {
+    /// The special vigils that are class I in practice (Christmas, Pentecost)
+    ChristmasOrPentecost,
+    /// The Vigil of Epiphany, special II-class behavior
+    Epiphany,
+    /// All other (common) vigils
+    Common,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, Eq, Hash)]
@@ -195,12 +206,19 @@ impl FeastRank for FeastRank54 {
     fn id(&self) -> RcStr {
         self.0.get_rank_string_verbose().into()
     }
+
+    fn transfers_vigil_from_sunday_to_saturday() -> bool
+    where
+        Self: Sized,
+    {
+        true
+    }
 }
 
 bitflags::bitflags! {
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
      struct FeriaFlags: u8 {
-        const EMBER_DAY = 0b00000010;
+        const HOLY_TRIDUUM = 0b00000100;
     }
 }
 
@@ -208,6 +226,14 @@ bitflags::bitflags! {
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
      struct FeastFlags: u8 {
         const OF_OUR_LORD = 0b00000001;
+    }
+}
+
+bitflags::bitflags! {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
+    struct SundayFlags: u8 {
+        const WAS_OCTAVE = 0b00000001;
+        const EASTER_OR_PENTECOST = 0b00000010; // treat like First class but do not admit commemorations
     }
 }
 
@@ -224,14 +250,14 @@ impl FeastRank54Inner {
                 FeastClass::Simple => 6,
                 FeastClass::Commemoration => 7,
             },
-            FeastRank54Inner::Vigil { major } => {
-                if *major {
-                    1
-                } else {
-                    2
+            FeastRank54Inner::Vigil { kind } => {
+                match kind {
+                    VigilKind::ChristmasOrPentecost => 1,
+                    VigilKind::Epiphany => 8,
+                    VigilKind::Common => 16,
                 }
-            } // Vigil ranks start from 16
-            FeastRank54Inner::Sunday { rank } => *rank as u8,
+            } // Vigil ranks start from small numbers for special vigils, larger for common
+            FeastRank54Inner::Sunday { rank, .. } => *rank as u8,
             FeastRank54Inner::Octave { rank, .. } => match rank {
                 OctaveType::Privileged1 => 1,
                 OctaveType::Privileged2 => 2,
@@ -329,7 +355,7 @@ impl FeastRank54Inner {
                 .resolve_occurrence(current_rank)
                 .context(format!(
                     "Error resolving occurrence between {:?} and {:?}",
-                    sorted_competetors[0].1, current_name
+                    winner, current_name
                 ))?;
             debug_trace.push(format!("    -> Occurrence result: {:?}", occurrence));
 
@@ -435,25 +461,17 @@ impl FeastRank54Inner {
     ) -> Result<OccurrenceResult> {
         if let FeastRank54Inner::Feria {
             rank: rank1,
-            flags: flags1,
+            flags: _flags1,
         } = self
         {
             // both ferias
             if let FeastRank54Inner::Feria {
                 rank: rank2,
-                flags: flags2,
+                flags: _flags2,
             } = other
             {
                 if rank1 == rank2 {
-                    let is_ember_day1 = flags1.contains(FeriaFlags::EMBER_DAY);
-                    let is_ember_day2 = flags2.contains(FeriaFlags::EMBER_DAY);
-                    if is_ember_day1 && !is_ember_day2 {
-                        return Ok(OccurrenceResult::FirstNothingOfSecond);
-                    } else if !is_ember_day1 && is_ember_day2 {
-                        return Ok(OccurrenceResult::SecondNothingOfFirst);
-                    } else {
-                        bail!("Two ferias of the same rank cannot occur on the same day");
-                    }
+                    bail!("Two ferias of the same rank cannot occur on the same day");
                 }
                 match (*rank1 as u8).cmp(&(*rank2 as u8)) {
                     std::cmp::Ordering::Less => return Ok(OccurrenceResult::FirstNothingOfSecond),
@@ -477,6 +495,12 @@ impl FeastRank54Inner {
             } = other
             {
                 match (rank1, rank2) {
+                    (_, FeriaClass::GreaterPrivilaged)
+                        if _flags2.contains(FeriaFlags::HOLY_TRIDUUM) =>
+                    {
+                        // Holy Triduum ferias take precedence over all feasts
+                        return Ok(OccurrenceResult::SecondNothingOfFirst);
+                    }
                     (
                         FeastClass::FirstClassDouble
                         | FeastClass::SecondClassDouble
@@ -487,7 +511,7 @@ impl FeastRank54Inner {
                     (
                         FeastClass::Semidouble | FeastClass::Simple,
                         FeriaClass::GreaterPrivilaged,
-                    ) => return Ok(OccurrenceResult::SecondNothingOfFirst),
+                    ) => return Ok(OccurrenceResult::SecondCommemorationOfFirst),
                     (
                         FeastClass::FirstClassDouble
                         | FeastClass::SecondClassDouble
@@ -824,12 +848,12 @@ impl FeastRank54Inner {
                 }
             }
             // other is vigil
-            if let FeastRank54Inner::Vigil { major: rank2 } = other {
-                match (rank1, rank2) {
+            if let FeastRank54Inner::Vigil { kind: kind2 } = other {
+                match (rank1, kind2) {
                     (FeastClass::FirstClassDouble, _) => {
                         return Ok(OccurrenceResult::FirstNothingOfSecond);
                     }
-                    (FeastClass::SecondClassDouble, true) => {
+                    (FeastClass::SecondClassDouble, VigilKind::ChristmasOrPentecost) => {
                         return Ok(OccurrenceResult::FirstCommemorationOfSecond);
                     }
                     (FeastClass::SecondClassDouble, _) => {
@@ -861,15 +885,20 @@ impl FeastRank54Inner {
             // - Sunday I: no feast may be celebrated; feasts are commemorated (except Easter/Pentecost which cannot be commemorated — not detectable here)
             // - Sunday II: only Doubles of the I Class may be celebrated; other feasts are commemorated
             // - Lesser Sundays: Doubles of I or II class, or a feast of Our Lord, may be celebrated; others are commemorated
-            if let FeastRank54Inner::Sunday { rank: rank2 } = other {
+            if let FeastRank54Inner::Sunday { rank: rank2, flags } = other {
                 match rank2 {
                     // Greater Sunday of the I class: Sunday wins; feast becomes a commemoration of the Sunday
+                    // Except for Easter/Pentecost Sundays which do not admit commemorations.
                     SundayClass::First => match rank1 {
                         FeastClass::FirstClassDouble
                         | FeastClass::SecondClassDouble
                         | FeastClass::MajorDouble
                         | FeastClass::Double
                         | FeastClass::Semidouble => {
+                            if flags.contains(SundayFlags::EASTER_OR_PENTECOST) {
+                                // behave like First-class Sunday but do not admit commemorations
+                                return Ok(OccurrenceResult::SecondNothingOfFirst);
+                            }
                             return Ok(OccurrenceResult::SecondCommemorationOfFirst);
                         }
                         _ => {
@@ -882,19 +911,29 @@ impl FeastRank54Inner {
                             // Feast (first) may be celebrated on Sunday II
                             return Ok(OccurrenceResult::FirstNothingOfSecond);
                         }
-                        FeastClass::MajorDouble if flags1.contains(FeastFlags::OF_OUR_LORD) => {
-                            // Major Doubles of Our Lord may be celebrated on Sunday II.
-                            // Do not extend this special-case to SecondClassDouble to
-                            // avoid a non-transitive cycle: SecondClassDouble -> Sunday II -> MajorDouble
-                            // which can produce permutation-dependent winners.
-                            return Ok(OccurrenceResult::FirstNothingOfSecond);
-                        }
+                        // FeastClass::MajorDouble if flags1.contains(FeastFlags::OF_OUR_LORD) => {
+                        //     // Major Doubles of Our Lord may be celebrated on Sunday II.
+                        //     // Do not extend this special-case to SecondClassDouble to
+                        //     // avoid a non-transitive cycle: SecondClassDouble -> Sunday II -> MajorDouble
+                        //     // which can produce permutation-dependent winners.
+                        //     return Ok(OccurrenceResult::FirstNothingOfSecond);
+                        // }
+                        // FeastClass::SecondClassDouble
+                        //     if flags1.contains(FeastFlags::OF_OUR_LORD) =>
+                        // {
+                        //     // Feast is commemorated (Sunday II takes precedence over a
+                        //     // Second Class Double when it's not a feast of Our Lord).
+                        //     return Ok(OccurrenceResult::FirstNothingOfSecond);
+                        // }
                         FeastClass::SecondClassDouble => {
                             // Feast is commemorated (Sunday II takes precedence over a
                             // Second Class Double when it's not a feast of Our Lord).
-                            return Ok(OccurrenceResult::FirstNothingOfSecond);
+                            return Ok(OccurrenceResult::SecondTransferAndCommemorationOfFirst);
                         }
-                        FeastClass::Double | FeastClass::Semidouble | FeastClass::Simple => {
+                        FeastClass::MajorDouble
+                        | FeastClass::Double
+                        | FeastClass::Semidouble
+                        | FeastClass::Simple => {
                             // For consistency in permutation resolution, have Sunday II take precedence
                             // over Doubles, Semidoubles and Simple feasts (they are commemorated).
                             return Ok(OccurrenceResult::SecondCommemorationOfFirst);
@@ -917,11 +956,14 @@ impl FeastRank54Inner {
                         FeastClass::FirstClassDouble => {
                             return Ok(OccurrenceResult::FirstNothingOfSecond);
                         }
+                        FeastClass::SecondClassDouble if flags1.contains(FeastFlags::OF_OUR_LORD) => {
+                            return Ok(OccurrenceResult::FirstNothingOfSecond);
+                        }
                         FeastClass::SecondClassDouble => {
                             return Ok(OccurrenceResult::FirstCommemorationOfSecond);
                         }
                         FeastClass::MajorDouble if flags1.contains(FeastFlags::OF_OUR_LORD) => {
-                            return Ok(OccurrenceResult::FirstCommemorationOfSecond);
+                            return Ok(OccurrenceResult::FirstNothingOfSecond);
                         }
                         FeastClass::MajorDouble => {
                             // Prefer the Major Double over a Lesser Sunday in ordinary cases
@@ -941,62 +983,38 @@ impl FeastRank54Inner {
             }
         }
 
-        // self is vigil
-        if let FeastRank54Inner::Vigil { major: rank1 } = self {
+    // self is vigil
+    if let FeastRank54Inner::Vigil { kind } = self {
             if let FeastRank54Inner::Octave {
                 rank: rank2,
                 flags: _flags2,
                 ..
             } = other
             {
-                match (rank1, rank2) {
-                    // Prefer a Major Vigil over a non-octave day within a
-                    // Privileged1 octave. This makes the pairwise relation
-                    // explicit and removes a rock-paper-scissors cycle where
-                    // Privileged1 beats Major Vigil, Major Vigil beats
-                    // Privileged2, and Privileged2 beats Privileged1.
-                    (true, OctaveType::Privileged1) => {
-                        // Prefer the Major Vigil over a non-octave day within a Privileged1
-                        // octave: make the vigil win (the octave is commemorated). This
-                        // keeps the pairwise relation explicit and avoids permutation-
-                        // dependent cycles where octave-days could inconsistently beat
-                        // vigils depending on ordering.
+                let is_major_vigil = matches!(kind, VigilKind::ChristmasOrPentecost);
+                match rank2 {
+                    // Prefer major-like vigils over non-octave day within a Privileged1 octave
+                    OctaveType::Privileged1 if is_major_vigil => {
                         return Ok(OccurrenceResult::SecondCommemorationOfFirst);
                     }
-                    // If the other is a Simple octave day, prefer the Major Vigil
-                    // so that Simple octaves yield to major vigils deterministically.
-                    (true, OctaveType::Simple) => {
+                    // Prefer major-like vigils over simple octaves
+                    OctaveType::Simple if is_major_vigil => {
                         return Ok(OccurrenceResult::FirstCommemorationOfSecond)
                     }
-                    (_, OctaveType::Privileged3) => {
+                    OctaveType::Privileged3 => {
                         return Ok(OccurrenceResult::SecondCommemorationOfFirst);
                     }
-                    (_, OctaveType::Privileged2) => {
-                        // If the Privileged2 octave is the actual OCTAVE_DAY, prefer
-                        // the octave day over the Vigil. This ensures the canonical
-                        // octave-day vs vigil comparison is explicit and prevents
-                        // permutation-dependent cycles when an actual octave day is
-                        // present. For non-octave Privileged2 days, keep the previous
-                        // behavior (Vigil wins) to avoid reintroducing cycles with
-                        // Simple feasts.
-                        // if _flags2.contains(OctaveFlags::OCTAVE_DAY) {
+                    OctaveType::Privileged2 => {
                         return Ok(OccurrenceResult::SecondCommemorationOfFirst);
-                        // }
-                        // return Ok(OccurrenceResult::FirstCommemorationOfSecond);
                     }
-                    // If the other is a Common octave day (often represented as a Major Double
-                    // when OCTAVE_DAY is set), prefer the octave day over a Vigil (both major
-                    // and minor) so that octave-days deterministically beat vigils. This
-                    // explicit arm avoids relying on swapped/delegated logic which previously
-                    // produced ordering-dependent results.
-                    (_, OctaveType::Common | OctaveType::Simple) => {
+                    // Common and other octaves generally beat vigils
+                    OctaveType::Common => {
+                        return Ok(OccurrenceResult::SecondCommemorationOfFirst)
+                    }
+                    OctaveType::Simple => {
                         return Ok(OccurrenceResult::SecondNothingOfFirst)
                     }
-                    (true, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
-                    (false, OctaveType::Privileged1) => {
-                        return Ok(OccurrenceResult::SecondNothingOfFirst)
-                    }
-                    (false, _) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    _ => {}
                 }
             }
 
@@ -1005,17 +1023,17 @@ impl FeastRank54Inner {
                 flags: _flags2,
             } = other
             {
-                match (rank1, rank2) {
-                    // Both major and minor vigils should take precedence over
-                    // Greater Non-Privileged ferias to avoid a rock-paper-scissors
-                    // cycle with Simple feasts. Make the vigil win explicitly.
-                    (true, FeriaClass::GreaterNonPrivilaged) => {
+                let is_major_vigil = matches!(kind, VigilKind::ChristmasOrPentecost);
+                match rank2 {
+                    // Vigils of the highest kind should take precedence over
+                    // Greater Non-Privileged ferias to avoid cycles with Simple feasts.
+                    FeriaClass::GreaterNonPrivilaged if is_major_vigil => {
                         return Ok(OccurrenceResult::FirstNothingOfSecond)
                     }
-                    (false, FeriaClass::GreaterNonPrivilaged) => {
+                    FeriaClass::GreaterNonPrivilaged => {
                         return Ok(OccurrenceResult::SecondCommemorationOfFirst)
                     }
-                    (_, FeriaClass::Lesser) => return Ok(OccurrenceResult::FirstNothingOfSecond),
+                    FeriaClass::Lesser => return Ok(OccurrenceResult::FirstNothingOfSecond),
                     _ => {}
                 }
             }
@@ -1027,23 +1045,21 @@ impl FeastRank54Inner {
                     .resolve_occurrence_inner(self, false)
                     .map(|r| r.reverse());
             }
-            if let FeastRank54Inner::Sunday { rank: rank2 } = other {
-                match (rank1, rank2) {
-                    (true, SundayClass::First) => {
-                        return Ok(OccurrenceResult::SecondNothingOfFirst)
+                if let FeastRank54Inner::Sunday { .. } = other {
+                    // Historically, special vigils like Christmas and Pentecost were
+                    // class I and could take precedence over Sundays. Epiphany's
+                    // vigil behaved like class II. Common vigils should yield to
+                    // Sundays. Implement that here.
+                    match kind {
+                        VigilKind::ChristmasOrPentecost => {
+                            // Vigil wins over Sunday
+                            return Ok(OccurrenceResult::FirstNothingOfSecond);
+                        }
+                        VigilKind::Epiphany | VigilKind::Common => {
+                            return Ok(OccurrenceResult::SecondNothingOfFirst);
+                        }
                     }
-                    // Prefer a Major Vigil over lesser Sundays (rank != 1) to avoid
-                    // rock-paper-scissors cycles with feasts and Sundays.
-                    (true, _) => return Ok(OccurrenceResult::SecondNothingOfFirst),
-                    (false, SundayClass::First) => {
-                        return Ok(OccurrenceResult::SecondNothingOfFirst)
-                    }
-                    // Minor vigils should yield to non-first-class Sundays to
-                    // avoid cycles where feasts and Sundays produce
-                    // permutation-dependent winners.
-                    (false, _) => return Ok(OccurrenceResult::SecondNothingOfFirst),
                 }
-            }
         }
 
         // self is octave
@@ -1081,16 +1097,13 @@ impl FeastRank54Inner {
             }
 
             // Sundays that fall within an octave follow octave rules; treat them similarly to feasts here
-            if let FeastRank54Inner::Sunday { rank: rank2 } = other {
+            if let FeastRank54Inner::Sunday { rank: rank2, flags: _ } = other {
                 match (is_octave_day1, rank1, rank2) {
                     (false, OctaveType::Privileged1, SundayClass::First) => {
                         return Ok(OccurrenceResult::SecondNothingOfFirst)
                     }
                     (false, OctaveType::Privileged1, SundayClass::Second | SundayClass::Lesser) => {
                         return Ok(OccurrenceResult::FirstNothingOfSecond)
-                    }
-                    (false, OctaveType::Privileged1, _) => {
-                        return Ok(OccurrenceResult::SecondNothingOfFirst)
                     }
                     // If the other is a 1st class Sunday, the Sunday should always win over an octave day
                     (_, _, SundayClass::First) => {
@@ -1102,7 +1115,7 @@ impl FeastRank54Inner {
                     // beat those Sundays. This makes the pairwise relation explicit
                     // and prevents permutation-dependent winners when octaves interact
                     // with Sundays and feasts.
-                    (true, OctaveType::Common, SundayClass::Second) => {
+                    (_, OctaveType::Common, SundayClass::Second) => {
                         return Ok(OccurrenceResult::SecondCommemorationOfFirst)
                     }
                     (true, OctaveType::Common, SundayClass::Lesser) => {
@@ -1131,17 +1144,17 @@ impl FeastRank54Inner {
                     (_, OctaveType::Privileged3, _) => {
                         return Ok(OccurrenceResult::SecondNothingOfFirst);
                     }
-                    (true, OctaveType::Common | OctaveType::Simple, _) => {
+                    (true, OctaveType::Simple, _) => {
                         // octave days yield to Sundays
                         return Ok(OccurrenceResult::SecondCommemorationOfFirst);
                     }
-                    (false, OctaveType::Common | OctaveType::Simple, SundayClass::Lesser) => {
+                    (false, OctaveType::Common, SundayClass::Lesser) => {
                         // these octaves yield to Sundays (Sundays are liturgically higher than a simple octave)
                         return Ok(OccurrenceResult::SecondCommemorationOfFirst);
                     }
-                    (false, OctaveType::Common | OctaveType::Simple, _) => {
+                    (false, OctaveType::Simple, SundayClass::Lesser) => {
                         // these octaves yield to Sundays (Sundays are liturgically higher than a simple octave)
-                        return Ok(OccurrenceResult::SecondNothingOfFirst);
+                        return Ok(OccurrenceResult::SecondCommemorationOfFirst);
                     }
                     _ => {}
                 }
@@ -1272,11 +1285,11 @@ impl FeastRank54Inner {
                     FeriaClass::GreaterPrivilaged => vec!["Greater Privileged Feria".to_string()],
                     FeriaClass::GreaterNonPrivilaged => {
                         vec!["Greater Non-Privileged Feria".to_string()]
-                    }
+        } 
                     FeriaClass::Lesser => vec!["Ordinary Feria".to_string()],
                 };
-                if flags.contains(FeriaFlags::EMBER_DAY) {
-                    parts.push("Ember Day".to_string());
+                if v && flags.contains(FeriaFlags::HOLY_TRIDUUM) {
+                    parts.push("of the Holy Triduum".to_string());
                 }
                 parts.join(" ").into()
             }
@@ -1298,12 +1311,13 @@ impl FeastRank54Inner {
                     base_name.into()
                 }
             }
-            FeastRank54Inner::Vigil { major } => match *major {
-                true => "Major Vigil",
-                false => "Minor Vigil",
+            FeastRank54Inner::Vigil { kind } => match kind {
+                VigilKind::ChristmasOrPentecost => "Vigil (Christmas/Pentecost)",
+                VigilKind::Epiphany => "Vigil (Epiphany)",
+                VigilKind::Common => "Vigil",
             }
             .into(),
-            FeastRank54Inner::Sunday { rank } => match rank {
+            FeastRank54Inner::Sunday { rank, .. } => match rank {
                 SundayClass::First => "Greater Sunday of the First Class",
                 SundayClass::Second => "Greater Sunday of the Second Class",
                 SundayClass::Lesser => "Lesser Sunday",
@@ -1360,10 +1374,12 @@ impl FeastRank54Inner {
                     _ => panic!("Unknown feria rank: {}", rank),
                 };
 
-                // Special handling for Ember days
-                if let Some(season) = &context.season_name {
-                    if season.contains("Ember") {
-                        feria_flags |= FeriaFlags::EMBER_DAY;
+                if let Some(feast_name) = &context.feast_name {
+                    if feast_name.contains("Holy Thursday")
+                        || feast_name.contains("Holy Saturday")
+                        || feast_name.contains("Good Friday")
+                    {
+                        feria_flags |= FeriaFlags::HOLY_TRIDUUM;
                     }
                 }
 
@@ -1400,15 +1416,29 @@ impl FeastRank54Inner {
                     "III" => SundayClass::Lesser, // Ordinary sundays
                     _ => panic!("Unknown sunday rank: {}", rank),
                 };
-                FeastRank54Inner::Sunday { rank }
+                let mut sflags = SundayFlags::empty();
+                if context.is_easter_or_pentecost && rank == SundayClass::First {
+                    sflags.insert(SundayFlags::EASTER_OR_PENTECOST);
+                }
+                FeastRank54Inner::Sunday { rank, flags: sflags }
             }
             DayType::Vigil => {
-                let rank = match rank {
-                    "major" | "I" => true,
-                    "minor" | "II" => false,
-                    _ => panic!("Unknown vigil rank: {}", rank),
+                // Determine vigil kind from feast name when possible
+                let kind = if let Some(name) = &context.feast_name {
+                    let lname = name.to_lowercase();
+                    if lname.contains("christmas") || lname.contains("vigil of christmas") {
+                        VigilKind::ChristmasOrPentecost
+                    } else if lname.contains("pentecost") || lname.contains("vigil of pentecost") {
+                        VigilKind::ChristmasOrPentecost
+                    } else if lname.contains("epiphany") || lname.contains("vigil of the epiphany") {
+                        VigilKind::Epiphany
+                    } else {
+                        VigilKind::Common
+                    }
+                } else {
+                    VigilKind::Common
                 };
-                FeastRank54Inner::Vigil { major: rank }
+                FeastRank54Inner::Vigil { kind }
             }
             DayType::Octave => {
                 let rank = match rank {
@@ -1428,46 +1458,10 @@ impl FeastRank54Inner {
     }
 }
 
-/// Check if a feast can be commemorated according to 1954 rules
-fn can_commemorate_1954(winning_rank: &FeastRank54Inner) -> bool {
-    match winning_rank {
-        FeastRank54Inner::Feast {
-            rank: FeastClass::FirstClassDouble,
-            ..
-        } => false, // First Class Double excludes commemorations
-        FeastRank54Inner::Feast {
-            rank: FeastClass::SecondClassDouble,
-            ..
-        } => false, // Second Class Double excludes commemorations
-        FeastRank54Inner::Feast {
-            rank: FeastClass::MajorDouble,
-            ..
-        } => false, // Major Double excludes commemorations
-        FeastRank54Inner::Feast {
-            rank: FeastClass::Double,
-            ..
-        } => false, // Double excludes commemorations
-        FeastRank54Inner::Sunday { rank } if *rank as u8 <= 2 => false, // Important sundays exclude commemorations
-        FeastRank54Inner::Octave { .. } => false, // Octaves exclude commemorations
-        FeastRank54Inner::Feria {
-            rank: FeriaClass::GreaterPrivilaged,
-            ..
-        } => false, // Ash Wednesday excludes commemorations
-        _ => true, // Semidouble, Simple, and other ranks allow commemorations
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use std::{
-        collections::{HashMap, HashSet},
-        sync::atomic::AtomicUsize,
-    };
 
-    use itertools::Itertools;
-    use rayon::iter::{
-        IndexedParallelIterator, IntoParallelIterator, ParallelBridge, ParallelIterator,
-    };
+    // rayon iter imports intentionally omitted when unused
     use test_case::test_matrix;
 
     use crate::calender::feast_rank::test::{
@@ -1554,10 +1548,14 @@ mod tests {
                 FeriaClass::GreaterNonPrivilaged,
                 FeriaClass::Lesser,
             ] {
-                for ember_day in [false, true] {
+                for holy_triduum in [false, true] {
+                    if holy_triduum && *rank != FeriaClass::GreaterPrivilaged {
+                        // Holy Triduum only applies to Greater Privileged ferias
+                        continue;
+                    }
                     let mut flags = FeriaFlags::empty();
-                    if ember_day {
-                        flags.insert(FeriaFlags::EMBER_DAY);
+                    if holy_triduum {
+                        flags.insert(FeriaFlags::HOLY_TRIDUUM);
                     }
                     ranks.push(FeastRank54Inner::Feria { rank: *rank, flags });
                 }
@@ -1593,12 +1591,11 @@ mod tests {
             }
 
             // Vigil ranks
-            for &major in &[true, false] {
-                ranks.push(FeastRank54Inner::Vigil { major });
-            }
+            // Single representative for vigil kinds (major/minor distinction removed)
+            ranks.push(FeastRank54Inner::Vigil { kind: VigilKind::Common });
             // Sunday ranks (1-3)
             for rank in &[SundayClass::First, SundayClass::Second, SundayClass::Lesser] {
-                ranks.push(FeastRank54Inner::Sunday { rank: *rank });
+                ranks.push(FeastRank54Inner::Sunday { rank: *rank, flags: SundayFlags::empty() });
             }
             // Octave ranks with all flags combinations
             for &rank in &[
@@ -1647,8 +1644,8 @@ mod tests {
                 (Ok(res1), Ok(res2)) if res1 == res2.reverse() => {
                     // All good
                 }
-                (Err(e1), Err(e2)) => {
-                    // assert_eq!(e1.to_string(), e2.to_string(), "Mismatch between {} and {}", rank1, rank2);
+                (Err(_e1), Err(_e2)) => {
+                    // Both sides failed; nothing to assert here
                 }
 
                 (Ok(res1), Ok(res2)) => {
@@ -1660,7 +1657,7 @@ mod tests {
                         rank2
                     );
                 }
-                (Err(e), Ok(res)) | (Ok(res), Err(e)) => {
+                (Err(e), Ok(_res)) | (Ok(_res), Err(e)) => {
                     core::panic!("One side failed for {} vs {}: {}", rank1, rank2, e);
                 }
             }
@@ -1672,7 +1669,7 @@ mod tests {
         test_feast_rank_enumeration_occurance_graph(
             FeastRank54Inner::enumerate()
                 .into_iter()
-                .map(|r| FeastRank54(r))
+                .map(FeastRank54)
                 .collect(),
         );
     }
@@ -1682,7 +1679,7 @@ mod tests {
         test_feast_rank_enumeration_conflicts(
             FeastRank54Inner::enumerate()
                 .into_iter()
-                .map(|r| FeastRank54(r))
+                .map(FeastRank54)
                 .collect(),
             n,
         );

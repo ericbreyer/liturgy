@@ -185,7 +185,7 @@ impl DateRule {
                     if d.weekday().num_days_from_sunday() == 0 {
                         sundays_in_nov += 1;
                     }
-                    d = d + chrono::Duration::days(1);
+                    d += chrono::Duration::days(1);
                 }
 
                 // Count Sundays after Epiphany that fall before Septuagesima (i.e., available
@@ -198,7 +198,7 @@ impl DateRule {
                     if d2.weekday().num_days_from_sunday() == 0 {
                         sundays_in_epiphany_window += 1;
                     }
-                    d2 = d2 + chrono::Duration::days(1);
+                    d2 += chrono::Duration::days(1);
                 }
 
                 // Canonical maximum number of Epiphany Sundays we may need to place

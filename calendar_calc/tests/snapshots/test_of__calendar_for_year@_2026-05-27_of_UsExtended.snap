@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-05-27|Feria IV week VIII of Ordinary Time|Feria|Feria IV week VIII of Ordinary Time|St. Augustine of Canterbury, Bishop

@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Chair of St. Peter Apostle at Rome, rank: Major Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica II after Epiphany, rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica II after Epiphany, rank: Lesser Sunday }) to Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Chair of St. Peter Apostle at Rome, rank: Major Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2026-01-18|Dominica II after Epiphany|Lesser Sunday|Dominica II after Epiphany|Chair of St. Peter Apostle at Rome, St. Paul, Apostle, St. Prisca, Virgin and Martyr

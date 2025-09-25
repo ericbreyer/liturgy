@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Marius, Martha, Audifax, and Abachum, Martyrs, rank: Simple }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week II after Epiphany, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Marius, Martha, Audifax, and Abachum, Martyrs, rank: Simple }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week II after Epiphany, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-01-19|Feria II week II after Epiphany|Simple|Ss. Marius, Martha, Audifax, and Abachum, Martyrs|St. Canute, King and Martyr

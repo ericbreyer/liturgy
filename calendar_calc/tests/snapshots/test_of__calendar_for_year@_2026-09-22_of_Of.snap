@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-09-22|Feria III week XXV of Ordinary Time|Feria|Feria III week XXV of Ordinary Time|

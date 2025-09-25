@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{calender::{
     DateRule, feast_rank::{FeastRank, FeastRank54, FeastRank62, FeastRankOf}, fuzzy_search::fuzzy_search_best_n, year_calendar::YearCalendar, year_calendar_builder::YearCalendarBuilder
-}, types::ArcStr};
-
+}};
+use types::ArcStr;
 mod feast_rule;
 mod season_rule;
 

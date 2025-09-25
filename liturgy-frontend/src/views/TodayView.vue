@@ -94,14 +94,6 @@ watch(selectedDate, () => {
   loadDayInfo()
 })
 
-// Watch for route changes (date parameter changes)
-watch(
-  () => route.query.date,
-  () => {
-    loadDayInfo()
-  },
-)
-
 onMounted(async () => {
   // Initialize displayed date to current selected date
   displayedDate.value = selectedDate.value
@@ -116,11 +108,21 @@ onMounted(async () => {
 async function loadDayInfo() {
   if (selectedCalendars.value.length === 0) return
 
-  // Cancel any existing request
+  // Cancel any existing request so consumers that support AbortSignal can stop
   if (abortController.value) {
-    abortController.value.abort()
+    try {
+      abortController.value.abort()
+    } catch (e) {
+      // ignore
+    }
   }
-  abortController.value = new AbortController()
+
+  // Create a controller that represents THIS request. We'll only apply
+  // results if this controller is still the active one when the fetches
+  // complete. This prevents stale/slow responses from overwriting newer
+  // data when network latency is high.
+  const currentController = new AbortController()
+  abortController.value = currentController
 
   try {
     backgroundLoading.value = true
@@ -130,22 +132,41 @@ async function loadDayInfo() {
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     const newMap: Record<string, DayInfo> = {}
 
+    console.debug('[TodayView] starting loadDayInfo', {
+      date: selectedDate.value,
+      calendars: selectedCalendars.value,
+      controllerId: currentController,
+    })
+
     await Promise.all(
       selectedCalendars.value.map(async (calendarName) => {
         try {
-          const dayInfo = await api.getDayInfo(calendarName, year, month, day)
+          // Pass the controller.signal so underlying fetch can be aborted.
+          const dayInfo = await api.getDayInfo(
+            calendarName,
+            year,
+            month,
+            day,
+            currentController.signal,
+          )
           newMap[calendarName] = dayInfo
         } catch (err) {
           if (err instanceof Error && err.name === 'AbortError') {
-            return // Request was cancelled
+            // cancelled by AbortController
+            console.debug('[TodayView] request aborted', { calendarName })
+            return
           }
           console.warn(`Could not load day info for ${calendarName}:`, err)
         }
       }),
     )
 
-    // Only update displayed content if this request wasn't cancelled
-    if (!abortController.value?.signal.aborted) {
+    // Only update displayed content if this request is still the active one
+    if (abortController.value === currentController && !currentController.signal.aborted) {
+      console.debug('[TodayView] applying results from loadDayInfo', {
+        date: selectedDate.value,
+        calendars: Object.keys(newMap),
+      })
       todayInfoMap.value = newMap
       displayedData.value = newMap
       displayedDate.value = selectedDate.value
@@ -156,9 +177,14 @@ async function loadDayInfo() {
       error.value = err.message || 'Could not load day info'
     }
   } finally {
-    loading.value = false
-    backgroundLoading.value = false
-    abortController.value = null
+    // Only clear loading state / controller if this is still the active
+    // request. A newer request may have started and replaced
+    // `abortController.value` already.
+    if (abortController.value === currentController) {
+      loading.value = false
+      backgroundLoading.value = false
+      abortController.value = null
+    }
   }
 }
 </script>

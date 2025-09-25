@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-02-07|Sabbato week IV of Ordinary Time|Feria|Sabbato week IV of Ordinary Time|BVM on Saturday

@@ -2,8 +2,8 @@ use std::fmt::Debug;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-
-use crate::{calender::DayType, types::{ArcStr, RcStr}};
+use types::{ArcStr, RcStr};
+use crate::{calender::DayType, };
 mod feast_rank54;
 mod feast_rank62;
 mod feast_rank_of;
@@ -41,6 +41,9 @@ pub struct LiturgicalContext {
     of_lent: bool,
     secondary_day_type: Option<DayType>,
     octave_flags: OctaveFlags,
+    /// Mark that this Sunday is the special Easter or Pentecost Sunday which
+    /// should behave like a First-class Sunday but not admit commemorations.
+    is_easter_or_pentecost: bool,
 }
 
 impl LiturgicalContext {
@@ -58,6 +61,9 @@ impl LiturgicalContext {
     /// Set the feast name
     pub fn feast<S: Into<String>>(mut self, name: S) -> Self {
         self.feast_name = Some(name.into());
+        if self.feast_name.as_deref() == Some("Easter Sunday") || self.feast_name.as_deref() == Some("Pentecost Sunday") {
+            self.is_easter_or_pentecost = true;
+        }
         self
     }
 
@@ -89,6 +95,12 @@ impl LiturgicalContext {
     /// Mark as feast of Our Lord
     pub fn of_our_lord(mut self) -> Self {
         self.of_our_lord = true;
+        self
+    }
+
+    /// Mark that this context represents Easter or Pentecost Sunday behavior
+    pub fn easter_or_pentecost(mut self, v: bool) -> Self {
+        self.is_easter_or_pentecost = v;
         self
     }
 
@@ -144,4 +156,12 @@ pub trait FeastRank: Clone + Debug {
         Self: Sized;
     fn admits_bvm_on_saturday(&self) -> BVMOnSaturdayResult;
     fn id(&self) -> RcStr;
+    /// Whether vigils that fall on Sunday should be transferred to the previous Saturday.
+    /// Default is false; the 1954 implementation opts in.
+    fn transfers_vigil_from_sunday_to_saturday() -> bool
+    where
+        Self: Sized,
+    {
+        false
+    }
 }

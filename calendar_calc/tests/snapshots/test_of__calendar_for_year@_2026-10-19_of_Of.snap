@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-10-19|Feria II week XXIX of Ordinary Time|Feria|Feria II week XXIX of Ordinary Time|Ss. John de Brébeuf, Isaac Jogues, and Companions, Priests and Martyrs, St. Paul of the Cross, Priest

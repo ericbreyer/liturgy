@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 1, flags: FeastFlags(IMMACULATE_CONCEPTION) } (LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary, rank: I }) and Sunday { rank: 1 } (LiturgicalUnit { desc: Dominica II of Advent, rank: I }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds | Comparing final winner Feast { rank: 1, flags: FeastFlags(IMMACULATE_CONCEPTION) } (LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary, rank: I }) to Sunday { rank: 1 } (LiturgicalUnit { desc: Dominica II of Advent, rank: I }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
+expression: split_line.0
 ---
 2024-12-08|Dominica II of Advent|I|The Immaculate Conception of the Blessed Virgin Mary|Dominica II of Advent

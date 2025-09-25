@@ -65,6 +65,17 @@ const minTableWidth = computed(() => {
 async function loadAllCalendarData() {
   if (selectedCalendars.value.length === 0) return
 
+  // Cancel previous request and create controller for this load
+  if ((window as any)._nerdLoadController) {
+    try {
+      ;(window as any)._nerdLoadController.abort()
+    } catch (e) {
+      // ignore
+    }
+  }
+  const currentController = new AbortController()
+  ;(window as any)._nerdLoadController = currentController
+
   isLoading.value = true
   error.value = ''
 
@@ -79,17 +90,23 @@ async function loadAllCalendarData() {
   try {
     const promises = selectedCalendars.value.map(async (calendar, index) => {
       try {
-        const dayInfo = await api.getDayInfo(calendar, year, month, day)
+        const dayInfo = await api.getDayInfo(calendar, year, month, day, currentController.signal)
         calendarData.value[index] = {
           calendar,
           dayInfo,
           loading: false,
         }
       } catch (err) {
-        calendarData.value[index] = {
-          calendar,
-          loading: false,
-          error: err instanceof Error ? err.message : 'Failed to load',
+        if ((err as any)?.name === 'AbortError') {
+          console.debug('[NerdView] request aborted for', { calendar })
+          // Leave loading true/false as best-effort; we'll reset below if this is the active controller
+          calendarData.value[index] = { calendar, loading: false }
+        } else {
+          calendarData.value[index] = {
+            calendar,
+            loading: false,
+            error: err instanceof Error ? err.message : 'Failed to load',
+          }
         }
       }
     })

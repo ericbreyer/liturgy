@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Chair of St. Peter the Apostle, rank: Feast })) and Feria { rank: 4, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Sabbato week VI of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Chair of St. Peter the Apostle, rank: Feast }) to Feria { rank: 4, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Sabbato week VI of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-02-22|Sabbato week VI of Ordinary Time|Feast|The Chair of St. Peter the Apostle|

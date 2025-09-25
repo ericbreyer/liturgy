@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anicetus, Pope and Martyr, rank: Simple }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week I after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anicetus, Pope and Martyr, rank: Simple }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week I after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-04-17|Feria VI week I after the Octave of Easter|Simple|St. Anicetus, Pope and Martyr|

@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: St. Ambrose, Bishop and Doctor of the Church, rank: Memorial })) and Sunday { rank: 1, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica II of Advent, rank: Major Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 1, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica II of Advent, rank: Major Sunday }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Ambrose, Bishop and Doctor of the Church, rank: Memorial }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-12-07|Dominica II of Advent|Major Sunday|Dominica II of Advent|

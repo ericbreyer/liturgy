@@ -51,10 +51,10 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     let date: Date
 
-    if (routeName === 'Today' || routeName === 'Nerd') {
+    if (routeName === 'Today' || routeName === 'Nerd' || routeName == 'Week') {
       date = new Date(year, month - 1, day - 1)
-    } else if (routeName === 'Week') {
-      date = new Date(year, month - 1, day - 7)
+    // } else if (routeName === 'Week') {
+    //   date = new Date(year, month - 1, day - 7)
     } else {
       // Month
       date = new Date(year, month - 2, day) // Go to previous month
@@ -68,10 +68,10 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     let date: Date
 
-    if (routeName === 'Today' || routeName === 'Nerd') {
+    if (routeName === 'Today' || routeName === 'Nerd'|| routeName == 'Week') {
       date = new Date(year, month - 1, day + 1)
-    } else if (routeName === 'Week') {
-      date = new Date(year, month - 1, day + 7)
+    // } else if (routeName === 'Week') {
+    //   date = new Date(year, month - 1, day + 7)
     } else {
       // Month
       date = new Date(year, month, day) // Go to next month

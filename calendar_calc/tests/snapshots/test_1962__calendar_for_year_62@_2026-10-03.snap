@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Teresa of the Child Jesus, Virgin, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XVIII after the octave of Pentecost (Week 4 of September), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Teresa of the Child Jesus, Virgin, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XVIII after the octave of Pentecost (Week 4 of September), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2026-10-03|Sabbato week XVIII after the octave of Pentecost (Week 4 of September)|III|St. Teresa of the Child Jesus, Virgin|

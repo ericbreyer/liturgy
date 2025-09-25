@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Annunciation of the Blessed Virgin Mary, rank: First Class Double }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week III of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Annunciation of the Blessed Virgin Mary, rank: First Class Double }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week III of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
 2025-03-25|Feria III week III of Lent|First Class Double|Annunciation of the Blessed Virgin Mary|Feria III week III of Lent

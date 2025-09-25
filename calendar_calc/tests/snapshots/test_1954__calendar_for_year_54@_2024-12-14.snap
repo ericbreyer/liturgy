@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week II of Advent, rank: Greater Non-Privileged Feria }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 7 in the Octave of The Immaculate Conception, rank: Day within a Common Octave }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 7 in the Octave of The Immaculate Conception, rank: Day within a Common Octave }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week II of Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
 2024-12-14|Sabbato week II of Advent|Day within a Common Octave|Day 7 in the Octave of The Immaculate Conception|Sabbato week II of Advent

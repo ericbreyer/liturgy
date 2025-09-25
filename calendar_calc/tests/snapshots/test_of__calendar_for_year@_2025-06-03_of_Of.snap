@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Ss. Charles Lwanga and Companions, Martyrs, rank: Memorial })) and Feria { rank: 3, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III week VII of Eastertide, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Charles Lwanga and Companions, Martyrs, rank: Memorial }) to Feria { rank: 3, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III week VII of Eastertide, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-06-03|Feria III week VII of Eastertide|Memorial|Ss. Charles Lwanga and Companions, Martyrs|

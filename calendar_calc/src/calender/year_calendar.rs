@@ -2,7 +2,7 @@ use chrono::NaiveDate;
 use serde::{ser::SerializeStruct as _, Serialize};
 
 use crate::calender::{feast_rank::FeastRank, LiturgicalUnit};
-use crate::types::ArcStr;
+use types::ArcStr;
 
 #[derive(Debug, Clone)]
 pub struct DayDescription {

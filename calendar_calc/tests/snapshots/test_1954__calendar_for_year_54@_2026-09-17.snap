@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Impression of the sacred Stigmata of St. Francis, Confessor, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XVI after the octave of Pentecost (Week 3 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Impression of the sacred Stigmata of St. Francis, Confessor, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XVI after the octave of Pentecost (Week 3 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-09-17|Feria V week XVI after the octave of Pentecost (Week 3 of September)|Double|Impression of the sacred Stigmata of St. Francis, Confessor|

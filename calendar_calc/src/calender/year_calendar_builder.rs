@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use chrono::{Datelike, Days, NaiveDate, TimeDelta};
+use chrono::{Datelike, Days, NaiveDate};
 
 use crate::{
     calender::{
@@ -9,8 +9,9 @@ use crate::{
     date_calc::{
         get_following_sunday, get_preceding_sunday, num_sundays_after_date_inclusive,
         num_weeks_after_date, to_month_string, to_roman_numeral,
-    }, types::ArcStr,
+    }
 };
+use types::ArcStr;
 
 #[derive(Debug, Clone)]
 pub struct YearCalendarBuilder {
@@ -52,11 +53,32 @@ impl YearCalendarBuilder {
                 color: self.get_season_color(&date),
             };
 
-            let feast_competitors: Vec<_> = self
-                .get_feasts_on_date(&date)
-                .into_iter()
-                .map(|f| (f.get_feastrank::<R>(), f.into_liturgical_unit::<R>(date)))
-                .collect();
+            // When the rank implementation opts into transferring vigils from Sunday to Saturday,
+            // do not include Vigil-type feasts on the Sunday itself; they will be added as
+            // transferred competitors on the previous Saturday instead.
+            let feast_competitors: Vec<_> = {
+                let feasts = self.get_feasts_on_date(&date);
+                let feasts = if date.weekday() == chrono::Weekday::Sun
+                    && R::transfers_vigil_from_sunday_to_saturday()
+                {
+                    feasts
+                        .into_iter()
+                        .filter(|f| {
+                            !matches!(
+                                f.day_type.as_ref().unwrap_or(&DayType::Feast),
+                                DayType::Vigil
+                            )
+                        })
+                        .collect::<Vec<_>>()
+                } else {
+                    feasts
+                };
+
+                feasts
+                    .into_iter()
+                    .map(|f| (f.get_feastrank::<R>(), f.into_liturgical_unit::<R>(date)))
+                    .collect()
+            };
 
             let has_ferial_or_sunday = feast_competitors
                 .iter()
@@ -110,6 +132,27 @@ impl YearCalendarBuilder {
                         .filter(|_| !has_high_festival)
                         .map(|(rank, unit)| (rank, unit.transfered())),
                 )
+                    // If the current date is a Saturday, and the feast-rank implementation
+                    // opts into transferring vigils that fall on Sunday, then look for
+                    // vigils defined on the following day (Sunday) and add them as transferred
+                    // competitors so they appear on Saturday.
+                    .chain((date.weekday() == chrono::Weekday::Sat
+                        && R::transfers_vigil_from_sunday_to_saturday()).then(|| {
+                        // Look for feasts that occur on the following day which are vigils
+                        let sunday = date + chrono::Duration::days(1);
+                        self.get_feasts_on_date(&sunday)
+                            .into_iter()
+                            .filter(|f| matches!(f.day_type.as_ref().unwrap_or(&DayType::Feast), DayType::Vigil))
+                            .map(|f| {
+                                let mut unit = f.clone().into_liturgical_unit::<R>(sunday);
+                                // mark as transferred so the calendar builder treats it correctly
+                                unit = unit.transfered();
+                                // The transferred unit should occur on the previous Saturday
+                                unit.date = date;
+                                (f.get_feastrank::<R>(), unit)
+                            })
+                            .collect::<Vec<_>>()
+                    }).into_iter().flatten())
                 .collect();
 
             // Only consume the transfer if we actually used it
@@ -174,7 +217,17 @@ impl YearCalendarBuilder {
                 debug_trace: result.debug_trace.join(" | ").into(),
             });
 
-            transfer = transfer.or(result.transferred);
+            // Only carry a transfer forward if it's not already a transferred unit
+            // (i.e., one we created because the feast originally fell on Sunday
+            // and was moved to Saturday). This prevents a vigil that we moved
+            // to Saturday from being transferred again to Sunday.
+            if transfer.is_none() {
+                if let Some((rank, unit)) = result.transferred {
+                    if !unit.desc.contains("(transferred)") {
+                        transfer = Some((rank, unit));
+                    }
+                }
+            }
         }
         YearCalendar {
             year: self.year,

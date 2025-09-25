@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Sacred Heart of Jesus, rank: First Class Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Sacred Heart of Jesus, rank: First Class Double }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 4 in the Octave of Nativity of St. John the Baptist, rank: Day within a Common Octave }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Sacred Heart of Jesus, rank: First Class Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Sacred Heart of Jesus, rank: First Class Double }) to Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 4 in the Octave of Nativity of St. John the Baptist, rank: Day within a Common Octave }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2025-06-27|Feria VI week II after the octave of Pentecost|First Class Double|Sacred Heart of Jesus|

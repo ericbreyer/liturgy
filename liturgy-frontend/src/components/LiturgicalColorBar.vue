@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const sizeMap = {
-  small: { width: '3px', height: '2rem' },
+  small: { width: '3px', height: '1.5rem' },
   medium: { width: '4px', height: '3rem' },
   large: { width: '6px', height: '4rem' },
 }
@@ -48,9 +48,11 @@ const style = computed(() => {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
+/* @import '../styles/liturgical.css'; */
 .liturgical-color-bar {
-  /* any local one-off tweaks can go here; base styling lives in liturgical.css */
+  width: 6px;
   border-radius: 2px;
+  flex-shrink: 0;
+  align-self: baseline;
 }
 </style>

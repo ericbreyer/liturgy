@@ -36,6 +36,7 @@ name = "Christmas"
 begin = "PreviousYear(Fixed(12,25))"
 end = "OffsetDays(Fixed(1,14), -1)"
 color = "white"
+sunday_rank = "III"
 
 [[feasts]]
 name = "Nativity of Our Lord"
@@ -1390,6 +1391,12 @@ rank = "double"
 color = "red"
 titles = ["Bishop", "Martyr"]
 
+[[feasts]]
+name = "Vigil of Ss. Peter and Paul"
+date_rule = "Fixed(6,28)"
+rank = "minor"
+color = "white"
+day_type = "vigil"
 
 [[feasts]]
 name = "Ss. Peter and Paul"
@@ -1589,6 +1596,13 @@ date_rule = "Fixed(7,23)"
 rank = "double"
 color = "red"
 titles = ["Martyr"]
+
+[[feasts]]
+name = "St. Liborius"
+date_rule = "Fixed(7,23)"
+rank = "commemoration"
+color = "white"
+titles = ["Bishop", "Confessor"]
 
 
 [[feasts]]
@@ -1815,6 +1829,13 @@ date_rule = "OffsetDays(Fixed(8,15), -1)"
 day_type = "vigil"
 rank = "minor"
 color = "violet"
+
+[[feasts]]
+name = "St. Eusebius"
+date_rule = "Fixed(8,14)"
+rank = "commemoration"
+color = "red"
+titles = ["Confessor"]
 
 [[feasts]]
 name = "Assumption of the Blessed Virgin Mary"
@@ -2821,6 +2842,7 @@ name = "The Holy Innocents"
 date_rule = "Fixed(12,28)"
 rank = "second class double"
 color = "red"
+of_our_lord = true
 
 [[octaves]]
 name = "the Holy Innocents"
@@ -2925,7 +2947,7 @@ color = "red"
 # September Ember Days - first Wednesday after Exaltation of Holy Cross (Sept 14)
 [[feasts]]
 name = "Ember Wednesday in September"
-date_rule = "OffsetDays(Fixed(9,14), 3)"
+date_rule = "OffsetDays(OffsetSundays(Fixed(9,14), 1), -4)"
 day_type = "feria"
 type = "feria"
 rank = "greater non-privileged"
@@ -2933,7 +2955,7 @@ color = "green"
 
 [[feasts]]
 name = "Ember Friday in September"
-date_rule = "OffsetDays(Fixed(9,14), 5)"
+date_rule = "OffsetDays(OffsetSundays(Fixed(9,14), 1), -2)"
 day_type = "feria"
 type = "feria"
 rank = "greater non-privileged"
@@ -2941,7 +2963,7 @@ color = "green"
 
 [[feasts]]
 name = "Ember Saturday in September"
-date_rule = "OffsetDays(Fixed(9,14), 6)"
+date_rule = "OffsetDays(OffsetSundays(Fixed(9,14), 1), -1)"
 day_type = "feria"
 type = "feria"
 rank = "greater non-privileged"
@@ -3151,13 +3173,6 @@ day_type = "vigil"
 rank = "major"
 color = "violet"
 
-
-[[feasts]]
-name = "Vigil of Ss. Peter and Paul"
-date_rule = "OffsetDays(Fixed(6,29), -1)"
-day_type = "vigil"
-rank = "minor"
-color = "violet"
 
 [[feasts]]
 name = "Vigil of St. Laurence"

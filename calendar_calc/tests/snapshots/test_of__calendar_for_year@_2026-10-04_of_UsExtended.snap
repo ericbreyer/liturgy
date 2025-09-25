@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: St. Francis of Assisi, Confessor, rank: Memorial })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXVII of Ordinary Time, rank: Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXVII of Ordinary Time, rank: Sunday }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Francis of Assisi, Confessor, rank: Memorial }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2026-10-04|Dominica XXVII of Ordinary Time|Sunday|Dominica XXVII of Ordinary Time|

@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(OF_THE_LORD) } (Some(LiturgicalUnit { desc: The Exaltation of the Holy Cross, rank: Feast })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXIV of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 2, flags: FeastFlags(OF_THE_LORD) } (LiturgicalUnit { desc: The Exaltation of the Holy Cross, rank: Feast }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXIV of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-09-14|Dominica XXIV of Ordinary Time|Feast|The Exaltation of the Holy Cross|

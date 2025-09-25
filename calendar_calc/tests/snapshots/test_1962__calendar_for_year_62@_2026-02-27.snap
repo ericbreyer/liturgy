@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Friday of Lent, rank: II }) and Feast { rank: 3, flags: FeastFlags(MOVABLE) } (LiturgicalUnit { desc: St. Gabriel of Our Lady of Sorrows, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds | Comparing final winner Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Friday of Lent, rank: II }) to Feast { rank: 3, flags: FeastFlags(MOVABLE) } (LiturgicalUnit { desc: St. Gabriel of Our Lady of Sorrows, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
+expression: split_line.0
 ---
 2026-02-27|Feria VI week I of Lent|II|Ember Friday of Lent|St. Gabriel of Our Lady of Sorrows

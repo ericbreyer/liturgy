@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Sunday { rank: First } (LiturgicalUnit { desc: Dominica I of Advent, rank: Greater Sunday of the First Class }) and Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Andrew, Apostle, rank: Second Class Double }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Sunday { rank: First } (LiturgicalUnit { desc: Dominica I of Advent, rank: Greater Sunday of the First Class }) to Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Andrew, Apostle, rank: Second Class Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2025-11-30|Dominica I of Advent|Greater Sunday of the First Class|Dominica I of Advent|St. Andrew, Apostle

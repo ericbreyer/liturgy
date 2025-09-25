@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica II after Pentecost, rank: Lesser Sunday }) and Octave { rank: Privileged2, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Sunday in the Octave of Corpus Christi , rank: Day within a Privileged 2nd Class Octave }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica II after Pentecost, rank: Lesser Sunday }) to Octave { rank: Privileged2, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Sunday in the Octave of Corpus Christi , rank: Day within a Privileged 2nd Class Octave }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-06-07|Dominica II after Pentecost|Lesser Sunday|Sunday in the Octave of Corpus Christi |

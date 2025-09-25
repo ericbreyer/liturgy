@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Damasus I, Pope and Confessor, rank: III }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week II of Advent, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Damasus I, Pope and Confessor, rank: III }) to Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week II of Advent, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers"
+expression: split_line.0
 ---
 2024-12-11|Feria IV week II of Advent|III|St. Damasus I, Pope and Confessor|Feria IV week II of Advent

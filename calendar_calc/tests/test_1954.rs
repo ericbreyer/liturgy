@@ -30,7 +30,7 @@ pub fn initialize() {
 }
 
 #[test_matrix(
-    2025..=2025
+    2025..=2026
 )]
 fn test_calendar_for_year_54(year: i32) {
     initialize();

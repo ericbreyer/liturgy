@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-10-03|Sabbato week XXVI of Ordinary Time|Feria|Sabbato week XXVI of Ordinary Time|BVM on Saturday

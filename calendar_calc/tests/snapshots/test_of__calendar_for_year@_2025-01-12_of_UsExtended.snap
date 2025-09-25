@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 2, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (Some(LiturgicalUnit { desc: The Baptism of the Lord, rank: Feast })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica in Christmas, rank: Sunday }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 2, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (LiturgicalUnit { desc: The Baptism of the Lord, rank: Feast }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica in Christmas, rank: Sunday }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-01-12|Dominica in Christmas|Feast|The Baptism of the Lord|

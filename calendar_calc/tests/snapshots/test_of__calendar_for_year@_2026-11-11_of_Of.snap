@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: St. Martin of Tours, Bishop, rank: Memorial })) and Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria IV week XXXII of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Martin of Tours, Bishop, rank: Memorial }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria IV week XXXII of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2026-11-11|Feria IV week XXXII of Ordinary Time|Memorial|St. Martin of Tours, Bishop|

@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-08-07|Feria VI week XVIII of Ordinary Time|Feria|Feria VI week XVIII of Ordinary Time|St. Sixtus II and Companions, Pope and Martyrs, St. Cajetan, Priest

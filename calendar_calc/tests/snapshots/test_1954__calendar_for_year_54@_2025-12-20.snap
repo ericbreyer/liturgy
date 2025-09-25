@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Vigil { major: false } (LiturgicalUnit { desc: Vigil of St. Thomas, Apostle, rank: Minor Vigil }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Saturday in Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Saturday in Advent, rank: Greater Non-Privileged Feria }) to Vigil { major: false } (LiturgicalUnit { desc: Vigil of St. Thomas, Apostle, rank: Minor Vigil }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2025-12-20|Sabbato week III of Advent|Greater Non-Privileged Feria|Ember Saturday in Advent|Vigil of St. Thomas, Apostle

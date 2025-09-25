@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cyprian and Justina, Virgin and Martyrs, rank: Simple }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XVII after the octave of Pentecost (Week 4 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cyprian and Justina, Virgin and Martyrs, rank: Simple }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XVII after the octave of Pentecost (Week 4 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-09-26|Sabbato week XVII after the octave of Pentecost (Week 4 of September)|Simple|BVM on Saturday|Ss. Cyprian and Justina, Virgin and Martyrs

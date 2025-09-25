@@ -18,12 +18,12 @@ use feast_rank::LiturgicalContext;
 // === Re-exports for external use ===
 pub use liturgical_unit::LiturgicalUnit;
 
-use crate::{calender::{
+use crate::calender::{
     feast_rank::{FeastRank54, FeastRank62, FeastRankOf},
     generic_calendar::{CalendarType, FeastRule, GenericCalendar},
     year_calendar::{DayDescription, YearCalendar},
-}, types::ArcStr};
-
+};
+use types::ArcStr;
 #[derive(Debug, Clone)]
 /// Handle for working with liturgical calendars loaded from configuration files
 pub struct GenericCalendarHandle(GenericCalendar);
@@ -117,7 +117,11 @@ impl GenericCalendarHandle {
 
     /// Get feast name suggestions using fuzzy matching
     pub fn suggest_feast_names(&self, name: &str) -> Vec<(String, f32)> {
-        self.0.suggest_feast_names(name).into_iter().map(|(n, score)| (n.to_string(), score)).collect()
+        self.0
+            .suggest_feast_names(name)
+            .into_iter()
+            .map(|(n, score)| (n.to_string(), score))
+            .collect()
     }
 
     pub fn commemoration_interpretation(&self) -> &str {

@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Saturday of September, rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cosmas and Damian, Martyrs, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds | Comparing final winner Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Saturday of September, rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cosmas and Damian, Martyrs, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
+expression: split_line.0
 ---
 2025-09-27|Sabbato week XV after the octave of Pentecost (Week 3 of September)|II|Ember Saturday of September|Ss. Cosmas and Damian, Martyrs

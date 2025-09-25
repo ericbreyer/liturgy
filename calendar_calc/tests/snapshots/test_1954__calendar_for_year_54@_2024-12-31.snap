@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Sylvester I, Pope and Confessor, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Sylvester I, Pope and Confessor, rank: Double }) and Octave { rank: Privileged3, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 7 in the Octave of Christmas, rank: Day within a Privileged 3rd Class Octave }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Sylvester I, Pope and Confessor, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Sylvester I, Pope and Confessor, rank: Double }) to Octave { rank: Privileged3, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 7 in the Octave of Christmas, rank: Day within a Privileged 3rd Class Octave }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
 2024-12-31|Feria III week II of Christmas|Double|St. Sylvester I, Pope and Confessor|Day 7 in the Octave of Christmas

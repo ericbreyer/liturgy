@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: "Resolving between Feast { rank: 1, flags: FeastFlags(MOVABLE) } (Some(LiturgicalUnit { desc: The Epiphany of the Lord, rank: Solemnity })) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Neumann, Bishop, rank: Memorial }) |     -> Occurrence result: FirstWins | Resolving between Feast { rank: 1, flags: FeastFlags(MOVABLE) } (Some(LiturgicalUnit { desc: The Epiphany of the Lord, rank: Solemnity })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica in Christmas, rank: Sunday }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(MOVABLE) } (LiturgicalUnit { desc: The Epiphany of the Lord, rank: Solemnity }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Neumann, Bishop, rank: Memorial }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(MOVABLE) } (LiturgicalUnit { desc: The Epiphany of the Lord, rank: Solemnity }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica in Christmas, rank: Sunday }) |     -> Occurrence result: FirstWins"
+expression: split_line.0
 ---
 2025-01-05|Dominica in Christmas|Solemnity|The Epiphany of the Lord|

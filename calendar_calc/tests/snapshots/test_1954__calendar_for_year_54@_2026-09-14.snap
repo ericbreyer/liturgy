@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Exaltation of the Holy Cross, rank: Major Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XVI after the octave of Pentecost (Week 3 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: MajorDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Exaltation of the Holy Cross, rank: Major Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XVI after the octave of Pentecost (Week 3 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-09-14|Feria II week XVI after the octave of Pentecost (Week 3 of September)|Major Double|Exaltation of the Holy Cross|

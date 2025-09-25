@@ -16,15 +16,17 @@ pub struct WebConfig {
     /// If set and `build_frontend` is true, the backend will run the frontend build
     /// before starting and serve files from `<frontend_dir>/dist`.
     pub frontend_dir: Option<String>,
+    pub debug_delay: bool,
 }
 
 impl Default for WebConfig {
     fn default() -> Self {
         Self {
-            host: "127.0.0.1".to_string(),
+            host: "0.0.0.0".to_string(),
             port: 3000,
             calendar_data_dir: "../calendar_calc/calendar_data".to_string(),
             frontend_dir: "../liturgy-frontend".to_string().into(),
+            debug_delay: false,
         }
     }
 }

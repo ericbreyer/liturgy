@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cosmas and Damian, Martyrs, rank: Semidouble }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XVIII after Pentecost (Week 5 of September), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XVIII after Pentecost (Week 5 of September), rank: Lesser Sunday }) to Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cosmas and Damian, Martyrs, rank: Semidouble }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
+---
+2026-09-27|Dominica XVIII after Pentecost (Week 5 of September)|Lesser Sunday|Dominica XVIII after Pentecost (Week 5 of September)|Ss. Cosmas and Damian, Martyrs

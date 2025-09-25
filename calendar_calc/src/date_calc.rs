@@ -1,6 +1,6 @@
 use chrono::{Datelike, NaiveDate};
 
-use crate::types::ArcStr;
+use types::ArcStr;
 
 pub(crate) fn get_preceding_sunday(date: NaiveDate) -> NaiveDate {
     let weekday = date.weekday();

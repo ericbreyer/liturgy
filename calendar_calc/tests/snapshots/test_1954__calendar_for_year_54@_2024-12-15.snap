@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Sunday { rank: Second } (LiturgicalUnit { desc: Dominica III of Advent, rank: Greater Sunday of the Second Class }) and Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of The Immaculate Conception, rank: Major Double (Octave Day) }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Sunday { rank: Second } (LiturgicalUnit { desc: Dominica III of Advent, rank: Greater Sunday of the Second Class }) to Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of The Immaculate Conception, rank: Major Double (Octave Day) }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
 2024-12-15|Dominica III of Advent|Greater Sunday of the Second Class|Dominica III of Advent|Octave Day of The Immaculate Conception

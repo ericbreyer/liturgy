@@ -1,5 +1,6 @@
 ---
-source: tests/test_of.rs
-expression: line
+source: calendar_calc/tests/test_of.rs
+description: ""
+expression: split_line.0
 ---
 2026-07-23|Feria V week XVI of Ordinary Time|Feria|Feria V week XVI of Ordinary Time|St. Bridget, Religious

@@ -1,5 +1,6 @@
 ---
-source: tests/test_1954.rs
-expression: line
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Marius, Martha, Audifax, and Abachum, Martyrs, rank: Simple }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica II after Epiphany, rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica II after Epiphany, rank: Lesser Sunday }) to Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Marius, Martha, Audifax, and Abachum, Martyrs, rank: Simple }) |     -> Occurrence result: FirstCommemorationOfSecond"
+expression: split_line.0
 ---
 2025-01-19|Dominica II after Epiphany|Lesser Sunday|Dominica II after Epiphany|Ss. Marius, Martha, Audifax, and Abachum, Martyrs, St. Canute, King and Martyr

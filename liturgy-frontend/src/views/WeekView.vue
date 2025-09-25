@@ -36,7 +36,7 @@ const {
   goToPrevious: goToPreviousWeek,
   goToNext: goToNextWeek,
   route,
-} = useDateNavigation('Week')
+} = useDateNavigation('Today')
 
 // Get week dates centered around displayed date
 const weekDates = computed(() => {
@@ -47,7 +47,7 @@ const weekDates = computed(() => {
   const centerDate = new Date(year, month - 1, day)
   const dates = []
 
-  for (let i = -3; i <= 3; i++) {
+  for (let i = -1; i <= 7; i++) {
     const date = new Date(centerDate.getTime() + i * 24 * 60 * 60 * 1000)
     dates.push({
       dateString: date.toISOString().split('T')[0],
@@ -79,12 +79,16 @@ async function loadWeekInfo() {
     return
   }
 
-  // Cancel previous request
+  // Cancel previous request and create a controller for this request
   if (abortController.value) {
-    abortController.value.abort()
+    try {
+      abortController.value.abort()
+    } catch (e) {
+      // ignore
+    }
   }
-  abortController.value = new AbortController()
-
+  const currentController = new AbortController()
+  abortController.value = currentController
   try {
     loading.value = true
     const newWeekMap: Record<string, Record<string, DayInfo>> = {}
@@ -93,26 +97,54 @@ async function loadWeekInfo() {
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     const centerDate = new Date(year, month - 1, day)
 
-    for (let i = -3; i <= 3; i++) {
+    // Create per-date promises so we can fetch all dates in parallel (each date still parallelizes calendars)
+    const datePromises: Array<Promise<{ dateString: string; dayMap: Record<string, DayInfo> | null }>> = []
+    for (let i = 0; i <= 7; i++) {
       const currentDate = new Date(centerDate.getTime() + i * 24 * 60 * 60 * 1000)
       const dateString = currentDate.toISOString().split('T')[0]
-      const dayMap: Record<string, DayInfo> = {}
 
-      for (const calendarName of selectedCalendars.value) {
-        try {
+      const datePromise = (async () => {
+        const dayMap: Record<string, DayInfo> = {}
+
+        const promises = selectedCalendars.value.map(async (calendarName) => {
           const [dayYear, dayMonth, dayDay] = dateString.split('-').map(Number)
-          const dayInfo = await api.getDayInfo(calendarName, dayYear, dayMonth, dayDay)
-          dayMap[calendarName] = dayInfo
-        } catch (err: any) {
-          if (err.name !== 'AbortError') {
-            console.warn(`Could not load day info for ${calendarName} on ${dateString}:`, err)
+          try {
+            const dayInfo = await api.getDayInfo(
+              calendarName,
+              dayYear,
+              dayMonth,
+              dayDay,
+              currentController.signal,
+            )
+            return { calendarName, status: 'fulfilled', value: dayInfo }
+          } catch (err: any) {
+            return { calendarName, status: 'rejected', reason: err }
+          }
+        })
+
+        const results = await Promise.all(promises)
+        for (const res of results) {
+          if (res.status === 'fulfilled' && res.value) {
+            dayMap[res.calendarName] = res.value as DayInfo
+          } else {
+            const err = res.reason
+            if (err && err.name === 'AbortError') {
+              console.debug('[WeekView] request aborted', { calendarName: res.calendarName, dateString })
+            } else {
+              console.warn(`Could not load day info for ${res.calendarName} on ${dateString}:`, err)
+            }
           }
         }
-      }
 
-      if (Object.keys(dayMap).length > 0) {
-        newWeekMap[dateString] = dayMap
-      }
+        return { dateString, dayMap: Object.keys(dayMap).length > 0 ? dayMap : null }
+      })()
+
+      datePromises.push(datePromise)
+    }
+
+    const dateResults = await Promise.all(datePromises)
+    for (const dr of dateResults) {
+      if (dr.dayMap) newWeekMap[dr.dateString] = dr.dayMap
     }
 
     if (!abortController.value.signal.aborted) {

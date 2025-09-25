@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Vigil { kind: Epiphany } (LiturgicalUnit { desc: Vigil of the Epiphany, rank: Vigil (Epiphany) }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { kind: Epiphany } (LiturgicalUnit { desc: Vigil of the Epiphany, rank: Vigil (Epiphany) }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-01-05|Feria II week III of Christmas|Vigil (Epiphany)|Vigil of the Epiphany|St. Telesphorus, Pope and Martyr

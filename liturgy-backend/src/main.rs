@@ -23,6 +23,11 @@ struct Args {
     /// Port to listen on
     #[arg(long, default_value_t = 3000)]
     port: u16,
+
+    /// Enable debug delay (for testing loading indicators)
+    /// flag
+    #[arg(long, default_value_t = false)]
+    debug_delay: bool,
 }
 
 #[tokio::main]
@@ -34,6 +39,7 @@ async fn main() -> Result<()> {
         port: args.port,
         calendar_data_dir: args.calendar_data_dir,
         frontend_dir: args.frontend_dir,
+        debug_delay: args.debug_delay,
     };
 
     run_web_app(config).await

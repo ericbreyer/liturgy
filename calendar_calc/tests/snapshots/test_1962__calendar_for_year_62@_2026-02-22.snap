@@ -1,5 +1,6 @@
 ---
-source: tests/test_1962.rs
-expression: line
+source: calendar_calc/tests/test_1962.rs
+description: "Resolving between Sunday { rank: 1 } (LiturgicalUnit { desc: Dominica I of Lent, rank: I }) and Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Chair of St. Peter, rank: II }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 1 } (LiturgicalUnit { desc: Dominica I of Lent, rank: I }) to Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Chair of St. Peter, rank: II }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
 ---
 2026-02-22|Dominica I of Lent|I|Dominica I of Lent|

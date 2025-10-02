@@ -1,0 +1,19 @@
+antiphons = [
+  "Watchman, tell us of the night",
+  "The dayspring from on high hath visited us",
+  "Comfort ye, comfort ye my people",
+  "Rejoice greatly, O daughter of Zion",
+  "Glory to God in the highest"
+]
+psalms = [
+  { verse = [ { reference = "Ps. 95", text = "O come, let us worship and fall down: let us kneel before the Lord our Maker" } ] },
+  { verse = [ { reference = "Ps. 98", text = "O sing unto the Lord a new song; for he hath done marvellous things" } ] }
+]
+chapter = "Arise, shine; for thy light is come"
+hymn_title = "Lo! He Comes with Clouds Descending"
+hymn_verses = [
+  "Lo! He comes with clouds descending, Once for favoured sinners slain"
+]
+verse = { verse = "O come, let us worship", response = "and fall down before him" }
+magnificat_antiphon = "Behold, a star shall arise out of Jacob"
+collect = "Stir up, we beseech thee, O Lord, the wills of thy faithful people..."

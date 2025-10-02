@@ -1,0 +1,13 @@
+antiphons = [
+  "Alleluia. Christ is risen" ,
+  "Christ our passover is sacrificed for us"
+]
+psalms = [
+  { verse = [ { reference = "Ps. 118", text = "This is the day which the Lord hath made; we will rejoice and be glad in it." } ] }
+]
+chapter = "Christ being raised from the dead dieth no more"
+hymn_title = "The Day of Resurrection"
+hymn_verses = ["The day of resurrection! Earth, tell it out abroad;"]
+verse = { verse = "Alleluia!", response = "For the Lord is risen indeed" }
+magnificat_antiphon = "Alleluia, alleluia"
+collect = "O God, who for our redemption didst give thine only-begotten Son to the death of the cross..."

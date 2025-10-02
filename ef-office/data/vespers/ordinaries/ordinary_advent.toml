@@ -1,0 +1,17 @@
+antiphons = [
+  "When the sun was set, the disciples were gathered together",
+  "The Lord will give strength unto his people",
+  "The meek shall inherit the earth",
+  "Behold, the days shall come",
+  "Let us bless the Father, and the Son, and the Holy Spirit"
+]
+chapter = "Behold, the days shall come, saith the Lord"
+hymn_title = "O Come, O Come, Emmanuel"
+hymn_verses = [
+  "O come, O come, Emmanuel, and ransom captive Israel",
+  "That mourns in lonely exile here until the Son of God appear"
+]
+[verse]
+verse = "O Lord, show thy mercy"
+response = "And grant us thy salvation"
+collect = "Almighty God, give us grace to look for that blessed hope and the coming of our Saviour, Jesus Christ."

@@ -1,0 +1,13 @@
+antiphons = [
+  "Unto us a child is born",
+  "For unto us a child is born"
+]
+chapter = "For unto us a child is born, unto us a son is given"
+hymn_title = "O Come, All Ye Faithful"
+hymn_verses = [
+  "O come, all ye faithful, joyful and triumphant"
+]
+[verse]
+verse = "The Lord is come into his garden"
+response = "To bring us life and salvation"
+collect = "Almighty God, who hast given us thy only-begotten Son to take our nature upon him..."

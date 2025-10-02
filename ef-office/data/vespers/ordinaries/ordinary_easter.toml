@@ -1,0 +1,16 @@
+antiphons = [
+  "This is the day which the Lord hath made",
+  "Alleluia, alleluia, alleluia",
+  "The Lord is risen indeed",
+  "I will sing unto the Lord as long as I live",
+  "Let us bless the Father, and the Son, and the Holy Spirit"
+]
+chapter = "I am the resurrection, and the life"
+hymn_title = "Jesus Christ is Risen Today"
+hymn_verses = [
+  "Jesus Christ is risen today, Alleluia!"
+]
+[verse]
+verse = "O give thanks unto the Lord, for he is good"
+response = "For his mercy endureth for ever"
+collect = "Almighty God, who through thine only-begotten Son Jesus Christ hast overcome death..."

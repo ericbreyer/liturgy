@@ -1,14 +1,18 @@
 use std::collections::HashMap;
 
-use chrono::NaiveDate;
+use chrono::{Datelike, NaiveDate};
 pub use feast_rule::FeastRule;
 pub use season_rule::SeasonRule;
 use serde::{Deserialize, Serialize};
-
-use crate::{calender::{
-    DateRule, feast_rank::{FeastRank, FeastRank54, FeastRank62, FeastRankOf}, fuzzy_search::fuzzy_search_best_n, year_calendar::YearCalendar, year_calendar_builder::YearCalendarBuilder
-}};
 use types::ArcStr;
+
+use crate::calender::{
+    feast_rank::{FeastRank54, FeastRank62, FeastRankOf, FeastRankResolver},
+    fuzzy_search::fuzzy_search_best_n,
+    year_calendar::YearCalendar,
+    year_calendar_builder::YearCalendarBuilder,
+    DateRule,
+};
 mod feast_rule;
 mod season_rule;
 
@@ -146,7 +150,10 @@ impl GenericCalendar {
     }
 
     /// Create a year calendar for a specific liturgical year
-    pub fn instantiate_62_for_lit_year(&self, lit_year: i32) -> YearCalendar<FeastRank62> {
+    pub fn instantiate_62_for_lit_year(
+        &self,
+        lit_year: i32,
+    ) -> YearCalendar<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
         // First, figure out when Advent starts to determine which feasts belong to which year
         let advent_season = self
             .seasons
@@ -227,7 +234,10 @@ impl GenericCalendar {
     }
 
     /// Create a 1954 calendar year calendar for a specific liturgical year
-    pub fn instantiate_54_for_lit_year(&self, lit_year: i32) -> YearCalendar<FeastRank54> {
+    pub fn instantiate_54_for_lit_year(
+        &self,
+        lit_year: i32,
+    ) -> YearCalendar<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
         // First, figure out when Advent starts to determine which feasts belong to which year
         let advent_season = self
             .seasons
@@ -283,7 +293,18 @@ impl GenericCalendar {
             .iter()
             .map(|f| f.instantiate_for_lit_year_with_advent(lit_year))
             .fold(HashMap::new(), |mut acc: HashMap<_, Vec<_>>, feast| {
+                if feast.date_rule.year() < lit_year {
+                    let mut feast_next_year = feast.clone();
+                    feast_next_year.date_rule = feast_next_year
+                        .date_rule
+                        .with_year(lit_year)
+                        .expect("Failed to adjust feast date to current year");
+                    acc.entry(feast_next_year.date_rule)
+                        .or_default()
+                        .push(feast_next_year);
+                }
                 acc.entry(feast.date_rule).or_default().push(feast);
+                // if the feast is in the previous year, also add it for the current year
                 acc
             });
 
@@ -308,7 +329,10 @@ impl GenericCalendar {
     }
 
     /// Create an Ordinary Form year calendar for a specific liturgical year
-    pub fn instantiate_of_for_lit_year(&self, lit_year: i32) -> YearCalendar<FeastRankOf> {
+    pub fn instantiate_of_for_lit_year(
+        &self,
+        lit_year: i32,
+    ) -> YearCalendar<<FeastRankOf as FeastRankResolver>::FeastRankDescriptor> {
         // First, figure out when Advent starts to determine which feasts belong to which year
         let advent_season = self
             .seasons

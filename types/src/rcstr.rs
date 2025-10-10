@@ -1,4 +1,8 @@
-use std::{fmt::{Debug, Display}, ops::Deref, rc::Rc};
+use std::{
+    fmt::{Debug, Display},
+    ops::Deref,
+    rc::Rc,
+};
 
 use serde::{Deserialize, Serialize};
 
@@ -13,9 +17,7 @@ use crate::ArcStr;
 /// boundary.
 
 #[derive(Serialize, Deserialize)]
-pub struct  RcStr(Rc<str>);
-
-
+pub struct RcStr(Rc<str>);
 
 impl From<String> for RcStr {
     fn from(s: String) -> Self {
@@ -40,7 +42,7 @@ impl Deref for RcStr {
 impl Clone for RcStr {
     fn clone(&self) -> Self {
         RcStr(self.0.clone())
-    }   
+    }
 }
 
 impl Debug for RcStr {

@@ -1,10 +1,10 @@
 use chrono::{Datelike, NaiveDate};
 use serde::{Deserialize, Serialize};
-
-use crate::{calender::{
-    DateRule, DayType, LiturgicalContext, LiturgicalUnit, feast_rank::FeastRank
-}};
 use types::ArcStr;
+
+use crate::calender::{
+    feast_rank::FeastRankResolver, DateRule, DayType, LiturgicalContext, LiturgicalUnit,
+};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FeastRule<DateType> {
     pub name: ArcStr,
@@ -21,11 +21,11 @@ pub struct FeastRule<DateType> {
 }
 
 impl<DateType> FeastRule<DateType> {
-    pub fn into_liturgical_unit<R>(self, date: NaiveDate) -> LiturgicalUnit
+    pub fn into_liturgical_unit<R>(self, date: NaiveDate) -> LiturgicalUnit<R::FeastRankDescriptor>
     where
-        R: FeastRank,
+        R: FeastRankResolver,
     {
-        let rank = self.get_feastrank::<R>().get_rank_string();
+        let rank = self.get_feastrank::<R>().descriptor();
         LiturgicalUnit {
             desc: self.to_string().into(),
             rank,
@@ -37,7 +37,7 @@ impl<DateType> FeastRule<DateType> {
     /// Get the effective FeastRank, either from the new field or converted from legacy fields
     pub fn get_feastrank<R>(&self) -> R
     where
-        R: FeastRank,
+        R: FeastRankResolver,
     {
         // Convert from legacy fields
         let rank = self.rank.as_deref().unwrap_or("III");

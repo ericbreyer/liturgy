@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of All Saints, rank: Vigil }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXII after the octave of Pentecost (Week 4 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of All Saints, rank: Vigil }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXII after the octave of Pentecost (Week 4 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-10-31|Sabbato week XXII after the octave of Pentecost (Week 4 of October)|Vigil|Vigil of All Saints|

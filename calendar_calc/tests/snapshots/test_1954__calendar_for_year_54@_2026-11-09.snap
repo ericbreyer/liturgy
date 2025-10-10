@@ -1,0 +1,6 @@
+---
+source: calendar_calc/tests/test_1954.rs
+description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Dedication of the Archbasilica of the most Holy Saviour, rank: Second Class Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXIV after the octave of Pentecost (Week 2 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Dedication of the Archbasilica of the most Holy Saviour, rank: Second Class Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXIV after the octave of Pentecost (Week 2 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
+expression: split_line.0
+---
+2026-11-09|Feria II week XXIV after the octave of Pentecost (Week 2 of November)|Second Class Double|Dedication of the Archbasilica of the most Holy Saviour|St. Theodore, Martyr

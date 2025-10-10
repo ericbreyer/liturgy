@@ -2,8 +2,9 @@ use std::fmt::Debug;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use types::{ArcStr, RcStr};
-use crate::{calender::DayType, };
+use types::{ArcStr, DayRank, RcStr};
+
+use crate::calender::DayType;
 mod feast_rank54;
 mod feast_rank62;
 mod feast_rank_of;
@@ -24,6 +25,42 @@ bitflags::bitflags! {
 impl Default for OctaveFlags {
     fn default() -> Self {
         OctaveFlags::empty()
+    }
+}
+
+bitflags::bitflags! {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
+    /// Flags used for Feria (weekday) special cases across feast rank implementations
+    pub struct FeriaFlags: u8 {
+        const OF_LENT = 0b00000001;
+        const LENT = 0b00000001;
+
+        const EMBER_DAY = 0b00000010;
+        const HOLY_TRIDUUM = 0b00000100;
+    }
+}
+
+bitflags::bitflags! {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
+    /// Flags describing properties of a feast
+    pub struct FeastFlags: u8 {
+        // Both names exist historically in submodules; keep both for backwards
+        // compatibility (they map to the same mask).
+        const OF_OUR_LORD = 0b00000001;
+        const OF_THE_LORD = 0b00000001;
+
+        const IMMACULATE_CONCEPTION = 0b00000010;
+        const MOVABLE = 0b00000100;
+        const ALL_SOULS = 0b00001000;
+    }
+}
+
+bitflags::bitflags! {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
+    /// Flags describing Sunday-specific properties
+    pub struct SundayFlags: u8 {
+        const WAS_OCTAVE = 0b00000001;
+        const EASTER_OR_PENTECOST = 0b00000010;
     }
 }
 
@@ -61,7 +98,9 @@ impl LiturgicalContext {
     /// Set the feast name
     pub fn feast<S: Into<String>>(mut self, name: S) -> Self {
         self.feast_name = Some(name.into());
-        if self.feast_name.as_deref() == Some("Easter Sunday") || self.feast_name.as_deref() == Some("Pentecost Sunday") {
+        if self.feast_name.as_deref() == Some("Easter Sunday")
+            || self.feast_name.as_deref() == Some("Pentecost Sunday")
+        {
             self.is_easter_or_pentecost = true;
         }
         self
@@ -122,7 +161,7 @@ impl LiturgicalContext {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ResolveConflictsResult<R: FeastRank, T: Clone> {
+pub struct ResolveConflictsResult<R: FeastRankResolver, T: Clone> {
     pub winner: T,
     pub winner_rank: R,
     pub transferred: Option<(R, T)>,
@@ -140,11 +179,14 @@ pub enum BVMOnSaturdayResult {
     /// The rank admits BVM on Saturday, and the current feast is commemorated
     OtherCommemorated,
 }
-pub trait FeastRank: Clone + Debug {
+pub trait FeastRankResolver: Clone + Debug {
+    type FeastRankDescriptor: DayRank;
+
     fn resolve_conflicts<T>(competetors: &[(Self, T)]) -> Result<ResolveConflictsResult<Self, T>>
     where
         // Self: Sized,
         T: Clone + Debug;
+
     fn new_with_context(rank: &str, day_type: &DayType, context: &LiturgicalContext) -> Self
     where
         Self: Sized;
@@ -156,6 +198,7 @@ pub trait FeastRank: Clone + Debug {
         Self: Sized;
     fn admits_bvm_on_saturday(&self) -> BVMOnSaturdayResult;
     fn id(&self) -> RcStr;
+    fn descriptor(&self) -> Self::FeastRankDescriptor;
     /// Whether vigils that fall on Sunday should be transferred to the previous Saturday.
     /// Default is false; the 1954 implementation opts in.
     fn transfers_vigil_from_sunday_to_saturday() -> bool

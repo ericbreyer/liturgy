@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 # local crates
 calendar_calc = { path = "../calendar_calc" }
+types = { path = "../types" }
 
 chrono = "0.4"
 serde = { version = "1.0", features = ["derive"] }

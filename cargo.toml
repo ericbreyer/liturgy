@@ -1,4 +1,4 @@
 [workspace]
-members = ["calendar_calc", "liturgy-backend", "types"]
+members = ["calendar_calc", "cross-proc-cache", "ordo", "liturgy-backend", "types"]
 resolver = "3"
 

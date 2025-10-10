@@ -1,17 +1,20 @@
 use std::collections::HashMap;
 
-use chrono::{Datelike, Days, NaiveDate};
+use chrono::{Datelike, NaiveDate};
+use types::{ArcStr, DayDescription};
 
 use crate::{
     calender::{
-        DayType, LiturgicalContext, LiturgicalUnit, feast_rank::{BVMOnSaturdayResult, FeastRank}, generic_calendar::{CalendarType, FeastRule, SeasonRule}, year_calendar::{DayDescription, YearCalendar}
+        feast_rank::{BVMOnSaturdayResult, FeastRankResolver},
+        generic_calendar::{CalendarType, FeastRule, SeasonRule},
+        year_calendar::YearCalendar,
+        DayType, LiturgicalContext, LiturgicalUnit,
     },
     date_calc::{
         get_following_sunday, get_preceding_sunday, num_sundays_after_date_inclusive,
         num_weeks_after_date, to_month_string, to_roman_numeral,
-    }
+    },
 };
-use types::ArcStr;
 
 #[derive(Debug, Clone)]
 pub struct YearCalendarBuilder {
@@ -27,9 +30,9 @@ pub struct YearCalendarBuilder {
 }
 
 impl YearCalendarBuilder {
-    pub fn generate_year_calendar<R>(&self) -> YearCalendar<R>
+    pub fn generate_year_calendar<R>(&self) -> YearCalendar<R::FeastRankDescriptor>
     where
-        R: FeastRank,
+        R: FeastRankResolver,
     {
         let mut days = Vec::new();
         // Diagnostic: print instantiated seasons and octaves to help debug range coverage
@@ -40,7 +43,7 @@ impl YearCalendarBuilder {
         let next_first_advent = self.next_first_advent;
         let end = next_first_advent.pred_opt().unwrap();
 
-        let mut transfer: Option<(R, LiturgicalUnit)> = None;
+        let mut transfer: Option<(R, LiturgicalUnit<R::FeastRankDescriptor>)> = None;
 
         for date in start.iter_days().take_while(|&d| d <= end) {
             let season_desc = self.get_season_descriptor(&date);
@@ -48,7 +51,7 @@ impl YearCalendarBuilder {
             let season_rank: R = self.season_day_to_feast_rank(&date);
             let season_liturgical_unit = LiturgicalUnit {
                 desc: season_desc.clone(),
-                rank: season_rank.clone().get_rank_string(),
+                rank: season_rank.clone().descriptor(),
                 date,
                 color: self.get_season_color(&date),
             };
@@ -85,7 +88,7 @@ impl YearCalendarBuilder {
                 .any(|(r, _)| r.is_ferial_or_sunday_rank());
 
             // If an octave exists on this date, create an octave competitor but do not replace the season
-            let octave_competitors: Vec<(R, LiturgicalUnit)> = self
+            let octave_competitors: Vec<(R, LiturgicalUnit<R::FeastRankDescriptor>)> = self
                 .octaves
                 .iter()
                 .filter(|s| date >= *s.begin() && date <= *s.end())
@@ -105,7 +108,7 @@ impl YearCalendarBuilder {
                     let r = R::new_with_context(rank, &DayType::Octave, &ctx);
                     let unit = LiturgicalUnit {
                         desc: self.get_octave_descriptor(&date, oct),
-                        rank: r.clone().get_rank_string(),
+                        rank: r.clone().descriptor(),
                         date,
                         color: oct.color().into(),
                     };
@@ -132,17 +135,24 @@ impl YearCalendarBuilder {
                         .filter(|_| !has_high_festival)
                         .map(|(rank, unit)| (rank, unit.transfered())),
                 )
-                    // If the current date is a Saturday, and the feast-rank implementation
-                    // opts into transferring vigils that fall on Sunday, then look for
-                    // vigils defined on the following day (Sunday) and add them as transferred
-                    // competitors so they appear on Saturday.
-                    .chain((date.weekday() == chrono::Weekday::Sat
-                        && R::transfers_vigil_from_sunday_to_saturday()).then(|| {
+                // If the current date is a Saturday, and the feast-rank implementation
+                // opts into transferring vigils that fall on Sunday, then look for
+                // vigils defined on the following day (Sunday) and add them as transferred
+                // competitors so they appear on Saturday.
+                .chain(
+                    (date.weekday() == chrono::Weekday::Sat
+                        && R::transfers_vigil_from_sunday_to_saturday())
+                    .then(|| {
                         // Look for feasts that occur on the following day which are vigils
                         let sunday = date + chrono::Duration::days(1);
                         self.get_feasts_on_date(&sunday)
                             .into_iter()
-                            .filter(|f| matches!(f.day_type.as_ref().unwrap_or(&DayType::Feast), DayType::Vigil))
+                            .filter(|f| {
+                                matches!(
+                                    f.day_type.as_ref().unwrap_or(&DayType::Feast),
+                                    DayType::Vigil
+                                )
+                            })
                             .map(|f| {
                                 let mut unit = f.clone().into_liturgical_unit::<R>(sunday);
                                 // mark as transferred so the calendar builder treats it correctly
@@ -152,7 +162,10 @@ impl YearCalendarBuilder {
                                 (f.get_feastrank::<R>(), unit)
                             })
                             .collect::<Vec<_>>()
-                    }).into_iter().flatten())
+                    })
+                    .into_iter()
+                    .flatten(),
+                )
                 .collect();
 
             // Only consume the transfer if we actually used it
@@ -170,16 +183,16 @@ impl YearCalendarBuilder {
                     BVMOnSaturdayResult::NotAdmitted => {}
                     BVMOnSaturdayResult::Admitted => {
                         // Add BVM on Saturday
-                        result.winner.bvm_on_saturday::<R>();
+                        bvm_on_saturday::<R>(&mut result.winner);
                     }
                     BVMOnSaturdayResult::Commemorated => {
                         result
                             .commemorations
-                            .push(LiturgicalUnit::bvm_on_saturday_commemoration::<R>(date));
+                            .push(bvm_on_saturday_commemoration::<R>(date));
                     }
                     BVMOnSaturdayResult::OtherCommemorated => {
                         result.commemorations.push(result.winner.clone());
-                        result.winner.bvm_on_saturday::<R>();
+                        bvm_on_saturday::<R>(&mut result.winner);
                     }
                 }
             }
@@ -234,7 +247,6 @@ impl YearCalendarBuilder {
             #[cfg(test)]
             name: self.name.clone(),
             days: days.into_boxed_slice(),
-            __marker: std::marker::PhantomData,
         }
     }
     pub fn get_season_color(&self, date: &NaiveDate) -> ArcStr {
@@ -297,6 +309,7 @@ impl YearCalendarBuilder {
                                 NaiveDate::from_ymd_opt(preceding_sunday.year(), month, 1).unwrap();
                             get_following_sunday(first_of_month)
                         };
+
                         let week_of_month = num_sundays_after_date_inclusive(
                             first_sunday_of_month,
                             preceding_sunday,
@@ -304,36 +317,87 @@ impl YearCalendarBuilder {
                         format!(" (Week {} of {})", week_of_month, to_month_string(month))
                     }
                     true => {
-                        // Old scheme: count from the closest sunday to the first of the month
+                        // Old scheme: the "first Sunday of the month" is the Sunday
+                        // closest to the 1st of the calendar month (may fall in the
+                        // previous month). To decide whether the current week's
+                        // starting Sunday belongs to this calendar month or the next,
+                        // compute the nearest Sunday to the 1st of this month and the
+                        // nearest Sunday to the 1st of the next month and compare.
                         let preceding_sunday = get_preceding_sunday(*date);
-                        let mut month = date.month();
-                        let first_of_next_month = if month == 12 {
-                            NaiveDate::from_ymd_opt(date.year() + 1, 1, 1).unwrap()
+
+                        let cur_month = date.month();
+                        let cur_year = date.year();
+                        let (next_month, next_year) = if cur_month == 12 {
+                            (1, cur_year + 1)
                         } else {
-                            NaiveDate::from_ymd_opt(date.year(), month + 1, 1).unwrap()
+                            (cur_month + 1, cur_year)
                         };
 
-                        if first_of_next_month - preceding_sunday
-                            <= preceding_sunday + Days::new(7) - first_of_next_month
-                        {
-                            month += 1;
-                        };
+                        let first_of_cur = NaiveDate::from_ymd_opt(cur_year, cur_month, 1).unwrap();
+                        let first_of_next =
+                            NaiveDate::from_ymd_opt(next_year, next_month, 1).unwrap();
 
-                        let first_of_month =
-                            NaiveDate::from_ymd_opt(date.year(), month, 1).unwrap();
+                        let cur_before = get_preceding_sunday(first_of_cur);
+                        let cur_after = get_following_sunday(first_of_cur);
+                        let nearest_cur =
+                            if first_of_cur.signed_duration_since(cur_before).num_days()
+                                <= cur_after.signed_duration_since(first_of_cur).num_days()
+                            {
+                                cur_before
+                            } else {
+                                cur_after
+                            };
 
-                        let first_sunday_before = get_preceding_sunday(first_of_month);
-                        let first_sunday_after = get_following_sunday(first_of_month);
-                        let first_sunday = if first_of_month - first_sunday_before
-                            < first_sunday_after - first_of_month
-                        {
-                            first_sunday_before
+                        let next_before = get_preceding_sunday(first_of_next);
+                        let next_after = get_following_sunday(first_of_next);
+                        let nearest_next =
+                            if first_of_next.signed_duration_since(next_before).num_days()
+                                <= next_after.signed_duration_since(first_of_next).num_days()
+                            {
+                                next_before
+                            } else {
+                                next_after
+                            };
+
+                        // Decide which calendar month this week's Sunday counts for.
+                        // If the week's starting Sunday equals the nearest Sunday of the
+                        // next month, attribute it to the next month. If the week's
+                        // starting Sunday is before the nearest Sunday for the current
+                        // month, then it belongs to the previous month (avoid "Week 0").
+                        let (prev_month, prev_year) = if cur_month == 1 {
+                            (12, cur_year - 1)
                         } else {
-                            first_sunday_after
+                            (cur_month - 1, cur_year)
                         };
+
+                        let first_of_prev =
+                            NaiveDate::from_ymd_opt(prev_year, prev_month, 1).unwrap();
+                        let prev_before = get_preceding_sunday(first_of_prev);
+                        let prev_after = get_following_sunday(first_of_prev);
+                        let nearest_prev =
+                            if first_of_prev.signed_duration_since(prev_before).num_days()
+                                <= prev_after.signed_duration_since(first_of_prev).num_days()
+                            {
+                                prev_before
+                            } else {
+                                prev_after
+                            };
+
+                        let (label_month, first_sunday) = if preceding_sunday == nearest_next {
+                            (next_month, nearest_next)
+                        } else if preceding_sunday < nearest_cur {
+                            (prev_month, nearest_prev)
+                        } else {
+                            (cur_month, nearest_cur)
+                        };
+
                         let week_of_month =
                             num_sundays_after_date_inclusive(first_sunday, preceding_sunday);
-                        format!(" (Week {} of {})", week_of_month, to_month_string(month))
+                        format!(
+                            " (Week {} of {})",
+                            week_of_month,
+                            to_month_string(label_month)
+                        )
                     }
                 }
             }
@@ -395,7 +459,7 @@ impl YearCalendarBuilder {
 
     pub fn season_day_to_feast_rank<R>(&self, date: &NaiveDate) -> R
     where
-        R: FeastRank,
+        R: FeastRankResolver,
     {
         // Determine season-only rank; octaves are handled separately by the builder as competitors
         let season = self.get_season(date);
@@ -557,6 +621,22 @@ impl YearCalendarBuilder {
                 *date,
             )
         }
+    }
+}
+
+pub fn bvm_on_saturday<R: FeastRankResolver>(lu: &mut LiturgicalUnit<R::FeastRankDescriptor>) {
+    lu.desc = "BVM on Saturday".into();
+    lu.rank = R::get_bvm_on_saturday_rank().unwrap().descriptor();
+}
+
+pub fn bvm_on_saturday_commemoration<R: FeastRankResolver>(
+    date: NaiveDate,
+) -> LiturgicalUnit<R::FeastRankDescriptor> {
+    LiturgicalUnit {
+        desc: "BVM on Saturday".into(),
+        rank: R::get_bvm_on_saturday_rank().unwrap().descriptor(),
+        date,
+        color: "white".into(),
     }
 }
 

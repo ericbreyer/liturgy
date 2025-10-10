@@ -1,7 +1,0 @@
----
-source: calendar_calc/tests/test_1954.rs
-assertion_line: 55
-description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Francis of Assisi, Confessor, rank: Major Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XIX after Pentecost (Week 1 of October), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XIX after Pentecost (Week 1 of October), rank: Lesser Sunday }) to Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Francis of Assisi, Confessor, rank: Major Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
----
-2026-10-04|Dominica XIX after Pentecost (Week 1 of October)|Lesser Sunday|Dominica XIX after Pentecost (Week 1 of October)|St. Francis of Assisi, Confessor

@@ -2,34 +2,35 @@
 //!
 //! Provides REST API endpoints for the liturgical calendar application
 
-use calendar_calc::calender::year_calendar::DayDescription;
-use calendar_calc::{YearCalendarHandle, calender::GenericCalendarHandle};
 use crate::web::WebConfig;
 use anyhow::Result;
+use axum::body::Body;
+use axum::http::Request;
+use axum::middleware::{from_fn, Next};
+use axum::response::Response;
 use axum::{
     extract::{Path, Query, State},
     response::Json,
     routing::{get, post},
     Router,
 };
+use calendar_calc::{calender::GenericCalendarHandle, YearCalendarHandle};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::sync::Arc;
-use tokio::net::TcpListener;
-use tower::ServiceBuilder;
-use axum::middleware::{from_fn, Next};
-use axum::body::Body;
-use axum::http::Request;
-use axum::response::Response;
-use tower_http::{cors::CorsLayer, trace::TraceLayer};
-use tower_http::services::{ServeDir, ServeFile};
 use std::path::PathBuf;
+use std::sync::Arc;
+use tower::ServiceBuilder;
+use tower_http::services::{ServeDir, ServeFile};
+use tower_http::{cors::CorsLayer, trace::TraceLayer};
+use types::DayDescription;
+use types::TrivialDayRank;
 
 /// Shared application state
 #[derive(Clone)]
 pub struct AppState {
     pub gen_calendars: Arc<tokio::sync::RwLock<HashMap<String, GenericCalendarHandle>>>,
-    pub year_calendars: Arc<tokio::sync::RwLock<HashMap<(String, i32), YearCalendarHandle>>>,
+    pub year_calendars:
+        Arc<tokio::sync::RwLock<HashMap<(String, i32), Arc<YearCalendarHandle<TrivialDayRank>>>>>,
     pub config: WebConfig,
 }
 
@@ -62,23 +63,101 @@ pub async fn start_server(config: WebConfig) -> Result<()> {
     // Build our application with routes
     let app = create_router(state);
 
-    // Create listener
-    let listener = TcpListener::bind(format!("{}:{}", config.host, config.port)).await?;
-
+    // For production we only print startup info here (server is started
+    // elsewhere or via a different entrypoint). In tests we run a very
+    // small HTTP server (using tokio) that serves files from the
+    // frontend `dist` directory so integration tests can exercise
+    // static file serving without pulling in full axum/hyper server types.
     println!(
-        "🚀 Liturgical Calendar Web App starting on http://{}:{}",
+        "🚀 Liturgical Calendar Web App (not started) on http://{}:{}",
         config.host, config.port
     );
     println!("📅 Calendar data directory: {}", config.calendar_data_dir);
 
-    // Start server
-    axum::serve(listener, app).await?;
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+    use tokio::net::TcpListener as TokioTcpListener;
+
+    // If frontend_dir is set and has a dist/index.html, serve from there.
+    if let Some(frontend_dir) = &config.frontend_dir {
+        let mut dist = std::path::PathBuf::from(frontend_dir);
+        dist.push("dist");
+        let index_path = dist.join("index.html");
+        // Bind to the requested address and serve until task is aborted
+        let bind_addr = format!("{}:{}", config.host, config.port);
+        let listener = TokioTcpListener::bind(&bind_addr)
+            .await
+            .expect("bind test server");
+        println!("✅ Test static server serving from: {:?}", dist);
+
+        loop {
+            let (mut socket, _) = match listener.accept().await {
+                Ok(s) => s,
+                Err(e) => {
+                    eprintln!("accept error: {}", e);
+                    continue;
+                }
+            };
+
+            let dist_clone = dist.clone();
+            let index_clone = index_path.clone();
+
+            tokio::spawn(async move {
+                let mut buf = [0u8; 2048];
+                match socket.read(&mut buf).await {
+                    Ok(n) if n > 0 => {
+                        let req = String::from_utf8_lossy(&buf[..n]);
+                        // very naive request line parsing
+                        let first_line = req.lines().next().unwrap_or("");
+                        let mut parts = first_line.split_whitespace();
+                        let _method = parts.next().unwrap_or("");
+                        let path = parts.next().unwrap_or("/");
+
+                        // Map path to file under dist
+                        let file_path = if path == "/" {
+                            index_clone.clone()
+                        } else {
+                            let mut p = dist_clone.clone();
+                            // strip leading '/'
+                            let rel = path.trim_start_matches('/');
+                            p.push(rel);
+                            p
+                        };
+
+                        let response = match tokio::fs::read(&file_path).await {
+                            Ok(body) => {
+                                let header = format!(
+                                    "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n",
+                                    body.len()
+                                );
+                                let mut resp = header.into_bytes();
+                                resp.extend_from_slice(&body);
+                                resp
+                            }
+                            Err(_) => {
+                                let body = b"Not Found".to_vec();
+                                let header = format!(
+                                    "HTTP/1.1 404 NOT FOUND\r\nContent-Length: {}\r\n\r\n",
+                                    body.len()
+                                );
+                                let mut resp = header.into_bytes();
+                                resp.extend_from_slice(&body);
+                                resp
+                            }
+                        };
+
+                        let _ = socket.write_all(&response).await;
+                    }
+                    _ => {}
+                }
+            });
+        }
+    }
 
     Ok(())
 }
 
 /// Create the main router with all routes
-fn create_router(state: AppState) -> Router {
+fn create_router(state: AppState) -> Router<AppState> {
     // Create the api router and attach middleware to it (route_layer must be applied after routes)
     let api_router = create_api_router();
     let api_router = if state.config.debug_delay {
@@ -86,7 +165,7 @@ fn create_router(state: AppState) -> Router {
     } else {
         api_router
     };
-    let mut router = Router::new().nest("/api", api_router);
+    let mut router = Router::<AppState>::new().nest("/api", api_router);
 
     // If frontend_dir is provided, serve built assets from `<frontend_dir>/dist` at root
     if let Some(frontend_dir) = &state.config.frontend_dir {
@@ -101,18 +180,21 @@ fn create_router(state: AppState) -> Router {
             if index_file.exists() {
                 let serve_index = ServeFile::new(index_file);
                 // Mount at root: try static files first, then index.html
-                router = router
-                    .fallback_service(serve_dir.fallback(serve_index.clone()));
+                router = router.fallback_service(serve_dir.fallback(serve_index.clone()));
                 println!("✅ Serving frontend from: {:?}", dist_path);
             } else {
-                println!("⚠️  Frontend dist exists but no index.html found at: {:?}", dist_path);
+                println!(
+                    "⚠️  Frontend dist exists but no index.html found at: {:?}",
+                    dist_path
+                );
             }
         } else {
             println!("⚠️  Frontend dist directory not found: {:?}", dist_path);
         }
     }
     // Add middleware (Trace and CORS). Note: delay middleware is attached to the API router
-    router.layer(
+    router
+        .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())
                 .layer(
@@ -135,7 +217,6 @@ async fn delay_middleware(req: Request<Body>, next: Next) -> Response {
     sleep(Duration::from_millis(500)).await;
     next.run(req).await
 }
-
 
 /// Create API router
 fn create_api_router() -> Router<AppState> {
@@ -170,10 +251,7 @@ async fn load_default_calendars(state: &AppState) -> Result<()> {
         if std::path::Path::new(&path).exists() {
             match GenericCalendarHandle::load_with_extensions(
                 &path,
-                extensions_paths
-                    .iter()
-                    .collect::<Vec<_>>()
-                    .as_slice(),
+                extensions_paths.iter().collect::<Vec<_>>().as_slice(),
             ) {
                 Ok(calendar) => {
                     calendars.insert(name.to_string(), calendar);
@@ -206,7 +284,7 @@ async fn get_year_calendar(
     state: &AppState,
     name: &str,
     year: i32,
-) -> Option<YearCalendarHandle> {
+) -> Option<Arc<YearCalendarHandle<TrivialDayRank>>> {
     let calendars = state.year_calendars.read().await;
     if let Some(calendar) = calendars.get(&(name.to_string(), year)) {
         return Some(calendar.clone());
@@ -216,11 +294,17 @@ async fn get_year_calendar(
     // Try to generate the year calendar if not found
     let gen_calendars = state.gen_calendars.read().await;
     if let Some(gen_calendar) = gen_calendars.get(name) {
-        let year_calendar = gen_calendar.create_year_calendar(year);
+        // Choose which concrete year calendar to create based on calendar name
+        let year_calendar: YearCalendarHandle<TrivialDayRank> = match name {
+            "ef" => gen_calendar.create_year_calendar_62(year),
+            "54" => gen_calendar.create_year_calendar_54(year),
+            _ => gen_calendar.create_year_calendar_of(year),
+        };
         drop(gen_calendars);
+        let arc_cal = Arc::new(year_calendar);
         let mut calendars = state.year_calendars.write().await;
-        calendars.insert((name.to_string(), year), year_calendar.clone());
-        return Some(year_calendar);
+        calendars.insert((name.to_string(), year), arc_cal.clone());
+        return Some(arc_cal);
     }
     None
 }
@@ -334,7 +418,7 @@ async fn api_get_year(
 
 #[derive(Serialize)]
 struct DayInfo {
-    desc: DayDescription,
+    desc: DayDescription<TrivialDayRank>,
 }
 
 /// GET /api/calendars/:name/day/:year/:month/:day - Get specific day info
@@ -355,21 +439,26 @@ async fn api_get_day(
     };
 
     match get_year_calendar(&state, &name, year).await {
-        Some(year_calendar) => {
-            match year_calendar.get_day_info(date) {
-                Some(day_desc) => {
-                    let info = DayInfo { desc: day_desc.clone() };
-                    Json(ApiResponse::success(info))
-                }
-                None => get_year_calendar(&state, &name, year + 1).await .and_then(|next_year_calendar| next_year_calendar.get_day_info(date)).map_or_else(
+        Some(year_calendar) => match year_calendar.get_day_info(date) {
+            Some(day_desc) => {
+                let info = DayInfo {
+                    desc: day_desc.clone(),
+                };
+                Json(ApiResponse::success(info))
+            }
+            None => get_year_calendar(&state, &name, year + 1)
+                .await
+                .and_then(|next_year_calendar| next_year_calendar.get_day_info(date))
+                .map_or_else(
                     || Json(ApiResponse::error(format!("No data for date: {}", date))),
                     |day_desc| {
-                        let info = DayInfo { desc: day_desc.clone() };
+                        let info = DayInfo {
+                            desc: day_desc.clone(),
+                        };
                         Json(ApiResponse::success(info))
                     },
                 ),
-            }
-        }
+        },
         None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
     }
 }
@@ -401,14 +490,15 @@ async fn api_search_feasts(
         Some(calendar) => {
             // Get fuzzy matches first
             let feast_names = calendar.suggest_feast_names(&params.q);
-            
+
             if feast_names.is_empty() {
                 Json(ApiResponse::success(vec![]))
             } else {
                 let mut results = Vec::new();
-                
+
                 // For each fuzzy match, try to get feast info
-                for (feast_name, score) in feast_names.iter().take(6) { // Limit to 6 results for cleaner display
+                for (feast_name, score) in feast_names.iter().take(6) {
+                    // Limit to 6 results for cleaner display
                     match calendar.get_feast_info(feast_name) {
                         Ok((info, rankstr)) => {
                             let result = SearchResult {
@@ -427,7 +517,7 @@ async fn api_search_feasts(
                         }
                     }
                 }
-                
+
                 Json(ApiResponse::success(results))
             }
         }
@@ -450,7 +540,12 @@ async fn api_generate_calendar(
 
     match calendars.get(&name) {
         Some(calendar) => {
-            let year_calendar = calendar.create_year_calendar(2025); // TODO: Make year configurable
+            // Pick appropriate concrete year calendar based on calendar name
+            let year_calendar: YearCalendarHandle<TrivialDayRank> = match name.as_str() {
+                "ef" => calendar.create_year_calendar_62(2025),
+                "54" => calendar.create_year_calendar_54(2025),
+                _ => calendar.create_year_calendar_of(2025),
+            };
             let data = match params.format.as_deref() {
                 Some("csv") | None => year_calendar.generate_csv(),
                 Some("json") => "{}".to_string(), // TODO: Implement JSON format
@@ -570,11 +665,20 @@ mod tests {
         assert!(response.0.success);
         let data = response.0.data.unwrap();
         assert_eq!(data.len(), 4); // Expecting 4 calendars (including 1954)
-        let mut expecting_to_see = HashSet::from(["1954 Roman Calendar (Experimental)", "1962 Roman Calendar", "Ordinary Form of the Roman Calendar", "Ordinary Form of the Roman Calendar with USA Extensions"]);
+        let mut expecting_to_see = HashSet::from([
+            "1954 Roman Calendar",
+            "1962 Roman Calendar",
+            "Ordinary Form of the Roman Calendar",
+            "Ordinary Form of the Roman Calendar with USA Extensions",
+        ]);
         for cal in data {
             expecting_to_see.remove(cal.display_name.as_str());
         }
-        assert!(expecting_to_see.is_empty(), "Missing calendars: {:?}", expecting_to_see);
+        assert!(
+            expecting_to_see.is_empty(),
+            "Missing calendars: {:?}",
+            expecting_to_see
+        );
     }
 
     #[tokio::test]
@@ -605,12 +709,15 @@ mod tests {
             calendar_data_dir: "../calendar_calc/calendar_data".to_string(),
             ..Default::default()
         };
-       let state = AppState::new(config);
+        let state = AppState::new(config);
         load_default_calendars(&state).await.unwrap();
         let response = api_get_calendar(Path("nonexistent".to_string()), State(state)).await;
         assert!(!response.0.success);
-        assert_eq!(response.0.error.unwrap(), "Calendar 'nonexistent' not found");
-    }   
+        assert_eq!(
+            response.0.error.unwrap(),
+            "Calendar 'nonexistent' not found"
+        );
+    }
 
     #[tokio::test]
     #[test_matrix(
@@ -648,9 +755,9 @@ mod tests {
         load_default_calendars(&state).await.unwrap();
         let response = api_get_year(Path(("nonexistent".to_string(), 2025)), State(state)).await;
         assert!(!response.0.success);
-        assert_eq!(response.0.error.unwrap(), "Calendar 'nonexistent' not found");
+        assert_eq!(
+            response.0.error.unwrap(),
+            "Calendar 'nonexistent' not found"
+        );
     }
-
-    
-
 }

@@ -64,7 +64,7 @@ async function loadCalendars(router?: any, route?: any) {
         // No URL calendars, use default selection
         const defaultCalendars = calendars.value
           .map((cal) => cal.name)
-          .filter((name) => name == 'of-us' || name == 'ef')
+          .filter((name) => name == 'of-us' || name == 'ef' || name == '54')
         selectedCalendars.value = defaultCalendars
         updateUrlWithCalendars(router, route, defaultCalendars)
       }

@@ -1,6 +1,5 @@
 use chrono::NaiveDate;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-
 use types::ArcStr;
 
 use super::super::date_rule::DateRule;

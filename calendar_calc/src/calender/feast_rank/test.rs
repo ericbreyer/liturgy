@@ -1,25 +1,19 @@
 #![cfg(test)]
 
-use std::{
-    collections::{HashMap, HashSet},
-    sync::atomic::AtomicUsize,
-};
+use std::collections::{HashMap, HashSet};
 
 use itertools::Itertools as _;
 use rayon::prelude::*;
 
-use crate::calender::feast_rank::FeastRank;
+use crate::calender::feast_rank::FeastRankResolver;
 
-pub fn test_feast_rank_enumeration_conflicts<FR: Sized + FeastRank + Send + PartialEq>(
+pub fn test_feast_rank_enumeration_conflicts<FR: Sized + FeastRankResolver + Send + PartialEq>(
     enumeration: Vec<FR>,
     n: usize,
 ) {
-
     println!("{} Variants", enumeration.len());
     let cs: Vec<_> = enumeration.into_iter().combinations(n).collect();
     println!("{} Combinations of {}", cs.len(), n);
-    let l = cs.len();
-    let i = AtomicUsize::new(0);
     println!();
     cs.into_par_iter().enumerate().for_each(|(_, c)| {
         c.into_iter()
@@ -73,7 +67,9 @@ pub fn test_feast_rank_enumeration_conflicts<FR: Sized + FeastRank + Send + Part
     });
 }
 
-fn build_occurance_graph<FR: FeastRank>(enumeration: Vec<FR>) -> HashMap<String, HashSet<String>> {
+fn build_occurance_graph<FR: FeastRankResolver>(
+    enumeration: Vec<FR>,
+) -> HashMap<String, HashSet<String>> {
     let mut adj_list = HashMap::new();
     for (feast1, feast2) in itertools::iproduct!(enumeration.iter(), enumeration.iter()) {
         let rank1 = format!("{}", feast1.id());
@@ -159,7 +155,7 @@ fn build_occurance_graph<FR: FeastRank>(enumeration: Vec<FR>) -> HashMap<String,
     adj_list
 }
 
-pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRank>(enumeration: Vec<FR>) {
+pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRankResolver>(enumeration: Vec<FR>) {
     let graph = build_occurance_graph::<FR>(enumeration);
     // Use Johnson's algorithm to enumerate all elementary cycles in the
     // directed graph. This finds every simple cycle exactly once and is
@@ -223,10 +219,9 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRank>(enumeration: V
                     cycle.push(nodes[s].clone());
                     cycles.push(cycle);
                     found_cycle = true;
-                } else if !blocked[w]
-                    && circuit(w, s, adj, blocked, set_b, stack, cycles, nodes) {
-                        found_cycle = true;
-                    }
+                } else if !blocked[w] && circuit(w, s, adj, blocked, set_b, stack, cycles, nodes) {
+                    found_cycle = true;
+                }
             }
 
             if found_cycle {

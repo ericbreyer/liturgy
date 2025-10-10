@@ -28,7 +28,7 @@
 //! let calendar = GenericCalendarHandle::load_from_file("calendar_data/of.toml")?;
 //!
 //! // Generate a year calendar
-//! let year_2025 = calendar.create_year_calendar(2025);
+//! let year_2025 = calendar.create_year_calendar_of(2025);
 //!
 //! // Export to CSV
 //! year_2025.export_csv("calendar_2025.csv")?;
@@ -41,4 +41,4 @@ pub mod calender;
 mod date_calc;
 
 // Re-export main public API types
-pub use calender::{GenericCalendarHandle, LiturgicalUnit, YearCalendarHandle};
+pub use calender::{GenericCalendarHandle, YearCalendarHandle};

@@ -1,4 +1,4 @@
-name = "1954 Roman Calendar (Experimental)"
+name = "1954 Roman Calendar"
 
 # ---------- Seasons ----------
 # The liturgical year starts with the First Sunday of Advent
@@ -611,7 +611,7 @@ titles = ["Confessor"]
 
 [[feasts]]
 name = "St. Matthias"
-date_rule = "Fixed(2,24)"
+date_rule = "LeapYearConditional(Fixed(2,24), Fixed(2,25))"
 rank = "second class double"
 color = "red"
 titles = ["Apostle"]
@@ -1904,6 +1904,13 @@ rank = "second class double"
 color = "white"
 
 [[feasts]]
+name = "Ss. Timothy, Hippolytus Bishop, and Symphorianus"
+date_rule = "Fixed(8,22)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
+
+[[feasts]]
 name = "St. Philip Benizi"
 date_rule = "Fixed(8,23)"
 rank = "double"
@@ -2214,11 +2221,11 @@ titles = ["archangel"]
 
 
 [[feasts]]
-name = "St. Jerome Priest, Confessor, and"
+name = "St. Jerome"
 date_rule = "Fixed(9,30)"
 rank = "double"
 color = "white"
-titles = ["Doctor of the Church"]
+titles = ["Priest", "Confessor","Doctor of the Church"]
 
 
 [[feasts]]
@@ -2236,11 +2243,11 @@ rank = "major double"
 color = "white"
 
 [[feasts]]
-name = "St. Teresa of the Child Jesus"
+name = "St. Thérèse of the Child Jesus"
 date_rule = "Fixed(10,3)"
 rank = "double"
 color = "white"
-titles = ["Virgin"]
+titles = ["Virgin", "Doctor of the Church"]
 
 
 [[feasts]]
@@ -2485,6 +2492,13 @@ color = "white"
 titles = ["Bishop", "Confessor"]
 
 [[feasts]]
+name = "Ss. Vitalis and Agricola"
+date_rule = "Fixed(11,4)"
+rank = "commemoration"
+color = "red"
+titles = ["Martyrs"]
+
+[[feasts]]
 name = "Holy Four Crowned Martyrs"
 date_rule = "Fixed(11,8)"
 rank = "commemoration"
@@ -2677,7 +2691,6 @@ titles = ["Bishop", "Martyr"]
 [[feasts]]
 name = "Vigil of St. Andrew"
 date_rule = "Fixed(11,29)"
-rank = "minor"
 color = "red"
 day_type = "vigil"
 
@@ -2947,27 +2960,27 @@ color = "red"
 # September Ember Days - first Wednesday after Exaltation of Holy Cross (Sept 14)
 [[feasts]]
 name = "Ember Wednesday in September"
-date_rule = "OffsetDays(OffsetSundays(Fixed(9,14), 1), -4)"
+date_rule = "OffsetDays(OffsetSundays(OffsetDays(Fixed(9,14), 1), 1), -4)"
 day_type = "feria"
 type = "feria"
 rank = "greater non-privileged"
-color = "green"
+color = "violet"
 
 [[feasts]]
 name = "Ember Friday in September"
-date_rule = "OffsetDays(OffsetSundays(Fixed(9,14), 1), -2)"
+date_rule = "OffsetDays(OffsetSundays(OffsetDays(Fixed(9,14), 1), 1), -2)"
 day_type = "feria"
 type = "feria"
 rank = "greater non-privileged"
-color = "green"
+color = "violet"
 
 [[feasts]]
 name = "Ember Saturday in September"
-date_rule = "OffsetDays(OffsetSundays(Fixed(9,14), 1), -1)"
+date_rule = "OffsetDays(OffsetSundays(OffsetDays(Fixed(9,14), 1), 1), -1)"
 day_type = "feria"
 type = "feria"
 rank = "greater non-privileged"
-color = "green"
+color = "violet"
 
 # ---------- Movable Feasts ----------
 

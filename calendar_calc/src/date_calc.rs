@@ -1,5 +1,4 @@
 use chrono::{Datelike, NaiveDate};
-
 use types::ArcStr;
 
 pub(crate) fn get_preceding_sunday(date: NaiveDate) -> NaiveDate {

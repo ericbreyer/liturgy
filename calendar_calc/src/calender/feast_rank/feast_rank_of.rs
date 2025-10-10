@@ -2,15 +2,18 @@ use std::fmt::Debug;
 
 use anyhow::{bail, Context, Result};
 use serde::{Deserialize, Serialize};
+use types::{ArcStr, RcStr, TrivialDayRank};
 
-use types::{ArcStr, RcStr};
-
-use super::{DayType, FeastRank, LiturgicalContext, ResolveConflictsResult};
+use super::{
+    DayType, FeastFlags, FeastRankResolver, FeriaFlags, LiturgicalContext, ResolveConflictsResult,
+    SundayFlags,
+};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FeastRankOf(FeastRankOfInner);
 
-impl FeastRank for FeastRankOf {
+impl FeastRankResolver for FeastRankOf {
+    type FeastRankDescriptor = TrivialDayRank;
     fn resolve_conflicts<T>(competetors: &[(Self, T)]) -> Result<ResolveConflictsResult<Self, T>>
     where
         Self: Sized,
@@ -69,29 +72,13 @@ impl FeastRank for FeastRankOf {
     fn id(&self) -> RcStr {
         self.0.get_rank_string_verbose().into()
     }
-}
 
-bitflags::bitflags! {
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-    struct FeastFlags: u8 {
-        const OF_THE_LORD = 0b00000001;
-        const MOVABLE = 0b00000010;
+    fn descriptor(&self) -> Self::FeastRankDescriptor {
+        TrivialDayRank(self.0.get_rank_string())
     }
 }
 
-bitflags::bitflags! {
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-    struct FerialFlags: u8 {
-        const LENT = 0b00000001;       // Lenten feria takes precedence over memorials
-    }
-}
-
-bitflags::bitflags! {
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-    struct SundayFlags: u8 {
-        const WAS_OCTAVE = 0b00000001;       // Lenten feria takes precedence over memorials
-    }
-}
+// Using shared FeastFlags, FerialFlags and SundayFlags from parent module
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 enum FeastRankOfInner {
@@ -100,7 +87,7 @@ enum FeastRankOfInner {
     /// Sunday - liturgical rank varies by season
     Sunday { rank: u8, flags: SundayFlags }, // 1=highest (like Easter), 2=major season, 3=ordinary time
     /// Feria - weekday with rank based on season
-    Feria { rank: u8, flags: FerialFlags }, // 1=Ash Wed, Good Friday, 2=Lent/Advent, 3=Ordinary Time
+    Feria { rank: u8, flags: FeriaFlags }, // 1=Ash Wed, Good Friday, 2=Lent/Advent, 3=Ordinary Time
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -160,29 +147,6 @@ impl FeastRankOfInner {
             }
             true
         });
-        // for (i, (rank, name)) in sorted_competetors.iter().enumerate() {
-        //     if let FeastRank54Inner::Feast {
-        //         rank: FeastClass::Commemoration,
-        //         ..
-        //     } = *rank
-        //     {
-        //         base_commemorations.push(name.clone());
-        //         indices_to_remove.push(i);
-        //     }
-        //     if let FeastRank54Inner::Octave {
-        //         rank: OctaveType::Simple,
-        //         flags,
-        //     } = rank
-        //     {
-        //         if !flags.contains(OctaveFlags::OCTAVE_DAY) {
-        //             indices_to_remove.push(i);
-        //         }
-        //     }
-        // }
-        // // Remove in reverse order to avoid index shifting
-        // for i in indices_to_remove.into_iter().rev() {
-        //     sorted_competetors.remove(i);
-        // }
 
         // If all competitors were commemorations, pick the first one as winner
         if sorted_competetors.is_empty() {
@@ -254,7 +218,7 @@ impl FeastRankOfInner {
                 )?
         };
         if let FeastRankOfInner::Feria { rank, flags } = winning_rank {
-            if flags.contains(FerialFlags::LENT) || *rank <= 2 {
+            if flags.contains(FeriaFlags::LENT) || *rank <= 2 {
                 // Lent feria takes precedence over memorials
                 commemorations.clear();
             }
@@ -311,13 +275,8 @@ impl FeastRankOfInner {
 
         let _winner_rank = winning_rank.get_numeric_rank();
 
-        let commemorations = if matches!(
-            winning_rank,
-            FeastRankOfInner::Feria {
-                rank: 2..=4,
-                ..
-            }
-        ) {
+        let commemorations = if matches!(winning_rank, FeastRankOfInner::Feria { rank: 2..=4, .. })
+        {
             commemorations
                 .into_iter()
                 .chain(base_commemorations)
@@ -342,11 +301,11 @@ impl FeastRankOfInner {
 
         match day_type {
             DayType::Feria => {
-                let mut flags = FerialFlags::empty();
+                let mut flags = FeriaFlags::empty();
 
                 // Set flags based on liturgical context
                 if context.of_lent {
-                    flags |= FerialFlags::LENT;
+                    flags |= FeriaFlags::LENT;
                 }
 
                 FeastRankOfInner::Feria {
@@ -400,7 +359,7 @@ impl FeastRankOfInner {
                 match context.secondary_day_type {
                     Some(DayType::Feria) => FeastRankOfInner::Feria {
                         rank: numeric_rank,
-                        flags: FerialFlags::empty(),
+                        flags: FeriaFlags::empty(),
                     }, // Ordinary Time Feria
                     Some(DayType::Sunday) => FeastRankOfInner::Sunday {
                         rank: 2,
@@ -502,7 +461,7 @@ impl FeastRankOfInner {
                     3 => "III",
                     _ => "III",
                 };
-                if flags.contains(FerialFlags::LENT) {
+                if flags.contains(FeriaFlags::LENT) {
                     format!("Lenten feria {}", rank_str).into()
                 } else {
                     format!("Feria {}", rank_str).into()
@@ -579,11 +538,11 @@ impl FeastRankOfInner {
                 if f1.contains(FeastFlags::OF_THE_LORD) && !f2.contains(FeastFlags::OF_THE_LORD) {
                     OccurrenceResult::FirstWinsSecondTransferred
                 } else if !f1.contains(FeastFlags::OF_THE_LORD)
-                    && f2.contains(FeastFlags::OF_THE_LORD) || f1.contains(FeastFlags::MOVABLE) && !f2.contains(FeastFlags::MOVABLE)
+                    && f2.contains(FeastFlags::OF_THE_LORD)
+                    || f1.contains(FeastFlags::MOVABLE) && !f2.contains(FeastFlags::MOVABLE)
                 {
                     OccurrenceResult::SecondWinsFirstTransferred
-                } 
-                 else if !f1.contains(FeastFlags::MOVABLE) && f2.contains(FeastFlags::MOVABLE) {
+                } else if !f1.contains(FeastFlags::MOVABLE) && f2.contains(FeastFlags::MOVABLE) {
                     OccurrenceResult::FirstWinsSecondTransferred
                 } else {
                     // No clear precedence rule - this should be rare
@@ -611,8 +570,14 @@ impl FeastRankOfInner {
                 }
             }
             (
-                FeastRankOfInner::Feast { rank: 3, flags: _f1 },
-                FeastRankOfInner::Feast { rank: 3, flags: _f2 },
+                FeastRankOfInner::Feast {
+                    rank: 3,
+                    flags: _f1,
+                },
+                FeastRankOfInner::Feast {
+                    rank: 3,
+                    flags: _f2,
+                },
             ) => OccurrenceResult::CommemorateBoth,
             (
                 FeastRankOfInner::Feria { flags, .. },
@@ -620,7 +585,7 @@ impl FeastRankOfInner {
                     rank: feast_rank, ..
                 },
             ) => {
-                if flags.contains(FerialFlags::LENT) && *feast_rank >= 3 {
+                if flags.contains(FeriaFlags::LENT) && *feast_rank >= 3 {
                     OccurrenceResult::FirstWinsSecondCommemoration
                 } else {
                     OccurrenceResult::SecondWins
@@ -650,11 +615,13 @@ impl FeastRankOfInner {
 mod test {
     use test_case::test_matrix;
 
-    use crate::calender::feast_rank::{OctaveFlags, test::{
-        test_feast_rank_enumeration_conflicts, test_feast_rank_enumeration_occurance_graph,
-    }};
-
     use super::*;
+    use crate::calender::feast_rank::{
+        test::{
+            test_feast_rank_enumeration_conflicts, test_feast_rank_enumeration_occurance_graph,
+        },
+        OctaveFlags,
+    };
 
     #[test]
     fn test_basic_feast_ranking() {
@@ -999,9 +966,9 @@ mod test {
 
             for rank in 1..=3 {
                 for lent in [false, true] {
-                    let mut flags = FerialFlags::empty();
+                    let mut flags = FeriaFlags::empty();
                     if lent {
-                        flags |= FerialFlags::LENT;
+                        flags |= FeriaFlags::LENT;
                     }
                     ranks.push(FeastRankOf(FeastRankOfInner::Feria { rank, flags }));
                 }

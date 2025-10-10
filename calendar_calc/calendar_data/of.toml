@@ -1704,7 +1704,7 @@ name = "St. Jerome"
 date_rule = "Fixed(9,30)"
 rank = "III"
 color = "White"
-titles = ["Priest", "Doctor of the Church"]
+titles = ["Priest", "Confessor","Doctor of the Church"]
 day_type = "feast"
 
 # ---------- October

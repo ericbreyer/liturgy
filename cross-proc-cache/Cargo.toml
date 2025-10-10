@@ -1,0 +1,11 @@
+[package]
+name = "cross-proc-cache"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bincode = "2.0.1"
+serde = { version = "1.0", features = ["derive", "rc"] }
+fs2 = "0.4.3"
+anyhow = "*"
+tempfile = "3.23.0"

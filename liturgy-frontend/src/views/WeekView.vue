@@ -99,7 +99,7 @@ async function loadWeekInfo() {
 
     // Create per-date promises so we can fetch all dates in parallel (each date still parallelizes calendars)
     const datePromises: Array<Promise<{ dateString: string; dayMap: Record<string, DayInfo> | null }>> = []
-    for (let i = 0; i <= 7; i++) {
+    for (let i = -1; i <= 7; i++) {
       const currentDate = new Date(centerDate.getTime() + i * 24 * 60 * 60 * 1000)
       const dateString = currentDate.toISOString().split('T')[0]
 

@@ -1,7 +1,0 @@
----
-source: calendar_calc/tests/test_1954.rs
-assertion_line: 55
-description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XXIII after the octave of Pentecost (Week 1 of November), rank: Ordinary Feria }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 5 in the Octave of All Saints, rank: Day within a Common Octave }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 5 in the Octave of All Saints, rank: Day within a Common Octave }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XXIII after the octave of Pentecost (Week 1 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
----
-2026-11-05|Feria V week XXIII after the octave of Pentecost (Week 1 of November)|Day within a Common Octave|Day 5 in the Octave of All Saints|

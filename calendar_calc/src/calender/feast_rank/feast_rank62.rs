@@ -3,16 +3,17 @@ use std::fmt::Debug;
 use anyhow::{bail, Context, Result};
 use itertools::Itertools;
 use serde::{Deserialize, Serialize};
+use types::{ArcStr, RcStr, TrivialDayRank};
 
-use super::{DayType, FeastRank, LiturgicalContext, ResolveConflictsResult};
-use crate::{
-    calender::feast_rank::BVMOnSaturdayResult,
-    
+use super::{
+    DayType, FeastFlags, FeastRankResolver, FeriaFlags, LiturgicalContext, ResolveConflictsResult,
 };
-use types::{ArcStr, RcStr};
+use crate::calender::feast_rank::BVMOnSaturdayResult;
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Copy)]
 pub struct FeastRank62(FeastRank62Inner);
-impl FeastRank for FeastRank62 {
+impl FeastRankResolver for FeastRank62 {
+    type FeastRankDescriptor = TrivialDayRank;
+
     fn resolve_conflicts<T>(competetors: &[(Self, T)]) -> Result<ResolveConflictsResult<Self, T>>
     where
         Self: Sized,
@@ -72,25 +73,13 @@ impl FeastRank for FeastRank62 {
     fn id(&self) -> RcStr {
         self.0.get_rank_string_verbose().into()
     }
-}
 
-bitflags::bitflags! {
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-     struct FeriaFlags: u8 {
-        const OF_LENT = 0b00000001;
-        const EMBER_DAY = 0b00000010;
+    fn descriptor(&self) -> Self::FeastRankDescriptor {
+        TrivialDayRank(self.0.get_rank_string())
     }
 }
 
-bitflags::bitflags! {
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-     struct FeastFlags: u8 {
-        const OF_OUR_LORD = 0b00000001;
-        const IMMACULATE_CONCEPTION = 0b00000010;
-        const MOVABLE = 0b00000100;
-        const ALL_SOULS = 0b00001000;
-    }
-}
+// Using shared FeriaFlags and FeastFlags from parent module
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Copy)]
 enum FeastRank62Inner {
@@ -864,11 +853,13 @@ impl FeastRank62Inner {
 mod test {
     use test_case::{test_case, test_matrix};
 
-    use crate::calender::feast_rank::{OctaveFlags, test::{
-        test_feast_rank_enumeration_conflicts, test_feast_rank_enumeration_occurance_graph,
-    }};
-
     use super::*;
+    use crate::calender::feast_rank::{
+        test::{
+            test_feast_rank_enumeration_conflicts, test_feast_rank_enumeration_occurance_graph,
+        },
+        OctaveFlags,
+    };
 
     // Helper function to create test cases
     fn create_feast(rank: u8, of_our_lord: bool) -> FeastRank62Inner {

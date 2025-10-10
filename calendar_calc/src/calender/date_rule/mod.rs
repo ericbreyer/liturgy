@@ -128,11 +128,12 @@ impl DateRule {
                 }
             }
             DateRule::LeapYearConditional {
-                leap_year_rule,
                 non_leap_year_rule,
+                leap_year_rule,
             } => {
                 // Check if the year is a leap year
-                let is_leap_year = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+                let is_leap_year =
+                    (((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0);
 
                 if is_leap_year {
                     leap_year_rule.to_day(year)

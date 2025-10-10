@@ -1,7 +1,0 @@
----
-source: calendar_calc/tests/test_1954.rs
-assertion_line: 55
-description: ""
-expression: split_line.0
----
-2026-10-29|Feria V week XXII after the octave of Pentecost (Week 4 of October)|Ordinary Feria|Feria V week XXII after the octave of Pentecost (Week 4 of October)|

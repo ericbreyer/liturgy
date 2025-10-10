@@ -4,7 +4,6 @@ mod day_type;
 pub mod feast_rank;
 mod fuzzy_search;
 pub mod generic_calendar;
-mod liturgical_unit;
 pub mod year_calendar;
 mod year_calendar_builder;
 
@@ -16,25 +15,22 @@ use date_rule::DateRule;
 use day_type::DayType;
 use feast_rank::LiturgicalContext;
 // === Re-exports for external use ===
-pub use liturgical_unit::LiturgicalUnit;
+use types::{ArcStr, DayRank};
+use types::{DayDescription, LiturgicalUnit};
 
 use crate::calender::{
-    feast_rank::{FeastRank54, FeastRank62, FeastRankOf},
-    generic_calendar::{CalendarType, FeastRule, GenericCalendar},
-    year_calendar::{DayDescription, YearCalendar},
+    feast_rank::{FeastRank54, FeastRankResolver},
+    generic_calendar::{FeastRule, GenericCalendar},
+    year_calendar::YearCalendar,
 };
-use types::ArcStr;
+
 #[derive(Debug, Clone)]
 /// Handle for working with liturgical calendars loaded from configuration files
 pub struct GenericCalendarHandle(GenericCalendar);
 
-#[derive(Debug, Clone)]
-/// Handle for working with instantiated year calendars
-pub enum YearCalendarHandle {
-    F54(YearCalendar<FeastRank54>),
-    Ef(YearCalendar<FeastRank62>),
-    Of(YearCalendar<FeastRankOf>),
-}
+pub struct YearCalendarHandle<R>(YearCalendar<R>)
+where
+    R: DayRank;
 
 impl GenericCalendarHandle {
     /// Get the name of this calendar
@@ -57,20 +53,27 @@ impl GenericCalendarHandle {
         GenericCalendar::from_toml_with_extensions(base_path, extension_paths)
             .map(GenericCalendarHandle)
     }
+
     /// Create a liturgical year calendar for the given year
-    pub fn create_year_calendar(&self, year: i32) -> YearCalendarHandle {
-        match self.0.calendar_type() {
-            CalendarType::Calendar1954 => {
-                YearCalendarHandle::F54(self.0.instantiate_54_for_lit_year(year))
-            }
-            CalendarType::Calendar1962 => {
-                YearCalendarHandle::Ef(self.0.instantiate_62_for_lit_year(year))
-            }
-            CalendarType::OrdinaryForm => {
-                YearCalendarHandle::Of(self.0.instantiate_of_for_lit_year(year))
-            }
-        }
+    pub fn create_year_calendar_54(
+        &self,
+        year: i32,
+    ) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
+        YearCalendarHandle(self.0.instantiate_54_for_lit_year(year))
     }
+    pub fn create_year_calendar_62(
+        &self,
+        year: i32,
+    ) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
+        YearCalendarHandle(self.0.instantiate_62_for_lit_year(year))
+    }
+    pub fn create_year_calendar_of(
+        &self,
+        year: i32,
+    ) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
+        YearCalendarHandle(self.0.instantiate_of_for_lit_year(year))
+    }
+
     /// Get feast information by name using fuzzy search
     ///
     /// # Examples
@@ -129,38 +132,30 @@ impl GenericCalendarHandle {
     }
 }
 
-impl YearCalendarHandle {
+impl<R> YearCalendarHandle<R>
+where
+    R: DayRank,
+{
     /// Generate and save a CSV file for a liturgical year
     pub fn export_csv<P: AsRef<Path>>(&self, path: P) -> std::io::Result<()> {
-        match self {
-            YearCalendarHandle::F54(cal) => cal.write_csv_for_year(path.as_ref().to_str().unwrap()),
-            YearCalendarHandle::Ef(cal) => cal.write_csv_for_year(path.as_ref().to_str().unwrap()),
-            YearCalendarHandle::Of(cal) => cal.write_csv_for_year(path.as_ref().to_str().unwrap()),
-        }
+        self.0.write_csv_for_year(path.as_ref().to_str().unwrap())
     }
+
     /// Generate CSV content for this liturgical year
     pub fn generate_csv(&self) -> String {
-        match self {
-            YearCalendarHandle::F54(cal) => cal.generate_year_calendar_csv(),
-            YearCalendarHandle::Ef(cal) => cal.generate_year_calendar_csv(),
-            YearCalendarHandle::Of(cal) => cal.generate_year_calendar_csv(),
-        }
+        self.0.generate_year_calendar_csv()
     }
     /// Get the year of this calendar
     pub fn year(&self) -> i32 {
-        match self {
-            YearCalendarHandle::F54(cal) => cal.year,
-            YearCalendarHandle::Ef(cal) => cal.year,
-            YearCalendarHandle::Of(cal) => cal.year,
-        }
+        self.0.year
     }
 
-    pub fn get_day_info(&self, date: chrono::NaiveDate) -> Option<DayDescription> {
-        match self {
-            YearCalendarHandle::F54(cal) => cal.get_day(date),
-            YearCalendarHandle::Ef(cal) => cal.get_day(date),
-            YearCalendarHandle::Of(cal) => cal.get_day(date),
-        }
+    pub fn get_day_info(&self, date: chrono::NaiveDate) -> Option<DayDescription<R>> {
+        self.0.get_day(date)
+    }
+
+    pub fn get_all_days(&self) -> Vec<DayDescription<R>> {
+        self.0.days.to_vec()
     }
 }
 
@@ -171,7 +166,7 @@ mod test {
     use std::collections::HashMap;
 
     use chrono::NaiveDate;
-    use feast_rank::{FeastRank, FeastRank62};
+    use feast_rank::{FeastRank62, FeastRankResolver};
     use generic_calendar::{tests::*, FeastRule, GenericCalendar};
     use test_case::test_case;
     use year_calendar_builder::YearCalendarBuilder;

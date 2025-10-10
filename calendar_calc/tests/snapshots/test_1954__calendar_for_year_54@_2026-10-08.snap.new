@@ -1,7 +1,0 @@
----
-source: calendar_calc/tests/test_1954.rs
-assertion_line: 55
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Bridget, Widow, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XIX after the octave of Pentecost (Week 1 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Bridget, Widow, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week XIX after the octave of Pentecost (Week 1 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
----
-2026-10-08|Feria V week XIX after the octave of Pentecost (Week 1 of October)|Double|St. Bridget, Widow|

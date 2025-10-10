@@ -1,50 +1,22 @@
 use chrono::NaiveDate;
-use serde::{ser::SerializeStruct as _, Serialize};
-
-use crate::calender::{feast_rank::FeastRank, LiturgicalUnit};
+#[cfg(test)]
 use types::ArcStr;
-
-#[derive(Debug, Clone)]
-pub struct DayDescription {
-    pub date: NaiveDate,
-    pub day_in_season: ArcStr,
-    pub day_rank: ArcStr,
-    pub day: LiturgicalUnit,
-    pub commemorations: Vec<LiturgicalUnit>,
-    pub debug_trace: ArcStr,
-}
-
-impl Serialize for DayDescription {
-    // Custom serialization to handle LiturgicalUnit serialization
-    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        let mut state = serializer.serialize_struct("DayDescription", 5)?;
-        state.serialize_field("date", &self.date.to_string())?;
-        state.serialize_field("day_in_season", self.day_in_season.as_ref())?;
-        state.serialize_field("day_rank", self.day_rank.as_ref())?;
-        state.serialize_field("day", &self.day)?;
-        state.serialize_field("commemorations", &self.commemorations)?;
-        state.end()
-    }
-}
+use types::{DayDescription, DayRank};
 
 #[derive(Debug, Clone)]
 pub struct YearCalendar<R>
 where
-    R: FeastRank,
+    R: DayRank,
 {
     pub year: i32,
     #[cfg(test)]
     pub name: ArcStr,
-    pub days: Box<[DayDescription]>,
-    pub __marker: std::marker::PhantomData<R>,
+    pub days: Box<[DayDescription<R>]>,
 }
 
 impl<R> YearCalendar<R>
 where
-    R: FeastRank,
+    R: DayRank,
 {
     /// Get the year this calendar represents
     #[cfg(test)]
@@ -60,12 +32,12 @@ where
 
     #[cfg(test)]
     /// Get all days in this liturgical year
-    pub fn days(&self) -> &[DayDescription] {
+    pub fn days(&self) -> &[DayDescription<R>] {
         &self.days
     }
 
     /// Get liturgical information for a specific date
-    pub fn get_day(&self, date: NaiveDate) -> Option<DayDescription> {
+    pub fn get_day(&self, date: NaiveDate) -> Option<DayDescription<R>> {
         self.days.iter().find(|day| day.date == date).cloned()
     }
 
@@ -97,7 +69,7 @@ where
                 "{}|{}|{}|{}|{}|{}\n",
                 day.date,
                 day.day_in_season.as_ref(),
-                day.day_rank.as_ref(),
+                day.day_rank.as_str(),
                 day.day.desc,
                 commemorations,
                 day.debug_trace.as_ref()
@@ -114,6 +86,7 @@ where
 #[cfg(test)]
 mod test {
     use chrono::NaiveDate;
+    use types::TrivialDayRank;
 
     use super::*;
     use crate::calender::{feast_rank::FeastRank62, DayType, LiturgicalContext, LiturgicalUnit};
@@ -127,7 +100,7 @@ mod test {
             days: vec![DayDescription {
                 date: NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),
                 day_in_season: "Feria II".into(),
-                day_rank: "IV".into(),
+                day_rank: TrivialDayRank("IV".into()),
                 day: LiturgicalUnit {
                     desc: "Test Day".into(),
                     rank: FeastRank62::new_with_context(
@@ -135,7 +108,7 @@ mod test {
                         &crate::calender::DayType::Feria,
                         &crate::calender::LiturgicalContext::new(),
                     )
-                    .get_rank_string(),
+                    .descriptor(),
                     date: NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),
                     color: "green".into(),
                 },
@@ -143,7 +116,6 @@ mod test {
                 debug_trace: "".into(),
             }]
             .into_boxed_slice(),
-            __marker: std::marker::PhantomData::<FeastRank62>,
         };
 
         let csv_content = year_calendar.generate_year_calendar_csv();
@@ -155,14 +127,15 @@ mod test {
         assert!(result.is_ok() || result.is_err()); // Either works or fails gracefully
     }
 
-    use crate::calender::feast_rank::FeastRank;
+    use crate::calender::feast_rank::FeastRankResolver;
 
-    fn create_test_year_calendar() -> YearCalendar<FeastRank62> {
+    fn create_test_year_calendar(
+    ) -> YearCalendar<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
         let days = vec![
             DayDescription {
                 date: NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),
                 day_in_season: "Feria II".into(),
-                day_rank: "IV".into(),
+                day_rank: TrivialDayRank("IV".into()),
                 day: LiturgicalUnit {
                     desc: "Regular Day".into(),
                     rank: FeastRank62::new_with_context(
@@ -170,7 +143,7 @@ mod test {
                         &DayType::Feria,
                         &LiturgicalContext::new(),
                     )
-                    .get_rank_string(),
+                    .descriptor(),
                     date: NaiveDate::from_ymd_opt(2025, 1, 1).unwrap(),
                     color: "green".into(),
                 },
@@ -180,7 +153,7 @@ mod test {
             DayDescription {
                 date: NaiveDate::from_ymd_opt(2025, 6, 15).unwrap(),
                 day_in_season: "Dom. IV post Pentecosten".into(),
-                day_rank: "I".into(),
+                day_rank: TrivialDayRank("I".into()),
                 day: LiturgicalUnit {
                     desc: "Major Feast".into(),
                     rank: FeastRank62::new_with_context(
@@ -188,7 +161,7 @@ mod test {
                         &DayType::Feast,
                         &LiturgicalContext::new(),
                     )
-                    .get_rank_string(),
+                    .descriptor(),
                     date: NaiveDate::from_ymd_opt(2025, 6, 15).unwrap(),
                     color: "green".into(),
                 },
@@ -199,7 +172,7 @@ mod test {
                         &DayType::Feast,
                         &LiturgicalContext::new(),
                     )
-                    .get_rank_string(),
+                    .descriptor(),
                     date: NaiveDate::from_ymd_opt(2025, 6, 15).unwrap(),
                     color: "green".into(),
                 }],
@@ -212,7 +185,6 @@ mod test {
             year: 2025,
             name: "Test Calendar".into(),
             days,
-            __marker: std::marker::PhantomData,
         }
     }
 

@@ -1,59 +1,65 @@
-use std::cell::OnceCell;
+use std::path::Path;
 
-use calendar_calc::{GenericCalendarHandle, YearCalendarHandle};
+use calendar_calc::GenericCalendarHandle;
+use cross_proc_cache::FsCache;
 use insta::{assert_snapshot, with_settings};
-use rayon::prelude::*;
 use test_case::test_matrix;
 
-thread_local! {
-    static CALENDARS: OnceCell<Vec<YearCalendarHandle>> = const { OnceCell::new() };
-}
+fn init_for_year(year: usize) -> Vec<String> {
+    let raw_calendar =
+        std::fs::read_to_string("calendar_data/ef.toml").expect("Failed to read calendar data");
 
-const START: i32 = 2020;
-const END: i32 = 2030;
+    let calendar: GenericCalendarHandle =
+        GenericCalendarHandle::load_from_str(&raw_calendar).expect("Failed to parse calendar data");
 
-pub fn initialize() {
-    CALENDARS.with(|cell| {
-        cell.get_or_init(|| {
-            let raw_calendar = std::fs::read_to_string("calendar_data/ef.toml")
-                .expect("Failed to read calendar data");
-
-            let calendar: GenericCalendarHandle =
-                GenericCalendarHandle::load_from_str(&raw_calendar)
-                    .expect("Failed to parse calendar data");
-
-            (START..=END)
-                .map(|year| calendar.create_year_calendar(year))
-                .collect()
-        });
-    });
+    calendar
+        .create_year_calendar_62(year as i32)
+        .generate_csv()
+        .lines()
+        .skip(1)
+        .map(|s| s.to_string())
+        .collect()
 }
 
 #[test_matrix(
-    2025..=2026
+    2025..=2026,
+    0..=366
 )]
-fn test_calendar_for_year_62(year: i32) {
-    initialize();
+fn test_calendar_for_year_62(year: usize, day: u32) {
+    let calendars = FsCache::new(
+        &Path::new(
+            format!(
+                "{}{}",
+                concat!(env!("CARGO_MANIFEST_DIR"), "/tests/cache/cache62"),
+                year
+            )
+            .as_str(),
+        ),
+        env!("TEST_FPRINT"),
+    )
+    .unwrap();
+    let line = {
+        let lines = calendars.load(|| init_for_year(year)).unwrap();
+        lines
+            .get(day as usize)
+            .map(|s| s.to_string())
+            .unwrap_or_default()
+    };
 
-    let desc = CALENDARS.with(|cell| {
-        let calendars = cell.get().unwrap();
-        let calendar = calendars.iter().find(|c| c.year() == year).unwrap();
+    if line.is_empty() {
+        return;
+    }
 
-        calendar.generate_csv()
-    });
-
-    desc.lines().skip(1).par_bridge().for_each(|line| {
-        let date = line.split('|').next().unwrap();
-        // split the line at the 5th '|'
-        let idx_5 = line.match_indices('|').nth(4).unwrap().0;
-        let (part1, part2) = line.split_at(idx_5);
-        let split_line = (part1, &part2[1..]); // skip the '|'
-        with_settings!(
-            {snapshot_suffix => format!("_{}", date), description => split_line.1
-        },
-            {
-                assert_snapshot!(split_line.0);
-            }
-        );
-    });
+    let date = line.split('|').next().unwrap();
+    // split the line at the 5th '|'
+    let idx_5 = line.match_indices('|').nth(4).unwrap().0;
+    let (part1, part2) = line.split_at(idx_5);
+    let split_line = (part1, &part2[1..]); // skip the '|'
+    with_settings!(
+        {snapshot_suffix => format!("_{}", date), description => split_line.1
+    },
+        {
+            assert_snapshot!(split_line.0);
+        }
+    );
 }

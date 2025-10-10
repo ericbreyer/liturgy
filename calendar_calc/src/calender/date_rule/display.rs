@@ -28,8 +28,8 @@ impl fmt::Display for DateRule {
                 )
             }
             DateRule::LeapYearConditional {
-                leap_year_rule,
                 non_leap_year_rule,
+                leap_year_rule,
             } => {
                 write!(
                     f,
@@ -220,10 +220,10 @@ impl FromStr for DateRule {
             .and_then(|s| s.strip_suffix(")"))
         {
             let parts = parse_two_args(rest)?;
-            let leap_year_rule = parts[0]
+            let leap_year_rule = parts[1]
                 .parse()
                 .map_err(|e| format!("Invalid leap year rule: {e:?}"))?;
-            let non_leap_year_rule = parts[1]
+            let non_leap_year_rule = parts[0]
                 .parse()
                 .map_err(|e| format!("Invalid non-leap year rule: {e:?}"))?;
             return Ok(DateRule::LeapYearConditional {

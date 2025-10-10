@@ -199,7 +199,7 @@ async function findFeastInOtherCalendars(feastName: string, comparison: FeastCom
           (current.score || 0) > (best.score || 0) ? current : best,
         )
 
-        if ((bestMatch.score || 0) > 0.9) {
+        if ((bestMatch.score || 0) > 0.8) {
           // Only if it's a good match
           comparison.calendars[calendar] = {
             present: false,

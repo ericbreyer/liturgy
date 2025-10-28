@@ -8,6 +8,8 @@ repository = "https://github.com/ericbreyer/liturgy"
 documentation = "https://docs.rs/calendar_calc"
 keywords = ["liturgical", "calendar", "liturgy", "church"]
 categories = ["science::astronomy", "development-tools::build-utils"]
+description = "Calendar computation library used by the Liturgy project (feasts, movable feasts, and canonical data)."
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 chrono = "0.4"
@@ -16,13 +18,13 @@ toml = ">=0.9.5"
 bitflags = { version = ">=2.0", features = ["serde"] }
 anyhow = "*"
 itertools = "0.14.0"
-types = { path = "../types" }
+types = { path = "../types", version = "0.1.0" }
 
 [dev-dependencies]
 test-case = "3.3"
 insta = {version = "1.43", features = ["filters"]}
 rayon = "1.11.0"
-cross-proc-cache = { path = "../cross-proc-cache" }
+cross-proc-cache = { path = "../cross-proc-cache", version = "0.1.0" }
 
 [build-dependencies]
 rand = "0.9"

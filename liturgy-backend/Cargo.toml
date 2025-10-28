@@ -8,11 +8,13 @@ repository = "https://github.com/ericbreyer/liturgy"
 documentation = "https://docs.rs/liturgy-backend"
 keywords = ["liturgy", "backend", "liturgical-calendar"]
 categories = ["web-programming"]
+description = "HTTP API server that provides calendar data and serves the frontend for the Liturgy project."
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 # local crates
-calendar_calc = { path = "../calendar_calc" }
-types = { path = "../types" }
+calendar_calc = { path = "../calendar_calc", version = "0.1.0" }
+types = { path = "../types", version = "0.1.0" }
 
 chrono = "0.4"
 serde = { version = "1.0", features = ["derive"] }

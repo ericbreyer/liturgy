@@ -8,10 +8,12 @@ repository = "https://github.com/ericbreyer/liturgy"
 documentation = "https://docs.rs/ordo"
 keywords = ["liturgical", "liturgy", "calendar", "ordo"]
 categories = ["development-tools::build-utils", "command-line-utilities"]
+description = "Helpers for building liturgical titles, flags, and textual fallbacks used by the Liturgy project."
+license = "MIT OR Apache-2.0"
 
 [dependencies]
-types = { path = "../types" }
-calendar_calc = { path = "../calendar_calc" }
+types = { path = "../types", version = "0.1.0" }
+calendar_calc = { path = "../calendar_calc", version = "0.1.0" }
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.9"
 anyhow = "*"

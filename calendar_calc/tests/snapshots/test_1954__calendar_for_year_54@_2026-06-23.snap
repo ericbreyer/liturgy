@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of the Nativity of St. John the Baptist, rank: Vigil }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week IV after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of the Nativity of St. John the Baptist, rank: Vigil }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week IV after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-06-23|Feria III week IV after the octave of Pentecost|Vigil|Vigil of the Nativity of St. John the Baptist|
+2026-06-23|Feria III week IV after the octave of Pentecost|Vigil|Vigil of the Nativity of St. John the Baptist||

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-26|Feria IV week III of Lent|Feria|Feria IV week III of Lent|
+2025-03-26|Feria IV week III of Lent|Feria|Feria IV week III of Lent||

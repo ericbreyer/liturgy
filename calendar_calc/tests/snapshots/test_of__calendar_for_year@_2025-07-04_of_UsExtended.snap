@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-07-04|Feria VI week XIII of Ordinary Time|Feria|Feria VI week XIII of Ordinary Time|
+2025-07-04|Feria VI week XIII of Ordinary Time|Feria|Feria VI week XIII of Ordinary Time||

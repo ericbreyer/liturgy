@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Dedication of Our Lady of the Snows, rank: Major Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week X after the octave of Pentecost (Week 1 of August), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Dedication of Our Lady of the Snows, rank: Major Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week X after the octave of Pentecost (Week 1 of August), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-08-05|Feria IV week X after the octave of Pentecost (Week 1 of August)|Major Double|Dedication of Our Lady of the Snows|
+2026-08-05|Feria IV week X after the octave of Pentecost (Week 1 of August)|Major Double|Dedication of Our Lady of the Snows||

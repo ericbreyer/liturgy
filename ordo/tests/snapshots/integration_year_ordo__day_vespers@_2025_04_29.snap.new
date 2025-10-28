@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--peter-martyr--martyr\", \"st--peter-martyr\"]"
+expression: s.0
+---
+2025-04-29
+Vespers of St. Peter Martyr, Martyr:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Eastertide)
+  Psalms:      Psalter
+  Chapter:     Common of Martyrs
+  Hymn:        Common of Martyrs
+  Verse:       Common of Martyrs
+  Magnificat:  Common of Martyrs
+  Collect:     Proper

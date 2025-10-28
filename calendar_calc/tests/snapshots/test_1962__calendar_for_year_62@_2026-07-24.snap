@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-07-24|Feria VI week VIII after the octave of Pentecost|III|Feria VI week VIII after the octave of Pentecost|St. Christina, Virgin and Martyr
+2026-07-24|Feria VI week VIII after the octave of Pentecost|III|Feria VI week VIII after the octave of Pentecost|St. Christina, Virgin and Martyr|

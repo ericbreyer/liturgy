@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Hilarion, Abbot, rank: Simple }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XIX after the octave of Pentecost (Week 4 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Hilarion, Abbot, rank: Simple }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XIX after the octave of Pentecost (Week 4 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-10-21|Feria III week XIX after the octave of Pentecost (Week 4 of October)|Simple|St. Hilarion, Abbot|St. Ursula and Companions, Virgin and Martyrs
+2025-10-21|Feria III week XIX after the octave of Pentecost (Week 4 of October)|Simple|St. Hilarion, Abbot|St. Ursula and Companions, Virgin and Martyrs|

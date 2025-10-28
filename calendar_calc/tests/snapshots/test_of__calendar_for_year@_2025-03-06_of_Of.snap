@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-06|Feria V after Ash Wednesday|Feria|Feria V after Ash Wednesday|
+2025-03-06|Feria V after Ash Wednesday|Feria|Feria V after Ash Wednesday||

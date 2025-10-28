@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-01-20|Feria III week II of Ordinary Time|Feria|Feria III week II of Ordinary Time|St. Fabian, Pope and Martyr, St. Sebastian, Martyr
+2026-01-20|Feria III week II of Ordinary Time|Feria|Feria III week II of Ordinary Time|St. Fabian, Pope and Martyr, St. Sebastian, Martyr|

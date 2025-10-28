@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-09-11|Feria VI week XXIII of Ordinary Time|Feria|Feria VI week XXIII of Ordinary Time|
+2026-09-11|Feria VI week XXIII of Ordinary Time|Feria|Feria VI week XXIII of Ordinary Time||

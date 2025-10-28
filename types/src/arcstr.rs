@@ -11,8 +11,8 @@ use crate::RcStr;
 /// Shared, reference-counted string slice type for single-threaded contexts.
 ///
 /// NOTE: This is intentionally `Arc<str>` (not `AArc`) per user's request.
-/// `Arc<str>` is not `Send` or `Sync`. If a value holding an `ArcStr` needs to be
-/// sent across threads (for example via Rayon parallel iterators), you'll
+/// `Arc<str>` is not `Send` or `Sync`. If a value holding an `ArcStr` needs to
+/// be sent across threads (for example via Rayon parallel iterators), you'll
 /// either need to convert to `AArc<str>` or clone to an owned `String` at the
 /// boundary.
 

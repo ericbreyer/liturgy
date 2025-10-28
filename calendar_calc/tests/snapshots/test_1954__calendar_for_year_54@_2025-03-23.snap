@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-23|Dominica III of Lent|Greater Sunday of the First Class|Dominica III of Lent|
+2025-03-23|Dominica III of Lent|Greater Sunday of the First Class|Dominica III of Lent||

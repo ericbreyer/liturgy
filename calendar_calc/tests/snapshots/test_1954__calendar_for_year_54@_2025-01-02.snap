@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week II of Christmas, rank: Ordinary Feria }) and Octave { rank: Simple, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of St. Stephen, rank: Simple Octave Day }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Octave { rank: Simple, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of St. Stephen, rank: Simple Octave Day }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week II of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-01-02|Feria V week II of Christmas|Simple Octave Day|Octave Day of St. Stephen|
+2025-01-02|Feria V week II of Christmas|Simple Octave Day|Octave Day of St. Stephen||

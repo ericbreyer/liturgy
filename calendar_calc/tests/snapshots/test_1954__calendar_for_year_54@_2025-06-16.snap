@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-06-16|Feria II week I after the octave of Pentecost|Ordinary Feria|Feria II week I after the octave of Pentecost|
+2025-06-16|Feria II week I after the octave of Pentecost|Ordinary Feria|Feria II week I after the octave of Pentecost||

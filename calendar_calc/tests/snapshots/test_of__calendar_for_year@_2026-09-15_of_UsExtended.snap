@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Seven Sorrows of the Blessed Virgin Mary (Our Lady of Sorrows), rank: Memorial })) and Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III week XXIV of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Seven Sorrows of the Blessed Virgin Mary (Our Lady of Sorrows), rank: Memorial }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III week XXIV of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-09-15|Feria III week XXIV of Ordinary Time|Memorial|Seven Sorrows of the Blessed Virgin Mary (Our Lady of Sorrows)|
+2026-09-15|Feria III week XXIV of Ordinary Time|Memorial|Seven Sorrows of the Blessed Virgin Mary (Our Lady of Sorrows)||

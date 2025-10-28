@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2024-12-14|Sabbato week II of Advent|III|Sabbato week II of Advent|
+2024-12-14|Sabbato week II of Advent|III|Sabbato week II of Advent||Vespers of Following: Dominica III of Advent

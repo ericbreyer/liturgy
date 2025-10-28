@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Passion of St. John the Baptist, Martyr, rank: Memorial })) and Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXI of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Passion of St. John the Baptist, Martyr, rank: Memorial }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXI of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-08-29|Sabbato week XXI of Ordinary Time|Memorial|The Passion of St. John the Baptist, Martyr|
+2026-08-29|Sabbato week XXI of Ordinary Time|Memorial|The Passion of St. John the Baptist, Martyr||

@@ -1,0 +1,20 @@
+id = "dominica-of-time-after-epiphany"
+name = "Dominica of Time after Epiphany"
+
+[vespers]
+antiphons = "Feria"
+psalms = "Psalter"
+chapter = "Ordinary"
+hymn = "Ordinary"
+verse = "Ordinary"
+magnificat_antiphon = "Proper"
+collect = "Proper"
+
+[first_vespers]
+antiphons = "Feria"
+psalms = "Psalter"
+chapter = "Ordinary"
+hymn = "Ordinary"
+verse = "Ordinary"
+magnificat_antiphon = "Proper"
+collect = "Proper"

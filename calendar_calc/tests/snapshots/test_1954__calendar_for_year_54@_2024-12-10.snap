@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II of Advent, rank: Greater Non-Privileged Feria }) and Octave { rank: Common, flags: OctaveFlags(FIRST_3_DAYS) } (LiturgicalUnit { desc: Day 3 in the Octave of The Immaculate Conception, rank: Day within a Common Octave }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(FIRST_3_DAYS) } (LiturgicalUnit { desc: Day 3 in the Octave of The Immaculate Conception, rank: Day within a Common Octave }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II of Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2024-12-10|Feria III week II of Advent|Day within a Common Octave|Day 3 in the Octave of The Immaculate Conception|Feria III week II of Advent, St. Melchiades, Pope and Martyr
+2024-12-10|Feria III week II of Advent|Day within a Common Octave|Day 3 in the Octave of The Immaculate Conception|Feria III week II of Advent, St. Melchiades, Pope and Martyr|

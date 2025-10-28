@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-01-10|Sabbato of Epiphany|III|BVM on Saturday|
+2026-01-10|Sabbato of Epiphany|III|BVM on Saturday||Vespers of Following: The Most Holy Family of Jesus, Mary, Joseph

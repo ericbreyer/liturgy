@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-09-26|Sabbato week XVII after the octave of Pentecost (Week 3 of September)|II|Ember Saturday of September|Ss. Cyprian and Justina, Virgin and Martyrs
+2026-09-26|Sabbato week XVII after the octave of Pentecost (Week 3 of September)|II|Ember Saturday of September|Ss. Cyprian and Justina, Virgin and Martyrs|Vespers of Following: Dominica XVIII after Pentecost (Week 4 of September)

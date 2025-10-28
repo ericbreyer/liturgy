@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--john-bosco--confessor\", \"st--john-bosco\"]"
+expression: s.0
+---
+2025-01-31
+Vespers of St. John Bosco, Confessor:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Epiphany)
+  Psalms:      Psalter
+  Chapter:     Common of Confessors (Non-Bishop)
+  Hymn:        Common of Confessors (Non-Bishop)
+  Verse:       Common of Confessors (Non-Bishop)
+  Magnificat:  Common of Confessors (Non-Bishop)
+  Collect:     Proper

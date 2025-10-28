@@ -1,8 +1,9 @@
 mod web;
 
-use crate::web::{run_web_app, WebConfig};
 use anyhow::Result;
 use clap::Parser;
+
+use crate::web::{WebConfig, run_web_app};
 
 /// CLI options for the web server
 #[derive(Parser, Debug)]

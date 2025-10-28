@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-04-06|Dominica of the Passion|I|Dominica of the Passion|
+2025-04-06|Dominica of the Passion|I|Dominica of the Passion||

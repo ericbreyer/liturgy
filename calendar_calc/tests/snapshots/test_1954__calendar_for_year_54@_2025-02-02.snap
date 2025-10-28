@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Purification of the Blessed Virgin Mary, rank: Second Class Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica IV after Epiphany, rank: Lesser Sunday }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Purification of the Blessed Virgin Mary, rank: Second Class Double }) to Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica IV after Epiphany, rank: Lesser Sunday }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-02-02|Dominica IV after Epiphany|Second Class Double|Purification of the Blessed Virgin Mary|Dominica IV after Epiphany
+2025-02-02|Dominica IV after Epiphany|Second Class Double|Purification of the Blessed Virgin Mary|Dominica IV after Epiphany|

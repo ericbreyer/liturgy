@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Sunday { rank: 1 } (LiturgicalUnit { desc: Dominica II of Advent, rank: I }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Ambrose, Bishop and Confessor and Doctor of the Church, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 1 } (LiturgicalUnit { desc: Dominica II of Advent, rank: I }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Ambrose, Bishop and Confessor and Doctor of the Church, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-12-07|Dominica II of Advent|I|Dominica II of Advent|
+2025-12-07|Dominica II of Advent|I|Dominica II of Advent||Commemorate Vespers of Following: The Immaculate Conception of the Blessed Virgin Mary

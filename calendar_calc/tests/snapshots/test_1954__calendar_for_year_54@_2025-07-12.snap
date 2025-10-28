@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Gualbert, Abbot, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week IV after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Gualbert, Abbot, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week IV after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-07-12|Sabbato week IV after the octave of Pentecost|Double|St. John Gualbert, Abbot|Ss. Nabor and Felix, Martyrs
+2025-07-12|Sabbato week IV after the octave of Pentecost|Double|St. John Gualbert, Abbot|Ss. Nabor and Felix, Martyrs|

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Frances of Rome, Widow, rank: Double }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Frances of Rome, Widow, rank: Double }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-03-09|Feria II week III of Lent|Double|St. Frances of Rome, Widow|Feria II week III of Lent
+2026-03-09|Feria II week III of Lent|Double|St. Frances of Rome, Widow|Feria II week III of Lent|

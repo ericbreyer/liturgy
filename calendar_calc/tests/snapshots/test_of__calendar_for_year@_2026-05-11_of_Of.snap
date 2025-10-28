@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-05-11|Feria II week VI of Eastertide|Feria|Feria II week VI of Eastertide|
+2026-05-11|Feria II week VI of Eastertide|Feria|Feria II week VI of Eastertide||

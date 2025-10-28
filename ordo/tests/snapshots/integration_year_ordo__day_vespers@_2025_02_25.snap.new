@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"feria-iii-after-sexagesima\", \"feria-of-sexagesima\"]"
+expression: s.0
+---
+2025-02-25
+Vespers of Feria III after Sexagesima:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Sexagesima)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Sexagesima)
+  Hymn:        Psalter (Ordinary of Sexagesima)
+  Verse:       Psalter (Ordinary of Sexagesima)
+  Magnificat:  Psalter (Ordinary of Sexagesima)
+  Collect:     of Sunday

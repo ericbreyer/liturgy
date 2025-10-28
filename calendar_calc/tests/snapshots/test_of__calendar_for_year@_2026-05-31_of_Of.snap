@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Visitation of the Blessed Virgin Mary, rank: Feast })) and Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (LiturgicalUnit { desc: The Most Holy Trinity, rank: Solemnity }) |     -> Occurrence result: SecondWins | Resolving between Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (Some(LiturgicalUnit { desc: The Most Holy Trinity, rank: Solemnity })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica IX of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (LiturgicalUnit { desc: The Most Holy Trinity, rank: Solemnity }) to Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Visitation of the Blessed Virgin Mary, rank: Feast }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (LiturgicalUnit { desc: The Most Holy Trinity, rank: Solemnity }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica IX of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-05-31|Dominica IX of Ordinary Time|Solemnity|The Most Holy Trinity|
+2026-05-31|Dominica IX of Ordinary Time|Solemnity|The Most Holy Trinity||

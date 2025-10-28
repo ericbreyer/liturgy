@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-06-20|Feria VI week I after the octave of Pentecost|III|Feria VI week I after the octave of Pentecost|St. Silverius, Pope and Martyr
+2025-06-20|Feria VI week I after the octave of Pentecost|III|Feria VI week I after the octave of Pentecost|St. Silverius, Pope and Martyr|

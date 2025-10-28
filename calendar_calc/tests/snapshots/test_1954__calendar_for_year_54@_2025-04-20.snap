@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-04-20|Dominica Easter|Greater Sunday of the First Class|Easter Sunday|
+2025-04-20|Dominica Easter|Greater Sunday of the First Class|Easter Sunday||

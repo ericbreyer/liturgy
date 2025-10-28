@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-07-30|Feria IV week XVII of Ordinary Time|Feria|Feria IV week XVII of Ordinary Time|St. Peter Chrysologus, Bishop and Doctor of the Church
+2025-07-30|Feria IV week XVII of Ordinary Time|Feria|Feria IV week XVII of Ordinary Time|St. Peter Chrysologus, Bishop and Doctor of the Church|

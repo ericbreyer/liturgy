@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-07-13|Dominica V after Pentecost|II|Dominica V after Pentecost|
+2025-07-13|Dominica V after Pentecost|II|Dominica V after Pentecost||

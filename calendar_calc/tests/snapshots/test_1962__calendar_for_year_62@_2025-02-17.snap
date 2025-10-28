@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-17|Feria II after Septuagesima|III|Feria II after Septuagesima|
+2025-02-17|Feria II after Septuagesima|III|Feria II after Septuagesima||

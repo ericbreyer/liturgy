@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-01-03|Feria VI in Christmas|Feria|Feria VI in Christmas|The Most Holy Name of Jesus
+2025-01-03|Feria VI in Christmas|Feria|Feria VI in Christmas|The Most Holy Name of Jesus|

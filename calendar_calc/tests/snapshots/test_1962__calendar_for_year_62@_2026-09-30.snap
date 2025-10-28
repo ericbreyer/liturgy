@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Jerome, Priest and Confessor and Doctor of the Church, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week XVIII after the octave of Pentecost (Week 4 of September), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Jerome, Priest and Confessor and Doctor of the Church, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week XVIII after the octave of Pentecost (Week 4 of September), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-09-30|Feria IV week XVIII after the octave of Pentecost (Week 4 of September)|III|St. Jerome, Priest and Confessor and Doctor of the Church|
+2026-09-30|Feria IV week XVIII after the octave of Pentecost (Week 4 of September)|III|St. Jerome, Priest and Confessor and Doctor of the Church||

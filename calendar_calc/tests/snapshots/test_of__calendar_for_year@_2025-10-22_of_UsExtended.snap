@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-10-22|Feria IV week XXIX of Ordinary Time|Feria|Feria IV week XXIX of Ordinary Time|St. John Paul II, Pope
+2025-10-22|Feria IV week XXIX of Ordinary Time|Feria|Feria IV week XXIX of Ordinary Time|St. John Paul II, Pope|

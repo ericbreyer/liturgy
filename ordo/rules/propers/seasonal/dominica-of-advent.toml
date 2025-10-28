@@ -1,0 +1,9 @@
+id = "dominica-of-advent"
+name = "Dominica of Advent"
+
+[vespers]
+chapter = "Proper"
+hymn = "Ordinary"
+verse = "Ordinary"
+magnificat_antiphon = "Proper"
+collect = "Proper"

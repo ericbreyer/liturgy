@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Vincent Ferrer, Confessor, rank: Double }) and Sunday { rank: First, flags: SundayFlags(EASTER_OR_PENTECOST) } (LiturgicalUnit { desc: Easter Sunday, rank: Greater Sunday of the First Class }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Sunday { rank: First, flags: SundayFlags(EASTER_OR_PENTECOST) } (LiturgicalUnit { desc: Easter Sunday, rank: Greater Sunday of the First Class }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Vincent Ferrer, Confessor, rank: Double }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-04-05|Dominica Easter|Greater Sunday of the First Class|Easter Sunday|
+2026-04-05|Dominica Easter|Greater Sunday of the First Class|Easter Sunday||

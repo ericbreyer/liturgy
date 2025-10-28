@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--agnes--virgin-and-martyr\", \"st--agnes\"]"
+expression: s.0
+---
+2025-01-21
+Vespers of St. Agnes, Virgin and Martyr:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      of Sunday (w.147)
+  Chapter:     Proper
+  Hymn:        Common of Virgins
+  Verse:       Common of Virgins
+  Magnificat:  Proper
+  Collect:     Proper

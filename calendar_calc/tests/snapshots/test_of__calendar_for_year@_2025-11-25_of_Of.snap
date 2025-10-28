@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-11-25|Feria III week XXXIV of Ordinary Time|Feria|Feria III week XXXIV of Ordinary Time|St. Catherine of Alexandria, Virgin and Martyr
+2025-11-25|Feria III week XXXIV of Ordinary Time|Feria|Feria III week XXXIV of Ordinary Time|St. Catherine of Alexandria, Virgin and Martyr|

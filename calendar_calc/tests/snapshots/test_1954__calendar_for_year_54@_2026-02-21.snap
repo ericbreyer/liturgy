@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-02-21|Sabbato after start of Lent|Greater Non-Privileged Feria|Sabbato after start of Lent|
+2026-02-21|Sabbato after start of Lent|Greater Non-Privileged Feria|Sabbato after start of Lent||

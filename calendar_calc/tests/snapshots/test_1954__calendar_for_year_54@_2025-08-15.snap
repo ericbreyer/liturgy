@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: FirstClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Assumption of the Blessed Virgin Mary, rank: First Class Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week IX after the octave of Pentecost (Week 2 of August), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Assumption of the Blessed Virgin Mary, rank: First Class Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week IX after the octave of Pentecost (Week 2 of August), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-08-15|Feria VI week IX after the octave of Pentecost (Week 2 of August)|First Class Double|Assumption of the Blessed Virgin Mary|
+2025-08-15|Feria VI week IX after the octave of Pentecost (Week 2 of August)|First Class Double|Assumption of the Blessed Virgin Mary||

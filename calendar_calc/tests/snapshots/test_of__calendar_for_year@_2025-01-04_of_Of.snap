@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-01-04|Sabbato in Christmas|Feria|Sabbato in Christmas|
+2025-01-04|Sabbato in Christmas|Feria|Sabbato in Christmas||

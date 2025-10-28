@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-01-18|Sabbato week I of Ordinary Time|Feria|Sabbato week I of Ordinary Time|BVM on Saturday
+2025-01-18|Sabbato week I of Ordinary Time|Feria|Sabbato week I of Ordinary Time|BVM on Saturday|

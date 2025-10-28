@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--jerome--priest-and-confessor-and-doctor-of-the-church\", \"st--jerome\"]"
+expression: s.0
+---
+2025-09-30
+Vespers of St. Jerome, Priest and Confessor and Doctor of the Church:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Common of Confessors (Non-Bishop)
+  Hymn:        Common of Confessors (Non-Bishop)
+  Verse:       Common of Confessors (Non-Bishop)
+  Magnificat:  Common of Confessors (Non-Bishop)
+  Collect:     Proper

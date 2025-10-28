@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Cecilia, Virgin and Martyr, rank: Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXVI after Pentecost (Week 4 of November), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXVI after Pentecost (Week 4 of November), rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Cecilia, Virgin and Martyr, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-11-22|Dominica XXVI after Pentecost (Week 4 of November)|Lesser Sunday|Dominica XXVI after Pentecost (Week 4 of November)|St. Cecilia, Virgin and Martyr
+2026-11-22|Dominica XXIV after Pentecost (Week 4 of November)|Lesser Sunday|Dominica XXIV after Pentecost (Week 4 of November)|St. Cecilia, Virgin and Martyr|

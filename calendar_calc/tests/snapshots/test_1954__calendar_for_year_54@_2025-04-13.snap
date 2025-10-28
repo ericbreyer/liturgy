@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Hermenegild, Martyr, rank: Semidouble }) and Sunday { rank: First } (LiturgicalUnit { desc: Palm Sunday, rank: Greater Sunday of the First Class }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: First } (LiturgicalUnit { desc: Palm Sunday, rank: Greater Sunday of the First Class }) to Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Hermenegild, Martyr, rank: Semidouble }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-04-13|Dominica Palm Sunday|Greater Sunday of the First Class|Palm Sunday|St. Hermenegild, Martyr
+2025-04-13|Dominica Palm Sunday|Greater Sunday of the First Class|Palm Sunday|St. Hermenegild, Martyr|

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-10-12|Dominica XXVIII of Ordinary Time|Sunday|Dominica XXVIII of Ordinary Time|
+2025-10-12|Dominica XXVIII of Ordinary Time|Sunday|Dominica XXVIII of Ordinary Time||

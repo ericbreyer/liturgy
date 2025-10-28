@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--francis-xavier--confessor\", \"st--francis-xavier\"]"
+expression: s.0
+---
+2024-12-03
+Vespers of St. Francis Xavier, Confessor:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Advent)
+  Psalms:      Psalter
+  Chapter:     Common of Confessors (Non-Bishop)
+  Hymn:        Common of Confessors (Non-Bishop)
+  Verse:       Common of Confessors (Non-Bishop)
+  Magnificat:  Common of Confessors (Non-Bishop)
+  Collect:     Proper
+  Commemoration of Feria III week I of Advent:
+    Magnificat Antiphon: Proper
+    Verse: Psalter (Ordinary of Advent)
+    Collect: Proper

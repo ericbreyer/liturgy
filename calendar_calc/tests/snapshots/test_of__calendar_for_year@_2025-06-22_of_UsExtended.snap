@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-06-22|Dominica XII of Ordinary Time|Sunday|Dominica XII of Ordinary Time|
+2025-06-22|Dominica XII of Ordinary Time|Sunday|Dominica XII of Ordinary Time||

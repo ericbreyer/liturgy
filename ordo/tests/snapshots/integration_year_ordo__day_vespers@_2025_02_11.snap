@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"the-apparition-of-the-blessed-virgin-mary-immaculate\"]"
+expression: s.0
+---
+2025-02-11
+Vespers of The Apparition of the Blessed Virgin Mary Immaculate:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

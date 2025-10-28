@@ -1,0 +1,5 @@
+id = "feria-of-christmas"
+name = "Feria of Christmas"
+
+[vespers]
+collect = "Feria"

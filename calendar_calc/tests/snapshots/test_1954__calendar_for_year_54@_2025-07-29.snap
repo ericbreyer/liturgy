@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Martha, Virgin, rank: Semidouble }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week VII after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Martha, Virgin, rank: Semidouble }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week VII after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-07-29|Feria III week VII after the octave of Pentecost|Semidouble|St. Martha, Virgin|Ss. Felicis, Simplicii, Faustini, and Beatrix, Martyrs
+2025-07-29|Feria III week VII after the octave of Pentecost|Semidouble|St. Martha, Virgin|Ss. Felicis, Simplicii, Faustini, and Beatrix, Martyrs|

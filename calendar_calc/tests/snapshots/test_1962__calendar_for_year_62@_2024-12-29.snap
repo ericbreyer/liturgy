@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica II of Christmas, rank: II }) and Octave { rank: 2 } (LiturgicalUnit { desc: Sunday in the Octave of Christmas , rank: II }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica II of Christmas, rank: II }) to Octave { rank: 2 } (LiturgicalUnit { desc: Sunday in the Octave of Christmas , rank: II }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2024-12-29|Dominica II of Christmas|II|Dominica II of Christmas|
+2024-12-29|Dominica II of Christmas|II|Dominica II of Christmas||

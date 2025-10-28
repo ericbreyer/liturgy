@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary, rank: Solemnity })) and Sunday { rank: 1, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica II of Advent, rank: Major Sunday }) |     -> Occurrence result: SecondWinsFirstTransferred | Comparing final winner Sunday { rank: 1, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica II of Advent, rank: Major Sunday }) to Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary, rank: Solemnity }) |     -> Occurrence result: FirstWinsSecondTransferred"
-expression: split_line.0
+expression: line
 ---
-2024-12-08|Dominica II of Advent|Major Sunday|Dominica II of Advent|
+2024-12-08|Dominica II of Advent|Major Sunday|Dominica II of Advent||

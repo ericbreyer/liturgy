@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-01-03|Sabbato in Christmas|Feria|Sabbato in Christmas|The Most Holy Name of Jesus
+2026-01-03|Sabbato in Christmas|Feria|Sabbato in Christmas|The Most Holy Name of Jesus|

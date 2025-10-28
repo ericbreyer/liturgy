@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-21|Feria IV week IV after the Octave of Easter|Ordinary Feria|Feria IV week IV after the Octave of Easter|
+2025-05-21|Feria IV week IV after the Octave of Easter|Ordinary Feria|Feria IV week IV after the Octave of Easter||

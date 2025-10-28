@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-08|Sabbato after Ash Wednesday|Feria|Sabbato after Ash Wednesday|St. John of God, Religious
+2025-03-08|Sabbato after Ash Wednesday|Feria|Sabbato after Ash Wednesday|St. John of God, Religious|

@@ -9,23 +9,18 @@ impl fmt::Display for DateRule {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             DateRule::Easter => write!(f, "Easter"),
-            DateRule::Fixed { month, day } => write!(f, "{}/{}", month, day),
-            DateRule::OffsetDays { rule, offset } => write!(f, "({}) + {} days", rule, offset),
+            DateRule::Fixed { month, day } => write!(f, "{month}/{day}"),
+            DateRule::OffsetDays { rule, offset } => write!(f, "({rule}) + {offset} days"),
             DateRule::OffsetSundays { rule, offset } => {
-                write!(f, "({}) + {} Sundays", rule, offset)
+                write!(f, "({rule}) + {offset} Sundays")
             }
-            DateRule::PreviousYear(rule) => write!(f, "{}", rule),
-            DateRule::NextYear(rule) => write!(f, "{}", rule),
+            DateRule::PreviousYear(rule) | DateRule::NextYear(rule) => write!(f, "{rule}"),
             DateRule::SundayBetweenOrFallback {
                 start,
                 end,
                 fallback,
             } => {
-                write!(
-                    f,
-                    "Sunday Between ({}) and ({}) or ({})",
-                    start, end, fallback
-                )
+                write!(f, "Sunday Between ({start}) and ({end}) or ({fallback})")
             }
             DateRule::LeapYearConditional {
                 non_leap_year_rule,
@@ -33,12 +28,11 @@ impl fmt::Display for DateRule {
             } => {
                 write!(
                     f,
-                    "({}) in leap year else ({})",
-                    leap_year_rule, non_leap_year_rule
+                    "({leap_year_rule}) in leap year else ({non_leap_year_rule})"
                 )
             }
             DateRule::AvoidSunday { rule } => {
-                write!(f, "({}) (transfered on sundays)", rule)
+                write!(f, "({rule}) (transfered on sundays)")
             }
             DateRule::DivinoAfflatuAnticipation => {
                 write!(f, "(DivinoAfflatuAnticipation)")
@@ -69,7 +63,7 @@ fn parse_three_args(s: &str) -> Result<Vec<&str>, String> {
         return Err(format!("Expected 3 arguments, got {}", parts.len()));
     }
 
-    Ok(parts.into_iter().map(|s| s.trim()).collect())
+    Ok(parts.into_iter().map(str::trim).collect())
 }
 
 fn parse_two_args(s: &str) -> Result<Vec<&str>, String> {
@@ -94,7 +88,7 @@ fn parse_two_args(s: &str) -> Result<Vec<&str>, String> {
         return Err(format!("Expected 2 arguments, got {}", parts.len()));
     }
 
-    Ok(parts.into_iter().map(|s| s.trim()).collect())
+    Ok(parts.into_iter().map(str::trim).collect())
 }
 
 impl FromStr for DateRule {
@@ -102,12 +96,46 @@ impl FromStr for DateRule {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = s.trim();
+
+        // Try simple literal
         if s == "Easter" {
             return Ok(DateRule::Easter);
         }
 
-        // Fixed(month, day)
-        if let Some(rest) = s.strip_prefix("Fixed(").and_then(|s| s.strip_suffix(")")) {
+        // Try specialized parsers in order
+        if let Some(res) = try_parse_fixed(s) {
+            return res;
+        }
+        if let Some(res) = try_parse_offset(s) {
+            return res;
+        }
+        if let Some(res) = try_parse_previous_year(s) {
+            return res;
+        }
+        if let Some(res) = try_parse_next_year(s) {
+            return res;
+        }
+        if let Some(res) = try_parse_sunday_between_or_fallback(s) {
+            return res;
+        }
+        if let Some(res) = try_parse_leap_year_conditional(s) {
+            return res;
+        }
+        if let Some(res) = try_parse_avoid_sunday(s) {
+            return res;
+        }
+        if s == "DivinoAfflatuAnticipation" {
+            return Ok(DateRule::DivinoAfflatuAnticipation);
+        }
+
+        Err(format!("Could not parse DateRule from '{s}'"))
+    }
+}
+
+// --- Helper parsers ---
+fn try_parse_fixed(s: &str) -> Option<Result<DateRule, String>> {
+    if let Some(rest) = s.strip_prefix("Fixed(").and_then(|s| s.strip_suffix(")")) {
+        let res = (|| -> Result<DateRule, String> {
             let mut parts = rest.split(',');
             let month: u8 = parts
                 .next()
@@ -121,18 +149,25 @@ impl FromStr for DateRule {
                 .map_err(|_| "Invalid day")?;
 
             if month == 0 || month > 12 {
-                return Err(format!("Invalid month: {}", month));
+                return Err(format!("Invalid month: {month}"));
             }
             if day == 0 || day > 31 {
-                return Err(format!("Invalid day: {}", day));
+                return Err(format!("Invalid day: {day}"));
             }
 
-            return Ok(DateRule::Fixed { month, day });
-        }
+            Ok(DateRule::Fixed { month, day })
+        })();
+        return Some(res);
+    }
+    None
+}
 
-        // OffsetDays(...) and OffsetSundays(...)
-        for prefix in &["OffsetDays(", "OffsetSundays("] {
-            if let Some(rest) = s.strip_prefix(prefix).and_then(|s| s.strip_suffix(")")) {
+fn try_parse_offset(s: &str) -> Option<Result<DateRule, String>> {
+    for prefix in &[("OffsetDays(", true), ("OffsetSundays(", false)] {
+        let (pfx, is_days) = *prefix;
+        if let Some(rest) = s.strip_prefix(pfx).and_then(|s| s.strip_suffix(")")) {
+            let res = (|| -> Result<DateRule, String> {
+                // find top-level comma
                 let mut depth = 0;
                 let mut split_index = None;
                 for (i, c) in rest.char_indices() {
@@ -146,57 +181,72 @@ impl FromStr for DateRule {
                         _ => {}
                     }
                 }
-                if let Some(i) = split_index {
-                    let (rule_str, offset_str) = rest.split_at(i);
-                    let offset_str = &offset_str[1..]; // skip comma
-                    let rule = rule_str
-                        .parse()
-                        .map_err(|e| format!("Invalid rule: {e:?}"))?;
-                    let offset: i32 = offset_str.trim().parse().map_err(|_| "Invalid offset")?;
-                    if offset == 0 {
-                        return Err("Offset cannot be zero".to_string());
-                    }
-                    return Ok(match *prefix {
-                        "OffsetDays(" => DateRule::OffsetDays {
-                            rule: Box::new(rule),
-                            offset,
-                        },
-                        "OffsetSundays(" => DateRule::OffsetSundays {
-                            rule: Box::new(rule),
-                            offset,
-                        },
-                        _ => unreachable!(),
-                    });
+                let i = split_index.ok_or("Missing comma in offset rule")?;
+                let (rule_str, offset_str) = rest.split_at(i);
+                let offset_str = &offset_str[1..]; // skip comma
+                let rule = rule_str
+                    .parse()
+                    .map_err(|e| format!("Invalid rule: {e:?}"))?;
+                let offset: i32 = offset_str.trim().parse().map_err(|_| "Invalid offset")?;
+                if offset == 0 {
+                    return Err("Offset cannot be zero".to_string());
                 }
-            }
+                Ok(if is_days {
+                    DateRule::OffsetDays {
+                        rule: Box::new(rule),
+                        offset,
+                    }
+                } else {
+                    DateRule::OffsetSundays {
+                        rule: Box::new(rule),
+                        offset,
+                    }
+                })
+            })();
+            return Some(res);
         }
-        // PreviousYear(...)
-        if let Some(rest) = s
-            .strip_prefix("PreviousYear(")
-            .and_then(|s| s.strip_suffix(")"))
-        {
+    }
+    None
+}
+
+fn try_parse_previous_year(s: &str) -> Option<Result<DateRule, String>> {
+    if let Some(rest) = s
+        .strip_prefix("PreviousYear(")
+        .and_then(|s| s.strip_suffix(")"))
+    {
+        let res = (|| -> Result<DateRule, String> {
             let rule = rest
                 .parse()
                 .map_err(|e| format!("Invalid PreviousYear rule: {e:?}"))?;
-            return Ok(DateRule::PreviousYear(Box::new(rule)));
-        }
+            Ok(DateRule::PreviousYear(Box::new(rule)))
+        })();
+        return Some(res);
+    }
+    None
+}
 
-        // NextYear(...)
-        if let Some(rest) = s
-            .strip_prefix("NextYear(")
-            .and_then(|s| s.strip_suffix(")"))
-        {
+fn try_parse_next_year(s: &str) -> Option<Result<DateRule, String>> {
+    if let Some(rest) = s
+        .strip_prefix("NextYear(")
+        .and_then(|s| s.strip_suffix(")"))
+    {
+        let res = (|| -> Result<DateRule, String> {
             let rule = rest
                 .parse()
                 .map_err(|e| format!("Invalid NextYear rule: {e:?}"))?;
-            return Ok(DateRule::NextYear(Box::new(rule)));
-        }
+            Ok(DateRule::NextYear(Box::new(rule)))
+        })();
+        return Some(res);
+    }
+    None
+}
 
-        // SundayBetweenOrFallback(start, end, fallback)
-        if let Some(rest) = s
-            .strip_prefix("SundayBetweenOrFallback(")
-            .and_then(|s| s.strip_suffix(")"))
-        {
+fn try_parse_sunday_between_or_fallback(s: &str) -> Option<Result<DateRule, String>> {
+    if let Some(rest) = s
+        .strip_prefix("SundayBetweenOrFallback(")
+        .and_then(|s| s.strip_suffix(")"))
+    {
+        let res = (|| -> Result<DateRule, String> {
             let parts = parse_three_args(rest)?;
             let start = parts[0]
                 .parse()
@@ -207,18 +257,23 @@ impl FromStr for DateRule {
             let fallback = parts[2]
                 .parse()
                 .map_err(|e| format!("Invalid fallback rule: {e:?}"))?;
-            return Ok(DateRule::SundayBetweenOrFallback {
+            Ok(DateRule::SundayBetweenOrFallback {
                 start: Box::new(start),
                 end: Box::new(end),
                 fallback: Box::new(fallback),
-            });
-        }
+            })
+        })();
+        return Some(res);
+    }
+    None
+}
 
-        // LeapYearConditional(leap_year_rule, non_leap_year_rule)
-        if let Some(rest) = s
-            .strip_prefix("LeapYearConditional(")
-            .and_then(|s| s.strip_suffix(")"))
-        {
+fn try_parse_leap_year_conditional(s: &str) -> Option<Result<DateRule, String>> {
+    if let Some(rest) = s
+        .strip_prefix("LeapYearConditional(")
+        .and_then(|s| s.strip_suffix(")"))
+    {
+        let res = (|| -> Result<DateRule, String> {
             let parts = parse_two_args(rest)?;
             let leap_year_rule = parts[1]
                 .parse()
@@ -226,32 +281,32 @@ impl FromStr for DateRule {
             let non_leap_year_rule = parts[0]
                 .parse()
                 .map_err(|e| format!("Invalid non-leap year rule: {e:?}"))?;
-            return Ok(DateRule::LeapYearConditional {
+            Ok(DateRule::LeapYearConditional {
                 leap_year_rule: Box::new(leap_year_rule),
                 non_leap_year_rule: Box::new(non_leap_year_rule),
-            });
-        }
+            })
+        })();
+        return Some(res);
+    }
+    None
+}
 
-        // AvoidSunday(rule)
-        if let Some(rest) = s
-            .strip_prefix("AvoidSunday(")
-            .and_then(|s| s.strip_suffix(")"))
-        {
+fn try_parse_avoid_sunday(s: &str) -> Option<Result<DateRule, String>> {
+    if let Some(rest) = s
+        .strip_prefix("AvoidSunday(")
+        .and_then(|s| s.strip_suffix(")"))
+    {
+        let res = (|| -> Result<DateRule, String> {
             let rule = rest
                 .parse()
                 .map_err(|e| format!("Invalid rule in AvoidSunday: {e:?}"))?;
-            return Ok(DateRule::AvoidSunday {
+            Ok(DateRule::AvoidSunday {
                 rule: Box::new(rule),
-            });
-        }
-
-        // DivinoAfflatuAnticipation
-        if s == "DivinoAfflatuAnticipation" {
-            return Ok(DateRule::DivinoAfflatuAnticipation);
-        }
-
-        Err(format!("Could not parse DateRule from '{}'", s))
+            })
+        })();
+        return Some(res);
     }
+    None
 }
 
 // Serialize and Deserialize for DateRule
@@ -279,60 +334,6 @@ mod test {
 
     use super::*;
 
-    // ---------- Base rules ----------
-    fn base_rules() -> Vec<DateRule> {
-        vec![
-            DateRule::Easter,
-            DateRule::Fixed { month: 1, day: 1 },
-            DateRule::Fixed { month: 12, day: 31 },
-        ]
-    }
-
-    // ---------- Generate depth-1 OffsetDays/OffsetSundays ----------
-    fn depth1_rules() -> Vec<DateRule> {
-        let mut rules = vec![];
-        for base in base_rules() {
-            rules.push(DateRule::OffsetDays {
-                rule: Box::new(base.clone()),
-                offset: 3,
-            });
-            rules.push(DateRule::OffsetSundays {
-                rule: Box::new(base.clone()),
-                offset: -2,
-            });
-        }
-        rules
-    }
-
-    // ---------- Generate depth-2 nested rules ----------
-    fn depth2_rules() -> Vec<DateRule> {
-        let mut rules = vec![];
-        for r1 in depth1_rules() {
-            for _r2 in base_rules() {
-                // Nested OffsetDays
-                rules.push(DateRule::OffsetDays {
-                    rule: Box::new(r1.clone()),
-                    offset: 1,
-                });
-                // Nested OffsetSundays
-                rules.push(DateRule::OffsetSundays {
-                    rule: Box::new(r1.clone()),
-                    offset: -1,
-                });
-            }
-        }
-        rules
-    }
-
-    // ---------- Combine all rules ----------
-    fn all_test_rules() -> Vec<DateRule> {
-        let mut rules = vec![];
-        rules.extend(base_rules());
-        rules.extend(depth1_rules());
-        rules.extend(depth2_rules());
-        rules
-    }
-
     // ---------- Hardcoded display tests ----------
     #[test_case(DateRule::Easter, "Easter"; "display_easter")]
     #[test_case(DateRule::Fixed { month: 1, day: 1 }, "1/1"; "display_fixed_jan_1")]
@@ -349,12 +350,7 @@ mod test {
         "display_nested_offset"
     )]
     fn test_display_hardcoded(rule: DateRule, expected: &str) {
-        assert_eq!(
-            rule.to_string(),
-            expected,
-            "Display mismatch for {:?}",
-            rule
-        );
+        assert_eq!(rule.to_string(), expected, "Display mismatch for {rule:?}");
     }
 
     // ---------- Invalid parse tests ----------
@@ -368,7 +364,7 @@ mod test {
     #[test_case("OffsetDays(Easter, abc)"; "offset_non_numeric")]
     fn test_parse_invalid(input: &str) {
         let result: Result<DateRule, _> = input.parse();
-        assert!(result.is_err(), "Expected error parsing '{}'", input);
+        assert!(result.is_err(), "Expected error parsing '{input}'");
     }
 
     // ---------- Nested parse example ----------

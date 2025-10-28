@@ -15,8 +15,9 @@ pub fn test_feast_rank_enumeration_conflicts<FR: Sized + FeastRankResolver + Sen
     let cs: Vec<_> = enumeration.into_iter().combinations(n).collect();
     println!("{} Combinations of {}", cs.len(), n);
     println!();
-    cs.into_par_iter().enumerate().for_each(|(_, c)| {
-        c.into_iter()
+    cs.into_iter().enumerate().for_each(|(_, c)| {
+        c.clone()
+            .into_iter()
             .map(|f| (f.clone(), f.get_rank_string()))
             .permutations(n)
             .filter_map(|perm| {
@@ -36,13 +37,9 @@ pub fn test_feast_rank_enumeration_conflicts<FR: Sized + FeastRankResolver + Sen
                 let (names1, mut res1) = pair[0].clone();
                 let (names2, mut res2) = pair[1].clone();
                 assert_eq!(
-                    res1.winner,
-                    res2.winner,
-                    "Mismatch in winners between {:?} and {:?}, \n\n{} \n\n{}",
-                    names1,
-                    names2,
-                    res1.debug_trace.join("\n"),
-                    res2.debug_trace.join("\n")
+                    res1.winner, res2.winner,
+                    "Mismatch in winners between {:?} and {:?}",
+                    names1, names2,
                 );
                 res1.commemorations.sort();
                 res2.commemorations.sort();
@@ -53,13 +50,11 @@ pub fn test_feast_rank_enumeration_conflicts<FR: Sized + FeastRankResolver + Sen
                 );
                 assert_eq!(
                     res1.winner_rank, res2.winner_rank,
-                    "Mismatch in winning ranks between {:?} and {:?}",
-                    names1, names2
+                    "Mismatch in winning ranks between {names1:?} and {names2:?}"
                 );
                 assert_eq!(
                     res1.transferred, res2.transferred,
-                    "Mismatch in transferred status between {:?} and {:?}",
-                    names1, names2
+                    "Mismatch in transferred status between {names1:?} and {names2:?}"
                 );
             });
 
@@ -92,12 +87,14 @@ fn build_occurance_graph<FR: FeastRankResolver>(
         match (res_ab, res_ba) {
             (Ok(r_ab), Ok(r_ba)) => {
                 // Both succeeded; ensure they picked the same winner.
-                if r_ab.winner != r_ba.winner {
-                    panic!(
-                        "Inconsistent winners for {} vs {}: '{}' vs '{}'",
-                        rank1, rank2, r_ab.winner, r_ba.winner
-                    );
-                }
+                assert!(
+                    !(r_ab.winner != r_ba.winner),
+                    "Inconsistent winners for {} vs {}: '{}' vs '{}'",
+                    rank1,
+                    rank2,
+                    r_ab.winner,
+                    r_ba.winner
+                );
                 // Add directed edge from winner -> loser
                 if r_ab.winner == rank1 {
                     adj_list
@@ -173,9 +170,9 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRankResolver>(enumer
 
         // Adjacency list with integer indices
         let mut adj: Vec<Vec<usize>> = vec![Vec::new(); nodes.len()];
-        for (u, neighs) in graph.iter() {
+        for (u, neighs) in graph {
             if let Some(&ui) = idx_of.get(u) {
-                for v in neighs.iter() {
+                for v in neighs {
                     if let Some(&vi) = idx_of.get(v) {
                         adj[ui].push(vi);
                     }
@@ -212,7 +209,7 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRankResolver>(enumer
             blocked[v] = true;
             stack.push(v);
 
-            for &w in adj[v].iter() {
+            for &w in &adj[v] {
                 if w == s {
                     let mut cycle: Vec<String> = stack.iter().map(|&i| nodes[i].clone()).collect();
                     // close cycle by repeating start
@@ -227,7 +224,7 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRankResolver>(enumer
             if found_cycle {
                 unblock(v, blocked, set_b);
             } else {
-                for &w in adj[v].iter() {
+                for &w in &adj[v] {
                     set_b[w].insert(v);
                 }
             }
@@ -241,7 +238,7 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRankResolver>(enumer
             // subgraph restricted to vertices with index >= s
             let mut sub_adj: Vec<Vec<usize>> = vec![Vec::new(); n];
             for u in s..n {
-                sub_adj[u] = adj[u].iter().cloned().filter(|&v| v >= s).collect();
+                sub_adj[u] = adj[u].iter().copied().filter(|&v| v >= s).collect();
             }
 
             for i in s..n {
@@ -304,17 +301,16 @@ pub fn test_feast_rank_enumeration_occurance_graph<FR: FeastRankResolver>(enumer
 
     let all_cycles = johnson_enumerate_cycles(&graph);
 
-    if !all_cycles.is_empty() {
-        panic!(
-            "Cycles detected in occurrence graph:\n{}\n{} cycles",
-            all_cycles
-                .iter()
-                .map(|cycle| cycle.join(" -> "))
-                .collect::<Vec<_>>()
-                .join("\n"),
-            all_cycles.len()
-        );
-    }
+    assert!(
+        all_cycles.is_empty(),
+        "Cycles detected in occurrence graph:\n{}\n{} cycles",
+        all_cycles
+            .iter()
+            .map(|cycle| cycle.join(" -> "))
+            .collect::<Vec<_>>()
+            .join("\n"),
+        all_cycles.len()
+    )
 }
 
 // Johnson's algorithm replaces the previous simple DFS cycle finder.

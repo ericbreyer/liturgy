@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Faustinus and Jovita, Martyrs, rank: Simple }) and Sunday { rank: Second } (LiturgicalUnit { desc: Quinquagesima Sunday, rank: Greater Sunday of the Second Class }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Second } (LiturgicalUnit { desc: Quinquagesima Sunday, rank: Greater Sunday of the Second Class }) to Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Faustinus and Jovita, Martyrs, rank: Simple }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-02-15|Dominica Quinquagesima|Greater Sunday of the Second Class|Quinquagesima Sunday|Ss. Faustinus and Jovita, Martyrs
+2026-02-15|Dominica Quinquagesima|Greater Sunday of the Second Class|Quinquagesima Sunday|Ss. Faustinus and Jovita, Martyrs|

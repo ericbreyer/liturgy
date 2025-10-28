@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"ss--fabian-and-sebastian--pope-and-martyrs\", \"ss--fabian-and-sebastian\"]"
+expression: s.0
+---
+2025-01-20
+Vespers of Ss. Fabian and Sebastian, Pope and Martyrs:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Epiphany)
+  Psalms:      Psalter
+  Chapter:     Common of Martyrs
+  Hymn:        Common of Martyrs
+  Verse:       Common of Martyrs
+  Magnificat:  Common of Martyrs
+  Collect:     Proper

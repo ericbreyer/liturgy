@@ -41,6 +41,11 @@
               Advanced comparison showing differences, transfers, and rank changes between calendars
             </p>
           </div>
+
+          <div class="feature-card">
+            <h3>Novena Tracker</h3>
+            <p>Track upcoming novenas and prepare for major feast days</p>
+        </div>
         </div>
       </div>
 
@@ -55,6 +60,11 @@
           <div class="calendar-item">
             <h3>Extraordinary Form (EF)</h3>
             <p>The Traditional Roman Calendar (1962 Missal)</p>
+          </div>
+
+          <div class="calendar-item">
+            <h3>1954</h3>
+            <p>The Roman Calendar as of 1954, prior to the 1955 reforms</p>
           </div>
 
           <div class="calendar-item">

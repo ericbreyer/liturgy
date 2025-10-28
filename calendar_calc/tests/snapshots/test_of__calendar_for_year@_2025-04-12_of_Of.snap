@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-04-12|Sabbato of Passion Week|Feria|Sabbato of Passion Week|
+2025-04-12|Sabbato of Passion Week|Feria|Sabbato of Passion Week||

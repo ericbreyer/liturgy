@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Ss. Andrew Kim Tae-gon, Paul Chong Ha-sang, and Companions, Priest and Martyrs, rank: Memorial })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXV of Ordinary Time, rank: Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXV of Ordinary Time, rank: Sunday }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Andrew Kim Tae-gon, Paul Chong Ha-sang, and Companions, Priest and Martyrs, rank: Memorial }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-09-20|Dominica XXV of Ordinary Time|Sunday|Dominica XXV of Ordinary Time|
+2026-09-20|Dominica XXV of Ordinary Time|Sunday|Dominica XXV of Ordinary Time||

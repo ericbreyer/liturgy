@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-10-14|Feria III week XXVIII of Ordinary Time|Feria|Feria III week XXVIII of Ordinary Time|St. Callistus I, Pope and Martyr
+2025-10-14|Feria III week XXVIII of Ordinary Time|Feria|Feria III week XXVIII of Ordinary Time|St. Callistus I, Pope and Martyr|

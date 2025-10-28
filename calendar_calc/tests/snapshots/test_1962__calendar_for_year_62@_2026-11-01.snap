@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: All Saints, rank: I }) and Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXIII after Pentecost (Week 1 of November), rank: II }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers | Comparing final winner Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: All Saints, rank: I }) to Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXIII after Pentecost (Week 1 of November), rank: II }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers"
-expression: split_line.0
+expression: line
 ---
-2026-11-01|Dominica XXIII after Pentecost (Week 1 of November)|I|All Saints|Dominica XXIII after Pentecost (Week 1 of November)
+2026-11-01|Dominica XXIII after Pentecost (Week 1 of November)|I|All Saints|Dominica XXIII after Pentecost (Week 1 of November)|

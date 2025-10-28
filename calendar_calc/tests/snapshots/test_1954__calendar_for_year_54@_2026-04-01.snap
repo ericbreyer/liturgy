@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-04-01|Feria IV of Holy Week|Greater Privileged Feria|Feria IV of Holy Week|
+2026-04-01|Feria IV of Holy Week|Greater Privileged Feria|Feria IV of Holy Week||

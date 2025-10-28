@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Catherine, Virgin and Martyr, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XXIV after the octave of Pentecost (Week 4 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Catherine, Virgin and Martyr, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XXIV after the octave of Pentecost (Week 4 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-11-25|Feria III week XXIV after the octave of Pentecost (Week 4 of November)|Double|St. Catherine, Virgin and Martyr|
+2025-11-25|Feria III week XXIV after the octave of Pentecost (Week 4 of November)|Double|St. Catherine, Virgin and Martyr||

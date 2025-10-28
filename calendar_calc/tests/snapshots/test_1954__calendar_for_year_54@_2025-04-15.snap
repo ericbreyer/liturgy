@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-04-15|Feria III of Holy Week|Greater Privileged Feria|Feria III of Holy Week|
+2025-04-15|Feria III of Holy Week|Greater Privileged Feria|Feria III of Holy Week||

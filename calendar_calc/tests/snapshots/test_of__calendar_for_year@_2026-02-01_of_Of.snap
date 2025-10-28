@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-02-01|Dominica IV of Ordinary Time|Sunday|Dominica IV of Ordinary Time|
+2026-02-01|Dominica IV of Ordinary Time|Sunday|Dominica IV of Ordinary Time||

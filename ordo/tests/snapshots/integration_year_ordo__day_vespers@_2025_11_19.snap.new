@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--elisabeth--widow\", \"st--elisabeth\"]"
+expression: s.0
+---
+2025-11-19
+Vespers of St. Elisabeth, Widow:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

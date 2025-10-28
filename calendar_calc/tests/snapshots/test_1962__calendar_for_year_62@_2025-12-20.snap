@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-12-20|Sabbato week III of Advent|II|Ember Saturday of Advent|
+2025-12-20|Sabbato week III of Advent|II|Ember Saturday of Advent||Vespers of Following: Dominica IV of Advent

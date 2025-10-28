@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-05-23|Sabbato week VII of Eastertide|Feria|Sabbato week VII of Eastertide|
+2026-05-23|Sabbato week VII of Eastertide|Feria|Sabbato week VII of Eastertide||

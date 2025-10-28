@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-04-21|Feria III week III of Eastertide|Feria|Feria III week III of Eastertide|St. Anselm, Bishop and Doctor of the Church
+2026-04-21|Feria III week III of Eastertide|Feria|Feria III week III of Eastertide|St. Anselm, Bishop and Doctor of the Church|

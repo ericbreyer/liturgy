@@ -5,3 +5,16 @@ edition = "2024"
 
 [dependencies]
 types = { path = "../types" }
+calendar_calc = { path = "../calendar_calc" }
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.7"
+anyhow = "*"
+nestify = "0.3.3"
+rayon = "1.11.0"
+
+[dev-dependencies]
+test-case = "3.3"
+insta = {version = "1.43", features = ["filters"]}
+
+[lints]
+workspace = true

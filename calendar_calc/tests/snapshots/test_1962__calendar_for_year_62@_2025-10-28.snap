@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Simon and Jude, Apostles, rank: II }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XX after the octave of Pentecost (Week 4 of October), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Simon and Jude, Apostles, rank: II }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XX after the octave of Pentecost (Week 4 of October), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-10-28|Feria III week XX after the octave of Pentecost (Week 4 of October)|II|Ss. Simon and Jude, Apostles|
+2025-10-28|Feria III week XX after the octave of Pentecost (Week 4 of October)|II|Ss. Simon and Jude, Apostles||

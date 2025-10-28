@@ -1351,7 +1351,7 @@ titles = ["Bishop", "Confessor"]
 name = "Vigil of the Nativity of St. John the Baptist"
 date_rule = "Fixed(6,23)"
 rank = "minor"
-color = "white"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]
@@ -1395,7 +1395,7 @@ titles = ["Bishop", "Martyr"]
 name = "Vigil of Ss. Peter and Paul"
 date_rule = "Fixed(6,28)"
 rank = "minor"
-color = "white"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]
@@ -1609,7 +1609,7 @@ titles = ["Bishop", "Confessor"]
 name = "Vigil of St. James"
 date_rule = "Fixed(7,24)"
 rank = "minor"
-color = "red"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]
@@ -2437,7 +2437,7 @@ titles = ["Pope", "Martyr"]
 name = "Vigil of Ss. Simon and Jude"
 date_rule = "Fixed(10,27)"
 rank = "minor"
-color = "red"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]
@@ -2452,7 +2452,7 @@ titles = ["Apostles"]
 name = "Vigil of All Saints"
 date_rule = "Fixed(10,31)"
 rank = "minor"
-color = "white"
+color = "violet"
 day_type = "vigil"
 
 # Movable feast - Last Sunday in October
@@ -2478,7 +2478,7 @@ octave_rank = "common"
 color = "white"
 
 [[feasts]]
-name = "Commemoration of all the Faithful Departed"
+name = "The Commemoration of All the Faithful Departed"
 date_rule = "AvoidSunday(Fixed(11,2))"
 rank = "double"
 color = "black"
@@ -2691,7 +2691,7 @@ titles = ["Bishop", "Martyr"]
 [[feasts]]
 name = "Vigil of St. Andrew"
 date_rule = "Fixed(11,29)"
-color = "red"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]
@@ -2809,7 +2809,7 @@ titles = ["Bishop", "Martyr"]
 name = "Vigil of St. Thomas"
 date_rule = "Fixed(12,20)"
 rank = "minor"
-color = "red"
+color = "violet"
 titles = ["Apostle"]
 day_type = "vigil"
 
@@ -3113,7 +3113,7 @@ octave_rank = "privileged3"
 name = "The Vigil of Pentecost"
 date_rule = "OffsetDays(Easter, 48)"
 rank = "major"
-color = "red"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-11|Dominica IV of Easter|Sunday|Dominica IV of Easter|
+2025-05-11|Dominica IV of Easter|Sunday|Dominica IV of Easter||

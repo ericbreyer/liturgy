@@ -1,7 +1,7 @@
 [package]
 name = "calendar_calc"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 chrono = "0.4"
@@ -12,7 +12,6 @@ anyhow = "*"
 itertools = "0.14.0"
 types = { path = "../types" }
 
-
 [dev-dependencies]
 test-case = "3.3"
 insta = {version = "1.43", features = ["filters"]}
@@ -21,3 +20,6 @@ cross-proc-cache = { path = "../cross-proc-cache" }
 
 [build-dependencies]
 rand = "0.8"
+
+[lints]
+workspace = true

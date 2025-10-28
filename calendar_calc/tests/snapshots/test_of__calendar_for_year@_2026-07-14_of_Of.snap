@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-07-14|Feria III week XV of Ordinary Time|Feria|Feria III week XV of Ordinary Time|St. Camillus de Lellis, Priest
+2026-07-14|Feria III week XV of Ordinary Time|Feria|Feria III week XV of Ordinary Time|St. Camillus de Lellis, Priest|

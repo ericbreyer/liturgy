@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--linus--pope-and-martyr\", \"st--linus\"]"
+expression: s.0
+---
+2025-09-23
+Vespers of St. Linus, Pope and Martyr:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Common of Martyrs
+  Hymn:        Common of Martyrs
+  Verse:       Common of Martyrs
+  Magnificat:  Common of Martyrs
+  Collect:     Proper

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-04-24|Feria VI week III of Eastertide|Feria|Feria VI week III of Eastertide|St. Fidelis of Sigmaringen, Priest and Martyr
+2026-04-24|Feria VI week III of Eastertide|Feria|Feria VI week III of Eastertide|St. Fidelis of Sigmaringen, Priest and Martyr|

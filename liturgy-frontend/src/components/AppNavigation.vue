@@ -297,7 +297,6 @@ export default {}
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 8px;
   padding: 12px 20px;
   background: none;
   border: none;

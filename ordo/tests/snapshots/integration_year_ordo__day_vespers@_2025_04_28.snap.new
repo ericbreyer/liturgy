@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--paul-of-the-cross--confessor\", \"st--paul-of-the-cross\"]"
+expression: s.0
+---
+2025-04-28
+Vespers of St. Paul of the Cross, Confessor:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Eastertide)
+  Psalms:      Psalter
+  Chapter:     Common of Confessors (Non-Bishop)
+  Hymn:        Common of Confessors (Non-Bishop)
+  Verse:       Common of Confessors (Non-Bishop)
+  Magnificat:  Common of Confessors (Non-Bishop)
+  Collect:     Proper

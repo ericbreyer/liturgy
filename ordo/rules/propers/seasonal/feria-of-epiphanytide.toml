@@ -1,0 +1,6 @@
+id = "feria-of-epiphanytide"
+name = "Feria of epiphanytide"
+
+[vespers]
+magnificat_antiphon = "Proper"
+collect = "Proper"

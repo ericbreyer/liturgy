@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-20|Feria III week V of Eastertide|Feria|Feria III week V of Eastertide|St. Bernardine of Siena, Priest
+2025-05-20|Feria III week V of Eastertide|Feria|Feria III week V of Eastertide|St. Bernardine of Siena, Priest|

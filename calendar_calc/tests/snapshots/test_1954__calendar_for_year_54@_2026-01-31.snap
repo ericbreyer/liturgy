@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Bosco, Confessor, rank: Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Divino Afflatu Anticipated Sunday (VI after Epiphany), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Divino Afflatu Anticipated Sunday (VI after Epiphany), rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Bosco, Confessor, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-01-31|Sabbato week III after Epiphany|Lesser Sunday|Divino Afflatu Anticipated Sunday (VI after Epiphany)|St. John Bosco, Confessor
+2026-01-31|Sabbato week III after Epiphany|Lesser Sunday|Divino Afflatu Anticipated Sunday (VI after Epiphany)|St. John Bosco, Confessor|

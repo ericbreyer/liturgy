@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-01-02|Feria V week II of Christmas|III|Feria V week II of Christmas|
+2025-01-02|Feria V week II of Christmas|III|Feria V week II of Christmas||

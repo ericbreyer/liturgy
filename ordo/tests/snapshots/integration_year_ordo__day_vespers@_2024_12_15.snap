@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"dominica-iii-of-advent\", \"dominica-of-advent\"]"
+expression: s.0
+---
+2024-12-15
+Second Vespers of Dominica III of Advent:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Psalter (Ordinary of Advent)
+  Verse:       Psalter (Ordinary of Advent)
+  Magnificat:  Proper
+  Collect:     Proper

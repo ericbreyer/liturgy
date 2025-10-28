@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-09-04|Feria VI week XIV after the octave of Pentecost (Week 1 of September)|Ordinary Feria|Feria VI week XIV after the octave of Pentecost (Week 1 of September)|
+2026-09-04|Feria VI week XIV after the octave of Pentecost (Week 1 of September)|Ordinary Feria|Feria VI week XIV after the octave of Pentecost (Week 1 of September)||

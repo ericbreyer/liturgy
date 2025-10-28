@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-13|Feria V week V after Epiphany|Ordinary Feria|Feria V week V after Epiphany|
+2025-02-13|Feria V week V after Epiphany|Ordinary Feria|Feria V week V after Epiphany||

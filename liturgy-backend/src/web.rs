@@ -1,6 +1,7 @@
 //! Web API module for liturgical calendars
 //!
-//! This module provides a REST API backend with Axum for liturgical calendar data
+//! This module provides a REST API backend with Axum for liturgical calendar
+//! data
 
 pub mod backend;
 
@@ -12,9 +13,10 @@ pub struct WebConfig {
     pub host: String,
     pub port: u16,
     pub calendar_data_dir: String,
-    /// Optional path to the frontend project directory (where package.json lives).
-    /// If set and `build_frontend` is true, the backend will run the frontend build
-    /// before starting and serve files from `<frontend_dir>/dist`.
+    /// Optional path to the frontend project directory (where package.json
+    /// lives). If set and `build_frontend` is true, the backend will run
+    /// the frontend build before starting and serve files from
+    /// `<frontend_dir>/dist`.
     pub frontend_dir: Option<String>,
     pub debug_delay: bool,
 }

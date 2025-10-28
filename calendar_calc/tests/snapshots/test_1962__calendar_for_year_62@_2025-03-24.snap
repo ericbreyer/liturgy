@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Gabriel the Archangel, rank: III }) and Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Feria II week III of Lent, rank: III }) |     -> Occurrence result: SecondCommemorationOfFirstAtLauds | Comparing final winner Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Feria II week III of Lent, rank: III }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Gabriel the Archangel, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
-expression: split_line.0
+expression: line
 ---
-2025-03-24|Feria II week III of Lent|III|Feria II week III of Lent|St. Gabriel the Archangel
+2025-03-24|Feria II week III of Lent|III|Feria II week III of Lent|St. Gabriel the Archangel|Vespers of Following, Commemorate Own Vespers: Annunciation of the Blessed Virgin Mary

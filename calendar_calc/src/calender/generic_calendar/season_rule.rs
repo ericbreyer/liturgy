@@ -136,6 +136,7 @@ where
     where
         D: Deserializer<'de>,
     {
+        #![allow(clippy::too_many_lines)]
         use std::{fmt, marker::PhantomData};
 
         use serde::de::{self, MapAccess, Visitor};
@@ -185,11 +186,11 @@ where
                         "count_sundays_from" => count_sundays_from = Some(map.next_value()?),
                         "count_ferias_from" => count_ferias_from = Some(map.next_value()?),
                         "continue_counting_from_season" => {
-                            continue_counting_from_season = Some(map.next_value()?)
+                            continue_counting_from_season = Some(map.next_value()?);
                         }
                         "append_week_of_month" => append_week_of_month = Some(map.next_value()?),
                         "dont_show_week_of_season" => {
-                            dont_show_week_of_season = map.next_value()?
+                            dont_show_week_of_season = map.next_value()?;
                         }
                         "sunday_rank" => sunday_rank = Some(map.next_value()?),
                         "ferial_rules" => ferial_rules = map.next_value()?,
@@ -197,7 +198,7 @@ where
                         "octave_rank" => octave_rank = Some(map.next_value()?),
                         "parent_season" => parent_season = Some(map.next_value()?),
                         "week_of_month_old_scheme" => {
-                            week_of_month_old_scheme = map.next_value()?
+                            week_of_month_old_scheme = map.next_value()?;
                         }
 
                         _ => {
@@ -291,7 +292,7 @@ impl<DateType> SeasonRule<DateType> {
                 begin,
                 end,
                 color,
-                sunday_rank: sunday_rank.map(|s| s.into()),
+                sunday_rank: sunday_rank.map(std::convert::Into::into),
                 ferial_rules,
             },
             counting: CountingConfig {
@@ -481,6 +482,7 @@ impl FerialRule<DateRule> {
 }
 
 impl SeasonRule<DateRule> {
+    #[must_use]
     pub fn instantiate_for_lit_year(&self, lit_year: i32) -> SeasonRule<NaiveDate> {
         let begin = self.core.begin.to_day(lit_year).unwrap();
         let end = self.core.end.to_day(lit_year).unwrap();
@@ -538,7 +540,9 @@ impl SeasonRule<DateRule> {
     }
 
     /// Instantiate for a liturgical year with hierarchy resolution
-    /// This resolves parent season properties and flattens them into the resulting season
+    /// This resolves parent season properties and flattens them into the
+    /// resulting season
+    #[must_use]
     pub fn instantiate_with_hierarchy(
         &self,
         lit_year: i32,
@@ -570,9 +574,7 @@ impl SeasonRule<DateRule> {
 
         // Inherit properties from parent season if not explicitly set
         let resolved_color = if self.core.color == "green" || self.core.color.is_empty() {
-            parent_season
-                .map(|p| p.core.color.clone())
-                .unwrap_or_else(|| self.core.color.clone())
+            parent_season.map_or_else(|| self.core.color.clone(), |p| p.core.color.clone())
         } else {
             self.core.color.clone()
         };
@@ -601,7 +603,8 @@ impl SeasonRule<DateRule> {
         let resolved_ferias_from =
             count_ferias_from.or_else(|| parent_season.and_then(|p| p.counting.ferias_from));
 
-        // Inherit ferial rules from parent (parent rules come first, then child rules override)
+        // Inherit ferial rules from parent (parent rules come first, then child rules
+        // override)
         if let Some(parent) = parent_season {
             let mut inherited_rules = parent.core.ferial_rules.clone();
             inherited_rules.extend(ferial_rules);
@@ -645,53 +648,61 @@ impl SeasonRule<DateRule> {
 
 impl SeasonRule<NaiveDate> {
     /// Gets the ferial rank for a given date within this season
-    pub fn get_ferial_rank_for_date(&self, date: &NaiveDate) -> ArcStr {
+    #[must_use]
+    pub fn get_ferial_rank_for_date(&self, date: NaiveDate) -> ArcStr {
         // Check if the date is within this season
-        if date < &self.core.begin || date > &self.core.end {
-            panic!(
-                "Date {:?} is out of range for season {}",
-                date, self.core.name
-            );
-        }
+        assert!(
+            !(date < self.core.begin || date > self.core.end),
+            "Date {:?} is out of range for season {}",
+            date,
+            self.core.name
+        );
 
         // Find the most applicable ferial rule (highest priority)
-        // Ferial rules are sorted by date range size (smaller ranges have higher priority)
+        // Ferial rules are sorted by date range size (smaller ranges have higher
+        // priority)
         self.core
             .ferial_rules
             .iter()
-            .find(|r| *date >= r.begin && *date <= r.end)
-            .map(|rule| rule.rank.clone())
-            .unwrap_or("IV".into())
+            .find(|r| date >= r.begin && date <= r.end)
+            .map_or("IV".into(), |rule| rule.rank.clone())
     }
 
     /// Gets the Sunday rank for this season
+    #[must_use]
     pub fn get_sunday_rank(&self) -> ArcStr {
         self.core.sunday_rank.clone().unwrap_or("II".into())
     }
 
-    /// Check if this season is "of Lent" (either Lent itself or a child of Lent)
+    /// Check if this season is "of Lent" (either Lent itself or a child of
+    /// Lent)
+    #[must_use]
     pub fn is_of_lent(&self) -> bool {
         self.name().to_lowercase().contains("lent")
             || self.name().to_lowercase().contains("passion")
             || self.name().to_lowercase().contains("holy week")
     }
 
-    /// Gets the count_sundays_suffix (hierarchy already resolved)
+    /// Gets the `count_sundays_suffix` (hierarchy already resolved)
+    #[must_use]
     pub fn get_count_sundays_suffix(&self) -> Option<&str> {
         self.counting.sundays_suffix.as_deref()
     }
 
-    /// Gets the count_ferias_suffix (hierarchy already resolved)
+    /// Gets the `count_ferias_suffix` (hierarchy already resolved)
+    #[must_use]
     pub fn get_count_ferias_suffix(&self) -> Option<&str> {
         self.counting.ferias_suffix.as_deref()
     }
 
-    /// Gets the count_sundays_from (hierarchy already resolved)
+    /// Gets the `count_sundays_from` (hierarchy already resolved)
+    #[must_use]
     pub fn get_count_sundays_from(&self) -> Option<NaiveDate> {
         self.counting.sundays_from
     }
 
-    /// Gets the count_ferias_from date (hierarchy already resolved)
+    /// Gets the `count_ferias_from` date (hierarchy already resolved)
+    #[must_use]
     pub fn get_count_ferias_from(&self) -> Option<NaiveDate> {
         self.counting.ferias_from
     }
@@ -715,7 +726,7 @@ pub mod test {
         }
     }
 
-    /// Tests SeasonRule ferial ranking functionality
+    /// Tests `SeasonRule` ferial ranking functionality
     #[test_case("2025-02-15", "II"; "date within ferial rule")]
     #[test_case("2025-01-15", "IV"; "date outside ferial rule uses default")]
     fn test_season_ferial_ranking(date_str: &str, expected_rank: &str) {
@@ -747,11 +758,11 @@ pub mod test {
 
         let test_date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
 
-        let actual_rank = season_rule.get_ferial_rank_for_date(&test_date);
+        let actual_rank = season_rule.get_ferial_rank_for_date(test_date);
         assert_eq!(actual_rank, expected_rank);
     }
 
-    /// Tests SeasonRule sunday ranking with different configurations
+    /// Tests `SeasonRule` sunday ranking with different configurations
     #[test_case(Some("I".into()), "I"; "explicit sunday rank")]
     #[test_case(None, "II"; "default sunday rank")]
     fn test_season_sunday_ranking(sunday_rank: Option<String>, expected: &str) {
@@ -778,7 +789,7 @@ pub mod test {
         assert_eq!(actual_rank, expected);
     }
 
-    /// Tests that SeasonRule panics when queried with out-of-range dates
+    /// Tests that `SeasonRule` panics when queried with out-of-range dates
     #[test]
     #[should_panic(expected = "Date")]
     fn test_season_rule_out_of_range_panic() {
@@ -804,7 +815,7 @@ pub mod test {
         // This should panic - date outside the season range
         let out_of_range = NaiveDate::from_ymd_opt(2025, 7, 1).unwrap();
 
-        season_rule.get_ferial_rank_for_date(&out_of_range);
+        season_rule.get_ferial_rank_for_date(out_of_range);
     }
 
     /// Tests instantiation of date rules for different liturgical years
@@ -839,15 +850,17 @@ pub mod test {
         assert_eq!(instantiated.rank, expected_rank);
         assert_eq!(
             instantiated.begin,
-            NaiveDate::from_ymd_opt(lit_year, begin_month as u32, begin_day as u32).unwrap()
+            NaiveDate::from_ymd_opt(lit_year, u32::from(begin_month), u32::from(begin_day))
+                .unwrap()
         );
         assert_eq!(
             instantiated.end,
-            NaiveDate::from_ymd_opt(lit_year, end_month as u32, end_day as u32).unwrap()
+            NaiveDate::from_ymd_opt(lit_year, u32::from(end_month), u32::from(end_day)).unwrap()
         );
     }
 
-    /// Tests SeasonRule instantiation with comprehensive field coverage for different years
+    /// Tests `SeasonRule` instantiation with comprehensive field coverage for
+    /// different years
     #[test_case(2025, "Complex Season", "I"; "year 2025")]
     #[test_case(2024, "Complex Season", "I"; "year 2024")]
     #[test_case(2026, "Complex Season", "I"; "year 2026")]
@@ -898,6 +911,7 @@ pub mod test {
     }
 
     // Test helper functions
+
     pub fn create_test_season(
         name: &str,
         begin: NaiveDate,

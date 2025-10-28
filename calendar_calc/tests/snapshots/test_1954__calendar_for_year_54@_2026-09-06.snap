@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-09-06|Dominica XV after Pentecost (Week 2 of September)|Lesser Sunday|Dominica XV after Pentecost (Week 2 of September)|
+2026-09-06|Dominica XV after Pentecost (Week 2 of September)|Lesser Sunday|Dominica XV after Pentecost (Week 2 of September)||

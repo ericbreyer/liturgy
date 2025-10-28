@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-09-26|Feria VI week XXV of Ordinary Time|Feria|Feria VI week XXV of Ordinary Time|Ss. Cosmas and Damian, Martyrs
+2025-09-26|Feria VI week XXV of Ordinary Time|Feria|Feria VI week XXV of Ordinary Time|Ss. Cosmas and Damian, Martyrs|

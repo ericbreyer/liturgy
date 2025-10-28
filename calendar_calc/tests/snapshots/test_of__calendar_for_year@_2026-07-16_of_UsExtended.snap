@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-07-16|Feria V week XV of Ordinary Time|Feria|Feria V week XV of Ordinary Time|Our Lady of Mount Carmel
+2026-07-16|Feria V week XV of Ordinary Time|Feria|Feria V week XV of Ordinary Time|Our Lady of Mount Carmel|

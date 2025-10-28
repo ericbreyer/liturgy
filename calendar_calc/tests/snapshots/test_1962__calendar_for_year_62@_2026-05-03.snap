@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-05-03|Dominica IV after Easter Sunday|II|Dominica IV after Easter Sunday|
+2026-05-03|Dominica IV after Easter Sunday|II|Dominica IV after Easter Sunday||

@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"day-4-in-the-octave-of-easter\", \"octave-of-easter\"]"
+expression: s.0
+---
+2025-04-23
+Second Vespers of Day 4 in the Octave of Easter:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

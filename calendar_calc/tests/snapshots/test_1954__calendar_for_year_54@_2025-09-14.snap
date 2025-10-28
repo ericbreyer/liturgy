@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Exaltation of the Holy Cross, rank: Major Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XIV after Pentecost (Week 3 of September), rank: Lesser Sunday }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: MajorDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Exaltation of the Holy Cross, rank: Major Double }) to Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XIV after Pentecost (Week 3 of September), rank: Lesser Sunday }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-09-14|Dominica XIV after Pentecost (Week 3 of September)|Major Double|Exaltation of the Holy Cross|
+2025-09-14|Dominica XIV after Pentecost (Week 3 of September)|Major Double|Exaltation of the Holy Cross||

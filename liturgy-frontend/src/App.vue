@@ -87,7 +87,7 @@ const currentHeader = computed(() => {
     </main>
 
     <footer>
-      <p>Backend API: <code>/api/*</code> | Built with Vue 3 + Rust/Axum</p>
+      <p>Built by Eric Breyer 2025 | Send feedback to <code>eric.breyer@gmail.com</code></p>
     </footer>
   </div>
 </template>

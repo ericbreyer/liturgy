@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-11-07|Sabbato week XXXI of Ordinary Time|Feria|Sabbato week XXXI of Ordinary Time|BVM on Saturday
+2026-11-07|Sabbato week XXXI of Ordinary Time|Feria|Sabbato week XXXI of Ordinary Time|BVM on Saturday|

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: St. Stanislaus, Bishop and Martyr, rank: Memorial })) and Feria { rank: 3, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Feria VI of Passion Week, rank: Feria }) |     -> Occurrence result: SecondWinsFirstCommemoration | Comparing final winner Feria { rank: 3, flags: FerialFlags(LENT) } (LiturgicalUnit { desc: Feria VI of Passion Week, rank: Feria }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Stanislaus, Bishop and Martyr, rank: Memorial }) |     -> Occurrence result: FirstWinsSecondCommemoration"
-expression: split_line.0
+expression: line
 ---
-2025-04-11|Feria VI of Passion Week|Feria|Feria VI of Passion Week|St. Stanislaus, Bishop and Martyr
+2025-04-11|Feria VI of Passion Week|Feria|Feria VI of Passion Week|St. Stanislaus, Bishop and Martyr|

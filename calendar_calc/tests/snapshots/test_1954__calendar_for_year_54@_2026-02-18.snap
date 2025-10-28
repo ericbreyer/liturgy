@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Simeon, Bishop and Martyr, rank: Simple }) and Feria { rank: GreaterPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ash Wednesday, rank: Greater Privileged Feria }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Feria { rank: GreaterPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ash Wednesday, rank: Greater Privileged Feria }) to Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Simeon, Bishop and Martyr, rank: Simple }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-02-18|Feria IV after start of Lent|Greater Privileged Feria|Ash Wednesday|St. Simeon, Bishop and Martyr
+2026-02-18|Feria IV after start of Lent|Greater Privileged Feria|Ash Wednesday|St. Simeon, Bishop and Martyr|

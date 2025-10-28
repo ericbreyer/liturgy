@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-07-06|Feria II week XIV of Ordinary Time|Feria|Feria II week XIV of Ordinary Time|St. Maria Goretti, Virgin and Martyr
+2026-07-06|Feria II week XIV of Ordinary Time|Feria|Feria II week XIV of Ordinary Time|St. Maria Goretti, Virgin and Martyr|

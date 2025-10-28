@@ -1,7 +1,8 @@
 //! # Liturgy
 //!
-//! A Rust library for generating liturgical calendars for both the 1962 Roman Calendar (Extraordinary Form)
-//! and the Ordinary Form (Post-Vatican II) calendars.
+//! A Rust library for generating liturgical calendars for both the 1962 Roman
+//! Calendar (Extraordinary Form) and the Ordinary Form (Post-Vatican II)
+//! calendars.
 //!
 //! ## Features
 //!

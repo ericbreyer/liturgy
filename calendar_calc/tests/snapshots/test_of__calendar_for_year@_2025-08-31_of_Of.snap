@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-08-31|Dominica XXII of Ordinary Time|Sunday|Dominica XXII of Ordinary Time|
+2025-08-31|Dominica XXII of Ordinary Time|Sunday|Dominica XXII of Ordinary Time||

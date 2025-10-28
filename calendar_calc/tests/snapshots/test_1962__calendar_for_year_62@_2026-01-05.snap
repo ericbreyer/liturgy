@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-01-05|Feria II week III of Christmas|III|Feria II week III of Christmas|St. Thelesphorus, Pope and Martyr
+2026-01-05|Feria II week III of Christmas|III|Feria II week III of Christmas|St. Thelesphorus, Pope and Martyr|Vespers of Following: The Epiphany of our Lord

@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"the-most-precious-blood-of-our-lord-jesus-christ\"]"
+expression: s.0
+---
+2025-06-30
+First Vespers of The Most Precious Blood of our Lord Jesus Christ:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

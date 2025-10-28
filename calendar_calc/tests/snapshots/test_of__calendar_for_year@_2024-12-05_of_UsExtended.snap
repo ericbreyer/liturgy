@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2024-12-05|Feria V week I of Advent|Feria|Feria V week I of Advent|
+2024-12-05|Feria V week I of Advent|Feria|Feria V week I of Advent||

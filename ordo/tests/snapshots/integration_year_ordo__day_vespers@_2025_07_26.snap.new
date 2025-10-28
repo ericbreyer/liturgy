@@ -1,0 +1,20 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--anne--mother-of-the-blessed-virgin-mary\", \"st--anne\"]"
+expression: s.0
+---
+2025-07-26
+Vespers of St. Anne, Mother of the Blessed Virgin Mary:
+Vespers:
+  Antiphons:   Common of the Blessed Virgin Mary
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Common of the Blessed Virgin Mary
+  Hymn:        Common of the Blessed Virgin Mary
+  Verse:       Common of the Blessed Virgin Mary
+  Magnificat:  Common of the Blessed Virgin Mary
+  Collect:     Proper
+  Commemoration of Dominica VII after Pentecost:
+    Magnificat Antiphon: Proper
+    Verse: Proper
+    Collect: Proper

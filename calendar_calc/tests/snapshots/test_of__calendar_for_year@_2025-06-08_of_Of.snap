@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (Some(LiturgicalUnit { desc: Pentacost Sunday, rank: Solemnity })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica X of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(OF_THE_LORD | MOVABLE) } (LiturgicalUnit { desc: Pentacost Sunday, rank: Solemnity }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica X of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2025-06-08|Dominica X of Ordinary Time|Solemnity|Pentacost Sunday|
+2025-06-08|Dominica X of Ordinary Time|Solemnity|Pentacost Sunday||

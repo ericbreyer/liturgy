@@ -18,14 +18,17 @@ RUN apt-get update && \
 
 WORKDIR /usr/src
 # copy Rust workspaces
+COPY Cargo.toml ./
 COPY calendar_calc ./calendar_calc
 COPY liturgy-backend ./liturgy-backend
+COPY cross-proc-cache ./cross-proc-cache
 COPY types ./types
-# copy the frontend 'dist' into the Rust crate where server expects it
-COPY --from=node-builder /app/frontend/dist ./liturgy-frontend/dist
+COPY ordo ./ordo
 
 # optionally set FRONTEND_DIR env if your build.rs reads it
 ENV FRONTEND_DIR=../liturgy-frontend
+# ensure cargo writes the target into the crate-local target dir so the runtime stage can copy it
+ENV CARGO_TARGET_DIR=/usr/src/liturgy-backend/target
 # build static binary (adjust features/target as needed)
 WORKDIR /usr/src/liturgy-backend
 # build, move the resulting binary to a stable location (try known names), then remove sources in the same layer

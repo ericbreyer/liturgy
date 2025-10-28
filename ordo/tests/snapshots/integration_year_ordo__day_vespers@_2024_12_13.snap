@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--lucy--virgin-and-martyr\", \"st--lucy\"]"
+expression: s.0
+---
+2024-12-13
+Vespers of St. Lucy, Virgin and Martyr:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Common of Virgins
+  Hymn:        Common of Virgins
+  Verse:       Common of Virgins
+  Magnificat:  Proper
+  Collect:     Proper
+  Commemoration of Feria VI week II of Advent:
+    Magnificat Antiphon: Proper
+    Verse: Psalter (Ordinary of Advent)
+    Collect: Proper

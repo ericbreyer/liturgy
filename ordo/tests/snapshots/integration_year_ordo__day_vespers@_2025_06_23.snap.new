@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"the-nativity-of-st--john-the-baptist\"]"
+expression: s.0
+---
+2025-06-23
+First Vespers of The Nativity of St. John the Baptist:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

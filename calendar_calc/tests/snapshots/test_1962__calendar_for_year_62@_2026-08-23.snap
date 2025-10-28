@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XIII after Pentecost (Week 4 of August), rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Philip Benizi, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XIII after Pentecost (Week 4 of August), rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Philip Benizi, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-08-23|Dominica XIII after Pentecost (Week 4 of August)|II|Dominica XIII after Pentecost (Week 4 of August)|
+2026-08-23|Dominica XIII after Pentecost (Week 4 of August)|II|Dominica XIII after Pentecost (Week 4 of August)||

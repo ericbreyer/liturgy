@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anicetus, Pope and Martyr, rank: Simple }) and Feria { rank: GreaterPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Holy Thursday, rank: Greater Privileged Feria }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Feria { rank: GreaterPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Holy Thursday, rank: Greater Privileged Feria }) to Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anicetus, Pope and Martyr, rank: Simple }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-04-17|Feria V of Holy Week|Greater Privileged Feria|Holy Thursday|
+2025-04-17|Feria V of Holy Week|Greater Privileged Feria|Holy Thursday||

@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--th-r-se-of-the-child-jesus--virgin-and-doctor-of-the-church\", \"st--th-r-se-of-the-child-jesus\"]"
+expression: s.0
+---
+2025-10-03
+Vespers of St. Thérèse of the Child Jesus, Virgin and Doctor of the Church:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Common of Virgins
+  Hymn:        Common of Virgins
+  Verse:       Common of Virgins
+  Magnificat:  Common of Virgins
+  Collect:     Proper

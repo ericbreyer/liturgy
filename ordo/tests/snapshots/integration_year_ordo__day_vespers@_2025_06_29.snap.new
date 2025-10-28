@@ -1,0 +1,20 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"ss--peter-and-paul--apostles\", \"ss--peter-and-paul\"]"
+expression: s.0
+---
+2025-06-29
+Second Vespers of Ss. Peter and Paul, Apostles:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper
+  Commemoration of Dominica III after Pentecost:
+    Magnificat Antiphon: Proper
+    Verse: Proper
+    Collect: Proper

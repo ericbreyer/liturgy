@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-02-11|Feria IV week V of Ordinary Time|Feria|Feria IV week V of Ordinary Time|Our Lady of Lourdes
+2026-02-11|Feria IV week V of Ordinary Time|Feria|Feria IV week V of Ordinary Time|Our Lady of Lourdes|

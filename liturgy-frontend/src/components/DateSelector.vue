@@ -307,7 +307,6 @@ function goToToday() {
 }
 
 .nav-btn .label {
-  margin-left: 8px;
   display: inline-block;
 }
 

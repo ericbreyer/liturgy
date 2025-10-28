@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"all-saints\"]"
+expression: s.0
+---
+2025-11-01
+Second Vespers of All Saints:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

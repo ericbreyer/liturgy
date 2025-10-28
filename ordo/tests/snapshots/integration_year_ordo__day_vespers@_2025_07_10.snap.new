@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"the-seven-holy-brothers-and-ss--rufina-and-secunda--martyrs-and-virgins-and-martyrs\", \"the-seven-holy-brothers-and-ss--rufina-and-secunda\"]"
+expression: s.0
+---
+2025-07-10
+Vespers of The Seven Holy Brothers and Ss. Rufina and Secunda, Martyrs and Virgins and Martyrs:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Common of Virgins
+  Hymn:        Common of Virgins
+  Verse:       Common of Virgins
+  Magnificat:  Common of Virgins
+  Collect:     Proper

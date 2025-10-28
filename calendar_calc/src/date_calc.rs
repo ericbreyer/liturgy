@@ -14,26 +14,25 @@ pub(crate) fn get_following_sunday(date: NaiveDate) -> NaiveDate {
 pub(crate) fn num_sundays_after_date_inclusive(my_date: NaiveDate, other: NaiveDate) -> i32 {
     let preceding_sunday = get_preceding_sunday(my_date);
 
-    if other.weekday() != chrono::Weekday::Sun {
-        panic!(
-            "The date {:?} is not a Sunday (it's a {:?})",
-            other,
-            other.weekday()
-        );
-    }
+    assert!(
+        !(other.weekday() != chrono::Weekday::Sun),
+        "The date {:?} is not a Sunday (it's a {:?})",
+        other,
+        other.weekday()
+    );
 
-    let days_diff = (other - preceding_sunday).num_days();
+    let days_diff: i32 = (other - preceding_sunday).num_days().try_into().unwrap();
     if days_diff < 0 {
         return 0i32;
     }
-    ((days_diff / 7) + 1) as i32
+    (days_diff / 7) + 1
 }
 
 pub fn num_weeks_after_date(my_date: NaiveDate, other: NaiveDate) -> i32 {
     let first_sunday_after =
-        my_date + chrono::Days::new((7 - my_date.weekday().num_days_from_sunday()) as u64);
+        my_date + chrono::Days::new(u64::from(7 - my_date.weekday().num_days_from_sunday()));
     let first_sunday_before =
-        my_date - chrono::Days::new(my_date.weekday().num_days_from_sunday() as u64);
+        my_date - chrono::Days::new(u64::from(my_date.weekday().num_days_from_sunday()));
     if other < my_date {
         return 0;
     }
@@ -66,7 +65,7 @@ pub fn to_roman_numeral(mut n: i32) -> ArcStr {
         (1, "I"),
     ];
 
-    for &(value, symbol) in roman_numerals.iter() {
+    for &(value, symbol) in &roman_numerals {
         while n >= value {
             result.push_str(symbol);
             n -= value;
@@ -89,7 +88,7 @@ pub fn to_month_string(month: u32) -> ArcStr {
         10 => "October".into(),
         11 => "November".into(),
         12 => "December".into(),
-        _ => panic!("Invalid month: {}", month),
+        _ => panic!("Invalid month: {month}"),
     }
 }
 

@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--raymund-of-pe-afort--confessor\", \"st--raymund-of-pe-afort\"]"
+expression: s.0
+---
+2025-01-23
+Vespers of St. Raymund of Peñafort, Confessor:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Epiphany)
+  Psalms:      Psalter
+  Chapter:     Common of Confessors (Non-Bishop)
+  Hymn:        Common of Confessors (Non-Bishop)
+  Verse:       Common of Confessors (Non-Bishop)
+  Magnificat:  Common of Confessors (Non-Bishop)
+  Collect:     Proper

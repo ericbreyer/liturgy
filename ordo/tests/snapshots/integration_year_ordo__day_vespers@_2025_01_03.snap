@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"feria-vi-week-ii-of-christmas\", \"feria-of-christmas\"]"
+expression: s.0
+---
+2025-01-03
+Vespers of Feria VI week II of Christmas:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Christmas)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Christmas)
+  Hymn:        Psalter (Ordinary of Christmas)
+  Verse:       Psalter (Ordinary of Christmas)
+  Magnificat:  Psalter (Ordinary of Christmas)
+  Collect:     Psalter (Ordinary of Christmas)

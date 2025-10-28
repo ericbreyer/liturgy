@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"feria-v-week-xv-after-the-octave-of-pentecost--week-3-of-september-\", \"feria-of-time-after-pentecost\"]"
+expression: s.0
+---
+2025-09-25
+Vespers of Feria V week XV after the octave of Pentecost (Week 3 of September):
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Time after Pentecost)
+  Hymn:        Psalter (Ordinary of Time after Pentecost)
+  Verse:       Psalter (Ordinary of Time after Pentecost)
+  Magnificat:  Psalter (Ordinary of Time after Pentecost)
+  Collect:     of Sunday

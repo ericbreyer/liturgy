@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-06-03|Feria III week VII of Eastertide|III|Feria III week VII of Eastertide|
+2025-06-03|Feria III week VII of Eastertide|III|Feria III week VII of Eastertide||

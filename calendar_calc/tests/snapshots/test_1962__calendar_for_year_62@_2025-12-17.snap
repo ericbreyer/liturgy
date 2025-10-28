@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-12-17|Feria IV week III of Advent|II|Ember Wednesday of Advent|
+2025-12-17|Feria IV week III of Advent|II|Ember Wednesday of Advent||

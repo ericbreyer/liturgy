@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Bartholomew, Apostle, rank: II }) and Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XI after Pentecost (Week 4 of August), rank: II }) |     -> Occurrence result: SecondCommemorationOfFirstAtLauds | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XI after Pentecost (Week 4 of August), rank: II }) to Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Bartholomew, Apostle, rank: II }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
-expression: split_line.0
+expression: line
 ---
-2025-08-24|Dominica XI after Pentecost (Week 4 of August)|II|Dominica XI after Pentecost (Week 4 of August)|St. Bartholomew, Apostle
+2025-08-24|Dominica XI after Pentecost (Week 4 of August)|II|Dominica XI after Pentecost (Week 4 of August)|St. Bartholomew, Apostle|

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anacletus, Pope and Martyr, rank: Semidouble }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica V after Pentecost, rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica V after Pentecost, rank: Lesser Sunday }) to Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anacletus, Pope and Martyr, rank: Semidouble }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-07-13|Dominica V after Pentecost|Lesser Sunday|Dominica V after Pentecost|St. Anacletus, Pope and Martyr
+2025-07-13|Dominica V after Pentecost|Lesser Sunday|Dominica V after Pentecost|St. Anacletus, Pope and Martyr|

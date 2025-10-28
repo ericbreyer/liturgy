@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"octave-day-of-the-nativity-of-our-lord-jesus-christ\", \"octave-of-christmas\"]"
+expression: s.0
+---
+2024-12-31
+First Vespers of Octave Day of the Nativity of our Lord Jesus Christ:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper
+  Commemoration of Day 7 in the Octave of Christmas:
+    Magnificat Antiphon: of Christmas
+    Verse: of Christmas
+    Collect: of Christmas

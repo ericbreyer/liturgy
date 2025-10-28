@@ -59,14 +59,14 @@ function getCommemorationInterpretation(calendarName: string): string {
               {{ getCommemorationInterpretation(calendar.name) }}
             </div>
             <div
-              v-for="commemoration in dayData[calendar.name].desc.commemorations"
+              v-for="[commemoration, _ctype] in dayData[calendar.name].desc.commemorations"
               :key="commemoration.desc"
               class="commemoration-item"
             >
-              <span
-                class="color-bar small"
-                :style="{ backgroundColor: commemoration.color }"
-              ></span>
+              <LiturgicalColorBar
+              :color="commemoration.color || 'green'"
+              size="tiny"
+            />
               <span class="commemoration-desc">{{ commemoration.desc }}</span>
               <span class="commemoration-rank">{{ commemoration.rank }}</span>
             </div>
@@ -195,7 +195,7 @@ function getCommemorationInterpretation(calendarName: string): string {
 
 .commemoration-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
   margin-bottom: 3px;
   font-size: 12px;
@@ -212,6 +212,7 @@ function getCommemorationInterpretation(calendarName: string): string {
   font-weight: normal;
   color: var(--text-secondary);
   font-size: 10px;
+  text-align: end;
 }
 
 .no-data {

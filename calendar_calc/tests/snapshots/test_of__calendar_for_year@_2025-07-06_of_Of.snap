@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-07-06|Dominica XIV of Ordinary Time|Sunday|Dominica XIV of Ordinary Time|
+2025-07-06|Dominica XIV of Ordinary Time|Sunday|Dominica XIV of Ordinary Time||

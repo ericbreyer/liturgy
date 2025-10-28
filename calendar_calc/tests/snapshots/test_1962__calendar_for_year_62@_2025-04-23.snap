@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Octave { rank: 1 } (LiturgicalUnit { desc: Day 4 in the Octave of Easter, rank: I }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week I of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Octave { rank: 1 } (LiturgicalUnit { desc: Day 4 in the Octave of Easter, rank: I }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV week I of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-04-23|Feria IV week I of Eastertide|I|Day 4 in the Octave of Easter|
+2025-04-23|Feria IV week I of Eastertide|I|Day 4 in the Octave of Easter||

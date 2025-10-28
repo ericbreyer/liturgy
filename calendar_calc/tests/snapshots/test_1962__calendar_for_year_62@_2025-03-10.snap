@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Forty Holy Martyrs, Martyrs, rank: III }) and Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Feria II week I of Lent, rank: III }) |     -> Occurrence result: SecondCommemorationOfFirstAtLauds | Comparing final winner Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Feria II week I of Lent, rank: III }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Forty Holy Martyrs, Martyrs, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
-expression: split_line.0
+expression: line
 ---
-2025-03-10|Feria II week I of Lent|III|Feria II week I of Lent|The Forty Holy Martyrs, Martyrs
+2025-03-10|Feria II week I of Lent|III|Feria II week I of Lent|The Forty Holy Martyrs, Martyrs|

@@ -1,8 +1,9 @@
 use std::fmt::Debug;
 
-use crate::{ArcStr, DayRank};
 use chrono::NaiveDate;
 use serde::{Serialize, ser::SerializeStruct};
+
+use crate::{ArcStr, DayKind, DayRank};
 
 #[derive(Clone)]
 pub struct LiturgicalUnit<R: DayRank> {
@@ -10,6 +11,8 @@ pub struct LiturgicalUnit<R: DayRank> {
     pub rank: R,
     pub date: NaiveDate,
     pub color: ArcStr,
+    pub day_kind: DayKind,
+    pub titles: Vec<ArcStr>,
 }
 
 impl<R> Debug for LiturgicalUnit<R>
@@ -20,6 +23,9 @@ where
         f.debug_struct("LiturgicalUnit")
             .field("desc", &self.desc)
             .field("rank", &self.rank)
+            .field("day_kind", &self.day_kind)
+            .field("date", &self.date)
+            .field("color", &self.color)
             .finish()
     }
 }
@@ -32,11 +38,13 @@ where
     where
         S: serde::Serializer,
     {
-        let mut state = serializer.serialize_struct("LiturgicalUnit", 3)?;
+        // desc, rank, date, color, day_kind
+        let mut state = serializer.serialize_struct("LiturgicalUnit", 5)?;
         state.serialize_field("desc", &self.desc)?;
         state.serialize_field("rank", &self.rank)?;
         state.serialize_field("date", &self.date.to_string())?;
         state.serialize_field("color", &self.color)?;
+        state.serialize_field("day_kind", &format!("{:?}", &self.day_kind))?;
         state.end()
     }
 }
@@ -51,6 +59,8 @@ where
             rank: self.rank.clone(),
             date: self.date,
             color: self.color.clone(),
+            day_kind: self.day_kind.clone(),
+            titles: self.titles.clone(),
         }
     }
 }

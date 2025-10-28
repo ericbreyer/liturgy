@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Lucy, Virgin and Martyr, rank: III }) and Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II of Advent, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Lucy, Virgin and Martyr, rank: III }) to Feria { rank: 3, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week II of Advent, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers"
-expression: split_line.0
+expression: line
 ---
-2024-12-13|Feria VI week II of Advent|III|St. Lucy, Virgin and Martyr|Feria VI week II of Advent
+2024-12-13|Feria VI week II of Advent|III|St. Lucy, Virgin and Martyr|Feria VI week II of Advent|

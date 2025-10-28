@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"dominica-iv-of-advent\", \"dominica-of-advent\"]"
+expression: s.0
+---
+2024-12-21
+First Vespers of Dominica IV of Advent:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

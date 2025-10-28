@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--john--apostle-and-evangelist\", \"st--john\", \"octave-of-christmas\"]"
+expression: s.0
+---
+2024-12-27
+Vespers of St. John, Apostle and Evangelist:
+Vespers:
+  Antiphons:   of Christmas
+  Psalms:      of Christmas
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper
+  Commemoration of Day 3 in the Octave of Christmas:
+    Magnificat Antiphon: of Christmas
+    Verse: of Christmas
+    Collect: of Christmas

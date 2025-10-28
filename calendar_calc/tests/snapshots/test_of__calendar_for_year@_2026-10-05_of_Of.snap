@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-10-05|Feria II week XXVII of Ordinary Time|Feria|Feria II week XXVII of Ordinary Time|St. Faustina Kowalska, Virgin
+2026-10-05|Feria II week XXVII of Ordinary Time|Feria|Feria II week XXVII of Ordinary Time|St. Faustina Kowalska, Virgin|

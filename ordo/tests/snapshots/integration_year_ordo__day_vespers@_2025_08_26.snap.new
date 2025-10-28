@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"feria-iii-week-xi-after-the-octave-of-pentecost--week-4-of-august-\", \"feria-of-time-after-pentecost\"]"
+expression: s.0
+---
+2025-08-26
+Vespers of Feria III week XI after the octave of Pentecost (Week 4 of August):
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Time after Pentecost)
+  Hymn:        Psalter (Ordinary of Time after Pentecost)
+  Verse:       Psalter (Ordinary of Time after Pentecost)
+  Magnificat:  Psalter (Ordinary of Time after Pentecost)
+  Collect:     of Sunday

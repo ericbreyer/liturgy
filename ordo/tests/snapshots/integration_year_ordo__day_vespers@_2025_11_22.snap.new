@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"dominica-xxiv-after-pentecost--week-4-of-november-\", \"dominica-of-time-after-pentecost\"]"
+expression: s.0
+---
+2025-11-22
+First Vespers of Dominica XXIV after Pentecost (Week 4 of November):
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

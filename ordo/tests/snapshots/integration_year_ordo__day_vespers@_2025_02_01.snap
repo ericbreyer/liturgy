@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"the-purification-of-the-blessed-virgin-mary\"]"
+expression: s.0
+---
+2025-02-01
+First Vespers of The Purification of the Blessed Virgin Mary:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Proper
+  Hymn:        Common of the Blessed Virgin Mary
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

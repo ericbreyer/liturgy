@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-08-11|Feria III week XI after the octave of Pentecost (Week 2 of August)|III|Feria III week XI after the octave of Pentecost (Week 2 of August)|Ss. Tiburtius and Susanna, Virgin and Martyrs
+2026-08-11|Feria III week XI after the octave of Pentecost (Week 2 of August)|III|Feria III week XI after the octave of Pentecost (Week 2 of August)|Ss. Tiburtius and Susanna, Virgin and Martyrs|

@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--peter-nolasco--confessor\", \"st--peter-nolasco\"]"
+expression: s.0
+---
+2025-01-28
+Vespers of St. Peter Nolasco, Confessor:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Epiphany)
+  Psalms:      Psalter
+  Chapter:     Common of Confessors (Non-Bishop)
+  Hymn:        Common of Confessors (Non-Bishop)
+  Verse:       Common of Confessors (Non-Bishop)
+  Magnificat:  Common of Confessors (Non-Bishop)
+  Collect:     Proper

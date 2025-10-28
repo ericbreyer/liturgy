@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-07-09|Feria IV week IV after the octave of Pentecost|Ordinary Feria|Feria IV week IV after the octave of Pentecost|
+2025-07-09|Feria IV week IV after the octave of Pentecost|Ordinary Feria|Feria IV week IV after the octave of Pentecost||

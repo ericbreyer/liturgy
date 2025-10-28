@@ -220,7 +220,7 @@ color = "White"
 day_type = "feast"
 
 [[feasts]]
-name = "The most holy Name of Jesus"
+name = "The Most Holy Name of Jesus"
 date_rule = "SundayBetweenOrFallback(Fixed(1,1), Fixed(1,6), Fixed(1,2))"
 rank = "II"
 of_our_lord = true
@@ -228,7 +228,7 @@ color = "White"
 day_type = "feast"
 
 [[feasts]]
-name = "The most holy Family of Jesus, Mary, Joseph"
+name = "The Most Holy Family of Jesus, Mary, Joseph"
 date_rule = "OffsetSundays(Fixed(1,6), 1)"
 rank = "II"
 of_our_lord = true
@@ -570,6 +570,7 @@ date_rule = "Fixed(2,22)"
 rank = "II"
 color = "White"
 day_type = "feast"
+titles = ["Apostle"]
 
 [[feasts]]
 name = "St. Paul"
@@ -2453,10 +2454,10 @@ color = "White"
 day_type = "feast"
 
 [[feasts]]
-name = "The Commemoration of all Souls"
-date_rule = "Fixed(11,2)"
+name = "The Commemoration of All the Faithful Departed"
+date_rule = "AvoidSunday(Fixed(11,2))"
 rank = "I"
-color = "Violet"
+color = "black"
 day_type = "feast"
 
 [[feasts]]
@@ -2484,11 +2485,12 @@ titles = ["Martyrs"]
 day_type = "feast"
 
 [[feasts]]
-name = "The Dedication of the Archbasilica of the most Holy Saviour"
+name = "The Dedication of the Archbasilica of the Most Holy Saviour"
 date_rule = "Fixed(11,9)"
 rank = "II"
 color = "White"
 day_type = "feast"
+of_our_lord = true
 
 [[feasts]]
 name = "St. Theodore"
@@ -2805,7 +2807,7 @@ day_type = "feast"
 name = "Vigil of the Nativity of our Lord Jesus Christ"
 date_rule = "Fixed(12,24)"
 rank = "I"
-color = "Violet"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]
@@ -2815,6 +2817,14 @@ rank = "I"
 of_our_lord = true
 color = "White"
 note = "with an octave"
+day_type = "feast"
+
+[[feasts]]
+name = "Octave Day of the Nativity of our Lord Jesus Christ"
+date_rule = "Fixed(1,1)"
+rank = "I"
+of_our_lord = true
+color = "White"
 day_type = "feast"
 
 [[feasts]]
@@ -3000,14 +3010,14 @@ day_type = "feast"
 name = "Vigil of Pentecost"
 date_rule = "OffsetDays(Easter, 48)"
 rank = "I"
-color = "Violet"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]
 name = "Vigil of the Ascension"
 date_rule = "OffsetDays(Easter, 38)"
 rank = "II"
-color = "Violet"
+color = "violet"
 day_type = "vigil"
 
 [[feasts]]

@@ -143,7 +143,7 @@ async function generateFeastComparisons() {
     }
 
     // Add commemorations (skip ferias)
-    for (const commemoration of dayData.desc?.commemorations || []) {
+    for (const [commemoration, ctype] of dayData.desc?.commemorations || []) {
       if (commemoration?.desc && !isFeria(commemoration.desc)) {
         addFeastToComparison(allFeasts, commemoration.desc, calendar, {
           present: true,

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-04-18|Sabbato week II of Eastertide|Feria|Sabbato week II of Eastertide|
+2026-04-18|Sabbato week II of Eastertide|Feria|Sabbato week II of Eastertide||

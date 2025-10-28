@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: St. Polycarp, Bishop and Martyr, rank: Memorial })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica VII of Ordinary Time, rank: Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica VII of Ordinary Time, rank: Sunday }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Polycarp, Bishop and Martyr, rank: Memorial }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2025-02-23|Dominica VII of Ordinary Time|Sunday|Dominica VII of Ordinary Time|
+2025-02-23|Dominica VII of Ordinary Time|Sunday|Dominica VII of Ordinary Time||

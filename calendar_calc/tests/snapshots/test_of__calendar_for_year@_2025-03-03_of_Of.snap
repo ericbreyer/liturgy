@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-03|Feria II week VIII of Ordinary Time|Feria|Feria II week VIII of Ordinary Time|
+2025-03-03|Feria II week VIII of Ordinary Time|Feria|Feria II week VIII of Ordinary Time||

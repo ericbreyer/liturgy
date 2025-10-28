@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Gregory I Pope, Confessor, and, Doctor of the Church, rank: Double }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Wednesday in Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Gregory I Pope, Confessor, and, Doctor of the Church, rank: Double }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Wednesday in Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-03-12|Feria IV week I of Lent|Double|St. Gregory I Pope, Confessor, and, Doctor of the Church|Ember Wednesday in Lent
+2025-03-12|Feria IV week I of Lent|Double|St. Gregory I Pope, Confessor, and, Doctor of the Church|Ember Wednesday in Lent|

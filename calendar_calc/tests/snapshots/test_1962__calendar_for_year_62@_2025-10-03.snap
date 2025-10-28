@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Thérèse of the Child Jesus, Virgin and Doctor of the Church, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week XVI after the octave of Pentecost (Week 4 of September), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Thérèse of the Child Jesus, Virgin and Doctor of the Church, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week XVI after the octave of Pentecost (Week 4 of September), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-10-03|Feria VI week XVI after the octave of Pentecost (Week 4 of September)|III|St. Thérèse of the Child Jesus, Virgin and Doctor of the Church|
+2025-10-03|Feria VI week XVI after the octave of Pentecost (Week 4 of September)|III|St. Thérèse of the Child Jesus, Virgin and Doctor of the Church||

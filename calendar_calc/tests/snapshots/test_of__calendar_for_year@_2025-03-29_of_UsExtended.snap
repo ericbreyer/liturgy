@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-29|Sabbato week III of Lent|Feria|Sabbato week III of Lent|
+2025-03-29|Sabbato week III of Lent|Feria|Sabbato week III of Lent||

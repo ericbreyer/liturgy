@@ -11,7 +11,7 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
       return dateParam
     }
-    return new Date().toISOString().split('T')[0]
+    return stringFromDate(new Date())
   })
 
   // Get formatted date for display
@@ -42,9 +42,16 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     router.push({ name: routeName, query: newQuery })
   }
 
+  function stringFromDate(date: Date): string {
+    return date.getFullYear() + '-' +
+      String(date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(date.getDate()).padStart(2, '0')
+  }
+
   function goToToday() {
-    const today = new Date().toISOString().split('T')[0]
-    updateSelectedDate(today)
+    const today = new Date()
+    const todayString = stringFromDate(today)
+    updateSelectedDate(todayString)
   }
 
   function goToPrevious() {
@@ -60,7 +67,7 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
       date = new Date(year, month - 2, day) // Go to previous month
     }
 
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = stringFromDate(date)
     updateSelectedDate(dateString)
   }
 
@@ -77,7 +84,7 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
       date = new Date(year, month, day) // Go to next month
     }
 
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = stringFromDate(date)
     updateSelectedDate(dateString)
   }
 

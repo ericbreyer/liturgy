@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Assumption of the Blessed Virgin Mary, rank: Solemnity })) and Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria VI week XIX of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Assumption of the Blessed Virgin Mary, rank: Solemnity }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria VI week XIX of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2025-08-15|Feria VI week XIX of Ordinary Time|Solemnity|The Assumption of the Blessed Virgin Mary|
+2025-08-15|Feria VI week XIX of Ordinary Time|Solemnity|The Assumption of the Blessed Virgin Mary||

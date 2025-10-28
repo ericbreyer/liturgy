@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-24|Feria II week VII of Ordinary Time|Feria|Feria II week VII of Ordinary Time|
+2025-02-24|Feria II week VII of Ordinary Time|Feria|Feria II week VII of Ordinary Time||

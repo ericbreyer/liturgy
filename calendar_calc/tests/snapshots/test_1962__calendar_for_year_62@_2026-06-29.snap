@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Peter and Paul, Apostles, rank: I }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week V after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Peter and Paul, Apostles, rank: I }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week V after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-06-29|Feria II week V after the octave of Pentecost|I|Ss. Peter and Paul, Apostles|
+2026-06-29|Feria II week V after the octave of Pentecost|I|Ss. Peter and Paul, Apostles||

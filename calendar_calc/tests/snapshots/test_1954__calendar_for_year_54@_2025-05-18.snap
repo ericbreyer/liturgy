@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Venantius, Martyr, rank: Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica IV after Easter Sunday, rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica IV after Easter Sunday, rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Venantius, Martyr, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-05-18|Dominica IV after Easter Sunday|Lesser Sunday|Dominica IV after Easter Sunday|St. Venantius, Martyr
+2025-05-18|Dominica IV after Easter Sunday|Lesser Sunday|Dominica IV after Easter Sunday|St. Venantius, Martyr|

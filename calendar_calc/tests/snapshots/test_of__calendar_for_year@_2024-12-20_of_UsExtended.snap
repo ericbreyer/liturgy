@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2024-12-20|Feria VI week III of Advent|Feria|Feria VI week III of Advent|
+2024-12-20|Feria VI week III of Advent|Feria|Feria VI week III of Advent||

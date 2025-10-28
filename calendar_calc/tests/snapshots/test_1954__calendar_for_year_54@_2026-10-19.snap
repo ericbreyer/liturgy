@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Peter of Alcantara, Confessor, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXI after the octave of Pentecost (Week 3 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Peter of Alcantara, Confessor, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXI after the octave of Pentecost (Week 3 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-10-19|Feria II week XXI after the octave of Pentecost (Week 3 of October)|Double|St. Peter of Alcantara, Confessor|
+2026-10-19|Feria II week XXI after the octave of Pentecost (Week 3 of October)|Double|St. Peter of Alcantara, Confessor||

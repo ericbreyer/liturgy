@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"feria-ii-week-ii-of-advent\", \"feria-of-advent\"]"
+expression: s.0
+---
+2024-12-09
+Vespers of Feria II week II of Advent:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Advent)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Advent)
+  Hymn:        Psalter (Ordinary of Advent)
+  Verse:       Psalter (Ordinary of Advent)
+  Magnificat:  Proper
+  Collect:     Proper

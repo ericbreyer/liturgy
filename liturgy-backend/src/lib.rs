@@ -1,3 +1,3 @@
 pub mod web;
 
-pub use web::{run_web_app, WebConfig};
+pub use web::{WebConfig, run_web_app};

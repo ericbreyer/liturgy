@@ -1,0 +1,15 @@
+[first_vespers]
+antiphons = "Proper"
+psalms = "Common"
+chapter = "Proper"
+hymn = "Common"
+verse = "Proper"
+magnificat_antiphon = "Proper"
+
+[vespers]
+antiphons = "Proper"
+psalms = "Common"
+chapter = "Proper"
+hymn = "Common"
+verse = "Proper"
+magnificat_antiphon = "Proper"

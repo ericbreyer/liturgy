@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Most Holy Name of Jesus, rank: Second Class Double }) and Sunday { rank: Second } (LiturgicalUnit { desc: Dominica III of Christmas, rank: Greater Sunday of the Second Class }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Most Holy Name of Jesus, rank: Second Class Double }) and Octave { rank: Simple, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of the Holy Innocents, rank: Simple Octave Day }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Most Holy Name of Jesus, rank: Second Class Double }) to Sunday { rank: Second } (LiturgicalUnit { desc: Dominica III of Christmas, rank: Greater Sunday of the Second Class }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Most Holy Name of Jesus, rank: Second Class Double }) to Octave { rank: Simple, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of the Holy Innocents, rank: Simple Octave Day }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-01-04|Dominica III of Christmas|Second Class Double|The Most Holy Name of Jesus|Octave Day of the Holy Innocents
+2026-01-04|Dominica III of Christmas|Second Class Double|The Most Holy Name of Jesus|Octave Day of the Holy Innocents|

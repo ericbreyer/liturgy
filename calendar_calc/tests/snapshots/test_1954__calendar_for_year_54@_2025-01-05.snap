@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Most Holy Name of Jesus, rank: Second Class Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica III of Christmas, rank: Lesser Sunday }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Most Holy Name of Jesus, rank: Second Class Double }) to Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica III of Christmas, rank: Lesser Sunday }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-01-05|Dominica III of Christmas|Second Class Double|The Most Holy Name of Jesus|St. Telesphorus, Pope and Martyr
+2025-01-05|Dominica III of Christmas|Second Class Double|The Most Holy Name of Jesus|St. Telesphorus, Pope and Martyr|

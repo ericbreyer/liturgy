@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Conversion of St. Paul the Apostle, rank: Feast })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica III of Ordinary Time, rank: Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica III of Ordinary Time, rank: Sunday }) to Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Conversion of St. Paul the Apostle, rank: Feast }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-01-25|Dominica III of Ordinary Time|Sunday|Dominica III of Ordinary Time|
+2026-01-25|Dominica III of Ordinary Time|Sunday|Dominica III of Ordinary Time||

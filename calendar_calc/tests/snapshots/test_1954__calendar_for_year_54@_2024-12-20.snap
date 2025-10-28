@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Vigil { major: false } (LiturgicalUnit { desc: Vigil of St. Thomas, Apostle, rank: Minor Vigil }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Friday in Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Friday in Advent, rank: Greater Non-Privileged Feria }) to Vigil { major: false } (LiturgicalUnit { desc: Vigil of St. Thomas, Apostle, rank: Minor Vigil }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2024-12-20|Feria VI week III of Advent|Greater Non-Privileged Feria|Ember Friday in Advent|Vigil of St. Thomas, Apostle
+2024-12-20|Feria VI week III of Advent|Greater Non-Privileged Feria|Ember Friday in Advent|Vigil of St. Thomas, Apostle|

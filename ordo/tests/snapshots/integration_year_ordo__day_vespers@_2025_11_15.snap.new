@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"dominica-xxiii-after-pentecost--week-3-of-november-\", \"dominica-of-time-after-pentecost\"]"
+expression: s.0
+---
+2025-11-15
+First Vespers of Dominica XXIII after Pentecost (Week 3 of November):
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

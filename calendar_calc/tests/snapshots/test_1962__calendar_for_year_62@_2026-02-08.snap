@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica Sexagesima, rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John of Matha, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica Sexagesima, rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John of Matha, Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-02-08|Dominica Sexagesima|II|Dominica Sexagesima|
+2026-02-08|Dominica Sexagesima|II|Dominica Sexagesima||

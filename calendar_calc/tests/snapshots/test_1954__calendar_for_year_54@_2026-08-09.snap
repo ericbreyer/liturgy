@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Vianney, Confessor and Priest, rank: Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XI after Pentecost (Week 2 of August), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XI after Pentecost (Week 2 of August), rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Vianney, Confessor and Priest, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-08-09|Dominica XI after Pentecost (Week 2 of August)|Lesser Sunday|Dominica XI after Pentecost (Week 2 of August)|St. John Vianney, Confessor and Priest, St. Romanus, Martyr
+2026-08-09|Dominica XI after Pentecost (Week 2 of August)|Lesser Sunday|Dominica XI after Pentecost (Week 2 of August)|St. John Vianney, Confessor and Priest, St. Romanus, Martyr|

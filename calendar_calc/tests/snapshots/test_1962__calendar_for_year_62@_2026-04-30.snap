@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Catherine of Siena, Virgin, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week IV of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Catherine of Siena, Virgin, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week IV of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-04-30|Feria V week IV of Eastertide|III|St. Catherine of Siena, Virgin|
+2026-04-30|Feria V week IV of Eastertide|III|St. Catherine of Siena, Virgin||Vespers of Following: St. Joseph the Workman, Spouse of the Blessed Virgin Mary and Confessor

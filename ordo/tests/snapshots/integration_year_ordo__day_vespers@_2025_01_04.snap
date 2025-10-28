@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"the-most-holy-name-of-jesus\"]"
+expression: s.0
+---
+2025-01-04
+First Vespers of The Most Holy Name of Jesus:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      of Sunday (w.115)
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

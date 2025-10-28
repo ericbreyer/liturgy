@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-17|Sabbato week IV of Eastertide|Feria|Sabbato week IV of Eastertide|
+2025-05-17|Sabbato week IV of Eastertide|Feria|Sabbato week IV of Eastertide||

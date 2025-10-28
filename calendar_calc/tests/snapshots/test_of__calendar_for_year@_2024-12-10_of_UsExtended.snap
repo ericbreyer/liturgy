@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2024-12-10|Feria III week II of Advent|Feria|Feria III week II of Advent|Our Lady of Loreto
+2024-12-10|Feria III week II of Advent|Feria|Feria III week II of Advent|Our Lady of Loreto|

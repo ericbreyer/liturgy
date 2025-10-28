@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--scholastica--virgin\", \"st--scholastica\"]"
+expression: s.0
+---
+2025-02-10
+Vespers of St. Scholastica, Virgin:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Epiphany)
+  Psalms:      Psalter
+  Chapter:     Common of Virgins
+  Hymn:        Common of Virgins
+  Verse:       Common of Virgins
+  Magnificat:  Common of Virgins
+  Collect:     Proper

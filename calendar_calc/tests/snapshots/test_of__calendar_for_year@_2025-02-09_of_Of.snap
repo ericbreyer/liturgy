@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-09|Dominica V of Ordinary Time|Sunday|Dominica V of Ordinary Time|
+2025-02-09|Dominica V of Ordinary Time|Sunday|Dominica V of Ordinary Time||

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Peter of Alcantara, Confessor, rank: Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XIX after Pentecost (Week 4 of October), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XIX after Pentecost (Week 4 of October), rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Peter of Alcantara, Confessor, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-10-19|Dominica XIX after Pentecost (Week 4 of October)|Lesser Sunday|Dominica XIX after Pentecost (Week 4 of October)|St. Peter of Alcantara, Confessor
+2025-10-19|Dominica XIX after Pentecost (Week 4 of October)|Lesser Sunday|Dominica XIX after Pentecost (Week 4 of October)|St. Peter of Alcantara, Confessor|

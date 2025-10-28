@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-04-30|Feria IV week II of Eastertide|Feria|Feria IV week II of Eastertide|St. Pius V, Pope
+2025-04-30|Feria IV week II of Eastertide|Feria|Feria IV week II of Eastertide|St. Pius V, Pope|

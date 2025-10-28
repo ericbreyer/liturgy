@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XVI after Pentecost (Week 4 of September), rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Wenceslaus, Duke and Martyr, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XVI after Pentecost (Week 4 of September), rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Wenceslaus, Duke and Martyr, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-09-28|Dominica XVI after Pentecost (Week 4 of September)|II|Dominica XVI after Pentecost (Week 4 of September)|
+2025-09-28|Dominica XVI after Pentecost (Week 4 of September)|II|Dominica XVI after Pentecost (Week 4 of September)||Vespers of Following, Commemorate Own Vespers: The Dedication of St. Michael Archangel

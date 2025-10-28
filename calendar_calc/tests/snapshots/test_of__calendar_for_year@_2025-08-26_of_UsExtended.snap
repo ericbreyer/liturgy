@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-08-26|Feria III week XXI of Ordinary Time|Feria|Feria III week XXI of Ordinary Time|
+2025-08-26|Feria III week XXI of Ordinary Time|Feria|Feria III week XXI of Ordinary Time||

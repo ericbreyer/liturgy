@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-10-19|Dominica XXIX of Ordinary Time|Sunday|Dominica XXIX of Ordinary Time|
+2025-10-19|Dominica XXIX of Ordinary Time|Sunday|Dominica XXIX of Ordinary Time||

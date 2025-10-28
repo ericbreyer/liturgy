@@ -117,26 +117,75 @@ async function loadNovenaData() {
   loading.value = true
   error.value = ''
 
-  try {
-    const feastMap = new Map<string, NovenaFeast>() // Use Map for deduplication
+    try {
+      const feastMap = new Map<string, NovenaFeast>() // Use Map for deduplication
 
-    // Load data for the next 21 days across all selected calendars
-    for (let i = 1; i <= 21; i++) {
-      const date = addDays(todayString, i)
-      const daysAway = i
+      // Build an array of per-day tasks and run them in parallel. Each task will
+      // fire all calendar requests for that date in parallel using Promise.all.
+      const dayTasks: Promise<void>[] = []
 
-      console.log(`Checking date: ${date} (${daysAway} days from ${todayString})`)
+      for (let i = 1; i <= 21; i++) {
+        const date = addDays(todayString, i)
+        const daysAway = i
 
-      for (const calendar of selectedCalendars.value) {
-        console.log(`Processing calendar: ${calendar} for date ${date}`)
-        try {
-          const [year, month, day] = date.split('-').map(Number)
-          const dayInfo = await api.getDayInfo(calendar, year, month, day, currentController.signal)
+        console.log(`Checking date: ${date} (${daysAway} days from ${todayString})`)
 
-          if (dayInfo.desc.commemorations && dayInfo.desc.commemorations.length > 0) {
-            for (const commemoration of dayInfo.desc.commemorations) {
-              if (isNovenaWorthy(commemoration.desc, commemoration.rank, date)) {
-                const feastKey = `${date}-${commemoration.desc}`
+        // Create a task for this date that requests all selected calendars in parallel
+        const task = (async () => {
+          // For each selected calendar, request the day info in parallel
+          const requests = selectedCalendars.value.map(async (calendar) => {
+            console.log(`Processing calendar: ${calendar} for date ${date}`)
+            try {
+              const [year, month, day] = date.split('-').map(Number)
+              const dayInfo = await api.getDayInfo(calendar, year, month, day, currentController.signal)
+              return { calendar, dayInfo }
+            } catch (err) {
+              console.warn(`Failed to load data for ${date} in ${calendar}:`, err)
+              return null
+            }
+          })
+
+          const results = await Promise.all(requests)
+
+          for (const res of results) {
+            if (!res) continue
+            const { calendar, dayInfo } = res
+
+            // Process commemorations
+            if (dayInfo.desc.commemorations && dayInfo.desc.commemorations.length > 0) {
+              for (const [commemoration, ctype] of dayInfo.desc.commemorations) {
+                if (isNovenaWorthy(commemoration.desc, commemoration.rank, date)) {
+                  const feastKey = `${date}-${commemoration.desc}`
+
+                  if (feastMap.has(feastKey)) {
+                    // Add calendar to existing feast
+                    const existingFeast = feastMap.get(feastKey)!
+                    if (!existingFeast.calendars.includes(calendar)) {
+                      existingFeast.calendars.push(calendar)
+                      // Sort calendars for consistent display order
+                      existingFeast.calendars.sort()
+                    }
+                  } else {
+                    // Create new feast
+                    const feast: NovenaFeast = {
+                      date,
+                      title: commemoration.desc,
+                      rank: commemoration.rank,
+                      color: commemoration.color || 'white',
+                      calendars: [calendar],
+                      daysAway,
+                      novenaStartDate: addDays(date, -novenaDays.value),
+                    }
+                    feastMap.set(feastKey, feast)
+                  }
+                }
+              }
+            }
+
+            // Also check the main day observance
+            if (dayInfo.desc.day) {
+              if (isNovenaWorthy(dayInfo.desc.day.desc, dayInfo.desc.day.rank, date)) {
+                const feastKey = `${date}-${dayInfo.desc.day.desc}`
 
                 if (feastMap.has(feastKey)) {
                   // Add calendar to existing feast
@@ -150,9 +199,9 @@ async function loadNovenaData() {
                   // Create new feast
                   const feast: NovenaFeast = {
                     date,
-                    title: commemoration.desc,
-                    rank: commemoration.rank,
-                    color: commemoration.color || 'white',
+                    title: dayInfo.desc.day.desc,
+                    rank: dayInfo.desc.day.rank,
+                    color: dayInfo.desc.day.color || 'white',
                     calendars: [calendar],
                     daysAway,
                     novenaStartDate: addDays(date, -novenaDays.value),
@@ -162,40 +211,13 @@ async function loadNovenaData() {
               }
             }
           }
+        })()
 
-          // Also check the main day observance
-          if (dayInfo.desc.day) {
-            if (isNovenaWorthy(dayInfo.desc.day.desc, dayInfo.desc.day.rank, date)) {
-              const feastKey = `${date}-${dayInfo.desc.day.desc}`
-
-              if (feastMap.has(feastKey)) {
-                // Add calendar to existing feast
-                const existingFeast = feastMap.get(feastKey)!
-                if (!existingFeast.calendars.includes(calendar)) {
-                  existingFeast.calendars.push(calendar)
-                  // Sort calendars for consistent display order
-                  existingFeast.calendars.sort()
-                }
-              } else {
-                // Create new feast
-                const feast: NovenaFeast = {
-                  date,
-                  title: dayInfo.desc.day.desc,
-                  rank: dayInfo.desc.day.rank,
-                  color: dayInfo.desc.day.color || 'white',
-                  calendars: [calendar],
-                  daysAway,
-                  novenaStartDate: addDays(date, -novenaDays.value),
-                }
-                feastMap.set(feastKey, feast)
-              }
-            }
-          }
-        } catch (err) {
-          console.warn(`Failed to load data for ${date} in ${calendar}:`, err)
-        }
+        dayTasks.push(task)
       }
-    }
+
+      // Wait for all days to complete
+      await Promise.all(dayTasks)
 
     // Convert map to array
     const allFeasts = Array.from(feastMap.values())

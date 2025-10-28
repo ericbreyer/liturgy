@@ -2,35 +2,64 @@
 //!
 //! Provides REST API endpoints for the liturgical calendar application
 
-use crate::web::WebConfig;
-use anyhow::Result;
-use axum::body::Body;
-use axum::http::Request;
-use axum::middleware::{from_fn, Next};
-use axum::response::Response;
-use axum::{
-    extract::{Path, Query, State},
-    response::Json,
-    routing::{get, post},
-    Router,
-};
-use calendar_calc::{calender::GenericCalendarHandle, YearCalendarHandle};
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::path::PathBuf;
-use std::sync::Arc;
-use tower::ServiceBuilder;
-use tower_http::services::{ServeDir, ServeFile};
-use tower_http::{cors::CorsLayer, trace::TraceLayer};
-use types::DayDescription;
-use types::TrivialDayRank;
+use std::{collections::HashMap, path::PathBuf, sync::Arc};
 
+use anyhow::Result;
+use axum::{
+    Router,
+    body::Body,
+    extract::{Path, Query, State},
+    http::Request,
+    middleware::{Next, from_fn},
+    response::{Json, Response},
+    routing::{get, post},
+};
+use calendar_calc::{YearCalendarHandle, calender::GenericCalendarHandle};
+use indexmap::IndexMap;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use tokio::net::TcpListener;
+use tower::ServiceBuilder;
+use tower_http::{
+    cors::CorsLayer,
+    services::{ServeDir, ServeFile},
+    trace::TraceLayer,
+};
+use types::{DayRank62, TrivialDayRank};
+
+use crate::web::WebConfig;
+
+pub enum YearCalendarHandleEnum {
+    Trivial(YearCalendarHandle<TrivialDayRank>),
+    SixtyTwo(YearCalendarHandle<DayRank62>),
+}
+
+impl YearCalendarHandleEnum {
+    pub fn generate_csv(&self) -> String {
+        match self {
+            YearCalendarHandleEnum::Trivial(cal) => cal.generate_csv(),
+            YearCalendarHandleEnum::SixtyTwo(cal) => cal.generate_csv(),
+        }
+    }
+
+    /// Return day info as JSON Value regardless of the concrete DayRank type.
+    pub fn get_day_info_json(&self, date: chrono::NaiveDate) -> Option<Value> {
+        match self {
+            YearCalendarHandleEnum::Trivial(cal) => cal
+                .get_day_info(date)
+                .map(|d| serde_json::to_value(&d).unwrap_or(Value::Null)),
+            YearCalendarHandleEnum::SixtyTwo(cal) => cal
+                .get_day_info(date)
+                .map(|d| serde_json::to_value(&d).unwrap_or(Value::Null)),
+        }
+    }
+}
 /// Shared application state
 #[derive(Clone)]
 pub struct AppState {
-    pub gen_calendars: Arc<tokio::sync::RwLock<HashMap<String, GenericCalendarHandle>>>,
+    pub gen_calendars: Arc<tokio::sync::RwLock<IndexMap<String, GenericCalendarHandle>>>,
     pub year_calendars:
-        Arc<tokio::sync::RwLock<HashMap<(String, i32), Arc<YearCalendarHandle<TrivialDayRank>>>>>,
+        Arc<tokio::sync::RwLock<HashMap<(String, i32), Arc<YearCalendarHandleEnum>>>>,
     pub config: WebConfig,
 }
 
@@ -38,7 +67,7 @@ impl AppState {
     #[cfg(test)]
     pub fn new(config: WebConfig) -> Self {
         Self {
-            gen_calendars: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+            gen_calendars: Arc::new(tokio::sync::RwLock::new(IndexMap::new())),
             year_calendars: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
             config,
         }
@@ -52,7 +81,7 @@ pub async fn start_server(config: WebConfig) -> Result<()> {
 
     // Create shared state
     let state = AppState {
-        gen_calendars: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+        gen_calendars: Arc::new(tokio::sync::RwLock::new(IndexMap::new())),
         year_calendars: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
         config: config.clone(),
     };
@@ -60,105 +89,28 @@ pub async fn start_server(config: WebConfig) -> Result<()> {
     // Load default calendars
     load_default_calendars(&state).await?;
 
-    // Build our application with routes
+    // Build our application with routes (not used by the simple test server,
+    // keep it available for future use).
     let app = create_router(state);
 
-    // For production we only print startup info here (server is started
-    // elsewhere or via a different entrypoint). In tests we run a very
-    // small HTTP server (using tokio) that serves files from the
-    // frontend `dist` directory so integration tests can exercise
-    // static file serving without pulling in full axum/hyper server types.
+    let listener = TcpListener::bind(format!("{}:{}", config.host, config.port)).await?;
+
     println!(
-        "🚀 Liturgical Calendar Web App (not started) on http://{}:{}",
+        "🚀 Liturgical Calendar Web App starting on http://{}:{}",
         config.host, config.port
     );
     println!("📅 Calendar data directory: {}", config.calendar_data_dir);
 
-    use tokio::io::{AsyncReadExt, AsyncWriteExt};
-    use tokio::net::TcpListener as TokioTcpListener;
-
-    // If frontend_dir is set and has a dist/index.html, serve from there.
-    if let Some(frontend_dir) = &config.frontend_dir {
-        let mut dist = std::path::PathBuf::from(frontend_dir);
-        dist.push("dist");
-        let index_path = dist.join("index.html");
-        // Bind to the requested address and serve until task is aborted
-        let bind_addr = format!("{}:{}", config.host, config.port);
-        let listener = TokioTcpListener::bind(&bind_addr)
-            .await
-            .expect("bind test server");
-        println!("✅ Test static server serving from: {:?}", dist);
-
-        loop {
-            let (mut socket, _) = match listener.accept().await {
-                Ok(s) => s,
-                Err(e) => {
-                    eprintln!("accept error: {}", e);
-                    continue;
-                }
-            };
-
-            let dist_clone = dist.clone();
-            let index_clone = index_path.clone();
-
-            tokio::spawn(async move {
-                let mut buf = [0u8; 2048];
-                match socket.read(&mut buf).await {
-                    Ok(n) if n > 0 => {
-                        let req = String::from_utf8_lossy(&buf[..n]);
-                        // very naive request line parsing
-                        let first_line = req.lines().next().unwrap_or("");
-                        let mut parts = first_line.split_whitespace();
-                        let _method = parts.next().unwrap_or("");
-                        let path = parts.next().unwrap_or("/");
-
-                        // Map path to file under dist
-                        let file_path = if path == "/" {
-                            index_clone.clone()
-                        } else {
-                            let mut p = dist_clone.clone();
-                            // strip leading '/'
-                            let rel = path.trim_start_matches('/');
-                            p.push(rel);
-                            p
-                        };
-
-                        let response = match tokio::fs::read(&file_path).await {
-                            Ok(body) => {
-                                let header = format!(
-                                    "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n",
-                                    body.len()
-                                );
-                                let mut resp = header.into_bytes();
-                                resp.extend_from_slice(&body);
-                                resp
-                            }
-                            Err(_) => {
-                                let body = b"Not Found".to_vec();
-                                let header = format!(
-                                    "HTTP/1.1 404 NOT FOUND\r\nContent-Length: {}\r\n\r\n",
-                                    body.len()
-                                );
-                                let mut resp = header.into_bytes();
-                                resp.extend_from_slice(&body);
-                                resp
-                            }
-                        };
-
-                        let _ = socket.write_all(&response).await;
-                    }
-                    _ => {}
-                }
-            });
-        }
-    }
+    // Start server
+    axum::serve(listener, app).await?;
 
     Ok(())
 }
 
 /// Create the main router with all routes
-fn create_router(state: AppState) -> Router<AppState> {
-    // Create the api router and attach middleware to it (route_layer must be applied after routes)
+fn create_router(state: AppState) -> Router {
+    // Create the api router and attach middleware to it (route_layer must be
+    // applied after routes)
     let api_router = create_api_router();
     let api_router = if state.config.debug_delay {
         api_router.route_layer(from_fn(delay_middleware))
@@ -167,7 +119,8 @@ fn create_router(state: AppState) -> Router<AppState> {
     };
     let mut router = Router::<AppState>::new().nest("/api", api_router);
 
-    // If frontend_dir is provided, serve built assets from `<frontend_dir>/dist` at root
+    // If frontend_dir is provided, serve built assets from `<frontend_dir>/dist` at
+    // root
     if let Some(frontend_dir) = &state.config.frontend_dir {
         let mut dist_path = PathBuf::from(frontend_dir);
         dist_path.push("dist");
@@ -177,6 +130,7 @@ fn create_router(state: AppState) -> Router<AppState> {
 
             // Fallback to index.html for SPA routes
             let index_file = dist_path.join("index.html");
+
             if index_file.exists() {
                 let serve_index = ServeFile::new(index_file);
                 // Mount at root: try static files first, then index.html
@@ -192,13 +146,15 @@ fn create_router(state: AppState) -> Router<AppState> {
             println!("⚠️  Frontend dist directory not found: {:?}", dist_path);
         }
     }
-    // Add middleware (Trace and CORS). Note: delay middleware is attached to the API router
+    // Add middleware (Trace and CORS). Note: delay middleware is attached to the
+    // API router
     router
         .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())
                 .layer(
-                    CorsLayer::permissive(), // Allow all origins, methods, and headers for development
+                    CorsLayer::permissive(), /* Allow all origins, methods, and headers for
+                                              * development */
                 ),
         )
         .with_state(state)
@@ -210,6 +166,7 @@ fn create_router(state: AppState) -> Router<AppState> {
 #[allow(dead_code)]
 async fn delay_middleware(req: Request<Body>, next: Next) -> Response {
     use std::time::Duration;
+
     use tokio::time::sleep;
     // Delay every request by 500ms
     // Log and delay to help confirm middleware runs
@@ -284,7 +241,7 @@ async fn get_year_calendar(
     state: &AppState,
     name: &str,
     year: i32,
-) -> Option<Arc<YearCalendarHandle<TrivialDayRank>>> {
+) -> Option<Arc<YearCalendarHandleEnum>> {
     let calendars = state.year_calendars.read().await;
     if let Some(calendar) = calendars.get(&(name.to_string(), year)) {
         return Some(calendar.clone());
@@ -295,10 +252,10 @@ async fn get_year_calendar(
     let gen_calendars = state.gen_calendars.read().await;
     if let Some(gen_calendar) = gen_calendars.get(name) {
         // Choose which concrete year calendar to create based on calendar name
-        let year_calendar: YearCalendarHandle<TrivialDayRank> = match name {
-            "ef" => gen_calendar.create_year_calendar_62(year),
-            "54" => gen_calendar.create_year_calendar_54(year),
-            _ => gen_calendar.create_year_calendar_of(year),
+        let year_calendar: YearCalendarHandleEnum = match name {
+            "ef" => YearCalendarHandleEnum::SixtyTwo(gen_calendar.create_year_calendar_62(year)),
+            "54" => YearCalendarHandleEnum::Trivial(gen_calendar.create_year_calendar_54(year)),
+            _ => YearCalendarHandleEnum::Trivial(gen_calendar.create_year_calendar_of(year)),
         };
         drop(gen_calendars);
         let arc_cal = Arc::new(year_calendar);
@@ -418,7 +375,7 @@ async fn api_get_year(
 
 #[derive(Serialize)]
 struct DayInfo {
-    desc: DayDescription<TrivialDayRank>,
+    desc: Value,
 }
 
 /// GET /api/calendars/:name/day/:year/:month/:day - Get specific day info
@@ -434,30 +391,22 @@ async fn api_get_day(
             return Json(ApiResponse::error(format!(
                 "Invalid date: {}-{}-{}",
                 year, month, day
-            )))
+            )));
         }
     };
 
     match get_year_calendar(&state, &name, year).await {
-        Some(year_calendar) => match year_calendar.get_day_info(date) {
-            Some(day_desc) => {
-                let info = DayInfo {
-                    desc: day_desc.clone(),
-                };
-                Json(ApiResponse::success(info))
-            }
-            None => get_year_calendar(&state, &name, year + 1)
-                .await
-                .and_then(|next_year_calendar| next_year_calendar.get_day_info(date))
-                .map_or_else(
-                    || Json(ApiResponse::error(format!("No data for date: {}", date))),
-                    |day_desc| {
-                        let info = DayInfo {
-                            desc: day_desc.clone(),
-                        };
-                        Json(ApiResponse::success(info))
-                    },
-                ),
+        Some(year_calendar) => match year_calendar.as_ref().get_day_info_json(date) {
+            Some(day_val) => Json(ApiResponse::success(DayInfo { desc: day_val })),
+            None => match get_year_calendar(&state, &name, year + 1).await {
+                Some(next_year_calendar) => {
+                    match next_year_calendar.as_ref().get_day_info_json(date) {
+                        Some(day_val) => Json(ApiResponse::success(DayInfo { desc: day_val })),
+                        None => Json(ApiResponse::error(format!("No data for date: {}", date))),
+                    }
+                }
+                None => Json(ApiResponse::error(format!("No data for date: {}", date))),
+            },
         },
         None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
     }
@@ -504,7 +453,8 @@ async fn api_search_feasts(
                             let result = SearchResult {
                                 name: feast_name.clone(),
                                 description: info.to_string(),
-                                date: info.date_rule.to_string().into(), // Convert date rule to string
+                                date: info.date_rule.to_string().into(), /* Convert date rule to
+                                                                          * string */
                                 rank: rankstr.to_string(),
                                 score: *score,
                                 color: info.color.clone().to_string(),
@@ -541,19 +491,19 @@ async fn api_generate_calendar(
     match calendars.get(&name) {
         Some(calendar) => {
             // Pick appropriate concrete year calendar based on calendar name
-            let year_calendar: YearCalendarHandle<TrivialDayRank> = match name.as_str() {
-                "ef" => calendar.create_year_calendar_62(2025),
-                "54" => calendar.create_year_calendar_54(2025),
-                _ => calendar.create_year_calendar_of(2025),
+            let year_calendar_csv = match name.as_str() {
+                "ef" => calendar.create_year_calendar_62(2025).generate_csv(),
+                "54" => calendar.create_year_calendar_54(2025).generate_csv(),
+                _ => calendar.create_year_calendar_of(2025).generate_csv(),
             };
             let data = match params.format.as_deref() {
-                Some("csv") | None => year_calendar.generate_csv(),
+                Some("csv") | None => year_calendar_csv,
                 Some("json") => "{}".to_string(), // TODO: Implement JSON format
                 Some(format) => {
                     return Json(ApiResponse::error(format!(
                         "Unsupported format: {}",
                         format
-                    )))
+                    )));
                 }
             };
 
@@ -631,9 +581,10 @@ async fn api_get_stats(
 mod tests {
     use std::collections::HashSet;
 
-    use super::*;
     use insta::{assert_snapshot, with_settings};
     use test_case::{test_case, test_matrix};
+
+    use super::*;
 
     #[tokio::test]
     async fn test_load_default_calendars() {

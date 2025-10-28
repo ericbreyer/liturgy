@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-02|Dominica Quinquagesima|Greater Sunday of the Second Class|Quinquagesima Sunday|
+2025-03-02|Dominica Quinquagesima|Greater Sunday of the Second Class|Quinquagesima Sunday||

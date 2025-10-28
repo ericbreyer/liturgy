@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-16|Dominica II of Lent|Major Sunday|Dominica II of Lent|
+2025-03-16|Dominica II of Lent|Major Sunday|Dominica II of Lent||

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week V after the octave of Pentecost, rank: Ordinary Feria }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 6 in the Octave of Ss. Peter and Paul, rank: Day within a Common Octave }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 6 in the Octave of Ss. Peter and Paul, rank: Day within a Common Octave }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week V after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-07-04|Sabbato week V after the octave of Pentecost|Day within a Common Octave|Day 6 in the Octave of Ss. Peter and Paul|
+2026-07-04|Sabbato week V after the octave of Pentecost|Day within a Common Octave|Day 6 in the Octave of Ss. Peter and Paul||

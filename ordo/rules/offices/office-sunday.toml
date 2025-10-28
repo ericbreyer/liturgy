@@ -1,0 +1,10 @@
+id = "office-sunday"
+name = "Sunday Office"
+[vespers]
+antiphons = "Proper"
+psalms = "Psalter"
+chapter = "Proper"
+hymn = "Proper"
+verse = "Proper"
+magnificat_antiphon = "Proper"
+collect = "Proper"

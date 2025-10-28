@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-04-17|Feria V of Holy Week|I|Feria V of Holy Week|
+2025-04-17|Feria V of Holy Week|I|Feria V of Holy Week||

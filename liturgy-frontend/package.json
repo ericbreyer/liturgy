@@ -7,8 +7,9 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+  "dev": "vite",
+  "prepare-icons": "cp -R src/assets/icon/* public/",
+  "build": "run-p prepare-icons type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",

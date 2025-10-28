@@ -1170,6 +1170,7 @@ onUnmounted(() => {
 .commemoration-rank {
   font-size: 0.8rem;
   color: var(--text-muted);
+  text-align: end;
 }
 
 .no-detail {

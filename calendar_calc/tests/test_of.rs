@@ -52,7 +52,7 @@ fn test_calendar_for_year(year: usize, day: u32, cal: CalendarType) {
     let line = match cal {
         CalendarType::Of => {
             let cache = FsCache::new(
-                &Path::new(
+                Path::new(
                     format!(
                         "{}{}",
                         concat!(env!("CARGO_MANIFEST_DIR"), "/tests/cache/cache_of"),
@@ -71,7 +71,7 @@ fn test_calendar_for_year(year: usize, day: u32, cal: CalendarType) {
         }
         CalendarType::UsExtended => {
             let cache = FsCache::new(
-                &Path::new(
+                Path::new(
                     format!(
                         "{}{}",
                         concat!(env!("CARGO_MANIFEST_DIR"), "/tests/cache/cache_of_us"),
@@ -95,15 +95,11 @@ fn test_calendar_for_year(year: usize, day: u32, cal: CalendarType) {
     }
 
     let date = line.split('|').next().unwrap();
-    // split the line at the 5th '|'
-    let idx_5 = line.match_indices('|').nth(4).unwrap().0;
-    let (part1, part2) = line.split_at(idx_5);
-    let split_line = (part1, &part2[1..]); // skip the '|'
     with_settings!(
-        {snapshot_suffix => format!("_{}_of_{:?}", date, cal), description => split_line.1
+        {snapshot_suffix => format!("_{}_of_{:?}", date, cal)
     },
         {
-            assert_snapshot!(split_line.0);
+            assert_snapshot!(line);
         }
     );
 }

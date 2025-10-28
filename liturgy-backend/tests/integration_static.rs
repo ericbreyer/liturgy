@@ -1,11 +1,7 @@
-use std::fs;
-use std::net::TcpListener;
-use std::path::PathBuf;
-use std::time::Duration;
+use std::{fs, net::TcpListener, path::PathBuf, time::Duration};
 
+use liturgy_backend::web::{WebConfig, run_web_app};
 use tempfile::tempdir;
-
-use liturgy_backend::web::{run_web_app, WebConfig};
 
 #[tokio::test]
 async fn serves_index_from_dist() {

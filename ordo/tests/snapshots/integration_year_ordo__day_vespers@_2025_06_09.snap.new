@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"day-2-in-the-octave-of-pentecost\", \"octave-of-pentecost\"]"
+expression: s.0
+---
+2025-06-09
+Second Vespers of Day 2 in the Octave of Pentecost:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

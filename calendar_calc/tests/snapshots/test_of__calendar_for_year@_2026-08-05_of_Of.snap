@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-08-05|Feria IV week XVIII of Ordinary Time|Feria|Feria IV week XVIII of Ordinary Time|The Dedication of the Basilica of St. Mary Major
+2026-08-05|Feria IV week XVIII of Ordinary Time|Feria|Feria IV week XVIII of Ordinary Time|The Dedication of the Basilica of St. Mary Major|

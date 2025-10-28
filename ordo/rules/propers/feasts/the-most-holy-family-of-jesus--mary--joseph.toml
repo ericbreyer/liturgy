@@ -1,0 +1,19 @@
+id = "the-most-holy-family-of-jesus--mary--joseph"
+
+[first_vespers]
+antiphons = "Proper"
+psalms = "Proper"
+chapter = "Proper"
+hymn = "Proper"
+verse = "Proper"
+magnificat_antiphon = "Proper"
+collect = "Proper"
+
+[vespers]
+antiphons = "Proper"
+psalms = "Common"
+chapter = "Proper"
+hymn = "Proper"
+verse = "Proper"
+magnificat_antiphon = "Proper"
+collect = "Proper"

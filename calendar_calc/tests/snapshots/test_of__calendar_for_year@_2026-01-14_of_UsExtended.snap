@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-01-14|Feria IV week I of Ordinary Time|Feria|Feria IV week I of Ordinary Time|
+2026-01-14|Feria IV week I of Ordinary Time|Feria|Feria IV week I of Ordinary Time||

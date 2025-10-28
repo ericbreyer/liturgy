@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-04-15|Feria IV week I after the Octave of Easter|Ordinary Feria|Feria IV week I after the Octave of Easter|
+2026-04-15|Feria IV week I after the Octave of Easter|Ordinary Feria|Feria IV week I after the Octave of Easter||

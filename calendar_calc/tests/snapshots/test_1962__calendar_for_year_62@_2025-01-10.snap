@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-01-10|Feria VI of Epiphany|III|Feria VI of Epiphany|
+2025-01-10|Feria VI of Epiphany|III|Feria VI of Epiphany||

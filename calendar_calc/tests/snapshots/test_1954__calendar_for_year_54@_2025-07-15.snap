@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Henry II Emperor, Confessor, rank: Semidouble }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week V after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Henry II Emperor, Confessor, rank: Semidouble }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week V after the octave of Pentecost, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-07-15|Feria III week V after the octave of Pentecost|Semidouble|St. Henry II Emperor, Confessor|
+2025-07-15|Feria III week V after the octave of Pentecost|Semidouble|St. Henry II Emperor, Confessor||

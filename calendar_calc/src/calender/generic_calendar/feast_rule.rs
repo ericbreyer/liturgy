@@ -1,9 +1,9 @@
 use chrono::{Datelike, NaiveDate};
 use serde::{Deserialize, Serialize};
-use types::ArcStr;
+use types::{ArcStr, DayKind};
 
 use crate::calender::{
-    feast_rank::FeastRankResolver, DateRule, DayType, LiturgicalContext, LiturgicalUnit,
+    DateRule, DayType, LiturgicalContext, LiturgicalUnit, feast_rank::FeastRankResolver,
 };
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FeastRule<DateType> {
@@ -26,22 +26,27 @@ impl<DateType> FeastRule<DateType> {
         R: FeastRankResolver,
     {
         let rank = self.get_feastrank::<R>().descriptor();
+        let desc_str = self.to_string();
         LiturgicalUnit {
-            desc: self.to_string().into(),
+            desc: desc_str.clone().into(),
             rank,
             date,
             color: self.color,
+            // Construct a structured Feast DayKind from the rule name (no parsing needed).
+            day_kind: DayKind::Feast(self.name.clone()),
+            titles: self.titles.into_iter().map(ArcStr::from).collect(),
         }
     }
 
-    /// Get the effective FeastRank, either from the new field or converted from legacy fields
+    /// Get the effective `FeastRank`, either from the new field or converted
+    /// from legacy fields
     pub fn get_feastrank<R>(&self) -> R
     where
         R: FeastRankResolver,
     {
         // Convert from legacy fields
         let rank = self.rank.as_deref().unwrap_or("III");
-        let day_type = self.day_type.as_ref().unwrap_or(&DayType::Feast);
+        let day_type = self.day_type.unwrap_or(DayType::Feast);
 
         let mut context = LiturgicalContext::new().feast(self.name.clone());
 
@@ -58,19 +63,21 @@ impl<DateType> FeastRule<DateType> {
 }
 
 impl FeastRule<DateRule> {
+    #[must_use]
     pub fn instantiate_for_lit_year_with_advent(&self, lit_year: i32) -> FeastRule<NaiveDate> {
-        // For fixed dates that occur on or after the NEXT Advent (end of liturgical year),
-        // they belong to the previous liturgical year
+        // For fixed dates that occur on or after the NEXT Advent (end of liturgical
+        // year), they belong to the previous liturgical year
         let mut movable = true;
         let calendar_year = match &self.date_rule {
             DateRule::Fixed { month, day } => {
                 // Get the date in the current calendar year
                 let current_year_date =
-                    NaiveDate::from_ymd_opt(lit_year, *month as u32, *day as u32).unwrap();
+                    NaiveDate::from_ymd_opt(lit_year, u32::from(*month), u32::from(*day)).unwrap();
 
                 // Calculate when the NEXT Advent starts (end of this liturgical year)
-                // Advent is the 4th Sunday before Christmas, so find the first Sunday of Advent for lit_year+1
-                // But we need to be careful - we want Advent of the current calendar year, not liturgical year
+                // Advent is the 4th Sunday before Christmas, so find the first Sunday of Advent
+                // for lit_year+1 But we need to be careful - we want Advent of
+                // the current calendar year, not liturgical year
                 let next_advent_year = if *month >= 11 { lit_year } else { lit_year + 1 };
 
                 // Find first Sunday of Advent for this calendar year
@@ -81,7 +88,8 @@ impl FeastRule<DateRule> {
                     advent_sunday -= chrono::Duration::days(1);
                 }
                 movable = false;
-                // If the feast date is on or after this Advent, it belongs to the previous liturgical year
+                // If the feast date is on or after this Advent, it belongs to the previous
+                // liturgical year
                 if current_year_date >= advent_sunday {
                     lit_year - 1
                 } else {
@@ -98,13 +106,14 @@ impl FeastRule<DateRule> {
             date_rule: date,
             rank: self.rank.clone(),
             of_our_lord: self.of_our_lord,
-            day_type: self.day_type.clone(),
+            day_type: self.day_type,
             color: self.color.clone(),
             titles: self.titles.clone(),
             movable,
         }
     }
 
+    #[must_use]
     pub fn add_extensions_prefix(mut self, prefix: &str) -> Self {
         self.name = format!("{}: {}", prefix, self.name).into();
         self
@@ -114,7 +123,7 @@ impl FeastRule<DateRule> {
 impl<T> std::fmt::Display for FeastRule<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let titles = if self.titles.is_empty() {
-            "".to_string()
+            String::new()
         } else {
             format!(", {}", self.titles.join(" and "))
         };

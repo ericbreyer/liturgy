@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-01-14|Feria III week I of Ordinary Time|Feria|Feria III week I of Ordinary Time|
+2025-01-14|Feria III week I of Ordinary Time|Feria|Feria III week I of Ordinary Time||

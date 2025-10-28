@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--peter-chrysologus--bishop-and-confessor-and-doctor-of-the-church\", \"st--peter-chrysologus\"]"
+expression: s.0
+---
+2024-12-04
+Vespers of St. Peter Chrysologus, Bishop and Confessor and Doctor of the Church:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Advent)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper
+  Commemoration of Feria IV week I of Advent:
+    Magnificat Antiphon: Proper
+    Verse: Psalter (Ordinary of Advent)
+    Collect: Proper

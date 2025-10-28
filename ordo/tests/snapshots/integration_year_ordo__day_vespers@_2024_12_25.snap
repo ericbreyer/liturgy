@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"the-nativity-of-our-lord-jesus-christ\"]"
+expression: s.0
+---
+2024-12-25
+Second Vespers of The Nativity of our Lord Jesus Christ:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Proper
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

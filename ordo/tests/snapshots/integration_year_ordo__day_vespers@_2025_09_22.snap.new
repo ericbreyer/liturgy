@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--thomas-of-villanova--bishop-and-confessor\", \"st--thomas-of-villanova\"]"
+expression: s.0
+---
+2025-09-22
+Vespers of St. Thomas of Villanova, Bishop and Confessor:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper

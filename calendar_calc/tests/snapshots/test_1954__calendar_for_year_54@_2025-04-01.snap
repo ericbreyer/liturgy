@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-04-01|Feria III week IV of Lent|Greater Non-Privileged Feria|Feria III week IV of Lent|
+2025-04-01|Feria III week IV of Lent|Greater Non-Privileged Feria|Feria III week IV of Lent||

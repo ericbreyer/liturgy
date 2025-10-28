@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Holy Innocents, Martyrs, rank: Feast })) and Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Sabbato week I of Christmas, rank: Feria }) |     -> Occurrence result: FirstWins | Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: The Holy Innocents, Martyrs, rank: Feast })) and Feria { rank: 2, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Day 4 in the Octave of Christmas, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Holy Innocents, Martyrs, rank: Feast }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Sabbato week I of Christmas, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Holy Innocents, Martyrs, rank: Feast }) to Feria { rank: 2, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Day 4 in the Octave of Christmas, rank: Feria }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2024-12-28|Sabbato week I of Christmas|Feast|The Holy Innocents, Martyrs|
+2024-12-28|Sabbato week I of Christmas|Feast|The Holy Innocents, Martyrs||

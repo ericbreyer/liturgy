@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-10-31|Feria VI week XX after the octave of Pentecost (Week 4 of October)|III|Feria VI week XX after the octave of Pentecost (Week 4 of October)|
+2025-10-31|Feria VI week XX after the octave of Pentecost (Week 4 of October)|III|Feria VI week XX after the octave of Pentecost (Week 4 of October)||Vespers of Following: All Saints

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-01-13|Feria II week I of Ordinary Time|Feria|Feria II week I of Ordinary Time|St. Hilary, Bishop and Doctor of the Church
+2025-01-13|Feria II week I of Ordinary Time|Feria|Feria II week I of Ordinary Time|St. Hilary, Bishop and Doctor of the Church|

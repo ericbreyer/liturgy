@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cyril and Methodius, Bishops and Confessors, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week VI after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Cyril and Methodius, Bishops and Confessors, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week VI after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-07-07|Feria III week VI after the octave of Pentecost|III|Ss. Cyril and Methodius, Bishops and Confessors|
+2026-07-07|Feria III week VI after the octave of Pentecost|III|Ss. Cyril and Methodius, Bishops and Confessors||

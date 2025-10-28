@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Placid and companions, Martyrs, rank: Simple }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XVII after Pentecost (Week 2 of October), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XVII after Pentecost (Week 2 of October), rank: Lesser Sunday }) to Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Placid and companions, Martyrs, rank: Simple }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-10-05|Dominica XVII after Pentecost (Week 2 of October)|Lesser Sunday|Dominica XVII after Pentecost (Week 2 of October)|St. Placid and companions, Martyrs
+2025-10-05|Dominica XVII after Pentecost (Week 2 of October)|Lesser Sunday|Dominica XVII after Pentecost (Week 2 of October)|St. Placid and companions, Martyrs|

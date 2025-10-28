@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Apparition of St. Michael, rank: Major Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week II after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Apparition of St. Michael, rank: Major Double }) and Octave { rank: Common, flags: OctaveFlags(FIRST_3_DAYS) } (LiturgicalUnit { desc: Day 2 in the Octave of St. Joseph, rank: Day within a Common Octave }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Apparition of St. Michael, rank: Major Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week II after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: MajorDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Apparition of St. Michael, rank: Major Double }) to Octave { rank: Common, flags: OctaveFlags(FIRST_3_DAYS) } (LiturgicalUnit { desc: Day 2 in the Octave of St. Joseph, rank: Day within a Common Octave }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-05-08|Feria V week II after the Octave of Easter|Major Double|Apparition of St. Michael|Day 2 in the Octave of St. Joseph
+2025-05-08|Feria V week II after the Octave of Easter|Major Double|Apparition of St. Michael|Day 2 in the Octave of St. Joseph|

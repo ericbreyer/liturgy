@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Nativity of the Blessed Virgin Mary, rank: Second Class Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XV after the octave of Pentecost (Week 2 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Nativity of the Blessed Virgin Mary, rank: Second Class Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week XV after the octave of Pentecost (Week 2 of September), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-09-08|Feria III week XV after the octave of Pentecost (Week 2 of September)|Second Class Double|Nativity of the Blessed Virgin Mary|St. Adrian, Martyr
+2026-09-08|Feria III week XV after the octave of Pentecost (Week 2 of September)|Second Class Double|Nativity of the Blessed Virgin Mary|St. Adrian, Martyr|

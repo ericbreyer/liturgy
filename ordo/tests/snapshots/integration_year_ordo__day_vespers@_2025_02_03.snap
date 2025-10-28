@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"feria-ii-week-iv-after-epiphany\", \"feria-of-time-after-epiphany\"]"
+expression: s.0
+---
+2025-02-03
+Vespers of Feria II week IV after Epiphany:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Epiphany)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Time after Epiphany)
+  Hymn:        Psalter (Ordinary of Time after Epiphany)
+  Verse:       Psalter (Ordinary of Time after Epiphany)
+  Magnificat:  Psalter (Ordinary of Time after Epiphany)
+  Collect:     of Sunday

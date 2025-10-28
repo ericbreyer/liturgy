@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--stephen--protomartyr\", \"st--stephen\", \"octave-of-christmas\"]"
+expression: s.0
+---
+2024-12-26
+Vespers of St. Stephen, Protomartyr:
+Vespers:
+  Antiphons:   of Christmas
+  Psalms:      of Christmas
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper
+  Commemoration of Day 2 in the Octave of Christmas:
+    Magnificat Antiphon: of Christmas
+    Verse: of Christmas
+    Collect: of Christmas

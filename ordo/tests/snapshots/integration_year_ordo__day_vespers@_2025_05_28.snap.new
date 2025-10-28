@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"ascension-of-our-lord-jesus-christ\"]"
+expression: s.0
+---
+2025-05-28
+First Vespers of Ascension of our Lord Jesus Christ:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

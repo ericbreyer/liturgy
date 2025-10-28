@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"dominica-x-after-pentecost--week-3-of-august-\", \"dominica-of-time-after-pentecost\"]"
+expression: s.0
+---
+2025-08-17
+Second Vespers of Dominica X after Pentecost (Week 3 of August):
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

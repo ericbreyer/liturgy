@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXVI after Pentecost (Week 4 of November), rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Cecilia, Virgin and Martyr, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXVI after Pentecost (Week 4 of November), rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Cecilia, Virgin and Martyr, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-11-22|Dominica XXVI after Pentecost (Week 4 of November)|II|Dominica XXVI after Pentecost (Week 4 of November)|
+2026-11-22|Dominica XXIV after Pentecost (Week 4 of November)|II|Dominica XXIV after Pentecost (Week 4 of November)||

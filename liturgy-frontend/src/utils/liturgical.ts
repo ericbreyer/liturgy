@@ -16,6 +16,7 @@ export function getColorValue(color: string): string {
     gold: '#eab308',
     yellow: '#eab308',
     black: '#1f2937',
+    blue: '#3b82f6',
   }
   return colorMap[color?.toLowerCase()] || '#6b7280'
 }

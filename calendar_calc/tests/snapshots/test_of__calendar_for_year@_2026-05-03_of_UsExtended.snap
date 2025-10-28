@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Ss. Philip and James, Apostles, rank: Feast })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica V of Easter, rank: Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica V of Easter, rank: Sunday }) to Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Philip and James, Apostles, rank: Feast }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-05-03|Dominica V of Easter|Sunday|Dominica V of Easter|
+2026-05-03|Dominica V of Easter|Sunday|Dominica V of Easter||

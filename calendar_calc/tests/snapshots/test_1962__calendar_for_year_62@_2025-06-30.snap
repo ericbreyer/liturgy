@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Commemoration of St. Paul, Apostle, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Commemoration of St. Paul, Apostle, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III after the octave of Pentecost, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-06-30|Feria II week III after the octave of Pentecost|III|The Commemoration of St. Paul, Apostle|St. Peter, Apostle
+2025-06-30|Feria II week III after the octave of Pentecost|III|The Commemoration of St. Paul, Apostle|St. Peter, Apostle|Vespers of Following: The Most Precious Blood of our Lord Jesus Christ

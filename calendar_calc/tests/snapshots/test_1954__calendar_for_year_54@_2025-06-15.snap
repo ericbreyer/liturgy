@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Vitus, Modestus, and Crescentia, Martyrs, rank: Simple }) and Sunday { rank: First } (LiturgicalUnit { desc: Holy Trinity and the Octave of Pentecost, rank: Greater Sunday of the First Class }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Sunday { rank: First } (LiturgicalUnit { desc: Holy Trinity and the Octave of Pentecost, rank: Greater Sunday of the First Class }) to Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Vitus, Modestus, and Crescentia, Martyrs, rank: Simple }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-06-15|Dominica I after Pentecost|Greater Sunday of the First Class|Holy Trinity and the Octave of Pentecost|
+2025-06-15|Dominica I after Pentecost|Greater Sunday of the First Class|Holy Trinity and the Octave of Pentecost||

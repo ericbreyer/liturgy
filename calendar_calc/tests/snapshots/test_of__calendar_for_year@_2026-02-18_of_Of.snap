@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-02-18|Feria IV after start of Lent|Feria|Ash Wednesday|
+2026-02-18|Feria IV after start of Lent|Feria|Ash Wednesday||

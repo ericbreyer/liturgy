@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--bibiana--virgin-and-martyr\", \"st--bibiana\"]"
+expression: s.0
+---
+2024-12-02
+Vespers of St. Bibiana, Virgin and Martyr:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Advent)
+  Psalms:      Psalter
+  Chapter:     Common of Virgins
+  Hymn:        Common of Virgins
+  Verse:       Common of Virgins
+  Magnificat:  Common of Virgins
+  Collect:     Proper
+  Commemoration of Feria II week I of Advent:
+    Magnificat Antiphon: Proper
+    Verse: Psalter (Ordinary of Advent)
+    Collect: Proper

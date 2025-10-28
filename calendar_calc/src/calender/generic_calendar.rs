@@ -7,11 +7,11 @@ use serde::{Deserialize, Serialize};
 use types::ArcStr;
 
 use crate::calender::{
+    DateRule,
     feast_rank::{FeastRank54, FeastRank62, FeastRankOf, FeastRankResolver},
     fuzzy_search::fuzzy_search_best_n,
     year_calendar::YearCalendar,
     year_calendar_builder::YearCalendarBuilder,
-    DateRule,
 };
 mod feast_rule;
 mod season_rule;
@@ -58,6 +58,7 @@ impl GenericCalendar {
         let calendar = Self::from_toml_str(&content)?;
         Ok(calendar)
     }
+
     #[cfg(test)]
     /// Get the name of this calendar
     pub fn name(&self) -> &str {
@@ -65,6 +66,7 @@ impl GenericCalendar {
     }
 
     /// Determine the calendar type based on the name
+    #[must_use]
     pub fn calendar_type(&self) -> CalendarType {
         if self.name.to_lowercase().contains("1954") {
             CalendarType::Calendar1954
@@ -80,12 +82,14 @@ impl GenericCalendar {
 
     #[cfg(test)]
     /// Get the seasons defined in this calendar
+
     pub fn seasons(&self) -> &[SeasonRule<DateRule>] {
         &self.seasons
     }
 
     #[cfg(test)]
     /// Get the feasts defined in this calendar
+
     pub fn feasts(&self) -> &[FeastRule<DateRule>] {
         &self.feasts
     }
@@ -135,7 +139,8 @@ impl GenericCalendar {
         Ok(())
     }
 
-    /// Create a new calendar by loading a base calendar and merging additional feast files
+    /// Create a new calendar by loading a base calendar and merging additional
+    /// feast files
     pub fn from_toml_with_extensions<P: AsRef<std::path::Path>>(
         base_path: P,
         extension_paths: &[P],
@@ -150,11 +155,13 @@ impl GenericCalendar {
     }
 
     /// Create a year calendar for a specific liturgical year
+    #[must_use]
     pub fn instantiate_62_for_lit_year(
         &self,
         lit_year: i32,
     ) -> YearCalendar<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
-        // First, figure out when Advent starts to determine which feasts belong to which year
+        // First, figure out when Advent starts to determine which feasts belong to
+        // which year
         let advent_season = self
             .seasons
             .iter()
@@ -221,7 +228,6 @@ impl GenericCalendar {
 
         YearCalendarBuilder {
             year: lit_year,
-            #[cfg(test)]
             name: self.name.clone(),
             seasons,
             feasts,
@@ -234,11 +240,13 @@ impl GenericCalendar {
     }
 
     /// Create a 1954 calendar year calendar for a specific liturgical year
+    #[must_use]
     pub fn instantiate_54_for_lit_year(
         &self,
         lit_year: i32,
     ) -> YearCalendar<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
-        // First, figure out when Advent starts to determine which feasts belong to which year
+        // First, figure out when Advent starts to determine which feasts belong to
+        // which year
         let advent_season = self
             .seasons
             .iter()
@@ -316,7 +324,6 @@ impl GenericCalendar {
 
         YearCalendarBuilder {
             year: lit_year,
-            #[cfg(test)]
             name: self.name.clone(),
             seasons,
             feasts,
@@ -329,11 +336,13 @@ impl GenericCalendar {
     }
 
     /// Create an Ordinary Form year calendar for a specific liturgical year
+    #[must_use]
     pub fn instantiate_of_for_lit_year(
         &self,
         lit_year: i32,
     ) -> YearCalendar<<FeastRankOf as FeastRankResolver>::FeastRankDescriptor> {
-        // First, figure out when Advent starts to determine which feasts belong to which year
+        // First, figure out when Advent starts to determine which feasts belong to
+        // which year
         let advent_season = self
             .seasons
             .iter()
@@ -400,7 +409,6 @@ impl GenericCalendar {
 
         YearCalendarBuilder {
             year: lit_year,
-            #[cfg(test)]
             name: self.name.clone(),
             seasons,
             feasts,
@@ -413,6 +421,7 @@ impl GenericCalendar {
     }
 
     /// Get feast info by exact name match (case-insensitive)
+    #[must_use]
     pub fn get_feast_info(&self, name: &str) -> Option<(FeastRule<DateRule>, ArcStr)> {
         let name_lower = name.to_lowercase();
         self.feasts
@@ -436,7 +445,8 @@ impl GenericCalendar {
             })
     }
 
-    /// Suggest feast names using fuzzy matching (case-insensitive, substring or fuzzy search)
+    /// Suggest feast names using fuzzy matching (case-insensitive, substring or
+    /// fuzzy search)
     pub fn suggest_feast_names(&self, name: &str) -> Vec<(ArcStr, f32)> {
         let feast_names_and_titles: Vec<String> = self
             .feasts
@@ -449,7 +459,7 @@ impl GenericCalendar {
         // Use rust-fuzzy-search for better fuzzy matching, get top 8 results
         let binding = feast_names_and_titles
             .iter()
-            .map(|s| s.as_str())
+            .map(std::string::String::as_str)
             .collect::<Vec<&str>>();
         let fuzzy_results_titles = fuzzy_search_best_n(name, &binding, 8);
         let fuzzy_results = fuzzy_search_best_n(name, &feast_names_str, 8);
@@ -458,7 +468,7 @@ impl GenericCalendar {
         let mut combined_results: HashMap<String, f32> = HashMap::new();
         for (feast_name, score) in fuzzy_results_titles.iter().chain(fuzzy_results.iter()) {
             let entry = combined_results
-                .entry(feast_name.split("\\").nth(0).unwrap().to_owned())
+                .entry(feast_name.split('\\').nth(0).unwrap().to_owned())
                 .or_insert(*score);
             if *score > *entry {
                 *entry = *score;
@@ -507,6 +517,7 @@ impl GenericCalendar {
 
                 // If most words match, include it with a lower score
                 if word_matches >= query_words.len().saturating_sub(1) && word_matches > 0 {
+                    #[allow(clippy::cast_precision_loss)]
                     let partial_score = 0.3 - (word_matches as f32 * 0.1); // Lower score for partial matches
                     scored_results.push((feast.name.clone(), partial_score));
                 }
@@ -527,7 +538,7 @@ impl GenericCalendar {
 
 #[cfg(test)]
 pub mod tests {
-    pub use super::{feast_rule::FeastRule, season_rule::test::*, GenericCalendar};
+    pub use super::{GenericCalendar, feast_rule::FeastRule, season_rule::test::*};
 
     #[test]
     fn test_generic_calendar_accessors() {
@@ -577,7 +588,8 @@ color = "white"
     #[test]
     fn test_from_toml_with_extensions() {
         // This would test the file-based loading with extensions
-        // For now, we'll test with empty extension arrays since we don't have test files
+        // For now, we'll test with empty extension arrays since we don't have test
+        // files
         let base_toml = r#"
 name = "Base Calendar"
 

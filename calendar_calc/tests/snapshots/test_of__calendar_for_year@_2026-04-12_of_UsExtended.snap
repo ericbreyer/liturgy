@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Sunday { rank: 2, flags: SundayFlags(0x0) } (Some(LiturgicalUnit { desc: Dominica II of Easter, rank: Sunday })) and Sunday { rank: 2, flags: SundayFlags(WAS_OCTAVE) } (LiturgicalUnit { desc: Octave Day of Easter, rank: Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 2, flags: SundayFlags(WAS_OCTAVE) } (LiturgicalUnit { desc: Octave Day of Easter, rank: Sunday }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica II of Easter, rank: Sunday }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-04-12|Dominica II of Easter|Sunday|Octave Day of Easter|
+2026-04-12|Dominica II of Easter|Sunday|Octave Day of Easter||

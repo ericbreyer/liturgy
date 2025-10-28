@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Wednesday of September, rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Linus, Pope and Martyr, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds | Comparing final winner Feria { rank: 2, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Ember Wednesday of September, rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Linus, Pope and Martyr, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
-expression: split_line.0
+expression: line
 ---
-2026-09-23|Feria IV week XVII after the octave of Pentecost (Week 3 of September)|II|Ember Wednesday of September|St. Linus, Pope and Martyr, St. Thecla, Virgin and Martyr
+2026-09-23|Feria IV week XVII after the octave of Pentecost (Week 3 of September)|II|Ember Wednesday of September|St. Linus, Pope and Martyr, St. Thecla, Virgin and Martyr|

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Clement I, Pope and Martyr, rank: Double }) and Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XXIV after Pentecost (Week 4 of November), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser } (LiturgicalUnit { desc: Dominica XXIV after Pentecost (Week 4 of November), rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Clement I, Pope and Martyr, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-11-23|Dominica XXIV after Pentecost (Week 4 of November)|Lesser Sunday|Dominica XXIV after Pentecost (Week 4 of November)|St. Clement I, Pope and Martyr, St. Felicitas, Martyr
+2025-11-23|Dominica XXIV after Pentecost (Week 4 of November)|Lesser Sunday|Dominica XXIV after Pentecost (Week 4 of November)|St. Clement I, Pope and Martyr, St. Felicitas, Martyr|

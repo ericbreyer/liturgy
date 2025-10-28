@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-06-02|Feria II week VII of Eastertide|Feria|Feria II week VII of Eastertide|Ss. Marcellinus and Peter, Martyrs
+2025-06-02|Feria II week VII of Eastertide|Feria|Feria II week VII of Eastertide|Ss. Marcellinus and Peter, Martyrs|

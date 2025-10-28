@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Octave { rank: 1 } (LiturgicalUnit { desc: Day 5 in the Octave of Pentecost, rank: I }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Augustine, Bishop and Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Octave { rank: 1 } (LiturgicalUnit { desc: Day 5 in the Octave of Pentecost, rank: I }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week VIII of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Octave { rank: 1 } (LiturgicalUnit { desc: Day 5 in the Octave of Pentecost, rank: I }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Augustine, Bishop and Confessor, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Octave { rank: 1 } (LiturgicalUnit { desc: Day 5 in the Octave of Pentecost, rank: I }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week VIII of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-05-28|Feria V week VIII of Eastertide|I|Day 5 in the Octave of Pentecost|
+2026-05-28|Feria V week VIII of Eastertide|I|Day 5 in the Octave of Pentecost||

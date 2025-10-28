@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"feria-iv-week-iv-of-lent\", \"feria-of-lent\"]"
+expression: s.0
+---
+2025-04-02
+Vespers of Feria IV week IV of Lent:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Lent)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Lent)
+  Hymn:        Psalter (Ordinary of Lent)
+  Verse:       Psalter (Ordinary of Lent)
+  Magnificat:  Psalter (Ordinary of Lent)
+  Collect:     of Sunday

@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--bonaventure--bishop-and-confessor-and-doctor-of-the-church\", \"st--bonaventure\"]"
+expression: s.0
+---
+2025-07-14
+Vespers of St. Bonaventure, Bishop and Confessor and Doctor of the Church:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Pentecost)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper

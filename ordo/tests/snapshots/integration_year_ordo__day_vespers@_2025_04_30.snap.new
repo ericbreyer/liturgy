@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--joseph-the-workman--spouse-of-the-blessed-virgin-mary-and-confessor\", \"st--joseph-the-workman\"]"
+expression: s.0
+---
+2025-04-30
+First Vespers of St. Joseph the Workman, Spouse of the Blessed Virgin Mary and Confessor:
+Vespers:
+  Antiphons:   Common of the Blessed Virgin Mary
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Common of the Blessed Virgin Mary
+  Hymn:        Common of the Blessed Virgin Mary
+  Verse:       Common of the Blessed Virgin Mary
+  Magnificat:  Common of the Blessed Virgin Mary
+  Collect:     Proper

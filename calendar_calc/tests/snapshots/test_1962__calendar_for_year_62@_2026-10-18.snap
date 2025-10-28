@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Luke, Evangelist, rank: II }) and Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXI after Pentecost (Week 3 of October), rank: II }) |     -> Occurrence result: SecondCommemorationOfFirstAtLauds | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXI after Pentecost (Week 3 of October), rank: II }) to Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Luke, Evangelist, rank: II }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
-expression: split_line.0
+expression: line
 ---
-2026-10-18|Dominica XXI after Pentecost (Week 3 of October)|II|Dominica XXI after Pentecost (Week 3 of October)|St. Luke, Evangelist
+2026-10-18|Dominica XXI after Pentecost (Week 3 of October)|II|Dominica XXI after Pentecost (Week 3 of October)|St. Luke, Evangelist|

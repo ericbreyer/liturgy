@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-06-22|Feria II week XII of Ordinary Time|Feria|Feria II week XII of Ordinary Time|St. Paulinus of Nola, Bishop, Ss. John Fisher and Thomas More, Bishop and Martyrs
+2026-06-22|Feria II week XII of Ordinary Time|Feria|Feria II week XII of Ordinary Time|St. Paulinus of Nola, Bishop, Ss. John Fisher and Thomas More, Bishop and Martyrs|

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Holy Innocents, rank: Second Class Double }) and Sunday { rank: Second } (LiturgicalUnit { desc: Dominica II of Christmas, rank: Greater Sunday of the Second Class }) |     -> Occurrence result: FirstNothingOfSecond | Resolving between Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Holy Innocents, rank: Second Class Double }) and Octave { rank: Privileged3, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Sunday in the Octave of Christmas , rank: Day within a Privileged 3rd Class Octave }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Holy Innocents, rank: Second Class Double }) to Sunday { rank: Second } (LiturgicalUnit { desc: Dominica II of Christmas, rank: Greater Sunday of the Second Class }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: SecondClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Holy Innocents, rank: Second Class Double }) to Octave { rank: Privileged3, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Sunday in the Octave of Christmas , rank: Day within a Privileged 3rd Class Octave }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-12-28|Dominica II of Christmas|Second Class Double|The Holy Innocents|Sunday in the Octave of Christmas
+2025-12-28|Dominica II of Christmas|Second Class Double|The Holy Innocents|Sunday in the Octave of Christmas |

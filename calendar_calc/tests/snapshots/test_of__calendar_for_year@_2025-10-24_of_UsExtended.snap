@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-10-24|Feria VI week XXIX of Ordinary Time|Feria|Feria VI week XXIX of Ordinary Time|St. Anthony Mary Claret, Bishop
+2025-10-24|Feria VI week XXIX of Ordinary Time|Feria|Feria VI week XXIX of Ordinary Time|St. Anthony Mary Claret, Bishop|

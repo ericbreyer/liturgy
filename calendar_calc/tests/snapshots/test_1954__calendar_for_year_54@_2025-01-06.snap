@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Epiphany of Our Lord, rank: First Class Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: Epiphany of Our Lord, rank: First Class Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-01-06|Feria II week III of Christmas|First Class Double|Epiphany of Our Lord|
+2025-01-06|Feria II week III of Christmas|First Class Double|Epiphany of Our Lord||

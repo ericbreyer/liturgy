@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of St. Andrew, rank: Vigil }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXIV after the octave of Pentecost (Week 4 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of St. Andrew, rank: Vigil }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXIV after the octave of Pentecost (Week 4 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-11-29|Sabbato week XXIV after the octave of Pentecost (Week 4 of November)|Vigil|Vigil of St. Andrew|St. Saturninus, Bishop and Martyr
+2025-11-29|Sabbato week XXIV after the octave of Pentecost (Week 4 of November)|Vigil|Vigil of St. Andrew|St. Saturninus, Bishop and Martyr|

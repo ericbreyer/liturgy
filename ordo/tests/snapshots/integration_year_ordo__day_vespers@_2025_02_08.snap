@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"dominica-v-after-epiphany\", \"dominica-of-time-after-epiphany\"]"
+expression: s.0
+---
+2025-02-08
+First Vespers of Dominica V after Epiphany:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Time after Epiphany)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Time after Epiphany)
+  Hymn:        Psalter (Ordinary of Time after Epiphany)
+  Verse:       Psalter (Ordinary of Time after Epiphany)
+  Magnificat:  Proper
+  Collect:     Proper

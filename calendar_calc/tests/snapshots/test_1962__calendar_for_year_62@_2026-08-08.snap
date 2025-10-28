@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Mary Vianney, Confessor and Priest, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week X after the octave of Pentecost (Week 1 of August), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Mary Vianney, Confessor and Priest, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week X after the octave of Pentecost (Week 1 of August), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-08-08|Sabbato week X after the octave of Pentecost (Week 1 of August)|III|St. John Mary Vianney, Confessor and Priest|Ss. Cyriacus, Largus, and Smaragdus, Martyrs
+2026-08-08|Sabbato week X after the octave of Pentecost (Week 1 of August)|III|St. John Mary Vianney, Confessor and Priest|Ss. Cyriacus, Largus, and Smaragdus, Martyrs|Vespers of Following: Dominica XI after Pentecost (Week 2 of August)

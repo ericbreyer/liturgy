@@ -1,0 +1,9 @@
+# Global defaults for ORDO resolution
+[vespers]
+antiphons = "Psalter"
+psalms = "Psalter"
+chapter = "Psalter"
+hymn = "Psalter"
+verse = "Psalter"
+magnificat_antiphon = "Psalter"
+collect = "Proper"

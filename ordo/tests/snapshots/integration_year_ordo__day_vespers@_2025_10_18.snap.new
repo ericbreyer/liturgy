@@ -1,0 +1,20 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"st--luke--evangelist\", \"st--luke\"]"
+expression: s.0
+---
+2025-10-18
+Vespers of St. Luke, Evangelist:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper
+  Commemoration of Dominica XIX after Pentecost (Week 3 of October):
+    Magnificat Antiphon: Proper
+    Verse: Proper
+    Collect: Proper

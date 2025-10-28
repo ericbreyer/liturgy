@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"dominica-xvii-after-pentecost--week-1-of-october-\", \"dominica-of-time-after-pentecost\"]"
+expression: s.0
+---
+2025-10-04
+First Vespers of Dominica XVII after Pentecost (Week 1 of October):
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

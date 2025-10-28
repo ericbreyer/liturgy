@@ -1,0 +1,20 @@
+id = "dominica-quinquagesima"
+name = "Dominica Quinquagesima"
+
+[vespers]
+antiphons = "Proper"
+psalms = "Psalter"
+chapter = "Proper"
+hymn = "Proper"
+verse = "Proper"
+magnificat_antiphon = "Proper"
+collect = "Proper"
+
+[first_vespers]
+antiphons = "Feria"
+psalms = "Psalter"
+chapter = "Psalter"
+hymn = "Psalter"
+verse = "Psalter"
+magnificat_antiphon = "Proper"
+collect = "Proper"

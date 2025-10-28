@@ -1,0 +1,20 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"blessed-virgin-mary--queen\", \"blessed-virgin-mary\"]"
+expression: s.0
+---
+2025-05-31
+Vespers of Blessed Virgin Mary, Queen:
+Vespers:
+  Antiphons:   Common of the Blessed Virgin Mary
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Common of the Blessed Virgin Mary
+  Hymn:        Common of the Blessed Virgin Mary
+  Verse:       Common of the Blessed Virgin Mary
+  Magnificat:  Common of the Blessed Virgin Mary
+  Collect:     Proper
+  Commemoration of Dominica VI after Easter Sunday:
+    Magnificat Antiphon: Proper
+    Verse: Proper
+    Collect: Proper

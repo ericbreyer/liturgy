@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXIV after Pentecost (Week 2 of November), rank: Lesser Sunday }) and Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of All Saints, rank: Major Double (Octave Day) }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXIV after Pentecost (Week 2 of November), rank: Lesser Sunday }) to Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of All Saints, rank: Major Double (Octave Day) }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-11-08|Dominica XXIV after Pentecost (Week 2 of November)|Lesser Sunday|Dominica XXIV after Pentecost (Week 2 of November)|Octave Day of All Saints, Holy Four Crowned Martyrs, Martyrs
+2026-11-08|Dominica XXIV after Pentecost (Week 2 of November)|Lesser Sunday|Dominica V after Epiphany|Octave Day of All Saints, Holy Four Crowned Martyrs, Martyrs|

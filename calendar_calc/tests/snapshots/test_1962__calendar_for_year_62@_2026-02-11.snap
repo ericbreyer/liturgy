@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Apparition of the Blessed Virgin Mary Immaculate, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV after Sexagesima, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Apparition of the Blessed Virgin Mary Immaculate, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria IV after Sexagesima, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-02-11|Feria IV after Sexagesima|III|The Apparition of the Blessed Virgin Mary Immaculate|
+2026-02-11|Feria IV after Sexagesima|III|The Apparition of the Blessed Virgin Mary Immaculate||

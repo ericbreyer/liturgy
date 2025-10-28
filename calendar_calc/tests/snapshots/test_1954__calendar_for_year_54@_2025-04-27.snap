@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Peter Canisius, Confessor and Doctor of the Church, rank: Double }) and Sunday { rank: First } (LiturgicalUnit { desc: Low Sunday, rank: Greater Sunday of the First Class }) |     -> Occurrence result: SecondCommemorationOfFirst | Resolving between Sunday { rank: First } (LiturgicalUnit { desc: Low Sunday, rank: Greater Sunday of the First Class }) and Octave { rank: Privileged1, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of Easter, rank: Octave Day of a Privileged 1st Class Octave }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: First } (LiturgicalUnit { desc: Low Sunday, rank: Greater Sunday of the First Class }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Peter Canisius, Confessor and Doctor of the Church, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Sunday { rank: First } (LiturgicalUnit { desc: Low Sunday, rank: Greater Sunday of the First Class }) to Octave { rank: Privileged1, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of Easter, rank: Octave Day of a Privileged 1st Class Octave }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-04-27|Dominica Easter|Greater Sunday of the First Class|Low Sunday|St. Peter Canisius, Confessor and Doctor of the Church
+2025-04-27|Dominica Easter|Greater Sunday of the First Class|Low Sunday|St. Peter Canisius, Confessor and Doctor of the Church|

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of the Assumption, rank: Vigil }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week IX after the octave of Pentecost (Week 2 of August), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of the Assumption, rank: Vigil }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week IX after the octave of Pentecost (Week 2 of August), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-08-14|Feria V week IX after the octave of Pentecost (Week 2 of August)|Vigil|Vigil of the Assumption|St. Eusebius, Confessor
+2025-08-14|Feria V week IX after the octave of Pentecost (Week 2 of August)|Vigil|Vigil of the Assumption|St. Eusebius, Confessor|

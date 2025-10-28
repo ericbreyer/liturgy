@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Evaristus, Pope and Martyr, rank: Simple }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXII after the octave of Pentecost (Week 4 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Evaristus, Pope and Martyr, rank: Simple }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXII after the octave of Pentecost (Week 4 of October), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-10-26|Feria II week XXII after the octave of Pentecost (Week 4 of October)|Simple|St. Evaristus, Pope and Martyr|
+2026-10-26|Feria II week XXII after the octave of Pentecost (Week 4 of October)|Simple|St. Evaristus, Pope and Martyr||

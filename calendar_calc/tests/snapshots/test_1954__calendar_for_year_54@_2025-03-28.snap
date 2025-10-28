@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Capistran, Confessor, rank: Semidouble }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week III of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: Semidouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Capistran, Confessor, rank: Semidouble }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week III of Lent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-03-28|Feria VI week III of Lent|Semidouble|St. John Capistran, Confessor|Feria VI week III of Lent
+2025-03-28|Feria VI week III of Lent|Semidouble|St. John Capistran, Confessor|Feria VI week III of Lent|

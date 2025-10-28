@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-09-07|Dominica XXIII of Ordinary Time|Sunday|Dominica XXIII of Ordinary Time|
+2025-09-07|Dominica XXIII of Ordinary Time|Sunday|Dominica XXIII of Ordinary Time||

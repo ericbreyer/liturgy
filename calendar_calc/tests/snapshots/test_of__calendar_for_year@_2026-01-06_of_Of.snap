@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(OF_THE_LORD) } (Some(LiturgicalUnit { desc: The Epiphany of the Lord, rank: Solemnity })) and Feria { rank: 3, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III in Christmas, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(OF_THE_LORD) } (LiturgicalUnit { desc: The Epiphany of the Lord, rank: Solemnity }) to Feria { rank: 3, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III in Christmas, rank: Feria }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-01-06|Feria III in Christmas|Solemnity|The Epiphany of the Lord|
+2026-01-06|Feria III in Christmas|Solemnity|The Epiphany of the Lord||

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-20|Feria V week VI of Ordinary Time|Feria|Feria V week VI of Ordinary Time|
+2025-02-20|Feria V week VI of Ordinary Time|Feria|Feria V week VI of Ordinary Time||

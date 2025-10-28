@@ -1,0 +1,10 @@
+id = "office-ferial"
+name = "Ferial Office"
+[vespers]
+antiphons = "Feria"
+psalms = "Psalter"
+chapter = "Feria"
+hymn = "Feria"
+verse = "Feria"
+magnificat_antiphon = "Feria"
+collect = "Sunday"

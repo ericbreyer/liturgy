@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Ss. Peter and Paul, Apostles, rank: Solemnity })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XIII of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 1, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Ss. Peter and Paul, Apostles, rank: Solemnity }) to Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XIII of Ordinary Time, rank: Sunday }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2025-06-29|Dominica XIII of Ordinary Time|Solemnity|Ss. Peter and Paul, Apostles|
+2025-06-29|Dominica XIII of Ordinary Time|Solemnity|Ss. Peter and Paul, Apostles||

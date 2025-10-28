@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"the-immaculate-conception-of-the-blessed-virgin-mary\"]"
+expression: s.0
+---
+2024-12-08
+Second Vespers of The Immaculate Conception of the Blessed Virgin Mary:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Proper
+  Hymn:        Common of the Blessed Virgin Mary
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper
+  Commemoration of Dominica II of Advent:
+    Magnificat Antiphon: Proper
+    Verse: Psalter (Ordinary of Advent)
+    Collect: Proper

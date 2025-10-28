@@ -1,3 +1,5 @@
+#![allow(clippy::cast_precision_loss)]
+
 //! Fuzzy search implementation using Levenshtein distance and n-gram analysis
 //!
 //! This module provides custom fuzzy matching algorithms that combine multiple
@@ -5,7 +7,8 @@
 
 use std::collections::HashSet;
 
-/// Custom fuzzy search implementation using Levenshtein distance and n-gram analysis
+/// Custom fuzzy search implementation using Levenshtein distance and n-gram
+/// analysis
 pub fn fuzzy_search_best_n<'a>(
     query: &str,
     candidates: &[&'a str],
@@ -69,11 +72,7 @@ fn calculate_fuzzy_score(query: &str, candidate: &str) -> f32 {
     let final_score = (combined_ngram * 0.4 + lev_score * 0.6).max(0.0);
 
     // Filter out very low scores
-    if final_score < 0.2 {
-        0.0
-    } else {
-        final_score
-    }
+    if final_score < 0.2 { 0.0 } else { final_score }
 }
 
 /// Calculate word overlap score
@@ -108,8 +107,8 @@ fn calculate_ngram_similarity(s1: &str, s2: &str, n: usize) -> f32 {
         return 0.0;
     }
 
-    let set1: HashSet<&str> = ngrams1.iter().map(|s| s.as_str()).collect();
-    let set2: HashSet<&str> = ngrams2.iter().map(|s| s.as_str()).collect();
+    let set1: HashSet<&str> = ngrams1.iter().map(std::string::String::as_str).collect();
+    let set2: HashSet<&str> = ngrams2.iter().map(std::string::String::as_str).collect();
 
     let intersection = set1.intersection(&set2).count();
     let union = set1.union(&set2).count();
@@ -187,11 +186,7 @@ fn levenshtein_distance(s1: &str, s2: &str) -> usize {
     // Fill the matrix
     for i in 1..=s1_len {
         for j in 1..=s2_len {
-            let cost = if s1_chars[i - 1] == s2_chars[j - 1] {
-                0
-            } else {
-                1
-            };
+            let cost = usize::from(s1_chars[i - 1] != s2_chars[j - 1]);
             matrix[i][j] = (matrix[i - 1][j] + 1) // deletion
                 .min(matrix[i][j - 1] + 1) // insertion
                 .min(matrix[i - 1][j - 1] + cost); // substitution

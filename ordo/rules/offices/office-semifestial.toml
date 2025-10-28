@@ -1,0 +1,11 @@
+id = "office-semifestial"
+name = "Semi Festial Office"
+[vespers]
+antiphons = "Common"
+psalms = "Common"
+chapter = "Common"
+hymn = "Common"
+verse = "Common"
+magnificat_antiphon = "Common"
+collect = "Proper"
+

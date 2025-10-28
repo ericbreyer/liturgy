@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Paschal Baylon, Confessor, rank: III }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week IV of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Paschal Baylon, Confessor, rank: III }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week IV of Eastertide, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-05-17|Sabbato week IV of Eastertide|III|St. Paschal Baylon, Confessor|
+2025-05-17|Sabbato week IV of Eastertide|III|St. Paschal Baylon, Confessor||Vespers of Following: Dominica IV after Easter Sunday

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-08-02|Dominica XVIII of Ordinary Time|Sunday|Dominica XVIII of Ordinary Time|
+2026-08-02|Dominica XVIII of Ordinary Time|Sunday|Dominica XVIII of Ordinary Time||

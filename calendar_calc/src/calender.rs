@@ -19,7 +19,7 @@ use types::{ArcStr, DayRank};
 use types::{DayDescription, LiturgicalUnit};
 
 use crate::calender::{
-    feast_rank::{FeastRank54, FeastRankResolver},
+    feast_rank::{FeastRank54, FeastRank62, FeastRankOf, FeastRankResolver},
     generic_calendar::{FeastRule, GenericCalendar},
     year_calendar::YearCalendar,
 };
@@ -34,6 +34,7 @@ where
 
 impl GenericCalendarHandle {
     /// Get the name of this calendar
+    #[must_use]
     pub fn name(&self) -> &str {
         &self.0.name
     }
@@ -55,22 +56,27 @@ impl GenericCalendarHandle {
     }
 
     /// Create a liturgical year calendar for the given year
+    #[must_use]
     pub fn create_year_calendar_54(
         &self,
         year: i32,
     ) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
         YearCalendarHandle(self.0.instantiate_54_for_lit_year(year))
     }
+
+    #[must_use]
     pub fn create_year_calendar_62(
         &self,
         year: i32,
-    ) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
+    ) -> YearCalendarHandle<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
         YearCalendarHandle(self.0.instantiate_62_for_lit_year(year))
     }
+
+    #[must_use]
     pub fn create_year_calendar_of(
         &self,
         year: i32,
-    ) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
+    ) -> YearCalendarHandle<<FeastRankOf as FeastRankResolver>::FeastRankDescriptor> {
         YearCalendarHandle(self.0.instantiate_of_for_lit_year(year))
     }
 
@@ -94,31 +100,36 @@ impl GenericCalendarHandle {
     /// "#;
     /// let cal = GenericCalendarHandle::load_from_str(toml).unwrap();
     /// assert_eq!(cal.get_feast_info("St. Joseph").is_ok(), true);
-    /// assert!(cal.get_feast_info("St. Jospeh").unwrap_err().to_string().contains("Did you mean: St. Joseph"));
+    /// assert!(
+    ///     cal.get_feast_info("St. Jospeh")
+    ///         .unwrap_err()
+    ///         .to_string()
+    ///         .contains("Did you mean: St. Joseph")
+    /// );
     /// ```
     pub fn get_feast_info(&self, name: &str) -> Result<(FeastRule<DateRule>, ArcStr)> {
-        match self.0.get_feast_info(name) {
-            Some(info) => Ok(info),
-            None => {
-                let suggestions = self.0.suggest_feast_names(name);
-                if suggestions.is_empty() {
-                    Err(anyhow::anyhow!("Feast '{}' not found.", name))
-                } else {
-                    Err(anyhow::anyhow!(
-                        "Feast '{}' not found. Did you mean: {}?",
-                        name,
-                        suggestions
-                            .into_iter()
-                            .map(|(n, _)| n.to_string())
-                            .collect::<Vec<_>>()
-                            .join(", ")
-                    ))
-                }
+        if let Some(info) = self.0.get_feast_info(name) {
+            Ok(info)
+        } else {
+            let suggestions = self.0.suggest_feast_names(name);
+            if suggestions.is_empty() {
+                Err(anyhow::anyhow!("Feast '{}' not found.", name))
+            } else {
+                Err(anyhow::anyhow!(
+                    "Feast '{}' not found. Did you mean: {}?",
+                    name,
+                    suggestions
+                        .into_iter()
+                        .map(|(n, _)| n.to_string())
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                ))
             }
         }
     }
 
     /// Get feast name suggestions using fuzzy matching
+    #[must_use]
     pub fn suggest_feast_names(&self, name: &str) -> Vec<(String, f32)> {
         self.0
             .suggest_feast_names(name)
@@ -127,6 +138,7 @@ impl GenericCalendarHandle {
             .collect()
     }
 
+    #[must_use]
     pub fn commemoration_interpretation(&self) -> &str {
         &self.0.commemoration_interpretation
     }
@@ -142,18 +154,23 @@ where
     }
 
     /// Generate CSV content for this liturgical year
+    #[must_use]
     pub fn generate_csv(&self) -> String {
         self.0.generate_year_calendar_csv()
     }
+
     /// Get the year of this calendar
+    #[must_use]
     pub fn year(&self) -> i32 {
         self.0.year
     }
 
+    #[must_use]
     pub fn get_day_info(&self, date: chrono::NaiveDate) -> Option<DayDescription<R>> {
         self.0.get_day(date)
     }
 
+    #[must_use]
     pub fn get_all_days(&self) -> Vec<DayDescription<R>> {
         self.0.days.to_vec()
     }
@@ -167,7 +184,7 @@ mod test {
 
     use chrono::NaiveDate;
     use feast_rank::{FeastRank62, FeastRankResolver};
-    use generic_calendar::{tests::*, FeastRule, GenericCalendar};
+    use generic_calendar::{FeastRule, GenericCalendar, tests::*};
     use test_case::test_case;
     use year_calendar_builder::YearCalendarBuilder;
 
@@ -220,7 +237,7 @@ mod test {
     fn test_feast_retrieval(date_str: &str, expected_count: usize, expected_name: &str) {
         let year_calendar = create_test_year_calendar();
         let test_date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
-        let feasts = year_calendar.get_feasts_on_date(&test_date);
+        let feasts = year_calendar.get_feasts_on_date(test_date);
 
         assert_eq!(feasts.len(), expected_count);
         if expected_count > 0 {
@@ -234,7 +251,7 @@ mod test {
     fn test_season_ranking(date_str: &str) {
         let year_calendar = create_test_year_calendar();
         let test_date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
-        let rank: FeastRank62 = year_calendar.season_day_to_feast_rank(&test_date);
+        let rank: FeastRank62 = year_calendar.season_day_to_feast_rank(test_date);
         assert!(rank.is_ferial_or_sunday_rank());
     }
 
@@ -244,11 +261,11 @@ mod test {
     fn test_season_descriptor_generation(date_str: &str, expected_season_name: &str) {
         let year_calendar = create_test_year_calendar();
         let test_date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
-        let descriptor = year_calendar.get_season_descriptor(&test_date);
+        let descriptor = year_calendar.get_season_descriptor(test_date);
         assert!(descriptor.contains(expected_season_name));
     }
 
-    /// Tests FeastRule Display implementation and feast ranking
+    /// Tests `FeastRule` Display implementation and feast ranking
     #[test_case("St. Joseph", vec!["Spouse of the Blessed Virgin Mary", "Patron of the Universal Church"] => "St. Joseph, Spouse of the Blessed Virgin Mary and Patron of the Universal Church"; "feast with titles")]
     #[test_case("Simple Feast", vec![] => "Simple Feast"; "feast without titles")]
     fn test_feast_rule_display(name: &str, titles: Vec<&str>) -> String {
@@ -259,7 +276,10 @@ mod test {
             of_our_lord: false,
             day_type: Some(DayType::Feast),
             color: "white".into(),
-            titles: titles.into_iter().map(|s| s.to_string()).collect(),
+            titles: titles
+                .into_iter()
+                .map(std::string::ToString::to_string)
+                .collect(),
             movable: false,
         };
 
@@ -280,7 +300,7 @@ mod test {
         let feast_rule = FeastRule {
             name: "Test Feast".into(),
             date_rule: NaiveDate::from_ymd_opt(2025, 3, 19).unwrap(),
-            rank: rank.map(|r| r.to_string()),
+            rank: rank.map(std::string::ToString::to_string),
             of_our_lord,
             day_type,
             color: "white".into(),
@@ -291,12 +311,11 @@ mod test {
         let feast_rank: FeastRank62 = feast_rule.get_feastrank();
         assert!(
             !feast_rank.is_ferial_or_sunday_rank(),
-            "Feast '{}' should not be classified as feria/sunday",
-            description
+            "Feast '{description}' should not be classified as feria/sunday"
         );
     }
 
-    /// Tests FeastRule instantiation with Advent calendar year calculation
+    /// Tests `FeastRule` instantiation with Advent calendar year calculation
     #[test_case("Christmas", DateRule::Fixed { month: 12, day: 25 }, true, false; "Christmas - fixed feast in Advent season")]
     #[test_case("Easter", DateRule::Easter, true, true; "Easter - movable feast")]
     fn test_feast_rule_instantiation(
@@ -341,7 +360,8 @@ color = "white"
     "#; "invalid date rule")]
     fn test_toml_parsing_errors(invalid_toml: &str) {
         let result = GenericCalendar::from_toml_str(invalid_toml);
-        // Should handle parsing errors gracefully - either fails or succeeds with valid subset
+        // Should handle parsing errors gracefully - either fails or succeeds with valid
+        // subset
         assert!(result.is_err() || result.is_ok());
     }
 
@@ -366,7 +386,7 @@ color = "white"
         };
 
         let test_date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
-        let rank: FeastRank62 = year_calendar.season_day_to_feast_rank(&test_date);
+        let rank: FeastRank62 = year_calendar.season_day_to_feast_rank(test_date);
         assert!(rank.is_ferial_or_sunday_rank());
     }
 }

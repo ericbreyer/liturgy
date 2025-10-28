@@ -1,0 +1,5 @@
+id = "feria-of-time-after-epiphany"
+name = "Feria of Time after Epiphany"
+
+[vespers]
+collect = "Sunday"

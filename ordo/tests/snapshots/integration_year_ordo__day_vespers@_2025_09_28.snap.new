@@ -1,0 +1,20 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"the-dedication-of-st--michael-archangel\"]"
+expression: s.0
+---
+2025-09-28
+First Vespers of The Dedication of St. Michael Archangel:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper
+  Commemoration of Dominica XVI after Pentecost (Week 4 of September):
+    Magnificat Antiphon: Proper
+    Verse: Proper
+    Collect: Proper

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XI after Pentecost (Week 2 of August), rank: II }) and Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Vigil of St. Laurence, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XI after Pentecost (Week 2 of August), rank: II }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Vigil of St. Laurence, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-08-09|Dominica XI after Pentecost (Week 2 of August)|II|Dominica XI after Pentecost (Week 2 of August)|
+2026-08-09|Dominica XI after Pentecost (Week 2 of August)|II|Dominica XI after Pentecost (Week 2 of August)||

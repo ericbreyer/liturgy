@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-06-19|Feria VI week XI of Ordinary Time|Feria|Feria VI week XI of Ordinary Time|St. Romuald, Abbot
+2026-06-19|Feria VI week XI of Ordinary Time|Feria|Feria VI week XI of Ordinary Time|St. Romuald, Abbot|

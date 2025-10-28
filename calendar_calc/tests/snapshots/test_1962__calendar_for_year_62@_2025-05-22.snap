@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-22|Feria V week V of Eastertide|III|Feria V week V of Eastertide|
+2025-05-22|Feria V week V of Eastertide|III|Feria V week V of Eastertide||

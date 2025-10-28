@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: Sts. John de Brébeuf and Isaac Jogues and Companions, Priests and Martyrs, rank: Memorial })) and Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXIX of Ordinary Time, rank: Sunday }) |     -> Occurrence result: SecondWins | Comparing final winner Sunday { rank: 2, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XXIX of Ordinary Time, rank: Sunday }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Sts. John de Brébeuf and Isaac Jogues and Companions, Priests and Martyrs, rank: Memorial }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2025-10-19|Dominica XXIX of Ordinary Time|Sunday|Dominica XXIX of Ordinary Time|
+2025-10-19|Dominica XXIX of Ordinary Time|Sunday|Dominica XXIX of Ordinary Time||

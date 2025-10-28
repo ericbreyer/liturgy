@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week III of Christmas, rank: Ordinary Feria }) and Octave { rank: Privileged2, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 4 in the Octave of Epiphany, rank: Day within a Privileged 2nd Class Octave }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Octave { rank: Privileged2, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 4 in the Octave of Epiphany, rank: Day within a Privileged 2nd Class Octave }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week III of Christmas, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-01-09|Feria V week III of Christmas|Day within a Privileged 2nd Class Octave|Day 4 in the Octave of Epiphany|
+2025-01-09|Feria V week III of Christmas|Day within a Privileged 2nd Class Octave|Day 4 in the Octave of Epiphany||

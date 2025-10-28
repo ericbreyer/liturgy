@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--agatha--virgin-and-martyr\", \"st--agatha\"]"
+expression: s.0
+---
+2025-02-05
+Vespers of St. Agatha, Virgin and Martyr:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      of Sunday (w.147)
+  Chapter:     Proper
+  Hymn:        Common of Virgins
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

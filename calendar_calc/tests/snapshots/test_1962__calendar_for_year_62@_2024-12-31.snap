@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Octave { rank: 2 } (LiturgicalUnit { desc: Day 7 in the Octave of Christmas, rank: II }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II of Christmas, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Octave { rank: 2 } (LiturgicalUnit { desc: Day 7 in the Octave of Christmas, rank: II }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II of Christmas, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2024-12-31|Feria III week II of Christmas|II|Day 7 in the Octave of Christmas|St. Sylvester I, Pope and Confessor
+2024-12-31|Feria III week II of Christmas|II|Day 7 in the Octave of Christmas|St. Sylvester I, Pope and Confessor|Vespers of Following, Commemorate Own Vespers: Octave Day of the Nativity of our Lord Jesus Christ

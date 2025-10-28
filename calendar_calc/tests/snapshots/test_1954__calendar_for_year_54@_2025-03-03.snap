@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-03-03|Feria II after Quinquagesima|Ordinary Feria|Feria II after Quinquagesima|
+2025-03-03|Feria II after Quinquagesima|Ordinary Feria|Feria II after Quinquagesima||

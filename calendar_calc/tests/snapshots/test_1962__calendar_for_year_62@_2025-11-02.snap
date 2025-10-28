@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(ALL_SOULS) } (LiturgicalUnit { desc: The Commemoration of all Souls, rank: I }) and Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXI after Pentecost (Week 1 of November), rank: II }) |     -> Occurrence result: SecondTransferOfFirst | Comparing final winner Sunday { rank: 2 } (LiturgicalUnit { desc: Dominica XXI after Pentecost (Week 1 of November), rank: II }) to Feast { rank: 1, flags: FeastFlags(ALL_SOULS) } (LiturgicalUnit { desc: The Commemoration of all Souls, rank: I }) |     -> Occurrence result: FirstTransferOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-11-02|Dominica XXI after Pentecost (Week 1 of November)|II|Dominica XXI after Pentecost (Week 1 of November)|
+2025-11-02|Dominica XXI after Pentecost (Week 1 of November)|II|Dominica XXI after Pentecost (Week 1 of November)||Vespers of Following, Commemorate Own Vespers: The Commemoration of All the Faithful Departed

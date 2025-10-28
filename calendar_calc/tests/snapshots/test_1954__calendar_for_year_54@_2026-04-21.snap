@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anselm Bishop, Confessor, and, Doctor of the Church, rank: Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Anselm Bishop, Confessor, and, Doctor of the Church, rank: Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria III week II after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-04-21|Feria III week II after the Octave of Easter|Double|St. Anselm Bishop, Confessor, and, Doctor of the Church|
+2026-04-21|Feria III week II after the Octave of Easter|Double|St. Anselm Bishop, Confessor, and, Doctor of the Church||

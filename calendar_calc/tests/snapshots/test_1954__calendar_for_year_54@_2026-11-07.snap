@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXIII after the octave of Pentecost (Week 1 of November), rank: Ordinary Feria }) and Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 7 in the Octave of All Saints, rank: Day within a Common Octave }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(0x0) } (LiturgicalUnit { desc: Day 7 in the Octave of All Saints, rank: Day within a Common Octave }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXIII after the octave of Pentecost (Week 1 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-11-07|Sabbato week XXIII after the octave of Pentecost (Week 1 of November)|Day within a Common Octave|Day 7 in the Octave of All Saints|
+2026-11-07|Sabbato week XXIII after the octave of Pentecost (Week 1 of November)|Day within a Common Octave|Day 7 in the Octave of All Saints||

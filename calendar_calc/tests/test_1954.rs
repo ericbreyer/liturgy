@@ -27,7 +27,7 @@ fn init(year: usize) -> Vec<String> {
 )]
 fn test_calendar_for_year_54(year: usize, day: u32) {
     let calendars = FsCache::new(
-        &Path::new(
+        Path::new(
             format!(
                 "{}{}",
                 concat!(env!("CARGO_MANIFEST_DIR"), "/tests/cache/cache54"),
@@ -51,15 +51,11 @@ fn test_calendar_for_year_54(year: usize, day: u32) {
     }
 
     let date = line.split('|').next().unwrap();
-    // split the line at the 5th '|'
-    let idx_5 = line.match_indices('|').nth(4).unwrap().0;
-    let (part1, part2) = line.split_at(idx_5);
-    let split_line = (part1, &part2[1..]); // skip the '|'
     with_settings!(
-        {snapshot_suffix => format!("_{}", date), description => split_line.1
+        {snapshot_suffix => format!("_{}", date)
     },
         {
-            assert_snapshot!(split_line.0);
+            assert_snapshot!(line);
         }
     );
 }

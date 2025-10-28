@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Boniface, Martyr, rank: Simple }) and Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Ascension, rank: First Class Double }) |     -> Occurrence result: SecondNothingOfFirst | Resolving between Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Ascension, rank: First Class Double }) and Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week V after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Ascension, rank: First Class Double }) to Feast { rank: Simple, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Boniface, Martyr, rank: Simple }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(OF_OUR_LORD) } (LiturgicalUnit { desc: The Ascension, rank: First Class Double }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria V week V after the Octave of Easter, rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-05-14|Feria V week V after the Octave of Easter|First Class Double|The Ascension|
+2026-05-14|Feria V week V after the Octave of Easter|First Class Double|The Ascension||

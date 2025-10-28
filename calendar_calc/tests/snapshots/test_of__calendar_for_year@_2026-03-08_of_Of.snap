@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-03-08|Dominica III of Lent|Major Sunday|Dominica III of Lent|
+2026-03-08|Dominica III of Lent|Major Sunday|Dominica III of Lent||

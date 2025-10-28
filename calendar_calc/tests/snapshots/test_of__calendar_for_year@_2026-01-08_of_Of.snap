@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-01-08|Feria V in Christmas|Feria|Feria V in Christmas|
+2026-01-08|Feria V in Christmas|Feria|Feria V in Christmas||

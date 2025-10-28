@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Immaculate Heart of the Blessed Virgin Mary, rank: II }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week X after the octave of Pentecost (Week 3 of August), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: Immaculate Heart of the Blessed Virgin Mary, rank: II }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria VI week X after the octave of Pentecost (Week 3 of August), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-08-22|Feria VI week X after the octave of Pentecost (Week 3 of August)|II|Immaculate Heart of the Blessed Virgin Mary|Ss. Timothy and Companions, Martyrs
+2025-08-22|Feria VI week X after the octave of Pentecost (Week 3 of August)|II|Immaculate Heart of the Blessed Virgin Mary|Ss. Timothy and Companions, Martyrs|

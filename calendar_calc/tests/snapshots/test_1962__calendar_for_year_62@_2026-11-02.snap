@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 1, flags: FeastFlags(ALL_SOULS) } (LiturgicalUnit { desc: The Commemoration of all Souls, rank: I }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXIII after the octave of Pentecost (Week 1 of November), rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 1, flags: FeastFlags(ALL_SOULS) } (LiturgicalUnit { desc: The Commemoration of all Souls, rank: I }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week XXIII after the octave of Pentecost (Week 1 of November), rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-11-02|Feria II week XXIII after the octave of Pentecost (Week 1 of November)|I|The Commemoration of all Souls|
+2026-11-02|Feria II week XXIII after the octave of Pentecost (Week 1 of November)|I|The Commemoration of All the Faithful Departed||

@@ -1,0 +1,20 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"the-commemoration-of-all-the-faithful-departed\"]"
+expression: s.0
+---
+2025-11-02
+First Vespers of The Commemoration of All the Faithful Departed:
+Vespers:
+  Antiphons:   Common
+  Psalms:      Common
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper
+  Commemoration of Dominica XXI after Pentecost (Week 1 of November):
+    Magnificat Antiphon: Proper
+    Verse: Proper
+    Collect: Proper

@@ -4,7 +4,7 @@ import { getColorValue } from '../utils/liturgical'
 
 interface Props {
   color: string
-  size?: 'small' | 'medium' | 'large'
+  size?: 'tiny' | 'small' | 'medium' | 'large'
   orientation?: 'vertical' | 'horizontal'
 }
 
@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const sizeMap = {
+  tiny: { width: '3px', height: '1rem' },
   small: { width: '3px', height: '1.5rem' },
   medium: { width: '4px', height: '3rem' },
   large: { width: '6px', height: '4rem' },

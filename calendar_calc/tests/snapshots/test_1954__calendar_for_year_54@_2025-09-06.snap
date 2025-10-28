@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-09-06|Sabbato week XII after the octave of Pentecost (Week 1 of September)|Simple|BVM on Saturday|
+2025-09-06|Sabbato week XII after the octave of Pentecost (Week 1 of September)|Simple|BVM on Saturday||

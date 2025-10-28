@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-13|Feria III week IV of Eastertide|Feria|Feria III week IV of Eastertide|Our Lady of Fatima
+2025-05-13|Feria III week IV of Eastertide|Feria|Feria III week IV of Eastertide|Our Lady of Fatima|

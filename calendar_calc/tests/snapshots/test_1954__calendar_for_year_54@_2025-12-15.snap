@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Advent, rank: Greater Non-Privileged Feria }) and Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of The Immaculate Conception, rank: Major Double (Octave Day) }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Octave { rank: Common, flags: OctaveFlags(OCTAVE_DAY) } (LiturgicalUnit { desc: Octave Day of The Immaculate Conception, rank: Major Double (Octave Day) }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week III of Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-12-15|Feria II week III of Advent|Major Double (Octave Day)|Octave Day of The Immaculate Conception|Feria II week III of Advent
+2025-12-15|Feria II week III of Advent|Major Double (Octave Day)|Octave Day of The Immaculate Conception|Feria II week III of Advent|

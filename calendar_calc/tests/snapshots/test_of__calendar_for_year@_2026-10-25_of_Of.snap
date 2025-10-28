@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-10-25|Dominica XXX of Ordinary Time|Sunday|Dominica XXX of Ordinary Time|
+2026-10-25|Dominica XXX of Ordinary Time|Sunday|Dominica XXX of Ordinary Time||

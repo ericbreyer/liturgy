@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: FirstClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary, rank: First Class Double }) and Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week II of Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond | Comparing final winner Feast { rank: FirstClassDouble, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: The Immaculate Conception of the Blessed Virgin Mary, rank: First Class Double }) to Feria { rank: GreaterNonPrivilaged, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Feria II week II of Advent, rank: Greater Non-Privileged Feria }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-12-08|Feria II week II of Advent|First Class Double|The Immaculate Conception of the Blessed Virgin Mary|Feria II week II of Advent
+2025-12-08|Feria II week II of Advent|First Class Double|The Immaculate Conception of the Blessed Virgin Mary|Feria II week II of Advent|

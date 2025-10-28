@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"commemoration-of-the-baptism-of-our-lord-jesus-christ\"]"
+expression: s.0
+---
+2025-01-13
+Vespers of Commemoration of the Baptism of our Lord Jesus Christ:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Proper
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-11-27|Feria V week XXIV after the octave of Pentecost (Week 4 of November)|Ordinary Feria|Feria V week XXIV after the octave of Pentecost (Week 4 of November)|
+2025-11-27|Feria V week XXIV after the octave of Pentecost (Week 4 of November)|Ordinary Feria|Feria V week XXIV after the octave of Pentecost (Week 4 of November)||

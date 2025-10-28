@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-12-09|Feria III week II of Advent|Feria|Feria III week II of Advent|St. Juan Diego Cuauhtlatoatzin
+2025-12-09|Feria III week II of Advent|Feria|Feria III week II of Advent|St. Juan Diego Cuauhtlatoatzin|

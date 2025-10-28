@@ -38,7 +38,7 @@ export interface DayInfo {
     day_in_season: string
     day_rank: string
     day: LitugicalUnit
-    commemorations: LitugicalUnit[]
+    commemorations: [LitugicalUnit, string][]
   }
 }
 

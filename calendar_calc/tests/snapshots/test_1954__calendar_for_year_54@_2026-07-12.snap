@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Gualbert, Abbot, rank: Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica VII after Pentecost, rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica VII after Pentecost, rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John Gualbert, Abbot, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-07-12|Dominica VII after Pentecost|Lesser Sunday|Dominica VII after Pentecost|St. John Gualbert, Abbot, Ss. Nabor and Felix, Martyrs
+2026-07-12|Dominica VII after Pentecost|Lesser Sunday|Dominica VII after Pentecost|St. John Gualbert, Abbot, Ss. Nabor and Felix, Martyrs|

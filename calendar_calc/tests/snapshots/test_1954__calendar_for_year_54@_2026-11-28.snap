@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXVI after the octave of Pentecost (Week 4 of November), rank: Ordinary Feria }) and Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of St. Andrew (transferred), rank: Vigil }) |     -> Occurrence result: SecondNothingOfFirst | Comparing final winner Vigil { kind: Common } (LiturgicalUnit { desc: Vigil of St. Andrew (transferred), rank: Vigil }) to Feria { rank: Lesser, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week XXVI after the octave of Pentecost (Week 4 of November), rank: Ordinary Feria }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-11-28|Sabbato week XXVI after the octave of Pentecost (Week 4 of November)|Vigil|Vigil of St. Andrew (transferred)|
+2026-11-28|Sabbato week XXVI after the octave of Pentecost (Week 4 of November)|Vigil|Vigil of St. Andrew (transferred)||

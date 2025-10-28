@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John, Apostle and Evangelist, rank: II }) and Octave { rank: 2 } (LiturgicalUnit { desc: Day 3 in the Octave of Christmas, rank: II }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers | Resolving between Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John, Apostle and Evangelist, rank: II }) and Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week I of Christmas, rank: III }) |     -> Occurrence result: FirstNothingOfSecond | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John, Apostle and Evangelist, rank: II }) to Octave { rank: 2 } (LiturgicalUnit { desc: Day 3 in the Octave of Christmas, rank: II }) |     -> Occurrence result: FirstCommemorationOfSecondAtLaudsAndVespers | Comparing final winner Feast { rank: 2, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John, Apostle and Evangelist, rank: II }) to Feria { rank: 4, flags: FeriaFlags(0x0) } (LiturgicalUnit { desc: Sabbato week I of Christmas, rank: III }) |     -> Occurrence result: FirstNothingOfSecond"
-expression: split_line.0
+expression: line
 ---
-2025-12-27|Sabbato week I of Christmas|II|St. John, Apostle and Evangelist|Day 3 in the Octave of Christmas
+2025-12-27|Sabbato week I of Christmas|II|St. John, Apostle and Evangelist|Day 3 in the Octave of Christmas|Commemorate Vespers of Following: Dominica II of Christmas

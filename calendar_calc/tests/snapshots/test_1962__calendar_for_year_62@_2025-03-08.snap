@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John of God, Confessor, rank: III }) and Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Sabbato after start of Lent, rank: III }) |     -> Occurrence result: SecondCommemorationOfFirstAtLauds | Comparing final winner Feria { rank: 3, flags: FeriaFlags(OF_LENT) } (LiturgicalUnit { desc: Sabbato after start of Lent, rank: III }) to Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. John of God, Confessor, rank: III }) |     -> Occurrence result: FirstCommemorationOfSecondAtLauds"
-expression: split_line.0
+expression: line
 ---
-2025-03-08|Sabbato after start of Lent|III|Sabbato after start of Lent|St. John of God, Confessor
+2025-03-08|Sabbato after start of Lent|III|Sabbato after start of Lent|St. John of God, Confessor|Vespers of Following: Dominica I of Lent

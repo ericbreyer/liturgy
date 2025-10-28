@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-28|Feria VI after Sexagesima|III|Feria VI after Sexagesima|
+2025-02-28|Feria VI after Sexagesima|III|Feria VI after Sexagesima||

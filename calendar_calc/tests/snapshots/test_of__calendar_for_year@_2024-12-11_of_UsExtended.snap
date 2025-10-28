@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2024-12-11|Feria IV week II of Advent|Feria|Feria IV week II of Advent|St. Damasus I, Pope
+2024-12-11|Feria IV week II of Advent|Feria|Feria IV week II of Advent|St. Damasus I, Pope|

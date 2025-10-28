@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-24|Sabbato week IV after the Octave of Easter|Simple|BVM on Saturday|
+2025-05-24|Sabbato week IV after the Octave of Easter|Simple|BVM on Saturday||

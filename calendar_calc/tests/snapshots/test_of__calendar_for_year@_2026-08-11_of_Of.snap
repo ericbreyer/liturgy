@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: "Resolving between Feast { rank: 3, flags: FeastFlags(0x0) } (Some(LiturgicalUnit { desc: St. Clare, Virgin, rank: Memorial })) and Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III week XIX of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins | Comparing final winner Feast { rank: 3, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Clare, Virgin, rank: Memorial }) to Feria { rank: 4, flags: FerialFlags(0x0) } (LiturgicalUnit { desc: Feria III week XIX of Ordinary Time, rank: Feria }) |     -> Occurrence result: FirstWins"
-expression: split_line.0
+expression: line
 ---
-2026-08-11|Feria III week XIX of Ordinary Time|Memorial|St. Clare, Virgin|
+2026-08-11|Feria III week XIX of Ordinary Time|Memorial|St. Clare, Virgin||

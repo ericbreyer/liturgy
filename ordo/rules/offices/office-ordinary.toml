@@ -1,0 +1,10 @@
+id = "office-ordinary"
+name = "Ordinary Office"
+[vespers]
+antiphons = "Feria"
+psalms = "Psalter"
+chapter = "Common"
+hymn = "Common"
+verse = "Common"
+magnificat_antiphon = "Common"
+collect = "Proper"

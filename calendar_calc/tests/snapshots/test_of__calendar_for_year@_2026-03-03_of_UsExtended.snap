@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-03-03|Feria III week II of Lent|Feria|Feria III week II of Lent|St. Katharine Drexel, Virgin
+2026-03-03|Feria III week II of Lent|Feria|Feria III week II of Lent|St. Katharine Drexel, Virgin|

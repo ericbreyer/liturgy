@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 32
+description: "[\"immaculate-heart-of-the-blessed-virgin-mary\"]"
+expression: s.0
+---
+2025-08-22
+Vespers of Immaculate Heart of the Blessed Virgin Mary:
+Vespers:
+  Antiphons:   Common of the Blessed Virgin Mary
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Common of the Blessed Virgin Mary
+  Hymn:        Common of the Blessed Virgin Mary
+  Verse:       Common of the Blessed Virgin Mary
+  Magnificat:  Common of the Blessed Virgin Mary
+  Collect:     Proper

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: "Resolving between Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Eustace and Companions, Martyrs, rank: Double }) and Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XVII after Pentecost (Week 4 of September), rank: Lesser Sunday }) |     -> Occurrence result: SecondCommemorationOfFirst | Comparing final winner Sunday { rank: Lesser, flags: SundayFlags(0x0) } (LiturgicalUnit { desc: Dominica XVII after Pentecost (Week 4 of September), rank: Lesser Sunday }) to Feast { rank: Double, flags: FeastFlags(0x0) } (LiturgicalUnit { desc: St. Eustace and Companions, Martyrs, rank: Double }) |     -> Occurrence result: FirstCommemorationOfSecond"
-expression: split_line.0
+expression: line
 ---
-2026-09-20|Dominica XVII after Pentecost (Week 4 of September)|Lesser Sunday|Dominica XVII after Pentecost (Week 4 of September)|St. Eustace and Companions, Martyrs
+2026-09-20|Dominica XVII after Pentecost (Week 4 of September)|Lesser Sunday|Dominica XVII after Pentecost (Week 4 of September)|St. Eustace and Companions, Martyrs|

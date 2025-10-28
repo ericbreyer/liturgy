@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-01-22|Feria V week II of Ordinary Time|Feria|Feria V week II of Ordinary Time|St. Vincent, Deacon and Martyr
+2026-01-22|Feria V week II of Ordinary Time|Feria|Feria V week II of Ordinary Time|St. Vincent, Deacon and Martyr|

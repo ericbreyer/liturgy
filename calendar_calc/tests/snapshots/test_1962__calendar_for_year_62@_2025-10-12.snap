@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-10-12|Dominica XVIII after Pentecost (Week 2 of October)|II|Dominica XVIII after Pentecost (Week 2 of October)|
+2025-10-12|Dominica XVIII after Pentecost (Week 2 of October)|II|Dominica XVIII after Pentecost (Week 2 of October)||

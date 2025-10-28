@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2024-12-06|Feria VI week I of Advent|Feria|Feria VI week I of Advent|St. Nicholas, Bishop
+2024-12-06|Feria VI week I of Advent|Feria|Feria VI week I of Advent|St. Nicholas, Bishop|

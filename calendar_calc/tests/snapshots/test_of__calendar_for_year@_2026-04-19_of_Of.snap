@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2026-04-19|Dominica III of Easter|Sunday|Dominica III of Easter|
+2026-04-19|Dominica III of Easter|Sunday|Dominica III of Easter||

@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-27|Feria V week VII of Ordinary Time|Feria|Feria V week VII of Ordinary Time|St. Gregory of Narek, Abbot and Doctor of the Church
+2025-02-27|Feria V week VII of Ordinary Time|Feria|Feria V week VII of Ordinary Time|St. Gregory of Narek, Abbot and Doctor of the Church|

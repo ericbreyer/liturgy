@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1954.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-02-19|Feria IV after Septuagesima|Ordinary Feria|Feria IV after Septuagesima|
+2025-02-19|Feria IV after Septuagesima|Ordinary Feria|Feria IV after Septuagesima||

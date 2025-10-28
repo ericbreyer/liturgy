@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"the-holy-innocents--martyrs\", \"the-holy-innocents\", \"octave-of-christmas\"]"
+expression: s.0
+---
+2024-12-28
+Vespers of The Holy Innocents, Martyrs:
+Vespers:
+  Antiphons:   of Christmas
+  Psalms:      of Christmas
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper
+  Commemoration of Dominica II of Christmas:
+    Magnificat Antiphon: Proper
+    Verse: Proper
+    Collect: Proper

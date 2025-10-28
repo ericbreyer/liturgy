@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-30|Feria VI week VI of Eastertide|III|Feria VI week VI of Eastertide|St. Felix I, Pope and Martyr
+2025-05-30|Feria VI week VI of Eastertide|III|Feria VI week VI of Eastertide|St. Felix I, Pope and Martyr|

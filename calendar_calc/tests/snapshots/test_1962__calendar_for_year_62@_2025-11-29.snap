@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_1962.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-11-29|Sabbato week XXIV after the octave of Pentecost (Week 4 of November)|III|BVM on Saturday|St. Saturninus, Martyr
+2025-11-29|Sabbato week XXIV after the octave of Pentecost (Week 4 of November)|III|BVM on Saturday|St. Saturninus, Martyr|Vespers of Following: Dominica XXV after Pentecost (Week 5 of November)

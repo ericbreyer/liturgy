@@ -1,6 +1,5 @@
 ---
 source: calendar_calc/tests/test_of.rs
-description: ""
-expression: split_line.0
+expression: line
 ---
-2025-05-22|Feria V week V of Eastertide|Feria|Feria V week V of Eastertide|St. Rita of Cascia, Religious
+2025-05-22|Feria V week V of Eastertide|Feria|Feria V week V of Eastertide|St. Rita of Cascia, Religious|

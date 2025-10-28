@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"feria-iv-week-iii-of-lent\", \"feria-of-lent\"]"
+expression: s.0
+---
+2025-03-26
+Vespers of Feria IV week III of Lent:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Lent)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Lent)
+  Hymn:        Psalter (Ordinary of Lent)
+  Verse:       Psalter (Ordinary of Lent)
+  Magnificat:  Psalter (Ordinary of Lent)
+  Collect:     of Sunday

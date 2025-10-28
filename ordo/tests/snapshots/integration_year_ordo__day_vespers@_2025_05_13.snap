@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--robert-bellarmine--bishop-and-confessor-and-doctor-of-the-church\", \"st--robert-bellarmine\"]"
+expression: s.0
+---
+2025-05-13
+Vespers of St. Robert Bellarmine, Bishop and Confessor and Doctor of the Church:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Eastertide)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Proper
+  Collect:     Proper

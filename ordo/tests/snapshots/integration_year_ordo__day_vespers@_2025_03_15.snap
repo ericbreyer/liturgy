@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"dominica-ii-of-lent\", \"dominica-of-lent\"]"
+expression: s.0
+---
+2025-03-15
+First Vespers of Dominica II of Lent:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

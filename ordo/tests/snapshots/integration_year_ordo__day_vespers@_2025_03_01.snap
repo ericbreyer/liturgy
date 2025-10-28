@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"dominica-quinquagesima\", \"dominica-of-sexagesima\"]"
+expression: s.0
+---
+2025-03-01
+First Vespers of Dominica Quinquagesima:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Sexagesima)
+  Psalms:      Psalter
+  Chapter:     Psalter
+  Hymn:        Psalter
+  Verse:       Psalter
+  Magnificat:  Proper
+  Collect:     Proper

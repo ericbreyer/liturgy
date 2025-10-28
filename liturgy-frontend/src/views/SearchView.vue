@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import useSeo from '../composables/useSeo'
 import { useSearch } from '../composables/useSearch'
 import { useCalendarSelection } from '../composables/useCalendarSelection'
 import { getColorValue } from '../utils/liturgical'
@@ -20,6 +21,17 @@ const {
 const getResultsForCalendar = (calendarName: string) => {
   return searchResults.value.filter((result) => result.calendarName === calendarName)
 }
+
+// SEO: update title/description based on current query
+useSeo({
+  title: computed(() => (searchQuery.value && searchQuery.value.trim() ? `Search: ${searchQuery.value}` : 'Search')),
+  description: computed(() =>
+    searchQuery.value && searchQuery.value.trim()
+      ? `Search results for "${searchQuery.value}" across selected liturgical calendars.`
+      : 'Search the liturgical calendar for feasts, saints, seasons, and commemorations.'
+  ),
+  path: computed(() => (searchQuery.value ? `/search?q=${encodeURIComponent(searchQuery.value)}` : '/search')),
+})
 </script>
 
 <template>

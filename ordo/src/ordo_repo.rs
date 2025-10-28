@@ -196,12 +196,14 @@ impl OrdoRepo {
             .collect::<Vec<_>>();
         // Use an explicit struct with named boolean fields for clarity.
         #[derive(Default, Copy, Clone)]
+        #[allow(clippy::struct_excessive_bools)]
         struct TitleFlags {
             martyr: bool,
             virgin: bool,
             confessor: bool,
             bishop: bool,
             pope: bool,
+            apostle: bool,
         }
 
         impl TitleFlags {
@@ -228,6 +230,9 @@ impl OrdoRepo {
                     if sref.contains("pope") {
                         f.pope = true;
                     }
+                    if sref.contains("apostle") {
+                        f.apostle = true;
+                    }
                 }
                 f
             }
@@ -251,7 +256,10 @@ impl OrdoRepo {
         if flags.confessor && !flags.bishop {
             return "Confessors (Non-Bishop)".to_string();
         }
-        "".to_string()
+        if flags.apostle {
+            return "Apostles".to_string();
+        }
+        String::new()
     }
 
     fn retrieve_components<F: OfficeComponentFamily>(
@@ -276,9 +284,10 @@ impl OrdoRepo {
 
         // Ensure `common` is owned so we can safely pass a reference below without
         // returning a reference to a temporary.
-        let common = common
-            .map(|s| s.to_string())
-            .unwrap_or_else(|| Self::obtain_common(day));
+        let common = common.map_or_else(
+            || Self::obtain_common(day),
+            std::string::ToString::to_string,
+        );
 
         // office: use the canonical office kind (Sunday, Feastial, Semifestial,
         // Ordinary, Ferial)
@@ -378,10 +387,7 @@ impl crate::OrdoRules for OrdoRepo {
             .commemorations
             .clone()
             .into_iter()
-            .filter(|(_, ctype)| {
-                *ctype == types::CommemorationType::LaudsAndVespers
-                    
-            })
+            .filter(|(_, ctype)| *ctype == types::CommemorationType::LaudsAndVespers)
             .filter(move |_| include_day_commemorations)
             .chain(
                 day_commemorated.map(|dc| (dc.clone(), types::CommemorationType::LaudsAndVespers)),

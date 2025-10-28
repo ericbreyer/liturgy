@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--matthias--apostle\", \"st--matthias\"]"
+expression: s.0
+---
+2025-02-24
+Vespers of St. Matthias, Apostle:
+Vespers:
+  Antiphons:   Common of Apostles
+  Psalms:      Common of Apostles
+  Chapter:     Common of Apostles
+  Hymn:        Common of Apostles
+  Verse:       Common of Apostles
+  Magnificat:  Common of Apostles
+  Collect:     Proper

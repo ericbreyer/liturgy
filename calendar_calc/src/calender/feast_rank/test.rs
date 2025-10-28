@@ -15,7 +15,7 @@ pub fn test_feast_rank_enumeration_conflicts<FR: Sized + FeastRankResolver + Sen
     let cs: Vec<_> = enumeration.into_iter().combinations(n).collect();
     println!("{} Combinations of {}", cs.len(), n);
     println!();
-    cs.into_iter().enumerate().for_each(|(_, c)| {
+    cs.into_par_iter().enumerate().for_each(|(_, c)| {
         c.clone()
             .into_iter()
             .map(|f| (f.clone(), f.get_rank_string()))

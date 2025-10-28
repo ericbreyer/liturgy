@@ -231,25 +231,24 @@ impl YearCalendarBuilder {
         // If this is a Sunday and the 1962/1954 remapping applies, build a
         // liturgical description that uses the Epiphany numbering. Use the
         // centralized helper to avoid duplicating the remapping arithmetic.
-        if date.weekday() == chrono::Weekday::Sun {
-            if let Some((epiph_num, _epiph_name, suffix)) =
+        if date.weekday() == chrono::Weekday::Sun
+            && let Some((epiph_num, _epiph_name, suffix)) =
                 self.epiphany_surplus_remap(season, date)
-            {
-                let week_ordinal_str = if epiph_num == 0 {
-                    String::new()
-                } else {
-                    format!("{} ", to_roman_numeral(epiph_num))
-                };
+        {
+            let week_ordinal_str = if epiph_num == 0 {
+                String::new()
+            } else {
+                format!("{} ", to_roman_numeral(epiph_num))
+            };
 
-                let weekday = date.weekday().number_from_monday();
-                let feria = match weekday {
-                    6 => "Sabbato".to_owned(),
-                    7 => "Dominica".to_owned(),
-                    n => format!("Feria {}", to_roman_numeral((n + 1).try_into().unwrap())),
-                };
+            let weekday = date.weekday().number_from_monday();
+            let feria = match weekday {
+                6 => "Sabbato".to_owned(),
+                7 => "Dominica".to_owned(),
+                n => format!("Feria {}", to_roman_numeral((n + 1).try_into().unwrap())),
+            };
 
-                liturgical_desc = format!("{feria} {week_ordinal_str}{suffix}").into();
-            }
+            liturgical_desc = format!("{feria} {week_ordinal_str}{suffix}").into();
         }
         let season_liturgical_unit = LiturgicalUnit {
             desc: liturgical_desc.clone(),
@@ -338,7 +337,7 @@ impl YearCalendarBuilder {
     }
 
     pub fn get_season_descriptor(&self, date: chrono::NaiveDate) -> ArcStr {
-    let season = self.get_season(date);
+        let season = self.get_season(date);
 
         let weekday = date.weekday().number_from_monday();
         let feria = match weekday {
@@ -773,14 +772,16 @@ impl YearCalendarBuilder {
         }
     }
     /// If this year/season/date corresponds to a surplus "after Pentecost"
-    /// Sunday that should be shown with Epiphany numbering for Calendar1962/1954,
-    /// return the Epiphany number and the Epiphany season name and suffix.
+    /// Sunday that should be shown with Epiphany numbering for
+    /// Calendar1962/1954, return the Epiphany number and the Epiphany
+    /// season name and suffix.
     fn epiphany_surplus_remap(
         &self,
         season: &SeasonRule<NaiveDate>,
         date: NaiveDate,
     ) -> Option<(i32, String, String)> {
-        // Apply only to the relevant calendar variants and to an "after Pentecost" season
+        // Apply only to the relevant calendar variants and to an "after Pentecost"
+        // season
         if !(self.calendar_type == CalendarType::Calendar1962
             || self.calendar_type == CalendarType::Calendar1954)
         {

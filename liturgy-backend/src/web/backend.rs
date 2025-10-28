@@ -18,7 +18,7 @@ use calendar_calc::{YearCalendarHandle, calender::GenericCalendarHandle};
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, sync::RwLock};
 use tower::ServiceBuilder;
 use tower_http::{
     cors::CorsLayer,
@@ -29,26 +29,29 @@ use types::{DayRank62, TrivialDayRank};
 
 use crate::web::WebConfig;
 
-pub enum YearCalendarHandleEnum {
+type SharedCalendarHandle = Arc<DynCalendarHandle>;
+pub enum DynCalendarHandle {
     Trivial(YearCalendarHandle<TrivialDayRank>),
     SixtyTwo(YearCalendarHandle<DayRank62>),
 }
 
-impl YearCalendarHandleEnum {
+impl DynCalendarHandle {
+    #[must_use]
     pub fn generate_csv(&self) -> String {
         match self {
-            YearCalendarHandleEnum::Trivial(cal) => cal.generate_csv(),
-            YearCalendarHandleEnum::SixtyTwo(cal) => cal.generate_csv(),
+            DynCalendarHandle::Trivial(cal) => cal.generate_csv(),
+            DynCalendarHandle::SixtyTwo(cal) => cal.generate_csv(),
         }
     }
 
-    /// Return day info as JSON Value regardless of the concrete DayRank type.
+    /// Return day info as JSON Value regardless of the concrete `DayRank` type.
+    #[must_use]
     pub fn get_day_info_json(&self, date: chrono::NaiveDate) -> Option<Value> {
         match self {
-            YearCalendarHandleEnum::Trivial(cal) => cal
+            DynCalendarHandle::Trivial(cal) => cal
                 .get_day_info(date)
                 .map(|d| serde_json::to_value(&d).unwrap_or(Value::Null)),
-            YearCalendarHandleEnum::SixtyTwo(cal) => cal
+            DynCalendarHandle::SixtyTwo(cal) => cal
                 .get_day_info(date)
                 .map(|d| serde_json::to_value(&d).unwrap_or(Value::Null)),
         }
@@ -57,9 +60,8 @@ impl YearCalendarHandleEnum {
 /// Shared application state
 #[derive(Clone)]
 pub struct AppState {
-    pub gen_calendars: Arc<tokio::sync::RwLock<IndexMap<String, GenericCalendarHandle>>>,
-    pub year_calendars:
-        Arc<tokio::sync::RwLock<HashMap<(String, i32), Arc<YearCalendarHandleEnum>>>>,
+    pub gen_calendars: Arc<RwLock<IndexMap<String, GenericCalendarHandle>>>,
+    pub year_calendars: Arc<RwLock<HashMap<(String, i32), SharedCalendarHandle>>>,
     pub config: WebConfig,
 }
 
@@ -135,15 +137,18 @@ fn create_router(state: AppState) -> Router {
                 let serve_index = ServeFile::new(index_file);
                 // Mount at root: try static files first, then index.html
                 router = router.fallback_service(serve_dir.fallback(serve_index.clone()));
-                println!("✅ Serving frontend from: {:?}", dist_path);
+                println!("✅ Serving frontend from: {}", dist_path.display());
             } else {
                 println!(
-                    "⚠️  Frontend dist exists but no index.html found at: {:?}",
-                    dist_path
+                    "⚠️  Frontend dist exists but no index.html found at: {}",
+                    dist_path.display()
                 );
             }
         } else {
-            println!("⚠️  Frontend dist directory not found: {:?}", dist_path);
+            println!(
+                "⚠️  Frontend dist directory not found: {}",
+                dist_path.display()
+            );
         }
     }
     // Add middleware (Trace and CORS). Note: delay middleware is attached to the
@@ -179,12 +184,15 @@ async fn delay_middleware(req: Request<Body>, next: Next) -> Response {
 fn create_api_router() -> Router<AppState> {
     Router::new()
         .route("/calendars", get(api_list_calendars))
-        .route("/calendars/:name", get(api_get_calendar))
-        .route("/calendars/:name/year/:year", get(api_get_year))
-        .route("/calendars/:name/day/:year/:month/:day", get(api_get_day))
-        .route("/calendars/:name/search", get(api_search_feasts))
-        .route("/calendars/:name/generate", post(api_generate_calendar))
-        .route("/calendars/:name/stats/:year", get(api_get_stats))
+        .route("/calendars/{name}", get(api_get_calendar))
+        .route("/calendars/{name}/year/{year}", get(api_get_year))
+        .route(
+            "/calendars/{name}/day/{year}/{month}/{day}",
+            get(api_get_day),
+        )
+        .route("/calendars/{name}/search", get(api_search_feasts))
+        .route("/calendars/{name}/generate", post(api_generate_calendar))
+        .route("/calendars/{name}/stats/{year}", get(api_get_stats))
 }
 
 /// Load default calendars from the calendar data directory
@@ -212,14 +220,14 @@ async fn load_default_calendars(state: &AppState) -> Result<()> {
             ) {
                 Ok(calendar) => {
                     calendars.insert(name.to_string(), calendar);
-                    println!("✅ Loaded calendar: {} from {}", name, path);
+                    println!("✅ Loaded calendar: {name} from {path}");
                 }
                 Err(e) => {
-                    println!("⚠️  Failed to load calendar {}: {}", name, e);
+                    println!("⚠️  Failed to load calendar {name}: {e}");
                 }
             }
         } else {
-            println!("📁 Calendar file not found: {}", path);
+            println!("📁 Calendar file not found: {path}");
         }
     }
 
@@ -241,7 +249,7 @@ async fn get_year_calendar(
     state: &AppState,
     name: &str,
     year: i32,
-) -> Option<Arc<YearCalendarHandleEnum>> {
+) -> Option<Arc<DynCalendarHandle>> {
     let calendars = state.year_calendars.read().await;
     if let Some(calendar) = calendars.get(&(name.to_string(), year)) {
         return Some(calendar.clone());
@@ -252,10 +260,10 @@ async fn get_year_calendar(
     let gen_calendars = state.gen_calendars.read().await;
     if let Some(gen_calendar) = gen_calendars.get(name) {
         // Choose which concrete year calendar to create based on calendar name
-        let year_calendar: YearCalendarHandleEnum = match name {
-            "ef" => YearCalendarHandleEnum::SixtyTwo(gen_calendar.create_year_calendar_62(year)),
-            "54" => YearCalendarHandleEnum::Trivial(gen_calendar.create_year_calendar_54(year)),
-            _ => YearCalendarHandleEnum::Trivial(gen_calendar.create_year_calendar_of(year)),
+        let year_calendar: DynCalendarHandle = match name {
+            "ef" => DynCalendarHandle::SixtyTwo(gen_calendar.create_year_calendar_62(year)),
+            "54" => DynCalendarHandle::Trivial(gen_calendar.create_year_calendar_54(year)),
+            _ => DynCalendarHandle::Trivial(gen_calendar.create_year_calendar_of(year)),
         };
         drop(gen_calendars);
         let arc_cal = Arc::new(year_calendar);
@@ -324,7 +332,7 @@ struct CalendarDetails {
     description: String,
 }
 
-/// GET /api/calendars/:name - Get calendar details
+/// GET /api/calendars/{name} - Get calendar details
 async fn api_get_calendar(
     Path(name): Path<String>,
     State(state): State<AppState>,
@@ -340,7 +348,7 @@ async fn api_get_calendar(
             };
             Json(ApiResponse::success(details))
         }
-        None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
+        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
     }
 }
 
@@ -352,7 +360,7 @@ struct YearCalendarData {
     total_days: usize,
 }
 
-/// GET /api/calendars/:name/year/:year - Get full year calendar
+/// GET /api/calendars/{name}/year/{year} - Get full year calendar
 async fn api_get_year(
     Path((name, year)): Path<(String, i32)>,
     State(state): State<AppState>,
@@ -369,7 +377,7 @@ async fn api_get_year(
             };
             Json(ApiResponse::success(data))
         }
-        None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
+        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
     }
 }
 
@@ -378,21 +386,17 @@ struct DayInfo {
     desc: Value,
 }
 
-/// GET /api/calendars/:name/day/:year/:month/:day - Get specific day info
+/// GET /api/calendars/{name}/day/{year}/{month}/{day} - Get specific day info
 async fn api_get_day(
     Path((name, year, month, day)): Path<(String, i32, u32, u32)>,
     State(state): State<AppState>,
 ) -> Json<ApiResponse<DayInfo>> {
     use chrono::NaiveDate;
 
-    let date = match NaiveDate::from_ymd_opt(year, month, day) {
-        Some(d) => d,
-        None => {
-            return Json(ApiResponse::error(format!(
-                "Invalid date: {}-{}-{}",
-                year, month, day
-            )));
-        }
+    let Some(date) = NaiveDate::from_ymd_opt(year, month, day) else {
+        return Json(ApiResponse::error(format!(
+            "Invalid date: {year}-{month}-{day}"
+        )));
     };
 
     match get_year_calendar(&state, &name, year).await {
@@ -402,13 +406,13 @@ async fn api_get_day(
                 Some(next_year_calendar) => {
                     match next_year_calendar.as_ref().get_day_info_json(date) {
                         Some(day_val) => Json(ApiResponse::success(DayInfo { desc: day_val })),
-                        None => Json(ApiResponse::error(format!("No data for date: {}", date))),
+                        None => Json(ApiResponse::error(format!("No data for date: {date}"))),
                     }
                 }
-                None => Json(ApiResponse::error(format!("No data for date: {}", date))),
+                None => Json(ApiResponse::error(format!("No data for date: {date}"))),
             },
         },
-        None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
+        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
     }
 }
 
@@ -427,7 +431,7 @@ struct SearchResult {
     color: String,
 }
 
-/// GET /api/calendars/:name/search?q=query - Search for feasts
+/// GET /api/calendars/{name}/search?q=query - Search for feasts
 async fn api_search_feasts(
     Path(name): Path<String>,
     Query(params): Query<SearchQuery>,
@@ -448,30 +452,26 @@ async fn api_search_feasts(
                 // For each fuzzy match, try to get feast info
                 for (feast_name, score) in feast_names.iter().take(6) {
                     // Limit to 6 results for cleaner display
-                    match calendar.get_feast_info(feast_name) {
-                        Ok((info, rankstr)) => {
-                            let result = SearchResult {
-                                name: feast_name.clone(),
-                                description: info.to_string(),
-                                date: info.date_rule.to_string().into(), /* Convert date rule to
-                                                                          * string */
-                                rank: rankstr.to_string(),
-                                score: *score,
-                                color: info.color.clone().to_string(),
-                            };
-                            results.push(result);
-                        }
-                        Err(_) => {
-                            // Skip if no info found
-                            continue;
-                        }
+                    if let Ok((info, rankstr)) = calendar.get_feast_info(feast_name) {
+                        let result = SearchResult {
+                            name: feast_name.clone(),
+                            description: info.to_string(),
+                            date: info.date_rule.to_string().into(), /* Convert date rule to
+                                                                      * string */
+                            rank: rankstr.to_string(),
+                            score: *score,
+                            color: info.color.clone().to_string(),
+                        };
+                        results.push(result);
+                    } else {
+                        // Skip if no info found
                     }
                 }
 
                 Json(ApiResponse::success(results))
             }
         }
-        None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
+        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
     }
 }
 
@@ -480,7 +480,7 @@ struct GenerateRequest {
     format: Option<String>,
 }
 
-/// POST /api/calendars/:name/generate - Generate calendar data
+/// POST /api/calendars/{name}/generate - Generate calendar data
 async fn api_generate_calendar(
     Path(name): Path<String>,
     Query(params): Query<GenerateRequest>,
@@ -500,16 +500,13 @@ async fn api_generate_calendar(
                 Some("csv") | None => year_calendar_csv,
                 Some("json") => "{}".to_string(), // TODO: Implement JSON format
                 Some(format) => {
-                    return Json(ApiResponse::error(format!(
-                        "Unsupported format: {}",
-                        format
-                    )));
+                    return Json(ApiResponse::error(format!("Unsupported format: {format}")));
                 }
             };
 
             Json(ApiResponse::success(data))
         }
-        None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
+        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
     }
 }
 
@@ -528,7 +525,7 @@ struct SeasonStats {
     color: String,
 }
 
-/// GET /api/calendars/:name/stats/:year - Get calendar statistics
+/// GET /api/calendars/{name}/stats/{year} - Get calendar statistics
 async fn api_get_stats(
     Path((name, year)): Path<(String, i32)>,
     State(state): State<AppState>,
@@ -573,7 +570,7 @@ async fn api_get_stats(
 
             Json(ApiResponse::success(stats))
         }
-        None => Json(ApiResponse::error(format!("Calendar '{}' not found", name))),
+        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
     }
 }
 

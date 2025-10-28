@@ -1,0 +1,19 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"annunciation-of-the-blessed-virgin-mary\"]"
+expression: s.0
+---
+2025-03-24
+First Vespers of Annunciation of the Blessed Virgin Mary:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Common of the Blessed Virgin Mary
+  Chapter:     Proper
+  Hymn:        Common of the Blessed Virgin Mary
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper
+  Commemoration of Feria II week III of Lent:
+    Magnificat Antiphon: Psalter (Ordinary of Lent)
+    Verse: Psalter (Ordinary of Lent)
+    Collect: of Sunday

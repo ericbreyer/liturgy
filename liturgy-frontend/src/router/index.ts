@@ -73,13 +73,8 @@ const router = createRouter({
   ],
 })
 
-// Optional: Update document title based on route
+// Set CSS variables based on route. Title/head is handled by per-page `useSeo` in components.
 router.beforeEach((to, from, next) => {
-  if (to.meta?.title) {
-    document.title = `${to.meta.title} - Liturgy Calendar`
-  }
-
-  // Set CSS variables based on route
   const app = document.documentElement
   switch (to.name) {
     case 'Today':

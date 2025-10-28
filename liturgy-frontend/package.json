@@ -7,9 +7,9 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-  "dev": "vite",
-  "prepare-icons": "cp -R src/assets/icon/* public/",
-  "build": "run-p prepare-icons type-check \"build-only {@}\" --",
+    "dev": "vite",
+    "prepare-icons": "cp -R src/assets/icon/* public/",
+    "build": "run-p prepare-icons type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
@@ -18,10 +18,12 @@
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "test:playwright": "playwright test"
+    "test:playwright": "playwright test",
+    "generate-sitemap": "node scripts/generate-sitemap.cjs"
   },
   "dependencies": {
     "vue": "^3.5.18",
+    "@vueuse/head": "^0.8.2",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {

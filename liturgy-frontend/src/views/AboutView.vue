@@ -117,6 +117,33 @@
           commemorations, and liturgical seasons.
         </p>
       </div>
+      
+      <div class="section">
+        <h2>Resources</h2>
+        <p>
+          Helpful external resources and references for further reading and calendar comparison:
+        </p>
+        <ul class="external-links resources-list">
+          <li>
+            <a href="https://www.divinumofficium.com/" target="_blank" rel="noopener noreferrer">Divinum Officium</a>
+            — searchable propers and Divine Office texts
+          </li>
+          <li>
+            <a href="https://1962ordo.today/" target="_blank" rel="noopener noreferrer">1962 Ordo</a>
+            — Traditional 1962 ordos and references
+          </li>
+          <li>
+            <a href="https://gcatholic.org/calendar/2025/Extraordinary-en" target="_blank" rel="noopener noreferrer">GCatholic — 2025 Calendar</a>
+            — GCatholic calendar listings for 2025
+          </li>
+          <li>
+            <a href="https://www.usccb.org/prayer-and-worship/liturgical-year" target="_blank" rel="noopener noreferrer">USCCB — Liturgical Year</a>
+            — Official USCCB resources on the liturgical year
+          </li>
+        </ul>
+      </div>
+
+      
     </div>
   </div>
 </template>
@@ -250,6 +277,49 @@
 .tech-list li {
   margin-bottom: 8px;
   color: var(--text-secondary);
+}
+
+.resources-list {
+  margin-top: 12px;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resources-list a {
+  color: var(--accent-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.resources-list a:hover {
+  text-decoration: underline;
+}
+
+.social-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.social-item a {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.social-item svg {
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--accent-color);
+}
+.social-item span {
+  color: var(--text-primary);
 }
 
 .tech-list strong {

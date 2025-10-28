@@ -1,20 +1,86 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-N67FW5WN');</script>
+  <!-- End Google Tag Manager -->
+ <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T64C2X2GCL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T64C2X2GCL');
+</script>
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="./assets/icon/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="./assets/icon//favicon.svg" />
-  <link rel="shortcut icon" href="./assets/icon//favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/icon//apple-touch-icon.png" />
-  <link rel="manifest" href="./assets/icon//site.webmanifest" />
-
+  <link rel="icon" type="image/svg+xml" href="./assets/icon/favicon.svg" />
+  <link rel="shortcut icon" href="./assets/icon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/icon/apple-touch-icon.png" />
+  <link rel="manifest" href="./assets/icon/site.webmanifest" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Liturgical Calendar</title>
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Browse a free, searchable liturgical calendar and Divine Office resources — including traditional (pre‑1955) Catholic calendars, propers, and common texts.">
+  <meta name="keywords" content="liturgical calendar, pre-1955 calendar, traditional catholic calendar, divine office, breviary, liturgy">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Liturgy — Liturgical Calendar & Divine Office (Traditional)">
+  <meta property="og:description" content="Browse a free, searchable liturgical calendar and Divine Office resources — traditional (pre‑1955) calendars, propers, and common texts.">
+  <meta property="og:image" content="/assets/icon/favicon-96x96.png">
+  <meta property="og:site_name" content="Liturgy">
+  <!-- Replace the URL below with your production URL -->
+  <link rel="canonical" href="https://liturgy.ericbreyer.com/">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Liturgy — Liturgical Calendar & Divine Office (Traditional)">
+  <meta name="twitter:description" content="Browse a free, searchable liturgical calendar and Divine Office resources — traditional (pre‑1955) calendars, propers, and common texts.">
+  <meta name="twitter:image" content="/assets/icon/favicon-96x96.png">
+
+  <title>Liturgy — Liturgical Calendar & Divine Office (Traditional / Pre‑1955)</title>
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://liturgy.ericbreyer.com/#website",
+        "url": "https://liturgy.ericbreyer.com/",
+        "name": "Liturgy",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://liturgy.ericbreyer.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://liturgy.ericbreyer.com/#organization",
+        "name": "Liturgy",
+        "url": "https://liturgy.ericbreyer.com/",
+        "logo": "https://liturgy.ericbreyer.com/assets/icon/favicon-96x96.png"
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N67FW5WN"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>

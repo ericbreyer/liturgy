@@ -181,10 +181,10 @@ impl Display for VespersCommemorationOrdo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             VespersCommemorationOrdo::FullCommemoration(ordo) => {
-                write!(f, "{}", ordo)
+                write!(f, "{ordo}")
             }
             VespersCommemorationOrdo::SpecialCommemoration(location) => {
-                writeln!(f, "  Collect: {:?}", location)
+                writeln!(f, "  Collect: {location:?}")
             }
         }
     }

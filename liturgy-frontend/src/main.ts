@@ -3,6 +3,7 @@ import './styles/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { createHead } from '@vueuse/head'
 
 // Import icon assets so Vite includes them in the build output. We'll update
 // the <link> tags at runtime to point to the processed (hashed) asset URLs
@@ -39,6 +40,10 @@ try {
 }
 
 const app = createApp(App)
+
+// Create and install the head manager for dynamic per-route metadata
+const head = createHead()
+app.use(head)
 
 app.use(router)
 app.mount('#app')

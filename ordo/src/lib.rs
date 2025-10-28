@@ -45,7 +45,6 @@ trait OrdoRules {
 /// Build a vespers representation for a day and return a debug string.
 /// This is a small public helper used by integration tests to snapshot
 /// full-year ordos.
-#[must_use]
 pub fn build_vespers_snapshot(
     day: &DayDescription<DayRank62>,
     repo: &OrdoRepo,

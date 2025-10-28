@@ -2,6 +2,11 @@
 name = "cross-proc-cache"
 version = "0.1.0"
 edition = "2021"
+readme = "README.md"
+homepage = "https://liturgy.ericbreyer.com"
+repository = "https://github.com/ericbreyer/liturgy"
+keywords = ["cache", "ipc", "cross-process"]
+categories = ["development-tools::build-utils"]
 
 [dependencies]
 bincode = "2.0.1"

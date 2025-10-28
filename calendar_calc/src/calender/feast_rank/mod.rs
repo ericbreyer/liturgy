@@ -227,12 +227,14 @@ pub trait FeastRankResolver: Clone + Debug {
 
     fn get_bvm_on_saturday_rank() -> Self;
     fn admits_bvm_on_saturday(&self) -> BVMOnSaturdayResult;
+    #[must_use]
     fn get_peter_and_paul_commemoration_rank() -> Self {
         Self::get_bvm_on_saturday_rank()
     }
 
     fn id(&self) -> RcStr;
     fn descriptor(&self) -> Self::FeastRankDescriptor;
+    #[must_use]
     fn transfers_vigil_from_sunday_to_saturday() -> bool {
         false
     }

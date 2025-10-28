@@ -26,7 +26,7 @@ where
             .field("day_kind", &self.day_kind)
             .field("date", &self.date)
             .field("color", &self.color)
-            .finish()
+            .finish_non_exhaustive()
     }
 }
 

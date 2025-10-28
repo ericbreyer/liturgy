@@ -33,6 +33,7 @@ function handleBack() {
     <div class="page-content">
       <slot />
     </div>
+    
   </div>
 </template>
 
@@ -85,6 +86,20 @@ function handleBack() {
 
 .page-content {
   flex: 1;
+}
+
+.external-links {
+  list-style: none;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+}
+.external-links a {
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {

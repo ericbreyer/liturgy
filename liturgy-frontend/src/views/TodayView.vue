@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
+import useSeo from '../composables/useSeo'
 import { api, type DayInfo } from '../services/api'
 import LiturgicalTable from '../components/LiturgicalTable.vue'
 import LiturgicalDayCard from '../components/LiturgicalDayCard.vue'
@@ -36,6 +37,15 @@ const {
   goToNext: goToNextDay,
   route,
 } = useDateNavigation('Today')
+
+// Per-page SEO: dynamic per-selected-date canonical/title/description
+useSeo({
+  title: computed(() => `Daily Liturgy — ${selectedDate.value || ''}`),
+  description: "Today's liturgical calendar, feasts, and Divine Office — traditional (pre-1955) calendars and resources.",
+  path: computed(() => (selectedDate.value ? `/today?date=${selectedDate.value}` : '/today')),
+  keywords:
+    'liturgical calendar, pre-1955 calendar, Catholic calendar, divine office, breviary, traditional liturgy',
+})
 
 // Create a single date array for the LiturgicalTable component using displayed data
 const singleDateArray = computed(() => {

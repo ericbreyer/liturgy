@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"feria-ii-after-quinquagesima\", \"feria-of-quinquagesima\"]"
+expression: s.0
+---
+2025-03-03
+Vespers of Feria II after Quinquagesima:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Quinquagesima)
+  Psalms:      Psalter
+  Chapter:     Psalter (Ordinary of Quinquagesima)
+  Hymn:        Psalter (Ordinary of Quinquagesima)
+  Verse:       Psalter (Ordinary of Quinquagesima)
+  Magnificat:  Psalter (Ordinary of Quinquagesima)
+  Collect:     of Sunday

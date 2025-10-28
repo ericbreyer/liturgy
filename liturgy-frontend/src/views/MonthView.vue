@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, onUnmounted } from 'vue'
+import useSeo from '../composables/useSeo'
 import { useRouter, useRoute } from 'vue-router'
 import { api, type DayInfo } from '../services/api'
 import DateSelector from '../components/DateSelector.vue'
@@ -305,7 +306,34 @@ onMounted(async () => {
   await loadCalendars(router, currentRoute)
   if (syncWithRoute) syncWithRoute(currentRoute)
   if (selectedCalendars.value.length > 0) loadMonthData()
+  // Set SEO for the month view using computed monthData
+  useSeo({
+    title: computed(() => `${monthData.value.monthName} ${monthData.value.year}`),
+    description: computed(
+      () => `Monthly liturgical calendar for ${monthData.value.monthName} ${monthData.value.year}. View feasts, commemorations, and liturgical colors for each day.`,
+    ),
+    path: computed(() => `/month`),
+  })
 })
+
+// When a day is selected for details, update per-day SEO so the detail panel can be indexed
+watch(
+  selectedDetailDate,
+  (newDate) => {
+    if (!newDate) return
+    // Build a human title using the first feast if available
+    const feasts = getDayFeasts(newDate)
+    const primary = feasts && feasts.length > 0 ? feasts[0].title : `Liturgical calendar for ${newDate}`
+    useSeo({
+      title: `${primary}`,
+      description: `Liturgical details for ${newDate}: ${feasts
+        .map((f) => f.title)
+        .slice(0, 3)
+        .join(', ')}`,
+      path: `/today?date=${newDate}`,
+    })
+  },
+)
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeyDown)

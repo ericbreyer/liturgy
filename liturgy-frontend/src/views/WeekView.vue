@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
+import useSeo from '../composables/useSeo'
 import { api, type DayInfo } from '../services/api'
 import LiturgicalTable from '../components/LiturgicalTable.vue'
 import LiturgicalDayCard from '../components/LiturgicalDayCard.vue'
@@ -197,6 +198,13 @@ onMounted(async () => {
   if (selectedCalendars.value.length > 0) {
     loadWeekInfo()
   }
+  // Page SEO
+  useSeo({
+    title: 'Week View',
+    description:
+      "Weekly liturgical calendar showing a 9-day window around the selected date, including feasts, ranks, and commemorations.",
+    path: '/week',
+  })
 })
 </script>
 

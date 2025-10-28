@@ -1,0 +1,15 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+description: "[\"st--gabriel-of-our-lady-of-sorrows\"]"
+expression: s.0
+---
+2025-02-27
+Vespers of St. Gabriel of Our Lady of Sorrows:
+Vespers:
+  Antiphons:   Psalter (Ordinary of Sexagesima)
+  Psalms:      Psalter
+  Chapter:     Common of Confessors (non-bishop)
+  Hymn:        Common of Confessors (non-bishop)
+  Verse:       Common of Confessors (non-bishop)
+  Magnificat:  Common of Confessors (non-bishop)
+  Collect:     Proper

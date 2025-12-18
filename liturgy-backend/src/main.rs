@@ -17,6 +17,10 @@ struct Args {
     #[arg(long)]
     frontend_dir: Option<String>,
 
+    /// Optional ordo rules directory (contains propers/ and offices/)
+    #[arg(long)]
+    ordo_rules_dir: Option<String>,
+
     /// Host/IP to bind the server to (use 0.0.0.0 in containers)
     #[arg(long, default_value = "127.0.0.1")]
     host: String,
@@ -40,6 +44,7 @@ async fn main() -> Result<()> {
         port: args.port,
         calendar_data_dir: args.calendar_data_dir,
         frontend_dir: args.frontend_dir,
+        ordo_rules_dir: args.ordo_rules_dir,
         debug_delay: args.debug_delay,
     };
 

@@ -1,0 +1,29 @@
+# cargo-release configuration for the workspace
+# See: https://github.com/crate-ci/cargo-release
+
+# Use workspace mode so cargo-release manages each crate inside the workspace
+workspace = true
+
+# Tag format for releases
+tag-format = "v{version}"
+
+# Publish crates to crates.io (set to true for actual release)
+publish = true
+
+# Push commits & tags after release
+push = true
+
+# Create git tag and commit changes
+tag = true
+
+# Do not modify the changelog automatically (project doesn't have automated changelog yet)
+#changelog = false
+
+# Allowed branches for performing release locally/CI
+allow-branch = ["master", "main"]
+
+# If you prefer to confirm each step locally, leave `skip-confirm` false
+skip-confirm = false
+
+# When cargo-release runs in workspace mode, it respects each crate's `package.version`.
+# If you want to run a dry-run in CI for validation, use `cargo release --dry-run`.

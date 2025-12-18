@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--bede-the-venerable--confessor-and-doctor-of-the-church\", \"st--bede-the-venerable\"]"
 expression: s.0
 ---

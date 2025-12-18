@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--josaphat--bishop-and-martyr\", \"st--josaphat\"]"
 expression: s.0
 ---

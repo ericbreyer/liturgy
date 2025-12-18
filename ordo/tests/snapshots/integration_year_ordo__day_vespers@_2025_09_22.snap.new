@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--thomas-of-villanova--bishop-and-confessor\", \"st--thomas-of-villanova\"]"
 expression: s.0
 ---

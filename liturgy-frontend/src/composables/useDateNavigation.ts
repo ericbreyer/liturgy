@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd') {
+export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd' | 'Ordo') {
   const route = useRoute()
   const router = useRouter()
 
@@ -58,7 +58,7 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     let date: Date
 
-    if (routeName === 'Today' || routeName === 'Nerd' || routeName == 'Week') {
+    if (routeName === 'Today' || routeName === 'Nerd' || routeName === 'Ordo' || routeName == 'Week') {
       date = new Date(year, month - 1, day - 1)
     // } else if (routeName === 'Week') {
     //   date = new Date(year, month - 1, day - 7)
@@ -75,7 +75,7 @@ export function useDateNavigation(routeName: 'Today' | 'Week' | 'Month' | 'Nerd'
     const [year, month, day] = selectedDate.value.split('-').map(Number)
     let date: Date
 
-    if (routeName === 'Today' || routeName === 'Nerd'|| routeName == 'Week') {
+    if (routeName === 'Today' || routeName === 'Nerd' || routeName === 'Ordo' || routeName == 'Week') {
       date = new Date(year, month - 1, day + 1)
     // } else if (routeName === 'Week') {
     //   date = new Date(year, month - 1, day + 7)

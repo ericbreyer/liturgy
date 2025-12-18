@@ -16,7 +16,7 @@ chrono = "0.4"
 serde = { version = "1.0", features = ["derive", "rc"] }
 toml = ">=0.9.5"
 bitflags = { version = ">=2.0", features = ["serde"] }
-anyhow = "*"
+anyhow = "1.0.100"
 itertools = "0.14.0"
 types = { path = "../types", version = "0.1.0" }
 

@@ -4,11 +4,12 @@ pub mod ordo_repo;
 mod vespers;
 
 use anyhow::Result;
-use types::{DayDescription, DayRank62};
+use serde::{Deserialize, Serialize};
+use types::{DayDescription, DayRank, DayRank62, TrivialDayRank};
 
-use crate::{ordo_repo::OrdoRepo, vespers::Vespers};
+pub use crate::{ordo_repo::OrdoRepo, vespers::Vespers};
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Location {
     /// Common, optionally carrying a name supplied by a rule (empty string if
     /// unnamed)
@@ -39,17 +40,50 @@ impl Debug for Location {
 /// component. Implement this to provide day-by-day overrides (for example when
 /// a day has specific propers).
 trait OrdoRules {
-    fn vespers_location(&self, day: &DayDescription<DayRank62>) -> Result<(Vespers, Vec<String>)>;
+    fn vespers_location_62(&self, day: &DayDescription<DayRank62>) -> Result<(Vespers, Vec<String>)>;
 }
 
-/// Build a vespers representation for a day and return a debug string.
-/// This is a small public helper used by integration tests to snapshot
-/// full-year ordos.
-pub fn build_vespers_snapshot(
-    day: &DayDescription<DayRank62>,
-    repo: &OrdoRepo,
-) -> Result<(String, Vec<String>)> {
-    let v = repo.vespers_location(day)?;
+pub trait VespersOrdo {
+    fn vespers_ordo (
+        &self,
+        repo: &OrdoRepo,
+    ) -> Result<Vespers>;
+    fn vespers_ordo_sources (
+        &self,
+        repo: &OrdoRepo,
+    ) -> Result<Vec<String>>;
+}
 
-    Ok((format!("{}\n{}", day.date, v.0), v.1))
+impl VespersOrdo for DayDescription<DayRank62>
+{
+    fn vespers_ordo (
+        &self,
+        repo: &OrdoRepo,
+    ) -> Result<Vespers> {
+        Ok(repo.vespers_location_62(self)?.0)
+    }
+
+    fn vespers_ordo_sources (
+        &self,
+        repo: &OrdoRepo,
+    ) -> Result<Vec<String>> {
+        Ok(repo.vespers_location_62(self)?.1)
+    }
+}
+
+impl VespersOrdo for DayDescription<TrivialDayRank>
+{
+    fn vespers_ordo (
+        &self,
+        _repo: &OrdoRepo,
+    ) -> Result<Vespers> {
+        Err(anyhow::anyhow!("VespersOrdo not implemented for DayRank other than DayRank62"))
+    }
+
+    fn vespers_ordo_sources (
+        &self,
+        _repo: &OrdoRepo,
+    ) -> Result<Vec<String>> {
+        Err(anyhow::anyhow!("VespersOrdo not implemented for DayRank other than DayRank62"))
+    }
 }

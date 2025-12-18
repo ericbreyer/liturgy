@@ -9,7 +9,7 @@ use crate::{
     office_component::{OfficeComponent, OfficeComponentFamily},
 };
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Vespers {
     pub name: String,
     pub ordo: VespersOrdo,
@@ -146,7 +146,7 @@ impl Display for VespersOrdo {
 }
 
 nest! {
-#[derive(Clone, Debug)]*
+#[derive(Clone, Debug, Serialize, Deserialize)]*
     pub struct VespersCommemoration {
         pub name: String,
         pub ordo: pub enum VespersCommemorationOrdo {

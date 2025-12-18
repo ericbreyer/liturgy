@@ -340,7 +340,7 @@ fn slugs(name: &str) -> Vec<String> {
 }
 
 impl crate::OrdoRules for OrdoRepo {
-    fn vespers_location(
+    fn vespers_location_62(
         &self,
         day: &crate::DayDescription<crate::DayRank62>,
     ) -> Result<(Vespers, Vec<String>)> {

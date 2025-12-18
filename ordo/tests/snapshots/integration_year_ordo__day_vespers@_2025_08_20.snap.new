@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--bernard--abbot-and-doctor-of-the-church\", \"st--bernard\"]"
 expression: s.0
 ---

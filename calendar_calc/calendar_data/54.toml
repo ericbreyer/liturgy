@@ -39,7 +39,7 @@ color = "white"
 sunday_rank = "III"
 
 [[feasts]]
-name = "Nativity of Our Lord"
+name = "The Nativity of Our Lord Jesus Christ"
 date_rule = "PreviousYear(Fixed(12,25))"
 rank = "first class double"
 color = "white"
@@ -2595,17 +2595,17 @@ titles = ["Bishop", "Confessor"]
 
 
 [[feasts]]
-name = "Dedication of the Basilicas of Ss. Peter and Paul"
+name = "The Dedication of the Basilicas of Ss. Peter and Paul"
 date_rule = "Fixed(11,18)"
 rank = "major double"
 color = "white"
 
 [[feasts]]
-name = "St. Elisabeth"
+name = "St. Elizabeth of Hungary"
 date_rule = "Fixed(11,19)"
 rank = "double"
 color = "white"
-titles = ["Widow"]
+titles = ["Queen", "Widow"]
 
 [[feasts]]
 name = "St. Pontianus"
@@ -2624,7 +2624,7 @@ titles = ["Confessor"]
 
 
 [[feasts]]
-name = "Presentation of the Blessed Virgin Mary"
+name = "The Presentation of the Blessed Virgin Mary"
 date_rule = "Fixed(11,21)"
 rank = "major double"
 color = "white"
@@ -2666,7 +2666,7 @@ color = "red"
 titles = ["Martyr"]
 
 [[feasts]]
-name = "St. Catherine"
+name = "St. Catherine of Alexandria"
 date_rule = "Fixed(11,25)"
 rank = "double"
 color = "red"
@@ -2707,7 +2707,7 @@ date_rule = "Fixed(11,30)"
 rank = "second class double"
 color = "red"
 titles = ["Apostle"]
-
+day_type = "feast"
 
 [[feasts]]
 name = "St. Bibiana"
@@ -2752,11 +2752,11 @@ color = "white"
 titles = ["Bishop", "Confessor"]
 
 [[feasts]]
-name = "St. Ambrose Bishop, Confessor, and"
+name = "St. Ambrose"
 date_rule = "Fixed(12,7)"
 rank = "double"
 color = "white"
-titles = ["Doctor of the Church"]
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
 
 
 [[feasts]]
@@ -2856,6 +2856,7 @@ date_rule = "Fixed(12,28)"
 rank = "second class double"
 color = "red"
 of_our_lord = true
+titles = ["Martyrs"]
 
 [[octaves]]
 name = "the Holy Innocents"
@@ -2877,12 +2878,13 @@ name = "St. Sylvester I"
 date_rule = "Fixed(12,31)"
 rank = "double"
 color = "white"
+titles = ["Pope", "Confessor"]
 
 # ---------- Ember Days ----------
 # Four sets of three days (Wednesday, Friday, Saturday) for fasting and prayer
 
 # Advent Ember Days - between 3rd and 4th Sundays of Advent
-titles = ["Pope", "Confessor"]
+
 
 
 [[feasts]]
@@ -3180,7 +3182,7 @@ is_octave = true
 # ---------- Vigils ----------
 
 [[feasts]]
-name = "Vigil of Christmas"
+name = "Vigil of the Nativity of Our Lord Jesus Christ"
 date_rule = "OffsetDays(PreviousYear(Fixed(12,25)), -1)"
 day_type = "vigil"
 rank = "major"

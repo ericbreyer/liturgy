@@ -44,7 +44,7 @@ fn init_us_extended_for_year(year: usize) -> Vec<String> {
 }
 
 #[test_matrix(
-    2025..=2026,
+    2025..=2027,
     0..=366,
     [CalendarType::Of, CalendarType::UsExtended]
 )]

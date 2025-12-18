@@ -18,6 +18,8 @@ pub struct WebConfig {
     /// the frontend build before starting and serve files from
     /// `<frontend_dir>/dist`.
     pub frontend_dir: Option<String>,
+    /// Optional path to the ordo rules directory (contains `propers/` and `offices/`)
+    pub ordo_rules_dir: Option<String>,
     pub debug_delay: bool,
 }
 
@@ -28,6 +30,7 @@ impl Default for WebConfig {
             port: 3000,
             calendar_data_dir: "../calendar_calc/calendar_data".to_string(),
             frontend_dir: "../liturgy-frontend".to_string().into(),
+            ordo_rules_dir: "../ordo/rules".to_string().into(),
             debug_delay: false,
         }
     }

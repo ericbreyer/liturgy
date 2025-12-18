@@ -26,6 +26,7 @@ const navItems: NavItem[] = [
   { id: 'search', label: 'Search', icon: '', route: '/search' },
   { id: 'novena', label: 'Novenas', icon: '', route: '/novena' },
   { id: 'nerd', label: 'Advanced', icon: '', route: '/nerd' },
+  { id: 'ordo', label: 'Ordo', icon: '', route: '/ordo' },
   { id: 'about', label: 'About', icon: '', route: '/about' },
 ]
 
@@ -123,14 +124,14 @@ onMounted(async () => {
 
 // Date navigation - only show for date-based views
 const showDatePicker = computed(() => {
-  return ['Today', 'Week', 'Month', 'Nerd'].includes(route.name as string)
+  return ['Today', 'Week', 'Month', 'Nerd', 'Ordo'].includes(route.name as string)
 })
 
 // Get the appropriate date navigation based on current route
 const dateNavigation = computed(() => {
   const routeName = route.name as string
-  if (['Today', 'Week', 'Month', 'Nerd'].includes(routeName)) {
-    return useDateNavigation(routeName as 'Today' | 'Week' | 'Month' | 'Nerd')
+  if (['Today', 'Week', 'Month', 'Nerd', 'Ordo'].includes(routeName)) {
+    return useDateNavigation(routeName as 'Today' | 'Week' | 'Month' | 'Nerd' | 'Ordo')
   }
   return null
 })
@@ -147,10 +148,15 @@ const datePickerVariant = computed(() => {
       return 'month'
     case 'Nerd':
       return 'day'
+    case 'Ordo':
+      return 'day'
     default:
       return 'day'
   }
 })
+
+// Hide the top-level calendar picker on Ordo so the view uses its own selector
+const showCalendarSelection = computed(() => route.name !== 'Ordo')
 </script>
 
 <script lang="ts">
@@ -219,9 +225,10 @@ export default {}
         </div>
 
         <!-- Calendar Selection -->
-        <div class="nav-calendar-selection">
+        <div v-if="showCalendarSelection" class="nav-calendar-selection">
           <CalendarSelection :show-title="false" variant="dropdown" title="Calendars" />
         </div>
+        <!-- bottom-row: (ordo button removed to avoid duplicates) -->
       </div>
     </div>
   </nav>
@@ -293,6 +300,7 @@ export default {}
   flex-shrink: 0;
   min-width: 200px;
 }
+
 
 .nav-item {
   display: flex;

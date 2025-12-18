@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--th-r-se-of-the-child-jesus--virgin-and-doctor-of-the-church\", \"st--th-r-se-of-the-child-jesus\"]"
 expression: s.0
 ---

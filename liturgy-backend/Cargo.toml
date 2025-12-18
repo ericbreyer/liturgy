@@ -15,6 +15,7 @@ license = "MIT OR Apache-2.0"
 # local crates
 calendar_calc = { path = "../calendar_calc", version = "0.1.0" }
 types = { path = "../types", version = "0.1.0" }
+ordo = { path = "../ordo", version = "0.1.0" }
 
 chrono = "0.4"
 serde = { version = "1.0", features = ["derive"] }

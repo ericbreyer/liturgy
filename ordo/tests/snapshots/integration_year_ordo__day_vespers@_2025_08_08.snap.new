@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--john-mary-vianney--confessor-and-priest\", \"st--john-mary-vianney\"]"
 expression: s.0
 ---

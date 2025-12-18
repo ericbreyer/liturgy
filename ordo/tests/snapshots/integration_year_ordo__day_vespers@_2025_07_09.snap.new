@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"feria-iv-week-iv-after-the-octave-of-pentecost\", \"feria-of-time-after-pentecost\"]"
 expression: s.0
 ---

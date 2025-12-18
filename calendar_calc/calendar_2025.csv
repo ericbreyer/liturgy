@@ -1,18 +1,18 @@
 Date|Day in Season|Rank|Feast|Commemorations|Vespers|DT
 2024-12-01|Dominica I of Advent|Major Sunday|Dominica I of Advent||
 2024-12-02|Feria II week I of Advent|Feria|Feria II week I of Advent||
-2024-12-03|Feria III week I of Advent|Memorial|St. Francis Xavier, Priest||
-2024-12-04|Feria IV week I of Advent|Feria|Feria IV week I of Advent|St. John Damascene, Priest and Doctor of the Church|
+2024-12-03|Feria III week I of Advent|Memorial|St. Francis Xavier, Confessor||
+2024-12-04|Feria IV week I of Advent|Feria|Feria IV week I of Advent|St. John Damascene, Confessor and Doctor of the Church|
 2024-12-05|Feria V week I of Advent|Feria|Feria V week I of Advent||
-2024-12-06|Feria VI week I of Advent|Feria|Feria VI week I of Advent|St. Nicholas, Bishop|
-2024-12-07|Sabbato week I of Advent|Memorial|St. Ambrose, Bishop and Doctor of the Church||
+2024-12-06|Feria VI week I of Advent|Feria|Feria VI week I of Advent|St. Nicholas, Bishop and Confessor|
+2024-12-07|Sabbato week I of Advent|Memorial|St. Ambrose, Bishop and Confessor and Doctor of the Church||
 2024-12-08|Dominica II of Advent|Major Sunday|Dominica II of Advent||
 2024-12-09|Feria II week II of Advent|Solemnity|The Immaculate Conception of the Blessed Virgin Mary (transferred)||
 2024-12-10|Feria III week II of Advent|Feria|Feria III week II of Advent|Our Lady of Loreto|
-2024-12-11|Feria IV week II of Advent|Feria|Feria IV week II of Advent|St. Damasus I, Pope|
+2024-12-11|Feria IV week II of Advent|Feria|Feria IV week II of Advent|St. Damasus I, Pope and Confessor|
 2024-12-12|Feria V week II of Advent|Feria|Feria V week II of Advent|Our Lady of Guadalupe|
 2024-12-13|Feria VI week II of Advent|Memorial|St. Lucy, Virgin and Martyr||
-2024-12-14|Sabbato week II of Advent|Memorial|St. John of the Cross, Priest and Doctor of the Church||
+2024-12-14|Sabbato week II of Advent|Memorial|St. John of the Cross, Confessor and Doctor of the Church||
 2024-12-15|Dominica III of Advent|Major Sunday|Dominica III of Advent||
 2024-12-16|Feria II week III of Advent|Feria|Feria II week III of Advent||
 2024-12-17|Feria III week III of Advent|Feria|Feria III week III of Advent||
@@ -23,13 +23,13 @@ Date|Day in Season|Rank|Feast|Commemorations|Vespers|DT
 2024-12-22|Dominica IV of Advent|Major Sunday|Dominica IV of Advent||
 2024-12-23|Feria II week IV of Advent|Feria|Feria II week IV of Advent|St. John of Kanty, Priest|
 2024-12-24|Feria III week IV of Advent|Feria|Feria III week IV of Advent||
-2024-12-25|Feria IV week I of Christmas|Solemnity|Nativity of the Lord||
-2024-12-26|Feria V week I of Christmas|Feast|St. Stephen, First Martyr||
+2024-12-25|Feria IV week I of Christmas|Solemnity|The Nativity of our Lord Jesus Christ||
+2024-12-26|Feria V week I of Christmas|Feast|St. Stephen, Protomartyr||
 2024-12-27|Feria VI week I of Christmas|Feast|St. John, Apostle and Evangelist||
 2024-12-28|Sabbato week I of Christmas|Feast|The Holy Innocents, Martyrs||
 2024-12-29|Dominica II of Christmas|Feast|The Holy Family of Jesus, Mary and Joseph||
 2024-12-30|Feria II week II of Christmas|Feria|Day 6 in the Octave of Christmas||
-2024-12-31|Feria III week II of Christmas|Feria|Day 7 in the Octave of Christmas|St. Sylvester I, Pope|
+2024-12-31|Feria III week II of Christmas|Feria|Day 7 in the Octave of Christmas|St. Sylvester I, Pope and Confessor|
 2025-01-01|Feria IV week II of Christmas|Solemnity|Solemnity of Mary, the Holy Mother of God||
 2025-01-02|Feria V in Christmas|Memorial|Ss. Basil the Great and Gregory Nazianzen, Bishops and Doctors of the Church||
 2025-01-03|Feria VI in Christmas|Feria|Feria VI in Christmas|The Most Holy Name of Jesus|
@@ -240,7 +240,7 @@ Date|Day in Season|Rank|Feast|Commemorations|Vespers|DT
 2025-07-27|Dominica XVII of Ordinary Time|Sunday|Dominica XVII of Ordinary Time||
 2025-07-28|Feria II week XVII of Ordinary Time|Feria|Feria II week XVII of Ordinary Time||
 2025-07-29|Feria III week XVII of Ordinary Time|Memorial|Ss. Martha, Mary and Lazarus||
-2025-07-30|Feria IV week XVII of Ordinary Time|Feria|Feria IV week XVII of Ordinary Time|St. Peter Chrysologus, Bishop and Doctor of the Church|
+2025-07-30|Feria IV week XVII of Ordinary Time|Feria|Feria IV week XVII of Ordinary Time|St. Peter Chrysologus, Bishop and Confessor and Doctor of the Church|
 2025-07-31|Feria V week XVII of Ordinary Time|Memorial|St. Ignatius of Loyola, Priest||
 2025-08-01|Feria VI week XVII of Ordinary Time|Memorial|St. Alphonsus Liguori, Bishop and Doctor of the Church||
 2025-08-02|Sabbato week XVII of Ordinary Time|Feria|Sabbato week XVII of Ordinary Time|St. Eusebius of Vercelli, Bishop, St. Peter Julian Eymard, Priest, BVM on Saturday|
@@ -342,7 +342,7 @@ Date|Day in Season|Rank|Feast|Commemorations|Vespers|DT
 2025-11-06|Feria V week XXXI of Ordinary Time|Feria|Feria V week XXXI of Ordinary Time||
 2025-11-07|Feria VI week XXXI of Ordinary Time|Feria|Feria VI week XXXI of Ordinary Time||
 2025-11-08|Sabbato week XXXI of Ordinary Time|Feria|Sabbato week XXXI of Ordinary Time|BVM on Saturday|
-2025-11-09|Dominica XXXII of Ordinary Time|Sunday|Dominica XXXII of Ordinary Time||
+2025-11-09|Dominica XXXII of Ordinary Time|Feast|The Dedication of the Lateran Basilica||
 2025-11-10|Feria II week XXXII of Ordinary Time|Memorial|St. Leo the Great, Pope and Doctor of the Church||
 2025-11-11|Feria III week XXXII of Ordinary Time|Memorial|St. Martin of Tours, Bishop||
 2025-11-12|Feria IV week XXXII of Ordinary Time|Memorial|St. Josaphat, Bishop and Martyr||
@@ -350,13 +350,13 @@ Date|Day in Season|Rank|Feast|Commemorations|Vespers|DT
 2025-11-14|Feria VI week XXXII of Ordinary Time|Feria|Feria VI week XXXII of Ordinary Time||
 2025-11-15|Sabbato week XXXII of Ordinary Time|Feria|Sabbato week XXXII of Ordinary Time|St. Albert the Great, Bishop and Doctor of the Church, BVM on Saturday|
 2025-11-16|Dominica XXXIII of Ordinary Time|Sunday|Dominica XXXIII of Ordinary Time||
-2025-11-17|Feria II week XXXIII of Ordinary Time|Memorial|St. Elizabeth of Hungary, Religious||
+2025-11-17|Feria II week XXXIII of Ordinary Time|Memorial|St. Elizabeth of Hungary, Queen and Widow||
 2025-11-18|Feria III week XXXIII of Ordinary Time|Feria|Feria III week XXXIII of Ordinary Time|The Dedication of the Basilicas of Ss. Peter and Paul|
 2025-11-19|Feria IV week XXXIII of Ordinary Time|Feria|Feria IV week XXXIII of Ordinary Time||
 2025-11-20|Feria V week XXXIII of Ordinary Time|Feria|Feria V week XXXIII of Ordinary Time||
 2025-11-21|Feria VI week XXXIII of Ordinary Time|Memorial|The Presentation of the Blessed Virgin Mary||
 2025-11-22|Sabbato week XXXIII of Ordinary Time|Memorial|St. Cecilia, Virgin and Martyr||
-2025-11-23|Dominica XXXIV of Ordinary Time|Solemnity|Our Lord Jesus Christ, King of the Universe||
+2025-11-23|Dominica XXXIV of Ordinary Time|Solemnity|Our Lord Jesus Christ the King of the Universe||
 2025-11-24|Feria II week XXXIV of Ordinary Time|Memorial|Ss. Andrew Dung-Lac and Companions, Priest and Martyrs||
 2025-11-25|Feria III week XXXIV of Ordinary Time|Feria|Feria III week XXXIV of Ordinary Time|St. Catherine of Alexandria, Virgin and Martyr|
 2025-11-26|Feria IV week XXXIV of Ordinary Time|Feria|Feria IV week XXXIV of Ordinary Time||

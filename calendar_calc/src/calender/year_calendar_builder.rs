@@ -498,73 +498,17 @@ impl YearCalendarBuilder {
     /// the season does not request week-of-month or the date is before the
     /// configured lower-bound.
     fn get_week_of_month_number(season: &SeasonRule<NaiveDate>, date: NaiveDate) -> Option<u8> {
-        if let Some(lower_bound) = season.append_week_of_month().as_ref() {
+        let Some(lower_bound) = season.append_week_of_month().as_ref() else {
+            return None;
+        };
             if lower_bound > &date {
                 return None;
             }
 
             if season.week_of_month_old_scheme() {
-                // Old scheme: nearest-Sunday-to-1st heuristic used in get_season_descriptor
-                let preceding_sunday = get_preceding_sunday(date);
-
-                let cur_month = date.month();
-                let cur_year = date.year();
-                let (next_month, next_year) = if cur_month == 12 {
-                    (1, cur_year + 1)
-                } else {
-                    (cur_month + 1, cur_year)
-                };
-
-                let first_of_cur = NaiveDate::from_ymd_opt(cur_year, cur_month, 1).unwrap();
-                let first_of_next = NaiveDate::from_ymd_opt(next_year, next_month, 1).unwrap();
-
-                let cur_before = get_preceding_sunday(first_of_cur);
-                let cur_after = get_following_sunday(first_of_cur);
-                let nearest_cur = if first_of_cur.signed_duration_since(cur_before).num_days()
-                    <= cur_after.signed_duration_since(first_of_cur).num_days()
-                {
-                    cur_before
-                } else {
-                    cur_after
-                };
-
-                let next_before = get_preceding_sunday(first_of_next);
-                let next_after = get_following_sunday(first_of_next);
-                let nearest_next = if first_of_next.signed_duration_since(next_before).num_days()
-                    <= next_after.signed_duration_since(first_of_next).num_days()
-                {
-                    next_before
-                } else {
-                    next_after
-                };
-
-                let (prev_month, prev_year) = if cur_month == 1 {
-                    (12, cur_year - 1)
-                } else {
-                    (cur_month - 1, cur_year)
-                };
-                let first_of_prev = NaiveDate::from_ymd_opt(prev_year, prev_month, 1).unwrap();
-                let prev_before = get_preceding_sunday(first_of_prev);
-                let prev_after = get_following_sunday(first_of_prev);
-                let nearest_prev = if first_of_prev.signed_duration_since(prev_before).num_days()
-                    <= prev_after.signed_duration_since(first_of_prev).num_days()
-                {
-                    prev_before
-                } else {
-                    prev_after
-                };
-
-                let first_sunday = if preceding_sunday == nearest_next {
-                    nearest_next
-                } else if preceding_sunday < nearest_cur {
-                    nearest_prev
-                } else {
-                    nearest_cur
-                };
-
-                let week_of_month =
-                    num_sundays_after_date_inclusive(first_sunday, preceding_sunday);
-                return week_of_month.try_into().ok();
+                if let Some(value) = week_of_month_old_scheme(date) {
+                    return value;
+                }
             }
             // New scheme: count from the preceding Sunday of the date
             let preceding_sunday = get_preceding_sunday(date);
@@ -575,8 +519,6 @@ impl YearCalendarBuilder {
             let week_of_month =
                 num_sundays_after_date_inclusive(first_sunday_of_month, preceding_sunday);
             return week_of_month.try_into().ok();
-        }
-        None
     }
 
     pub fn get_season(&self, date: NaiveDate) -> &SeasonRule<NaiveDate> {
@@ -873,6 +815,71 @@ impl YearCalendarBuilder {
         };
         (r, unit)
     }
+}
+
+fn week_of_month_old_scheme(date: NaiveDate) -> Option<Option<u8>> {
+    let preceding_sunday = get_preceding_sunday(date);
+    let cur_month = date.month();
+    let cur_year = date.year();
+    let (next_month, next_year) = if cur_month == 12 {
+        (1, cur_year + 1)
+    } else {
+        (cur_month + 1, cur_year)
+    };
+    let first_of_cur = NaiveDate::from_ymd_opt(cur_year, cur_month, 1).unwrap();
+    let first_of_next = NaiveDate::from_ymd_opt(next_year, next_month, 1).unwrap();
+    let cur_before = get_preceding_sunday(first_of_cur);
+    let cur_after = get_following_sunday(first_of_cur);
+    let nearest_cur = if first_of_cur.signed_duration_since(cur_before).num_days()
+        <= cur_after.signed_duration_since(first_of_cur).num_days()
+    {
+        cur_before
+    } else {
+        cur_after
+    };
+    let next_before = get_preceding_sunday(first_of_next);
+    let next_after = get_following_sunday(first_of_next);
+    let nearest_next = if first_of_next.signed_duration_since(next_before).num_days()
+        <= next_after.signed_duration_since(first_of_next).num_days()
+    {
+        next_before
+    } else {
+        next_after
+    };
+    let (prev_month, prev_year) = if cur_month == 1 {
+        (12, cur_year - 1)
+    } else {
+        (cur_month - 1, cur_year)
+    };
+    let first_of_prev = NaiveDate::from_ymd_opt(prev_year, prev_month, 1).unwrap();
+    let prev_before = get_preceding_sunday(first_of_prev);
+    let prev_after = get_following_sunday(first_of_prev);
+    let nearest_prev = if first_of_prev.signed_duration_since(prev_before).num_days()
+        <= prev_after.signed_duration_since(first_of_prev).num_days()
+    {
+        prev_before
+    } else {
+        prev_after
+    };
+    let first_sunday = if preceding_sunday == nearest_next {
+        nearest_next
+    } else if preceding_sunday < nearest_cur {
+        nearest_prev
+    } else {
+        nearest_cur
+    };
+    let week_of_month =
+        num_sundays_after_date_inclusive(first_sunday, preceding_sunday);
+    return Some(week_of_month.try_into().ok());
+    // Old scheme: nearest-Sunday-to-1st heuristic used in get_season_descriptor
+
+
+
+
+
+
+
+    None
 }
 
 fn check_not_sat_and_vigil_transfered<R>(date: NaiveDate, f: &FeastRule<NaiveDate>) -> bool

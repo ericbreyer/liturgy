@@ -22,7 +22,7 @@ fn init(year: usize) -> Vec<String> {
 }
 
 #[test_matrix(
-    2025..=2026,
+    2025..=2027,
     0..=366
 )]
 fn test_calendar_for_year_54(year: usize, day: u32) {

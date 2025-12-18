@@ -1,0 +1,29 @@
+---
+source: liturgy-backend/src/web/backend.rs
+expression: "serde_json::to_string_pretty(&data).unwrap()"
+---
+{
+  "desc": {
+    "commemorations": [
+      [
+        {
+          "color": "Red",
+          "date": "2024-12-25",
+          "day_kind": "Feast(St. Anastasia)",
+          "desc": "St. Anastasia, Martyr",
+          "rank": "Comm."
+        },
+        "Lauds"
+      ]
+    ],
+    "date": "2024-12-25",
+    "day": {
+      "color": "White",
+      "date": "2024-12-25",
+      "day_kind": "Feast(The Nativity of our Lord Jesus Christ)",
+      "desc": "The Nativity of our Lord Jesus Christ",
+      "rank": "I"
+    },
+    "day_in_season": "Feria IV week I of Christmas"
+  }
+}

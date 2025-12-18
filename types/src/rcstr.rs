@@ -16,7 +16,7 @@ use crate::ArcStr;
 /// either need to convert to `Arc<str>` or clone to an owned `String` at the
 /// boundary.
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash)]
 pub struct RcStr(Rc<str>);
 
 impl From<String> for RcStr {

@@ -19,8 +19,8 @@ if [ "$MODE" = "publish" ]; then
 fi
 
 CRATES=(
-  "types"
-  "cross-proc-cache"
+#   "types"
+#   "cross-proc-cache"
   "calendar_calc"
   "ordo"
   "liturgy-backend"
@@ -40,7 +40,7 @@ for crate in "${CRATES[@]}"; do
   if [ "$DRY_RUN" = false ]; then
     echo "-- Publishing $crate to crates.io"
     # publish will fail if dependency versions are not found on crates.io; publish order matters
-    cargo publish -p "$crate"
+    cargo publish -p "$crate" --allow-dirty
   else
     echo "-- Dry run: skipping cargo publish for $crate"
   fi

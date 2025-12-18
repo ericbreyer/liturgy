@@ -177,7 +177,7 @@ name = "St. Francis Xavier"
 date_rule = "Fixed(12,3)"
 rank = "III"
 color = "White"
-titles = ["Priest"]
+titles = ["Confessor"]
 day_type = "feast"
 
 [[feasts]]
@@ -185,7 +185,7 @@ name = "St. John Damascene"
 date_rule = "Fixed(12,4)"
 rank = "IV"
 color = "White"
-titles = ["Priest", "Doctor of the Church"]
+titles = ["Confessor", "Doctor of the Church"]
 day_type = "feast"
 
 [[feasts]]
@@ -193,7 +193,7 @@ name = "St. Nicholas"
 date_rule = "Fixed(12,6)"
 rank = "IV"
 color = "White"
-titles = ["Bishop"]
+titles = ["Bishop", "Confessor"]
 day_type = "feast"
 
 [[feasts]]
@@ -201,7 +201,7 @@ name = "St. Ambrose"
 date_rule = "Fixed(12,7)"
 rank = "III"
 color = "White"
-titles = ["Bishop", "Doctor of the Church"]
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
 day_type = "feast"
 
 [[feasts]]
@@ -233,7 +233,7 @@ name = "St. Damasus I"
 date_rule = "Fixed(12,11)"
 rank = "IV"
 color = "White"
-titles = ["Pope"]
+titles = ["Pope", "Confessor"]
 day_type = "feast"
 
 [[feasts]]
@@ -257,7 +257,7 @@ name = "St. John of the Cross"
 date_rule = "Fixed(12,14)"
 rank = "III"
 color = "White"
-titles = ["Priest", "Doctor of the Church"]
+titles = ["Confessor", "Doctor of the Church"]
 day_type = "feast"
 
 [[feasts]]
@@ -277,7 +277,7 @@ titles = ["Priest"]
 day_type = "feast"
 
 [[feasts]]
-name = "Nativity of the Lord"
+name = "The Nativity of our Lord Jesus Christ"
 date_rule = "Fixed(12,25)"
 rank = "I"
 color = "White"
@@ -289,7 +289,7 @@ name = "St. Stephen"
 date_rule = "Fixed(12,26)"
 rank = "II"
 color = "Red"
-titles = ["First Martyr"]
+titles = ["Protomartyr"]
 day_type = "feast"
 
 [[feasts]]
@@ -330,7 +330,7 @@ name = "St. Sylvester I"
 date_rule = "Fixed(12,31)"
 rank = "IV"
 color = "White"
-titles = ["Pope"]
+titles = ["Pope", "Confessor"]
 day_type = "feast"
 
 # ---------- January
@@ -1298,7 +1298,7 @@ name = "St. Peter Chrysologus"
 date_rule = "Fixed(7,30)"
 rank = "IV"
 color = "White"
-titles = ["Bishop", "Doctor of the Church"]
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
 day_type = "feast"
 
 [[feasts]]
@@ -1918,6 +1918,7 @@ rank = "II"
 color = "White"
 titles = []
 day_type = "feast"
+of_our_lord = true
 
 [[feasts]]
 name = "St. Leo the Great"
@@ -1972,7 +1973,7 @@ name = "St. Elizabeth of Hungary"
 date_rule = "Fixed(11,17)"
 rank = "III"
 color = "White"
-titles = ["Religious"]
+titles = ["Queen", "Widow"]
 day_type = "feast"
 
 [[feasts]]
@@ -2040,7 +2041,7 @@ titles = ["Apostle"]
 day_type = "feast"
 
 [[feasts]]
-name = "Our Lord Jesus Christ, King of the Universe"
+name = "Our Lord Jesus Christ the King of the Universe"
 date_rule = "OffsetSundays(OffsetSundays(Fixed(12,25), -4), -1)"
 rank = "I"
 color = "White"

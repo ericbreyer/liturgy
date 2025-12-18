@@ -25,6 +25,7 @@ async fn serves_index_from_dist() {
         host: "127.0.0.1".to_string(),
         port,
         calendar_data_dir: "../calendar_calc/calendar_data".to_string(),
+        ordo_rules_dir: "../ordo/rules".to_string().into(),
         frontend_dir: Some(dir.path().to_str().unwrap().to_string()),
         debug_delay: false,
     };

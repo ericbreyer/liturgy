@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"ss--peter-and-paul--apostles\", \"ss--peter-and-paul\"]"
 expression: s.0
 ---

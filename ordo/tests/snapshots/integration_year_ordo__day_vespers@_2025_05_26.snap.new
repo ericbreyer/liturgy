@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--philip-neri--confessor\", \"st--philip-neri\"]"
 expression: s.0
 ---

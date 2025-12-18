@@ -14,7 +14,7 @@ license = "MIT OR Apache-2.0"
 bincode = "2.0.1"
 serde = { version = "1.0", features = ["derive", "rc"] }
 fs2 = "0.4.3"
-anyhow = "*"
+anyhow = "1.0.100"
 tempfile = "3.23.0"
 
 [lints]

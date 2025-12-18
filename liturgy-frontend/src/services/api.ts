@@ -5,6 +5,48 @@ export interface ApiResponse<T> {
   error?: string
 }
 
+export type OfficeComponentLocation =
+  | { type: 'Common'; name?: string }
+  | { type: 'Proper' }
+  | { type: 'Ordinary'; source: string }
+  | { type: 'Octave'; source: string }
+  | { type: 'Psalter' }
+  | { type: 'Sunday'; source?: string }
+
+export interface VespersOrdo {
+  antiphons: OfficeComponentLocation
+  psalms: OfficeComponentLocation
+  chapter: OfficeComponentLocation
+  hymn: OfficeComponentLocation
+  verse: OfficeComponentLocation
+  magnificat_antiphon: OfficeComponentLocation
+  collect: OfficeComponentLocation
+}
+
+export interface VespersCommemoration {
+  name: string
+  ordo: VespersCommemorationOrdo
+}
+
+export type VespersCommemorationOrdo =
+  | {
+      type: 'FullCommemoration'
+      magnificat_antiphon: OfficeComponentLocation
+      verse: OfficeComponentLocation
+      collect: OfficeComponentLocation
+    }
+  | {
+      type: 'SpecialCommemoration'
+      location: OfficeComponentLocation
+    }
+
+export interface Vespers {
+  name: string
+  ordo: VespersOrdo
+  commemorations: VespersCommemoration[]
+}
+
+
 export interface CalendarInfo {
   name: string
   display_name: string
@@ -174,6 +216,22 @@ class ApiClient {
       return response.data
     }
     throw new Error(response.error || 'Failed to fetch calendar stats')
+  }
+
+  async getOrdoVespers(cal: string, year: number, month: number, day: number): Promise<Vespers> {
+    const response = await this.fetch<Vespers>(`/ordo/vespers/${cal}/${year}/${month}/${day}`)
+    if (response.success && response.data) {
+      return response.data
+    }
+    throw new Error(response.error || 'Failed to fetch Ordo vespers')
+  }
+
+  async getOrdoVespersSources(cal: string, year: number, month: number, day: number): Promise<string[]> {
+    const response = await this.fetch<string[]>(`/ordo/vespers/${cal}/sources/${year}/${month}/${day}`)
+    if (response.success && response.data) {
+      return response.data
+    }
+    throw new Error(response.error || 'Failed to fetch Ordo vespers sources')
   }
 }
 

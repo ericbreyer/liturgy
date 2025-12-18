@@ -1,10 +1,10 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-description: "[\"ember-wednesday-of-advent\", \"feria-of-advent\"]"
+description: "[\"ember-wednesday-in-advent\", \"feria-of-advent\"]"
 expression: s.0
 ---
 2024-12-18
-Vespers of Ember Wednesday of Advent:
+Vespers of Ember Wednesday in Advent:
 Vespers:
   Antiphons:   Psalter (Ordinary of Advent)
   Psalms:      Psalter

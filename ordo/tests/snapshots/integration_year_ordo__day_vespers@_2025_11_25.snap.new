@@ -1,11 +1,11 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
-description: "[\"st--catherine--virgin-and-martyr\", \"st--catherine\"]"
+assertion_line: 49
+description: "[\"st--catherine-of-alexandria--virgin-and-martyr\", \"st--catherine-of-alexandria\"]"
 expression: s.0
 ---
 2025-11-25
-Vespers of St. Catherine, Virgin and Martyr:
+Vespers of St. Catherine of Alexandria, Virgin and Martyr:
 Vespers:
   Antiphons:   Psalter (Ordinary of Time after Pentecost)
   Psalms:      Psalter

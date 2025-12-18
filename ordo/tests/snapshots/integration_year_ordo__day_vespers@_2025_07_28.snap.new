@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"ss--nazarius-and-celsus--victor-i--and-innocent-i--martyrs-and-pope-and-martyr-and-pope-and-confessor\", \"ss--nazarius-and-celsus\"]"
 expression: s.0
 ---

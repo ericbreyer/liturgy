@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"the-seven-holy-brothers-and-ss--rufina-and-secunda--martyrs-and-virgins-and-martyrs\", \"the-seven-holy-brothers-and-ss--rufina-and-secunda\"]"
 expression: s.0
 ---

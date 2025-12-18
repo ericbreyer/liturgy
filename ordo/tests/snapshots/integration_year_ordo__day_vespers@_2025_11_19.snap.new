@@ -1,11 +1,11 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
-description: "[\"st--elisabeth--widow\", \"st--elisabeth\"]"
+assertion_line: 49
+description: "[\"st--elizabeth-of-hungary--queen-and-widow\", \"st--elizabeth-of-hungary\"]"
 expression: s.0
 ---
 2025-11-19
-Vespers of St. Elisabeth, Widow:
+Vespers of St. Elizabeth of Hungary, Queen and Widow:
 Vespers:
   Antiphons:   Psalter (Ordinary of Time after Pentecost)
   Psalms:      Psalter

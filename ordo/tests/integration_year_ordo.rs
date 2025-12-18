@@ -1,7 +1,24 @@
 use calendar_calc::GenericCalendarHandle;
 use insta::{assert_snapshot, with_settings};
-use ordo::{build_vespers_snapshot, ordo_repo::OrdoRepo};
+use ordo::{ordo_repo::OrdoRepo, VespersOrdo};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator as _};
+use types::{DayDescription, DayRank62};
+use anyhow::Result;
+
+
+/// Build a vespers representation for a day and return a debug string.
+/// This is a small public helper used by integration tests to snapshot
+/// full-year ordos.
+pub fn build_vespers_snapshot(
+    day: &DayDescription<DayRank62>,
+    repo: &OrdoRepo,
+) -> Result<(String, Vec<String>)> {
+    let v = day.vespers_ordo(repo)?;
+    let v_sources = day.vespers_ordo_sources(repo)?;
+
+    Ok((format!("{}\n{}", day.date, v), v_sources))
+}
+
 
 #[test]
 fn build_ordos_for_year_of_2025() {

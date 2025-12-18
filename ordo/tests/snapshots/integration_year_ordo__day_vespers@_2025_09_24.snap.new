@@ -1,11 +1,11 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
-description: "[\"ember-wednesday-of-september\", \"feria-of-time-after-pentecost\"]"
+assertion_line: 49
+description: "[\"ember-wednesday-in-september\", \"feria-of-time-after-pentecost\"]"
 expression: s.0
 ---
 2025-09-24
-Vespers of Ember Wednesday of September:
+Vespers of Ember Wednesday in September:
 Vespers:
   Antiphons:   Psalter (Ordinary of Time after Pentecost)
   Psalms:      Psalter

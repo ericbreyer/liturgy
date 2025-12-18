@@ -16,6 +16,7 @@ use axum::{
 };
 use calendar_calc::{YearCalendarHandle, calender::GenericCalendarHandle};
 use indexmap::IndexMap;
+use ordo::{Vespers, VespersOrdo, ordo_repo::OrdoRepo};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use tokio::{net::TcpListener, sync::RwLock};
@@ -25,7 +26,7 @@ use tower_http::{
     services::{ServeDir, ServeFile},
     trace::TraceLayer,
 };
-use types::{DayRank62, TrivialDayRank};
+use types::{DayDescription, DayRank62, TrivialDayRank};
 
 use crate::web::WebConfig;
 
@@ -33,6 +34,38 @@ type SharedCalendarHandle = Arc<DynCalendarHandle>;
 pub enum DynCalendarHandle {
     Trivial(YearCalendarHandle<TrivialDayRank>),
     SixtyTwo(YearCalendarHandle<DayRank62>),
+}
+
+pub enum DynDayHandle {
+    Trivial(DayDescription<TrivialDayRank>),
+    SixtyTwo(DayDescription<DayRank62>),
+}
+
+impl Serialize for DynDayHandle {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            DynDayHandle::Trivial(d) => d.serialize(serializer),
+            DynDayHandle::SixtyTwo(d) => d.serialize(serializer),
+        }
+    }
+}
+
+impl VespersOrdo for DynDayHandle {
+    fn vespers_ordo(&self, repo: &OrdoRepo) -> Result<Vespers> {
+        match self {
+            DynDayHandle::Trivial(d) => d.vespers_ordo(repo),
+            DynDayHandle::SixtyTwo(d) => d.vespers_ordo(repo),
+        }
+    }
+    fn vespers_ordo_sources(&self, repo: &OrdoRepo) -> Result<Vec<String>> {
+        match self {
+            DynDayHandle::Trivial(d) => d.vespers_ordo_sources(repo),
+            DynDayHandle::SixtyTwo(d) => d.vespers_ordo_sources(repo),
+        }
+    }
 }
 
 impl DynCalendarHandle {
@@ -56,12 +89,21 @@ impl DynCalendarHandle {
                 .map(|d| serde_json::to_value(&d).unwrap_or(Value::Null)),
         }
     }
+
+    pub fn get_day_info(&self, date: chrono::NaiveDate) -> Option<DynDayHandle> {
+        Some(match self {
+            DynCalendarHandle::Trivial(cal) => DynDayHandle::Trivial(cal.get_day_info(date)?),
+
+            DynCalendarHandle::SixtyTwo(cal) => DynDayHandle::SixtyTwo(cal.get_day_info(date)?),
+        })
+    }
 }
 /// Shared application state
 #[derive(Clone)]
 pub struct AppState {
     pub gen_calendars: Arc<RwLock<IndexMap<String, GenericCalendarHandle>>>,
     pub year_calendars: Arc<RwLock<HashMap<(String, i32), SharedCalendarHandle>>>,
+    pub ordo_repo: Arc<RwLock<Option<OrdoRepo>>>,
     pub config: WebConfig,
 }
 
@@ -71,6 +113,7 @@ impl AppState {
         Self {
             gen_calendars: Arc::new(tokio::sync::RwLock::new(IndexMap::new())),
             year_calendars: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+            ordo_repo: Arc::new(tokio::sync::RwLock::new(None)),
             config,
         }
     }
@@ -85,6 +128,7 @@ pub async fn start_server(config: WebConfig) -> Result<()> {
     let state = AppState {
         gen_calendars: Arc::new(tokio::sync::RwLock::new(IndexMap::new())),
         year_calendars: Arc::new(tokio::sync::RwLock::new(HashMap::new())),
+        ordo_repo: Arc::new(tokio::sync::RwLock::new(None)),
         config: config.clone(),
     };
 
@@ -193,6 +237,122 @@ fn create_api_router() -> Router<AppState> {
         .route("/calendars/{name}/search", get(api_search_feasts))
         .route("/calendars/{name}/generate", post(api_generate_calendar))
         .route("/calendars/{name}/stats/{year}", get(api_get_stats))
+        .route(
+            "/ordo/vespers/{name}/{year}/{month}/{day}",
+            get(api_get_ordo_vespers),
+        )
+        .route(
+            "/ordo/vespers/{name}/sources/{year}/{month}/{day}",
+            get(api_get_ordo_vespers_sources),
+        )
+}
+
+async fn api_get_ordo_vespers(
+    Path((name, year, month, day)): Path<(String, i32, u32, u32)>,
+    State(state): State<AppState>,
+) -> Json<ApiResponse<Vespers>> {
+    use chrono::NaiveDate;
+
+    let Some(date) = NaiveDate::from_ymd_opt(year, month, day) else {
+        return Json(ApiResponse::error(format!(
+            "Invalid date: {year}-{month}-{day}"
+        )));
+    };
+
+    let Some(day_desc) = get_day_info(&state, &name, date).await else {
+        return Json(ApiResponse::error(format!(
+            "No day info found for date: {date} in calendar '{name}'"
+        )));
+    };
+
+    // Use cached OrdoRepo if available, otherwise load from configured path
+    let read_repo = state.ordo_repo.read().await;
+
+    if let Some(repo) = read_repo.as_ref() {
+        match day_desc.vespers_ordo(repo) {
+            Ok(vespers) => Json(ApiResponse::success(vespers)),
+            Err(e) => Json(ApiResponse::error(format!("Failed to build vespers: {e}"))),
+        }
+        
+    } else {
+        drop(read_repo);
+        let mut write_repo = state.ordo_repo.write().await;
+                
+        if write_repo.is_none() {
+            let path = state
+                .config
+                .ordo_rules_dir
+                .clone()
+                .unwrap_or_else(|| "../ordo/rules".to_string());
+            match OrdoRepo::load_from_dir(path) {
+                Ok(r) => *write_repo = Some(r),
+                Err(e) => {
+                    return Json(ApiResponse::error(format!(
+                        "Failed to load ordo rules: {e}"
+                    )));
+                }
+            }
+        }
+        
+        match (&day_desc).vespers_ordo(write_repo.as_ref().unwrap()) {
+            Ok(vespers) => Json(ApiResponse::success(vespers)),
+            Err(e) => Json(ApiResponse::error(format!("Failed to build vespers: {e}"))),
+        }
+    }
+}
+
+// GET /api/ordo/vespers/{name}/sources/{year}/{month}/{day} - Return list of ordo sources
+async fn api_get_ordo_vespers_sources(
+    Path((name, year, month, day)): Path<(String, i32, u32, u32)>,
+    State(state): State<AppState>,
+) -> Json<ApiResponse<Vec<String>>> {
+    use chrono::NaiveDate;
+
+    let Some(date) = NaiveDate::from_ymd_opt(year, month, day) else {
+        return Json(ApiResponse::error(format!(
+            "Invalid date: {year}-{month}-{day}"
+        )));
+    };
+
+    let Some(day_desc) = get_day_info(&state, &name, date).await else {
+        return Json(ApiResponse::error(format!(
+            "No day info found for date: {date} in calendar '{name}'"
+        )));
+    };
+
+    let read_repo = state.ordo_repo.read().await;
+    if let Some(repo) = read_repo.as_ref() {
+        match day_desc.vespers_ordo_sources(repo) {
+            Ok(sources) => Json(ApiResponse::success(sources)),
+            Err(e) => Json(ApiResponse::error(format!(
+                "Failed to build vespers sources: {e}"
+            ))),
+        }
+    } else {
+        drop(read_repo);
+        let mut write_repo = state.ordo_repo.write().await;
+        if write_repo.is_none() {
+            let path = state
+                .config
+                .ordo_rules_dir
+                .clone()
+                .unwrap_or_else(|| "../ordo/rules".to_string());
+            match OrdoRepo::load_from_dir(path) {
+                Ok(r) => *write_repo = Some(r),
+                Err(e) => {
+                    return Json(ApiResponse::error(format!(
+                        "Failed to load ordo rules: {e}"
+                    )));
+                }
+            }
+        }
+        match day_desc.vespers_ordo_sources(write_repo.as_ref().unwrap()) {
+            Ok(sources) => Json(ApiResponse::success(sources)),
+            Err(e) => Json(ApiResponse::error(format!(
+                "Failed to build vespers sources: {e}"
+            ))),
+        }
+    }
 }
 
 /// Load default calendars from the calendar data directory
@@ -272,6 +432,23 @@ async fn get_year_calendar(
         return Some(arc_cal);
     }
     None
+}
+
+async fn get_day_info (
+    state: &AppState,
+    name: &str,
+    date: chrono::NaiveDate,
+) -> Option<DynDayHandle> {
+    use chrono::Datelike;
+    let year = date.year();
+    let year_calendar = get_year_calendar(state, name, year).await?;
+    let day = year_calendar.get_day_info(date);
+    if day.is_some() {
+        return day;
+    }
+    // try next year
+    let next_year_calendar = get_year_calendar(state, name, year + 1).await?;
+    next_year_calendar.get_day_info(date)
 }
 
 // API Handlers
@@ -399,21 +576,32 @@ async fn api_get_day(
         )));
     };
 
-    match get_year_calendar(&state, &name, year).await {
-        Some(year_calendar) => match year_calendar.as_ref().get_day_info_json(date) {
-            Some(day_val) => Json(ApiResponse::success(DayInfo { desc: day_val })),
-            None => match get_year_calendar(&state, &name, year + 1).await {
-                Some(next_year_calendar) => {
-                    match next_year_calendar.as_ref().get_day_info_json(date) {
-                        Some(day_val) => Json(ApiResponse::success(DayInfo { desc: day_val })),
-                        None => Json(ApiResponse::error(format!("No data for date: {date}"))),
-                    }
-                }
-                None => Json(ApiResponse::error(format!("No data for date: {date}"))),
-            },
-        },
-        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
-    }
+    get_day_info(&state, &name, date)
+        .await
+        .and_then(|day_desc| {
+            let desc_json = serde_json::to_value(&day_desc).unwrap_or(Value::Null);
+            Some(DayInfo { desc: desc_json })
+        })
+        .map(|data| Json(ApiResponse::success(data)))
+        .unwrap_or_else(|| Json(ApiResponse::error(format!(
+            "No day info found for date: {date} in calendar '{name}'"
+        ))))
+
+    // match get_year_calendar(&state, &name, year).await {
+    //     Some(year_calendar) => match year_calendar.as_ref().get_day_info_json(date) {
+    //         Some(day_val) => Json(ApiResponse::success(DayInfo { desc: day_val })),
+    //         None => match get_year_calendar(&state, &name, year + 1).await {
+    //             Some(next_year_calendar) => {
+    //                 match next_year_calendar.as_ref().get_day_info_json(date) {
+    //                     Some(day_val) => Json(ApiResponse::success(DayInfo { desc: day_val })),
+    //                     None => Json(ApiResponse::error(format!("No data for date: {date}"))),
+    //                 }
+    //             }
+    //             None => Json(ApiResponse::error(format!("No data for date: {date}"))),
+    //         },
+    //     },
+    //     None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
+    // }
 }
 
 #[derive(Deserialize)]
@@ -707,5 +895,43 @@ mod tests {
             response.0.error.unwrap(),
             "Calendar 'nonexistent' not found"
         );
+    }
+
+    #[tokio::test]
+    async fn test_api_get_ordo_vespers() {
+        let config = WebConfig {
+            host: "localhost".to_string(),
+            port: 3000,
+            calendar_data_dir: "../calendar_calc/calendar_data".to_string(),
+            ordo_rules_dir: Some("../ordo/rules".to_string()),
+            ..Default::default()
+        };
+        let state = AppState::new(config);
+        load_default_calendars(&state).await.unwrap();
+        let response =
+            api_get_ordo_vespers(Path(("ef".to_string(), 2024, 12, 25)), State(state)).await;
+        assert!(response.0.success, "Response error: {:?}", response.0.error);
+        let data = response.0.data.unwrap();
+        with_settings!({snapshot_suffix => "_of_2023_12_25"}, {
+            assert_snapshot!(data);
+        });
+    }
+
+    #[tokio::test]
+    async fn test_api_get_day() {
+        let config = WebConfig {
+            host: "localhost".to_string(),
+            port: 3000,
+            calendar_data_dir: "../calendar_calc/calendar_data".to_string(),
+            ..Default::default()
+        };
+        let state = AppState::new(config);
+        load_default_calendars(&state).await.unwrap();
+        let response = api_get_day(Path(("ef".to_string(), 2024, 12, 25)), State(state)).await;
+        assert!(response.0.success, "Response error: {:?}", response.0.error);
+        let data = response.0.data.unwrap();
+        with_settings!({snapshot_suffix => "_ef_2024_12_25"}, {
+            assert_snapshot!(serde_json::to_string_pretty(&data).unwrap());
+        });
     }
 }

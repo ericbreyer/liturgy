@@ -103,7 +103,7 @@ impl LiturgicalContext {
     pub fn feast<S: Into<String>>(mut self, name: S) -> Self {
         self.feast_name = Some(name.into());
         if self.feast_name.as_deref() == Some("Easter Sunday")
-            || self.feast_name.as_deref() == Some("Pentecost Sunday")
+            || self.feast_name.as_deref() == Some("Pentecost Sunday") || self.feast_name.as_deref() == Some("Holy Trinity and the Octave of Pentecost")
         {
             self.is_easter_or_pentecost = true;
         }

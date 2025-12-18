@@ -6,6 +6,7 @@ import SearchView from '../views/SearchView.vue'
 import NerdView from '../views/NerdView.vue'
 import NovenaView from '../views/NovenaView.vue'
 import AboutView from '../views/AboutView.vue'
+import OrdoView from '../views/OrdoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +69,14 @@ const router = createRouter({
       component: AboutView,
       meta: {
         title: 'About',
+      },
+    },
+    {
+      path: '/ordo',
+      name: 'Ordo',
+      component: OrdoView,
+      meta: {
+        title: 'Ordo',
       },
     },
   ],

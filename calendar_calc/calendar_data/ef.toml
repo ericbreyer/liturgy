@@ -2588,11 +2588,11 @@ color = "White"
 day_type = "feast"
 
 [[feasts]]
-name = "St. Elisabeth"
+name = "St. Elizabeth of Hungary"
 date_rule = "Fixed(11,19)"
 rank = "III"
 color = "White"
-titles = ["Widow"]
+titles = ["Queen", "Widow"]
 day_type = "feast"
 
 [[feasts]]
@@ -2659,7 +2659,7 @@ titles = ["Martyr"]
 day_type = "feast"
 
 [[feasts]]
-name = "St. Catherine"
+name = "St. Catherine of Alexandria"
 date_rule = "Fixed(11,25)"
 rank = "III"
 color = "Red"
@@ -2687,7 +2687,7 @@ name = "St. Saturninus"
 date_rule = "Fixed(11,29)"
 rank = "Comm."
 color = "Red"
-titles = ["Martyr"]
+titles = ["Bishop", "Martyr"]
 day_type = "feast"
 
 [[feasts]]
@@ -2897,7 +2897,7 @@ color = "Violet"
 day_type = "feria"
 
 [[feasts]]
-name = "Ember Wednesday of Lent"
+name = "Ember Wednesday in Lent"
 date_rule = "OffsetDays(Easter, -39)"
 rank = "II"
 color = "Violet"
@@ -2918,7 +2918,7 @@ color = "Violet"
 day_type = "feria"
 
 [[feasts]]
-name = "Ember Wednesday of September"
+name = "Ember Wednesday in September"
 date_rule = "OffsetDays(OffsetSundays(Fixed(9,22), -1), 3)"
 rank = "II"
 color = "Violet"
@@ -2939,7 +2939,7 @@ color = "Violet"
 day_type = "feria"
 
 [[feasts]]
-name = "Ember Wednesday of Advent"
+name = "Ember Wednesday in Advent"
 date_rule = "OffsetDays(OffsetSundays(PreviousYear(Fixed(12,25)), -2), 3)"
 rank = "II"
 color = "Violet"

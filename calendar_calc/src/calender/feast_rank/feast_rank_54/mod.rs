@@ -220,6 +220,8 @@ impl FeastRankResolver for FeastRank54 {
     {
         true
     }
+
+    
 }
 
 // Using shared FeriaFlags, FeastFlags, SundayFlags from parent module
@@ -416,8 +418,8 @@ impl FeastRank54Inner {
             }
         }
 
-        let _winner_rank = winning_rank.get_numeric_rank();
 
+        
         let commemorations = commemorations
             .into_iter()
             .chain(base_commemorations)
@@ -427,8 +429,24 @@ impl FeastRank54Inner {
             winner,
             winner_rank: FeastRank54(winning_rank.clone()),
             transferred,
-            commemorations,
+            commemorations: winning_rank.admits_commemorations().then(|| commemorations).unwrap_or(vec![]),
         })
+    }
+
+    fn admits_commemorations(&self) -> bool {
+        match &self {
+            FeastRank54Inner::Feast { rank, .. } => match rank {
+                FeastClass::Commemoration => false,
+                _ => true,
+            },
+            FeastRank54Inner::Sunday { flags, .. } => {
+                // Easter/Pentecost Sundays do not admit commemorations
+                !flags.contains(SundayFlags::EASTER_OR_PENTECOST)
+            }
+            FeastRank54Inner::Octave { .. } => true,
+            FeastRank54Inner::Feria { .. } => true,
+            FeastRank54Inner::Vigil { .. } => true,
+        }
     }
 
     fn resolve_occurrence(&self, other: &Self) -> Result<OccurrenceResult> {
@@ -879,15 +897,15 @@ impl FeastRank54Inner {
                     // the Sunday Except for Easter/Pentecost Sundays which do
                     // not admit commemorations.
                     SundayClass::First => match rank1 {
-                        FeastClass::FirstClassDouble
-                        | FeastClass::SecondClassDouble
-                        | FeastClass::MajorDouble
-                        | FeastClass::Double
-                        | FeastClass::Semidouble => {
-                            if flags.contains(SundayFlags::EASTER_OR_PENTECOST) {
-                                // behave like First-class Sunday but do not admit commemorations
-                                return Ok(OccurrenceResult::SecondNothingOfFirst);
-                            }
+                        _ if flags.contains(SundayFlags::EASTER_OR_PENTECOST) => {
+                            // Easter/Pentecost Sundays do not admit commemorations
+                            return Ok(OccurrenceResult::SecondNothingOfFirst);
+                        }
+                        FeastClass::FirstClassDouble | FeastClass::SecondClassDouble => {
+                            return Ok(OccurrenceResult::SecondTransferAndCommemorationOfFirst);
+                        }
+
+                        FeastClass::MajorDouble | FeastClass::Double | FeastClass::Semidouble => {
                             return Ok(OccurrenceResult::SecondCommemorationOfFirst);
                         }
                         _ => {
@@ -1421,8 +1439,8 @@ impl FeastRank54Inner {
                 // Determine vigil kind from feast name when possible
                 let kind = if let Some(name) = &context.feast_name {
                     let lname = name.to_lowercase();
-                    if lname.contains("christmas")
-                        || lname.contains("vigil of christmas")
+                    if lname.contains("nativity of our lord jesus christ")
+                        || lname.contains("vigil of the nativity of our lord jesus christ")
                         || lname.contains("pentecost")
                         || lname.contains("vigil of pentecost")
                     {

@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"st--bonaventure--bishop-and-confessor-and-doctor-of-the-church\", \"st--bonaventure\"]"
 expression: s.0
 ---

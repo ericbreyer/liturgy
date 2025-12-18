@@ -1,6 +1,6 @@
 ---
 source: ordo/tests/integration_year_ordo.rs
-assertion_line: 32
+assertion_line: 49
 description: "[\"dominica-xxv-after-pentecost--week-5-of-november-\", \"dominica-of-time-after-pentecost\"]"
 expression: s.0
 ---

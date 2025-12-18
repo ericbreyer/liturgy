@@ -1,0 +1,13 @@
+---
+source: liturgy-backend/src/web/backend.rs
+expression: data
+---
+Second Vespers of The Nativity of our Lord Jesus Christ:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      Proper
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

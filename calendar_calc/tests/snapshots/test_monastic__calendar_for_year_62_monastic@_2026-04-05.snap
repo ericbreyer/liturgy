@@ -1,0 +1,5 @@
+---
+source: calendar_calc/tests/test_monastic.rs
+expression: line
+---
+2026-04-05|Dominica after start after Easter Sunday|I|Easter Sunday||

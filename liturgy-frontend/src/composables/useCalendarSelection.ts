@@ -61,10 +61,11 @@ async function loadCalendars(router?: any, route?: any) {
           updateUrlWithCalendars(router, route, validCalendars)
         }
       } else if (calendars.value.length > 0 && selectedCalendars.value.length === 0) {
+        const defaultCalendarHandles = ['of-us', 'ef', 'monastic']
         // No URL calendars, use default selection
         const defaultCalendars = calendars.value
           .map((cal) => cal.name)
-          .filter((name) => name == 'of-us' || name == 'ef' || name == '54')
+          .filter((name) => defaultCalendarHandles.includes(name))
         selectedCalendars.value = defaultCalendars
         updateUrlWithCalendars(router, route, defaultCalendars)
       }

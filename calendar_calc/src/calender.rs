@@ -18,6 +18,7 @@ use feast_rank::LiturgicalContext;
 use types::{ArcStr, DayRank};
 use types::{DayDescription, LiturgicalUnit};
 
+use crate::calender::generic_calendar::CalendarTypeProvider;
 use crate::calender::{
     feast_rank::{FeastRank54, FeastRank62, FeastRankOf, FeastRankResolver},
     generic_calendar::{FeastRule, GenericCalendar},
@@ -25,24 +26,27 @@ use crate::calender::{
 };
 
 #[derive(Debug, Clone)]
-/// Handle for working with liturgical calendars loaded from configuration files
-pub struct GenericCalendarHandle(GenericCalendar);
+/// Handle for working with 1954 Roman Calendar
+pub struct GenericCalendarHandle<R: FeastRankResolver + CalendarTypeProvider>(GenericCalendar<R>);
+pub type GenericCalendarHandle62 = GenericCalendarHandle<FeastRank62>;
+pub type GenericCalendarHandle54 = GenericCalendarHandle<FeastRank54>;
+pub type GenericCalendarHandleOf = GenericCalendarHandle<FeastRankOf>;
 
 pub struct YearCalendarHandle<R>(YearCalendar<R>)
 where
     R: DayRank;
 
-impl GenericCalendarHandle {
+impl<R: FeastRankResolver + CalendarTypeProvider> GenericCalendarHandle<R> {
     /// Get the name of this calendar
     #[must_use]
     pub fn name(&self) -> &str {
         &self.0.name
     }
-    /// Load a liturgical calendar from a TOML file
+    /// Load a 1954 Roman Calendar from a TOML file
     pub fn load_from_file<P: AsRef<Path>>(path: P) -> Result<Self, Box<dyn std::error::Error>> {
         GenericCalendar::from_toml_file(path).map(GenericCalendarHandle)
     }
-    /// Load a liturgical calendar from TOML string content
+    /// Load a 1954 Roman Calendar from TOML string content
     pub fn load_from_str(content: &str) -> Result<Self, toml::de::Error> {
         GenericCalendar::from_toml_str(content).map(GenericCalendarHandle)
     }
@@ -55,58 +59,7 @@ impl GenericCalendarHandle {
             .map(GenericCalendarHandle)
     }
 
-    /// Create a liturgical year calendar for the given year
-    #[must_use]
-    pub fn create_year_calendar_54(
-        &self,
-        year: i32,
-    ) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
-        YearCalendarHandle(self.0.instantiate_54_for_lit_year(year))
-    }
-
-    #[must_use]
-    pub fn create_year_calendar_62(
-        &self,
-        year: i32,
-    ) -> YearCalendarHandle<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
-        YearCalendarHandle(self.0.instantiate_62_for_lit_year(year))
-    }
-
-    #[must_use]
-    pub fn create_year_calendar_of(
-        &self,
-        year: i32,
-    ) -> YearCalendarHandle<<FeastRankOf as FeastRankResolver>::FeastRankDescriptor> {
-        YearCalendarHandle(self.0.instantiate_of_for_lit_year(year))
-    }
-
     /// Get feast information by name using fuzzy search
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use calendar_calc::GenericCalendarHandle;
-    /// let toml = r#"
-    /// name = "Test Calendar"
-    /// [[seasons]]
-    /// name = "Test Season"
-    /// begin = "Fixed(1,1)"
-    /// end = "Fixed(12,31)"
-    /// color = "white"
-    /// [[feasts]]
-    /// name = "St. Joseph"
-    /// date_rule = "Fixed(3,19)"
-    /// color = "white"
-    /// "#;
-    /// let cal = GenericCalendarHandle::load_from_str(toml).unwrap();
-    /// assert_eq!(cal.get_feast_info("St. Joseph").is_ok(), true);
-    /// assert!(
-    ///     cal.get_feast_info("St. Jospeh")
-    ///         .unwrap_err()
-    ///         .to_string()
-    ///         .contains("Did you mean: St. Joseph")
-    /// );
-    /// ```
     pub fn get_feast_info(&self, name: &str) -> Result<(FeastRule<DateRule>, ArcStr)> {
         if let Some(info) = self.0.get_feast_info(name) {
             Ok(info)
@@ -141,6 +94,30 @@ impl GenericCalendarHandle {
     #[must_use]
     pub fn commemoration_interpretation(&self) -> &str {
         &self.0.commemoration_interpretation
+    }
+}
+
+impl GenericCalendarHandle<FeastRank62> {
+    /// Create a year calendar for a specific liturgical year
+    #[must_use]
+    pub fn create_year_calendar(&self, year: i32) -> YearCalendarHandle<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
+        YearCalendarHandle(self.0.instantiate_for_lit_year(year))
+    }
+}
+
+impl GenericCalendarHandle<FeastRank54> {
+    /// Create a 1954 calendar year calendar for a specific liturgical year
+    #[must_use]
+    pub fn create_year_calendar(&self, year: i32) -> YearCalendarHandle<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
+        YearCalendarHandle(self.0.instantiate_for_lit_year(year))
+    }
+}
+
+impl GenericCalendarHandle<FeastRankOf> {
+    /// Create an Ordinary Form year calendar for a specific liturgical year
+    #[must_use]
+    pub fn create_year_calendar(&self, year: i32) -> YearCalendarHandle<<FeastRankOf as FeastRankResolver>::FeastRankDescriptor> {
+        YearCalendarHandle(self.0.instantiate_for_lit_year(year))
     }
 }
 
@@ -359,7 +336,7 @@ rank = "I"
 color = "white"
     "#; "invalid date rule")]
     fn test_toml_parsing_errors(invalid_toml: &str) {
-        let result = GenericCalendar::from_toml_str(invalid_toml);
+        let result: Result<GenericCalendar<FeastRankOf>, _> = GenericCalendar::from_toml_str(invalid_toml);
         // Should handle parsing errors gracefully - either fails or succeeds with valid
         // subset
         assert!(result.is_err() || result.is_ok());

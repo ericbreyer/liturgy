@@ -23,6 +23,7 @@ anyhow = "*"
 clap = { version = "4", features = ["derive"] }
 serde_json = "1.0"
 indexmap = ">=2.0"
+delegate = "0.13.5"
 
 # Web dependencies
 axum = "0.8"

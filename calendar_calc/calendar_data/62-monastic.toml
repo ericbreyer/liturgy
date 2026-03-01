@@ -1,0 +1,1842 @@
+name = "1962 Monastic Calendar"
+cal_type = "Calendar1962"
+
+# ---------- Seasons ----------
+# The liturgical year starts with the First Sunday of Advent
+
+[[seasons]]
+name = "Advent"
+begin = "OffsetSundays(PreviousYear(Fixed(12,25)), -4)"
+end = "PreviousYear(Fixed(12,24))"
+color = "violet"
+
+sunday_rank = "I"
+
+# Ferial rules for Advent - higher rank ferias from Dec 17-24
+[[seasons.ferial_rules]]
+name = "Normal Advent Ferias"
+begin = "OffsetSundays(PreviousYear(Fixed(12,25)), -4)"
+end = "PreviousYear(Fixed(12,16))"
+rank = "III"
+
+[[seasons.ferial_rules]]
+name = "Greater Antiphons Ferias"
+begin = "PreviousYear(Fixed(12,17))"
+end = "PreviousYear(Fixed(12,24))"
+rank = "II"
+
+
+[[seasons]]
+name = "Christmas"
+begin = "PreviousYear(Fixed(12,25))"
+end = "OffsetDays(Fixed(1,14), -1)"
+color = "white"
+
+[[octaves]]
+name = "Christmas"
+begin = "PreviousYear(Fixed(12,26))"
+end = "Fixed(1,1)"
+color = "white"
+is_octave = true
+octave_rank = "II"
+parent_season = "Christmas"
+dont_show_week_of_season = true
+count_ferias_suffix = "in the Octave of Christmas"
+count_sundays_suffix = "in the Octave of Christmas"
+
+
+[[seasons]]
+name = "Christmastide"
+begin = "Fixed(12,25)"
+end = "OffsetDays(Fixed(1,6), -1)"
+color = "white"
+parent_season = "Christmas"
+dont_show_week_of_season = true
+
+[[seasons]]
+name = "Epiphanytide"
+begin = "Fixed(1,6)"
+end = "OffsetDays(Fixed(1,14), -1)"
+color = "white"
+parent_season = "Christmas"
+count_ferias_suffix = "of Epiphany"
+count_sundays_suffix = "of Epiphany"
+dont_show_week_of_season = true
+
+[[seasons]]
+name = "Time after Epiphany"
+begin = "Fixed(1,14)"
+end = "OffsetDays(Easter, -64)"
+color = "green"
+count_ferias_suffix = "after Epiphany"
+count_sundays_suffix = "after Epiphany"
+
+[[seasons]]
+name = "Septuagesima"
+begin = "OffsetDays(Easter, -63)"
+end = "OffsetDays(Easter, -57)"
+color = "violet"
+dont_show_week_of_season = true
+count_sundays_suffix = "Septuagesima"
+count_ferias_suffix = "after Septuagesima"
+
+[[seasons]]
+name = "Sexagesima"
+begin = "OffsetDays(Easter, -56)"
+end = "OffsetDays(Easter, -50)"
+color = "violet"
+dont_show_week_of_season = true
+count_sundays_suffix = "Sexagesima"
+count_ferias_suffix = "after Sexagesima"
+
+[[seasons]]
+name = "Quinquagesima"
+begin = "OffsetDays(Easter, -49)"
+end = "OffsetDays(Easter, -47)"
+color = "violet"
+dont_show_week_of_season = true
+count_sundays_suffix = "Quinquagesima"
+count_ferias_suffix = "after Quinquagesima"
+
+[[seasons]]
+name = "Lent"
+begin = "OffsetDays(Easter, -46)"
+end = "OffsetDays(Easter, -1)"
+count_sundays_from = "OffsetSundays(OffsetDays(Easter, -46), 1)"
+count_ferias_from = "OffsetSundays(OffsetDays(Easter, -46), 1)"
+color = "violet"
+
+sunday_rank = "I"
+
+[[seasons.ferial_rules]]
+name = "Normal Lenten Ferias"
+begin = "OffsetDays(Easter, -46)"
+end = "OffsetDays(Easter, -1)"
+rank = "III"
+
+[[seasons]]
+name = "Passiontide"
+begin = "OffsetDays(Easter, -14)"
+count_sundays_from = "OffsetDays(Easter, -14)"
+count_ferias_from = "OffsetDays(Easter, -14)"
+dont_show_week_of_season = true
+end = "OffsetDays(Easter, -1)"
+color = "violet"
+parent_season = "Lent"
+count_ferias_suffix = "of Passion Week"
+count_sundays_suffix = "of the Passion"
+
+
+[[seasons]]
+name = "Holy Week"
+begin = "OffsetDays(Easter, -7)"
+end = "OffsetDays(Easter, -1)"
+count_sundays_from = "OffsetDays(Easter, -7)"
+count_ferias_from = "OffsetDays(Easter, -7)"
+color = "red"
+parent_season = "Passiontide"
+dont_show_week_of_season = true
+count_sundays_suffix = "Palm Sunday"
+count_ferias_suffix = "of Holy Week"
+
+
+[[seasons.ferial_rules]]
+name = "Holy Week Ferias"
+begin = "OffsetDays(Easter, -7)"
+end = "OffsetDays(Easter, -1)"
+rank = "I"
+
+[[seasons]]
+name = "Eastertide"
+begin = "Easter"
+end = "OffsetDays(Easter, 55)"
+color = "white"
+
+count_sundays_from = "OffsetDays(Easter, 7)"
+count_sundays_suffix = "after Easter Sunday"
+
+[[octaves]]
+name = "Easter"
+begin = "OffsetDays(Easter, 1)"
+end = "OffsetDays(Easter, 7)"
+color = "white"
+is_octave = true
+octave_rank = "I"
+dont_show_week_of_season = true
+count_sundays_suffix = "Easter"
+count_ferias_suffix = "in the Octave of Easter"
+
+[[octaves]]
+name = "Pentecost"
+begin = "OffsetDays(Easter, 50)"
+end = "OffsetDays(Easter, 56)"
+color = "red"
+octave_rank = "I"
+sunday_rank = "II"
+parent_season = "Eastertide"
+dont_show_week_of_season = true
+count_sundays_suffix = "in the Octave of Pentecost"
+count_ferias_suffix = "in the Octave of Pentecost"
+
+[[seasons]]
+name = "Time after Pentecost"
+begin = "OffsetDays(Easter, 56)"
+end = "OffsetDays(OffsetSundays(Fixed(12,25), -4), -1)"
+color = "green"
+
+count_sundays_suffix = "after Pentecost"
+count_ferias_suffix = "after the octave of Pentecost"
+append_week_of_month = "OffsetSundays(Fixed(8,1), 1)"
+
+# ---------- Feasts ----------
+[[feasts]]
+name = "St. Titus"
+date_rule = "Fixed(1,4)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Epiphany of our Lord"
+date_rule = "Fixed(1,6)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name= "St. Paul"
+date_rule = "Fixed(1,10)"
+rank = "Comm."
+color = "White"
+titles = ["First Hermit", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Commemoration of the Baptism of our Lord Jesus Christ"
+date_rule = "Fixed(1,13)"
+rank = "II"
+of_our_lord = true
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Hilary"
+date_rule = "Fixed(1,14)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Felix"
+date_rule = "Fixed(1,14)"
+rank = "Comm."
+color = "Red"
+titles = ["Priest", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Marcellus I"
+date_rule = "Fixed(1,16)"
+rank = "III"
+color = "Red"
+titles = ["Pope", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Anthony"
+date_rule = "Fixed(1,17)"
+rank = "III"
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Marius, Martha, Audifax, and Abachum"
+date_rule = "Fixed(1,19)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Fabian and Sebastian"
+date_rule = "Fixed(1,20)"
+rank = "III"
+color = "Red"
+titles = ["Pope", "Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Agnes"
+date_rule = "Fixed(1,21)"
+rank = "III"
+color = "Red"
+titles = ["Virgin", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Vincent"
+date_rule = "Fixed(1,22)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Emerentiana"
+date_rule = "Fixed(1,23)"
+rank = "Comm."
+color = "Red"
+titles = ["Virgin", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Timothy"
+date_rule = "Fixed(1,24)"
+rank = "Comm."
+color = "Red"
+titles = ["Bishop", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "Conversion of St. Paul"
+date_rule = "Fixed(1,25)"
+rank = "III"
+color = "White"
+titles = ["Apostle"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Peter"
+date_rule = "Fixed(1,25)"
+rank = "Comm."
+color = "White"
+titles = ["Apostle"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Polycarp"
+date_rule = "Fixed(1,26)"
+rank = "Comm."
+color = "Red"
+titles = ["Bishop", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. John Chrysostom"
+date_rule = "Fixed(1,27)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Cyril"
+date_rule = "Fixed(1,28)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop of Alexandria", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Francis de Sales"
+date_rule = "Fixed(1,29)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. John Bosco"
+date_rule = "Fixed(1,31)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+# ---------- February ----------
+
+[[feasts]]
+name = "St. Ignatius"
+date_rule = "Fixed(2,1)"
+rank = "III"
+color = "Red"
+titles = ["Bishop", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Purification of the Blessed Virgin Mary"
+date_rule = "Fixed(2,2)"
+rank = "II"
+color = "White"
+day_type = "feast"
+of_our_lord = true
+
+[[feasts]]
+name = "St. Blase"
+date_rule = "Fixed(2,3)"
+rank = "Comm."
+color = "Red"
+titles = ["Bishop", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Agatha"
+date_rule = "Fixed(2,5)"
+rank = "III"
+color = "Red"
+titles = ["Virgin", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Romuald"
+date_rule = "Fixed(2,7)"
+rank = "III"
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Scholastica"
+date_rule = "Fixed(2,10)"
+rank = "II"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Valentine"
+date_rule = "Fixed(2,14)"
+rank = "Comm."
+color = "Red"
+titles = ["Priest", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "Chair of St. Peter"
+date_rule = "Fixed(2,22)"
+rank = "III"
+color = "White"
+day_type = "feast"
+titles = ["Apostle"]
+
+[[feasts]]
+name = "St. Paul"
+date_rule = "Fixed(2,22)"
+rank = "Comm."
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Peter Damian"
+date_rule = "Fixed(2,23)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Matthias"
+date_rule = "LeapYearConditional(Fixed(2,24), Fixed(2,25))"
+rank = "II"
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+# ---------- March ----------
+
+[[feasts]]
+name = "Ss. Perpetua and Felicity"
+date_rule = "Fixed(3,6)"
+rank = "III"
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Thomas Aquinas"
+date_rule = "Fixed(3,7)"
+rank = "III"
+color = "White"
+titles = ["Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Frances of Rome"
+date_rule = "Fixed(3,9)"
+rank = "Comm."
+color = "White"
+titles = ["Widow"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Forty Holy Martyrs"
+date_rule = "Fixed(3,10)"
+rank = "III"
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Gregory I"
+date_rule = "Fixed(3,12)"
+rank = "II"
+color = "White"
+titles = ["Pope", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Cyril"
+date_rule = "Fixed(3,18)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop of Jerusalem", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Joseph"
+date_rule = "Fixed(3,19)"
+rank = "I"
+color = "White"
+titles = ["Spouse of the Blessed Virgin Mary", "Confessor", "Patron of the Universal Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Benedict"
+date_rule = "Fixed(3,21)"
+rank = "I"
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "Annunciation of the Blessed Virgin Mary"
+date_rule = "Fixed(3,25)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. John Damascene"
+date_rule = "Fixed(3,27)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+# ---------- April ----------
+
+[[feasts]]
+name = "St. Isidore"
+date_rule = "Fixed(4,4)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Leo I"
+date_rule = "Fixed(4,11)"
+rank = "III"
+color = "White"
+titles = ["Pope", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Justin"
+date_rule = "Fixed(4,13)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Anselm"
+date_rule = "Fixed(4,21)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. George"
+date_rule = "Fixed(4,23)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Mark"
+date_rule = "Fixed(4,25)"
+rank = "II"
+color = "Red"
+titles = ["Evangelist"]
+note = "Greater Litany"
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Cletus"
+date_rule = "Fixed(4,26)"
+rank = "Comm."
+color = "Red"
+titles = ["Pope", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Peter Canisius"
+date_rule = "Fixed(4,27)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Odo, Majolus, Odilo, and Hugh"
+date_rule = "Fixed(4,29)"
+rank = "III"
+color = "White"
+titles = ["Abbots"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Catherine of Siena"
+date_rule = "Fixed(4,30)"
+rank = "Comm."
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+# ---------- May ----------
+
+[[feasts]]
+name = "St. Joseph the Workman"
+date_rule = "Fixed(5,1)"
+rank = "I"
+color = "White"
+titles = ["Spouse of the Blessed Virgin Mary", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Athanasius"
+date_rule = "Fixed(5,2)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Alexander I, Eventius and Theodulus"
+date_rule = "Fixed(5,3)"
+rank = "Comm."
+color = "Red"
+titles = ["Pope", "Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Monica"
+date_rule = "Fixed(5,4)"
+rank = "Comm."
+color = "White"
+titles = ["Widow"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Pius V"
+date_rule = "Fixed(5,5)"
+rank = "Comm."
+color = "White"
+titles = ["Pope", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Gregory Nazianzen"
+date_rule = "Fixed(5,9)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Gordian and Epimachus"
+date_rule = "Fixed(5,10)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Philip and James"
+date_rule = "Fixed(5,11)"
+rank = "II"
+color = "Red"
+titles = ["Apostles"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Nereus, Achilleus, Domitilla and Pancras"
+date_rule = "Fixed(5,12)"
+rank = "Comm."
+color = "Red"
+titles = ["Virgin", "Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Robert Bellarmine"
+date_rule = "Fixed(5,13)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Pachomius"
+date_rule = "Fixed(5,14)"
+rank = "Comm."
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Peter Celestine"
+date_rule = "Fixed(5,19)"
+rank = "Comm."
+color = "White"
+titles = ["Pope", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Gregory VII"
+date_rule = "Fixed(5,25)"
+rank = "III"
+color = "White"
+titles = ["Pope", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Augustine"
+date_rule = "Fixed(5,26)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Bede the Venerable"
+date_rule = "Fixed(5,27)"
+rank = "III"
+color = "White"
+titles = ["Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+# ---------- June ----------
+
+[[feasts]]
+name = "Ss. Marcellinus and Peter"
+date_rule = "Fixed(6,2)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Boniface"
+date_rule = "Fixed(6,5)"
+rank = "III"
+color = "Red"
+titles = ["Bishop", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Norbert"
+date_rule = "Fixed(6,6)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Primus and Felician"
+date_rule = "Fixed(6,9)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Barnabas"
+date_rule = "Fixed(6,11)"
+rank = "III"
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Anthony of Padua"
+date_rule = "Fixed(6,13)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Basil the Great"
+date_rule = "Fixed(6,14)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Vitus"
+date_rule = "Fixed(6,15)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Ephraem Syrus"
+date_rule = "Fixed(6,18)"
+rank = "Comm."
+color = "White"
+titles = ["Deacon", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Mark and Marcellianus"
+date_rule = "Fixed(6,18)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Gervase and Protase"
+date_rule = "Fixed(6,19)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Aloysius Gonzaga"
+date_rule = "Fixed(6,21)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Vigil of St. John the Baptist"
+date_rule = "Fixed(6,23)"
+rank = "II"
+color = "Violet"
+day_type = "feast"
+
+[[feasts]]
+name = "The Nativity of St. John the Baptist"
+date_rule = "Fixed(6,24)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. John and Paul"
+date_rule = "Fixed(6,26)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "Vigil of Ss. Peter and Paul"
+date_rule = "Fixed(6,28)"
+rank = "II"
+color = "Violet"
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Peter and Paul"
+date_rule = "Fixed(6,29)"
+rank = "I"
+color = "Red"
+titles = ["Apostles"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Commemoration of St. Paul"
+date_rule = "Fixed(6,30)"
+rank = "III"
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Peter"
+date_rule = "Fixed(6,30)"
+rank = "Comm."
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+# ---------- July ----------
+[[feasts]]
+name = "The Visitation of the Blessed Virgin Mary"
+date_rule = "Fixed(7,2)"
+rank = "II"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Processus and Martinianus"
+date_rule = "Fixed(7,3)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. John Gualbert"
+date_rule = "Fixed(7,12)"
+rank = "Comm."
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Bonaventure"
+date_rule = "Fixed(7,14)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Leo IV"
+date_rule = "Fixed(7,17)"
+rank = "Comm."
+color = "White"
+titles = ["Pope", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Vincent de Paul"
+date_rule = "Fixed(7,19)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Hieronymi Æmilianii, Josephi Calasanctii et Joannis Baptistæ de la Salle"
+date_rule = "Fixed(7,20)"
+rank = "Comm."
+color = "White"
+titles = ["Confessors"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Mary Magdalene"
+date_rule = "Fixed(7,22)"
+rank = "III"
+color = "White"
+titles = ["Penitent"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Apollinaris"
+date_rule = "Fixed(7,23)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. James"
+date_rule = "Fixed(7,25)"
+rank = "II"
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Joachim and Anne"
+date_rule = "Fixed(7,26)"
+rank = "III"
+color = "White"
+titles = ["Parents of the Blessed Virgin Mary"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Felix, Simplicius, Faustinus and Beatricis"
+date_rule = "Fixed(7,29)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Abdon and Sennen"
+date_rule = "Fixed(7,30)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Ignatius"
+date_rule = "Fixed(7,31)"
+rank = "III"
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+# ---------- August ----------
+
+[[feasts]]
+name = "Holy Machabees"
+date_rule = "Fixed(8,1)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Alphonsus Mary of Liguori"
+date_rule = "Fixed(8,2)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Dominic"
+date_rule = "Fixed(8,4)"
+rank = "III"
+color = "White"
+titles = ["Confessor"]
+note = "Greater III class"
+day_type = "feast"
+
+[[feasts]]
+name = "The Dedication of Our Lady of the Snows"
+date_rule = "Fixed(8,5)"
+rank = "Comm."
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "The Transfiguration of our Lord Jesus Christ"
+date_rule = "Fixed(8,6)"
+rank = "II"
+color = "White"
+of_our_lord = true
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Xystus II, Felicissimus, and Agapitus"
+date_rule = "Fixed(8,7)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Cyriaci"
+date_rule = "Fixed(8,8)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "Vigil of St. Lawrence"
+date_rule = "Fixed(8,9)"
+rank = "III"
+color = "Violet"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Lawrence"
+date_rule = "Fixed(8,10)"
+rank = "II"
+color = "Red"
+titles = ["Deacon", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Tiburtius"
+date_rule = "Fixed(8,11)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Clare"
+date_rule = "Fixed(8,12)"
+rank = "Comm."
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Pontianus and Hippolytus"
+date_rule = "Fixed(8,13)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "Vigil of the Assumption of the Blessed Virgin Mary"
+date_rule = "Fixed(8,14)"
+rank = "II"
+color = "Violet"
+day_type = "feast"
+
+[[feasts]]
+name = "The Assumption of the Blessed Virgin Mary"
+date_rule = "Fixed(8,15)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Agapitus"
+date_rule = "Fixed(8,18)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Bernard"
+date_rule = "Fixed(8,20)"
+rank = "III"
+color = "White"
+titles = ["Abbot", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "Blessed Bernard Ptolomaei"
+date_rule = "Fixed(8,21)"
+rank = "Comm."
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Timothy"
+date_rule = "Fixed(8,22)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Bartholomew"
+date_rule = "Fixed(8,24)"
+rank = "II"
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Augustine"
+date_rule = "Fixed(8,28)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Hermes"
+date_rule = "Fixed(8,28)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Beheading of St. John the Baptist"
+date_rule = "Fixed(8,29)"
+rank = "III"
+color = "Red"
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Felix and Adauctus"
+date_rule = "Fixed(8,30)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+# ---------- September ----------
+
+[[feasts]]
+name = "St. Pius X"
+date_rule = "Fixed(9,3)"
+rank = "III"
+color = "White"
+titles = ["Pope", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Nativity of the Blessed Virgin Mary"
+date_rule = "Fixed(9,8)"
+rank = "II"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Gorgonius"
+date_rule = "Fixed(9,9)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Protus and Hyacinth"
+date_rule = "Fixed(9,11)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Exaltation of the Holy Cross"
+date_rule = "Fixed(9,14)"
+rank = "II"
+color = "Red"
+day_type = "feast"
+of_our_lord = true
+
+[[feasts]]
+name = "Seven Sorrows of the Blessed Virgin Mary (Our Lady of Sorrows)"
+date_rule = "Fixed(9,15)"
+rank = "III"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Cornelius, Pope and Cyprian, Bishop"
+date_rule = "Fixed(9,16)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Hildegard"
+date_rule = "Fixed(9,17)"
+rank = "Comm."
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Matthew"
+date_rule = "Fixed(9,21)"
+rank = "II"
+color = "Red"
+titles = ["Apostle", "Evangelist"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Maurice and Companions"
+date_rule = "Fixed(9,22)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Linus"
+date_rule = "Fixed(9,23)"
+rank = "Comm."
+color = "Red"
+titles = ["Pope", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Cosmas and Damian"
+date_rule = "Fixed(9,27)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Dedication of St. Michael Archangel"
+date_rule = "Fixed(9,29)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Jerome"
+date_rule = "Fixed(9,30)"
+rank = "III"
+color = "White"
+titles = ["Priest", "Confessor","Doctor of the Church"]
+
+day_type = "feast"
+
+# ---------- October ----------
+
+[[feasts]]
+name = "The Holy Guardian Angels"
+date_rule = "Fixed(10,2)"
+rank = "III"
+color = "White"
+note = "Greater III class"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Thérèse of the Child Jesus"
+date_rule = "Fixed(10,3)"
+rank = "Comm."
+color = "White"
+titles = ["Virgin","Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Francis of Assisi"
+date_rule = "Fixed(10,4)"
+rank = "III"
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Mauri and Placidi"
+date_rule = "Fixed(10,5)"
+rank = "III"
+color = "White"
+titles = ["Confessors"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Bruno"
+date_rule = "Fixed(10,6)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Blessed Virgin Mary of the Rosary"
+date_rule = "Fixed(10,7)"
+rank = "III"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Callistus I"
+date_rule = "Fixed(10,14)"
+rank = "Comm."
+color = "Red"
+titles = ["Pope", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Teresa"
+date_rule = "Fixed(10,15)"
+rank = "III"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Luke"
+date_rule = "Fixed(10,18)"
+rank = "II"
+color = "Red"
+titles = ["Evangelist"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Hilarion"
+date_rule = "Fixed(10,21)"
+rank = "Comm."
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Chrysanthus and Daria"
+date_rule = "Fixed(10,25)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "Ss. Simon and Jude"
+date_rule = "Fixed(10,28)"
+rank = "II"
+color = "Red"
+titles = ["Apostles"]
+day_type = "feast"
+
+# ---------- November ----------
+
+[[feasts]]
+name = "All Saints"
+date_rule = "Fixed(11,1)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "The Commemoration of All the Faithful Departed"
+date_rule = "AvoidSunday(Fixed(11,2))"
+rank = "I"
+color = "black"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Charles"
+date_rule = "Fixed(11,4)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Holy Four Crowned Martyrs"
+date_rule = "Fixed(11,8)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyrs"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Dedication of the Archbasilica of the Most Holy Saviour"
+date_rule = "Fixed(11,9)"
+rank = "II"
+color = "White"
+day_type = "feast"
+of_our_lord = true
+
+[[feasts]]
+name = "St. Theodore"
+date_rule = "Fixed(11,9)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Martin"
+date_rule = "Fixed(11,11)"
+rank = "II"
+color = "White"
+titles = ["Bishop", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Mennas"
+date_rule = "Fixed(11,12)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "All Saints of Our Order"
+date_rule = "Fixed(11,13)"
+rank = "II"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "All Souls of Our Order"
+date_rule = "Fixed(11,14)"
+rank = "II"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Albert the Great"
+date_rule = "Fixed(11,15)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Gertrude"
+date_rule = "Fixed(11,17)"
+rank = "III"
+color = "White"
+titles = ["Virgin"]
+day_type = "feast"
+
+[[feasts]]
+name = "Dedication of the Basilicas of Ss. Peter and Paul"
+date_rule = "Fixed(11,18)"
+rank = "II"
+color = "White"
+day_type = "feast"
+titles = ["Apostles"]
+
+[[feasts]]
+name = "The Presentation of the Blessed Virgin Mary"
+date_rule = "Fixed(11,21)"
+rank = "III"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Columbanus"
+date_rule = "Fixed(11,21)"
+rank = "Comm."
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Clement I"
+date_rule = "Fixed(11,23)"
+rank = "III"
+color = "Red"
+titles = ["Pope", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Felicitas"
+date_rule = "Fixed(11,23)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+note = "Commemoration"
+day_type = "feast"
+
+[[feasts]]
+name = "St. John of the Cross"
+date_rule = "Fixed(11,24)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Chrysogonus"
+date_rule = "Fixed(11,24)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+note = "Commemoration"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Catherine of Alexandria"
+date_rule = "Fixed(11,25)"
+rank = "Comm."
+color = "Red"
+titles = ["Virgin", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Sylvester"
+date_rule = "Fixed(11,26)"
+rank = "Comm."
+color = "White"
+titles = ["Abbot"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Saturninus"
+date_rule = "Fixed(11,29)"
+rank = "Comm."
+color = "Red"
+titles = ["Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Andrew"
+date_rule = "Fixed(11,30)"
+rank = "II"
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+# ---------- December ----------
+
+[[feasts]]
+name = "St. Peter Chrysologus"
+date_rule = "Fixed(12,2)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Francis Xavier"
+date_rule = "Fixed(12,3)"
+rank = "Comm."
+color = "White"
+titles = ["Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Nicholas"
+date_rule = "Fixed(12,6)"
+rank = "Comm."
+color = "White"
+titles = ["Bishop", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Ambrose"
+date_rule = "Fixed(12,7)"
+rank = "III"
+color = "White"
+titles = ["Bishop", "Confessor", "Doctor of the Church"]
+day_type = "feast"
+
+[[feasts]]
+name = "The Immaculate Conception of the Blessed Virgin Mary"
+date_rule = "Fixed(12,8)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Damasus I"
+date_rule = "Fixed(12,11)"
+rank = "Comm."
+color = "White"
+titles = ["Pope", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Lucy"
+date_rule = "Fixed(12,13)"
+rank = "III"
+color = "Red"
+titles = ["Virgin", "Martyr"]
+day_type = "feast"
+
+[[feasts]]
+name = "St. Thomas"
+date_rule = "Fixed(12,21)"
+rank = "II"
+color = "Red"
+titles = ["Apostle"]
+day_type = "feast"
+
+[[feasts]]
+name = "Vigil of the Nativity of our Lord Jesus Christ"
+date_rule = "Fixed(12,24)"
+rank = "I"
+color = "violet"
+day_type = "vigil"
+
+[[feasts]]
+name = "The Nativity of our Lord Jesus Christ"
+date_rule = "Fixed(12,25)"
+rank = "I"
+of_our_lord = true
+color = "White"
+note = "with an octave"
+day_type = "feast"
+
+[[feasts]]
+name = "Octave Day of the Nativity of our Lord Jesus Christ"
+date_rule = "Fixed(1,1)"
+rank = "I"
+of_our_lord = true
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Stephen"
+date_rule = "Fixed(12,26)"
+rank = "II"
+color = "Red"
+titles = ["Protomartyr"]
+note = "II day within the octave of the Nativity of the Lord"
+day_type = "feast"
+
+[[feasts]]
+name = "St. John"
+date_rule = "Fixed(12,27)"
+rank = "II"
+color = "White"
+titles = ["Apostle", "Evangelist"]
+note = "III day within the octave of the Nativity of the Lord"
+day_type = "feast"
+
+[[feasts]]
+name = "The Holy Innocents"
+date_rule = "Fixed(12,28)"
+rank = "II"
+color = "Red"
+titles = ["Martyrs"]
+note = "IV day within the octave of the Nativity of the Lord"
+day_type = "feast"
+
+[[feasts]]
+name = "St. Sylvester I"
+date_rule = "Fixed(12,31)"
+rank = "Comm."
+color = "White"
+titles = ["Pope", "Confessor"]
+day_type = "feast"
+
+[[feasts]]
+name = "Our Lord Jesus Christ the King"
+date_rule = "OffsetSundays(Fixed(11,1), -1)"
+rank = "I"
+of_our_lord = true
+color = "White"
+day_type = "sunday"
+
+# ----- Ferias -----
+
+[[feasts]]
+name = "Ash Wednesday"
+date_rule = "OffsetDays(Easter, -46)"
+rank = "I"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Wednesday in Lent"
+date_rule = "OffsetDays(Easter, -39)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Friday of Lent"
+date_rule = "OffsetDays(Easter, -37)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Saturday of Lent"
+date_rule = "OffsetDays(Easter, -36)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Wednesday in September"
+date_rule = "OffsetDays(OffsetSundays(Fixed(9,22), -1), 3)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Friday of September"
+date_rule = "OffsetDays(OffsetSundays(Fixed(9,22), -1), 5)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Saturday of September"
+date_rule = "OffsetDays(OffsetSundays(Fixed(9,22), -1), 6)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Wednesday in Advent"
+date_rule = "OffsetDays(OffsetSundays(PreviousYear(Fixed(12,25)), -2), 3)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Friday of Advent"
+date_rule = "OffsetDays(OffsetSundays(PreviousYear(Fixed(12,25)), -2), 5)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+[[feasts]]
+name = "Ember Saturday of Advent"
+date_rule = "OffsetDays(OffsetSundays(PreviousYear(Fixed(12,25)), -2), 6)"
+rank = "II"
+color = "Violet"
+day_type = "feria"
+
+# ---- Sundays
+[[feasts]]
+name = "Easter Sunday"
+date_rule = "Easter"
+rank = "I"
+color = "White"
+day_type = "sunday"
+
+[[feasts]]
+name = "Pentecost"
+date_rule = "OffsetDays(Easter, 49)"
+rank = "I"
+color = "Red"
+day_type = "sunday"
+
+[[feasts]]
+name = "Low Sunday"
+date_rule = "OffsetDays(Easter, 7)"
+rank = "I"
+color = "White"
+day_type = "sunday"
+
+[[feasts]]
+name = "Trinity Sunday"
+date_rule = "OffsetDays(Easter, 56)"
+rank = "I"
+color = "White"
+day_type = "sunday"
+
+[[feasts]]
+name = "Corpus Christi"
+date_rule = "OffsetDays(Easter, 60)"
+rank = "I"
+color = "White"
+day_type = "feast"
+
+[[feasts]]
+name = " The Most Sacred Heart of Jesus"
+date_rule = "OffsetDays(Easter, 68)"
+rank = "I"
+color = "White"
+of_our_lord = true
+day_type = "feast"
+
+
+# ---- Vigils ----
+
+[[feasts]]
+name = "Vigil of Pentecost"
+date_rule = "OffsetDays(Easter, 48)"
+rank = "I"
+color = "violet"
+day_type = "vigil"
+
+[[feasts]]
+name = "Vigil of the Ascension"
+date_rule = "OffsetDays(Easter, 38)"
+rank = "II"
+color = "violet"
+day_type = "vigil"
+
+[[feasts]]
+name = "Ascension of our Lord Jesus Christ"
+date_rule = "OffsetDays(Easter, 39)"
+rank = "I"
+of_our_lord = true
+color = "White"
+day_type = "feast"

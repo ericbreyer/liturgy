@@ -1,6 +1,6 @@
 <template>
   <div class="ordo-view">
-    <h1>Ordo</h1>
+    <h1>Ordo (Beta)</h1>
     <div class="controls">
       <label>Calendar
         <select v-model="selectedCalendar">

@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use calendar_calc::GenericCalendarHandle;
+use calendar_calc::{GenericCalendarHandle54};
 use cross_proc_cache::FsCache;
 use insta::{assert_snapshot, with_settings};
 use test_case::test_matrix;
@@ -9,11 +9,11 @@ fn init(year: usize) -> Vec<String> {
     let raw_calendar =
         std::fs::read_to_string("calendar_data/54.toml").expect("Failed to read calendar data");
 
-    let calendar: GenericCalendarHandle =
-        GenericCalendarHandle::load_from_str(&raw_calendar).expect("Failed to parse calendar data");
+    let calendar: GenericCalendarHandle54 =
+        GenericCalendarHandle54::load_from_str(&raw_calendar).expect("Failed to parse calendar data");
 
     calendar
-        .create_year_calendar_54(year as i32)
+        .create_year_calendar(year as i32)
         .generate_csv()
         .lines()
         .skip(1)

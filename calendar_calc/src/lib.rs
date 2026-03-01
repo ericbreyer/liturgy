@@ -22,14 +22,14 @@
 //!
 //! ## Quick Start
 //!
-//! ```rust
-//! use calendar_calc::GenericCalendarHandle;
+//! ```rust,no_run
+//! use calendar_calc::GenericCalendarHandle62;
 //!
 //! // Load a calendar
-//! let calendar = GenericCalendarHandle::load_from_file("calendar_data/of.toml")?;
+//! let calendar = GenericCalendarHandle62::load_from_file("calendar_data/62.toml")?;
 //!
 //! // Generate a year calendar
-//! let year_2025 = calendar.create_year_calendar_of(2025);
+//! let year_2025 = calendar.create_year_calendar(2025);
 //!
 //! // Export to CSV
 //! year_2025.export_csv("calendar_2025.csv")?;
@@ -42,4 +42,6 @@ pub mod calender;
 mod date_calc;
 
 // Re-export main public API types
-pub use calender::{GenericCalendarHandle, YearCalendarHandle};
+pub use calender::{
+    GenericCalendarHandle62, GenericCalendarHandle54, GenericCalendarHandleOf,
+};

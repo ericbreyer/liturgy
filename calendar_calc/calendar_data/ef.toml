@@ -1,4 +1,5 @@
 name = "1962 Roman Calendar"
+cal_type = "Calendar1962"
 
 # ---------- Seasons ----------
 # The liturgical year starts with the First Sunday of Advent

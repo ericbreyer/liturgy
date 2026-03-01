@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use calendar_calc::GenericCalendarHandle;
+use calendar_calc::GenericCalendarHandleOf;
 use cross_proc_cache::FsCache;
 use insta::{assert_snapshot, with_settings};
 use test_case::test_matrix;
@@ -15,11 +15,11 @@ fn init_of_for_year(year: usize) -> Vec<String> {
     let raw_calendar =
         std::fs::read_to_string("calendar_data/of.toml").expect("Failed to read calendar data");
 
-    let calendar: GenericCalendarHandle =
-        GenericCalendarHandle::load_from_str(&raw_calendar).expect("Failed to parse calendar data");
+    let calendar: GenericCalendarHandleOf =
+        GenericCalendarHandleOf::load_from_str(&raw_calendar).expect("Failed to parse calendar data");
 
     calendar
-        .create_year_calendar_of(year as i32)
+        .create_year_calendar(year as i32)
         .generate_csv()
         .lines()
         .skip(1)
@@ -28,14 +28,14 @@ fn init_of_for_year(year: usize) -> Vec<String> {
 }
 
 fn init_us_extended_for_year(year: usize) -> Vec<String> {
-    let calendar = GenericCalendarHandle::load_with_extensions(
+    let calendar = GenericCalendarHandleOf::load_with_extensions(
         "calendar_data/of.toml",
         &["calendar_data/of-us-extensions.toml"],
     )
     .expect("Failed to load calendar with US extensions");
 
     calendar
-        .create_year_calendar_of(year as i32)
+        .create_year_calendar(year as i32)
         .generate_csv()
         .lines()
         .skip(1)

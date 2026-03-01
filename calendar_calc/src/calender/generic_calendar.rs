@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::marker::PhantomData;
 
 use chrono::{Datelike, NaiveDate};
 pub use feast_rule::FeastRule;
@@ -16,8 +17,31 @@ use crate::calender::{
 mod feast_rule;
 mod season_rule;
 
+/// Trait for getting the expected calendar type for a FeastRankResolver
+pub trait CalendarTypeProvider: FeastRankResolver {
+    fn expected_calendar_type() -> CalendarType;
+}
+
+impl CalendarTypeProvider for FeastRank62 {
+    fn expected_calendar_type() -> CalendarType {
+        CalendarType::Calendar1962
+    }
+}
+
+impl CalendarTypeProvider for FeastRank54 {
+    fn expected_calendar_type() -> CalendarType {
+        CalendarType::Calendar1954
+    }
+}
+
+impl CalendarTypeProvider for FeastRankOf {
+    fn expected_calendar_type() -> CalendarType {
+        CalendarType::OrdinaryForm
+    }
+}
+
 /// Calendar system type identifier
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum CalendarType {
     /// 1954 Roman Calendar (Pre-Pius XII reforms)
     Calendar1954,
@@ -28,9 +52,10 @@ pub enum CalendarType {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct GenericCalendar {
+pub struct GenericCalendar<T: FeastRankResolver = FeastRankOf> {
     #[serde(default)]
     pub name: ArcStr,
+    pub cal_type: CalendarType,
     #[serde(default = "default_commemoration_interpretation")]
     pub commemoration_interpretation: ArcStr,
     #[serde(default)]
@@ -38,16 +63,22 @@ pub struct GenericCalendar {
     #[serde(default)]
     pub octaves: Vec<SeasonRule<DateRule>>,
     pub feasts: Vec<FeastRule<DateRule>>,
+    #[serde(skip)]
+    _phantom: PhantomData<T>,
 }
+
+
 
 fn default_commemoration_interpretation() -> ArcStr {
     "Commemoration".into()
 }
 
-impl GenericCalendar {
+impl<T: FeastRankResolver + CalendarTypeProvider> GenericCalendar<T> {
+
     /// Load a calendar from TOML string content
     pub fn from_toml_str(s: &str) -> Result<Self, toml::de::Error> {
-        toml::from_str(s)
+        let calendar: GenericCalendar<T> = toml::from_str(s)?;
+        Ok(calendar)
     }
 
     /// Load a calendar from a TOML file
@@ -56,6 +87,14 @@ impl GenericCalendar {
     ) -> Result<Self, Box<dyn std::error::Error>> {
         let content = std::fs::read_to_string(path)?;
         let calendar = Self::from_toml_str(&content)?;
+        if calendar.cal_type != T::expected_calendar_type() {
+            return Err(format!(
+                "Calendar type mismatch: expected {:?} but got {:?}",
+                T::expected_calendar_type(),
+                calendar.cal_type
+            )
+            .into());
+        }
         Ok(calendar)
     }
 
@@ -95,7 +134,7 @@ impl GenericCalendar {
     }
 
     /// Merge additional feasts from another calendar into this one
-    pub fn merge_feasts(&mut self, other: GenericCalendar) {
+    pub fn merge_feasts(&mut self, other: GenericCalendar<T>) {
         // merge strategy:
         // 1. if a feast with the same name and date_rule exists, replace it
         // 2. otherwise, add the new feast to the list
@@ -154,272 +193,6 @@ impl GenericCalendar {
         Ok(calendar)
     }
 
-    /// Create a year calendar for a specific liturgical year
-    #[must_use]
-    pub fn instantiate_62_for_lit_year(
-        &self,
-        lit_year: i32,
-    ) -> YearCalendar<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
-        // First, figure out when Advent starts to determine which feasts belong to
-        // which year
-        let advent_season = self
-            .seasons
-            .iter()
-            .find(|s| s.name().to_lowercase().contains("advent"));
-        let advent = advent_season.expect("No Advent season found in calendar");
-        let first_advent = advent.begin().to_day(lit_year).unwrap();
-        let next_first_advent = advent.begin().to_day(lit_year + 1).unwrap();
-
-        let seasons = {
-            // Create a mapping of season names to season objects for parent lookups
-            let season_map: std::collections::HashMap<String, &SeasonRule<DateRule>> = self
-                .seasons
-                .iter()
-                .map(|s| (s.name().to_string(), s))
-                .collect();
-
-            // Helper function to recursively resolve hierarchy
-            fn resolve_hierarchy_chain(
-                season: &SeasonRule<DateRule>,
-                season_map: &std::collections::HashMap<String, &SeasonRule<DateRule>>,
-                lit_year: i32,
-                visited: &mut std::collections::HashSet<String>,
-            ) -> SeasonRule<NaiveDate> {
-                // Prevent infinite loops
-                if visited.contains(season.name()) {
-                    return season.instantiate_for_lit_year(lit_year);
-                }
-                visited.insert(season.name().to_string());
-
-                let parent_season = season
-                    .parent_season()
-                    .as_ref()
-                    .and_then(|parent_name| season_map.get(parent_name))
-                    .map(|parent| resolve_hierarchy_chain(parent, season_map, lit_year, visited));
-
-                let result = season.instantiate_with_hierarchy(lit_year, parent_season.as_ref());
-                visited.remove(season.name());
-                result
-            }
-
-            // Instantiate seasons with proper hierarchy resolution
-            self.seasons
-                .iter()
-                .map(|s| {
-                    let mut visited = std::collections::HashSet::new();
-                    resolve_hierarchy_chain(s, &season_map, lit_year, &mut visited)
-                })
-                .collect()
-        };
-        let feasts = self
-            .feasts
-            .iter()
-            .map(|f| f.instantiate_for_lit_year_with_advent(lit_year))
-            .fold(HashMap::new(), |mut acc: HashMap<_, Vec<_>>, feast| {
-                acc.entry(feast.date_rule).or_default().push(feast);
-                acc
-            });
-
-        let octaves = self
-            .octaves
-            .iter()
-            .map(|o| o.instantiate_for_lit_year(lit_year))
-            .collect();
-
-        YearCalendarBuilder {
-            year: lit_year,
-            name: self.name.clone(),
-            seasons,
-            feasts,
-            octaves,
-            first_advent,
-            next_first_advent,
-            calendar_type: CalendarType::Calendar1962,
-        }
-        .generate_year_calendar::<FeastRank62>()
-    }
-
-    /// Create a 1954 calendar year calendar for a specific liturgical year
-    #[must_use]
-    pub fn instantiate_54_for_lit_year(
-        &self,
-        lit_year: i32,
-    ) -> YearCalendar<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
-        // First, figure out when Advent starts to determine which feasts belong to
-        // which year
-        let advent_season = self
-            .seasons
-            .iter()
-            .find(|s| s.name().to_lowercase().contains("advent"));
-        let advent = advent_season.expect("No Advent season found in calendar");
-        let first_advent = advent.begin().to_day(lit_year).unwrap();
-        let next_first_advent = advent.begin().to_day(lit_year + 1).unwrap();
-
-        let seasons = {
-            // Create a mapping of season names to season objects for parent lookups
-            let season_map: std::collections::HashMap<String, &SeasonRule<DateRule>> = self
-                .seasons
-                .iter()
-                .map(|s| (s.name().to_string(), s))
-                .collect();
-
-            // Helper function to recursively resolve hierarchy
-            fn resolve_hierarchy_chain(
-                season: &SeasonRule<DateRule>,
-                season_map: &std::collections::HashMap<String, &SeasonRule<DateRule>>,
-                lit_year: i32,
-                visited: &mut std::collections::HashSet<String>,
-            ) -> SeasonRule<NaiveDate> {
-                // Prevent infinite loops
-                if visited.contains(season.name()) {
-                    return season.instantiate_for_lit_year(lit_year);
-                }
-                visited.insert(season.name().to_string());
-
-                let parent_season = season
-                    .parent_season()
-                    .as_ref()
-                    .and_then(|parent_name| season_map.get(parent_name))
-                    .map(|parent| resolve_hierarchy_chain(parent, season_map, lit_year, visited));
-
-                let result = season.instantiate_with_hierarchy(lit_year, parent_season.as_ref());
-                visited.remove(season.name());
-                result
-            }
-
-            // Instantiate seasons with proper hierarchy resolution
-            self.seasons
-                .iter()
-                .map(|s| {
-                    let mut visited = std::collections::HashSet::new();
-                    resolve_hierarchy_chain(s, &season_map, lit_year, &mut visited)
-                })
-                .collect()
-        };
-        let feasts = self
-            .feasts
-            .iter()
-            .map(|f| f.instantiate_for_lit_year_with_advent(lit_year))
-            .fold(HashMap::new(), |mut acc: HashMap<_, Vec<_>>, feast| {
-                if feast.date_rule.year() < lit_year {
-                    let mut feast_next_year = feast.clone();
-                    feast_next_year.date_rule = feast_next_year
-                        .date_rule
-                        .with_year(lit_year)
-                        .expect("Failed to adjust feast date to current year");
-                    acc.entry(feast_next_year.date_rule)
-                        .or_default()
-                        .push(feast_next_year);
-                }
-                acc.entry(feast.date_rule).or_default().push(feast);
-                // if the feast is in the previous year, also add it for the current year
-                acc
-            });
-
-        let octaves = self
-            .octaves
-            .iter()
-            .map(|o| o.instantiate_for_lit_year(lit_year))
-            .collect();
-
-        YearCalendarBuilder {
-            year: lit_year,
-            name: self.name.clone(),
-            seasons,
-            feasts,
-            octaves,
-            first_advent,
-            next_first_advent,
-            calendar_type: CalendarType::Calendar1954,
-        }
-        .generate_year_calendar::<FeastRank54>()
-    }
-
-    /// Create an Ordinary Form year calendar for a specific liturgical year
-    #[must_use]
-    pub fn instantiate_of_for_lit_year(
-        &self,
-        lit_year: i32,
-    ) -> YearCalendar<<FeastRankOf as FeastRankResolver>::FeastRankDescriptor> {
-        // First, figure out when Advent starts to determine which feasts belong to
-        // which year
-        let advent_season = self
-            .seasons
-            .iter()
-            .find(|s| s.name().to_lowercase().contains("advent"));
-        let advent = advent_season.expect("No Advent season found in calendar");
-        let first_advent = advent.begin().to_day(lit_year).unwrap();
-        let next_first_advent = advent.begin().to_day(lit_year + 1).unwrap();
-
-        let seasons = {
-            // Create a mapping of season names to season objects for parent lookups
-            let season_map: std::collections::HashMap<String, &SeasonRule<DateRule>> = self
-                .seasons
-                .iter()
-                .map(|s| (s.name().to_string(), s))
-                .collect();
-
-            // Helper function to recursively resolve hierarchy
-            fn resolve_hierarchy_chain(
-                season: &SeasonRule<DateRule>,
-                season_map: &std::collections::HashMap<String, &SeasonRule<DateRule>>,
-                lit_year: i32,
-                visited: &mut std::collections::HashSet<String>,
-            ) -> SeasonRule<NaiveDate> {
-                // Prevent infinite loops
-                if visited.contains(season.name()) {
-                    return season.instantiate_for_lit_year(lit_year);
-                }
-                visited.insert(season.name().to_string());
-
-                let parent_season = season
-                    .parent_season()
-                    .as_ref()
-                    .and_then(|parent_name| season_map.get(parent_name))
-                    .map(|parent| resolve_hierarchy_chain(parent, season_map, lit_year, visited));
-
-                let result = season.instantiate_with_hierarchy(lit_year, parent_season.as_ref());
-                visited.remove(season.name());
-                result
-            }
-
-            // Instantiate seasons with proper hierarchy resolution
-            self.seasons
-                .iter()
-                .map(|s| {
-                    let mut visited = std::collections::HashSet::new();
-                    resolve_hierarchy_chain(s, &season_map, lit_year, &mut visited)
-                })
-                .collect()
-        };
-        let feasts = self
-            .feasts
-            .iter()
-            .map(|f| f.instantiate_for_lit_year_with_advent(lit_year))
-            .fold(HashMap::new(), |mut acc: HashMap<_, Vec<_>>, feast| {
-                acc.entry(feast.date_rule).or_default().push(feast);
-                acc
-            });
-
-        let octaves = self
-            .octaves
-            .iter()
-            .map(|o| o.instantiate_for_lit_year(lit_year))
-            .collect();
-
-        YearCalendarBuilder {
-            year: lit_year,
-            name: self.name.clone(),
-            seasons,
-            feasts,
-            octaves,
-            first_advent,
-            next_first_advent,
-            calendar_type: CalendarType::OrdinaryForm,
-        }
-        .generate_year_calendar::<FeastRankOf>()
-    }
-
     /// Get feast info by exact name match (case-insensitive)
     #[must_use]
     pub fn get_feast_info(&self, name: &str) -> Option<(FeastRule<DateRule>, ArcStr)> {
@@ -430,17 +203,7 @@ impl GenericCalendar {
             .map(|f| {
                 (
                     f.clone(),
-                    match self.calendar_type() {
-                        CalendarType::Calendar1954 => {
-                            f.get_feastrank::<FeastRank54>().get_rank_string()
-                        }
-                        CalendarType::Calendar1962 => {
-                            f.get_feastrank::<FeastRank62>().get_rank_string()
-                        }
-                        CalendarType::OrdinaryForm => {
-                            f.get_feastrank::<FeastRankOf>().get_rank_string()
-                        }
-                    },
+                    f.get_feastrank::<T>().get_rank_string(),
                 )
             })
     }
@@ -536,14 +299,291 @@ impl GenericCalendar {
     }
 }
 
+impl GenericCalendar<FeastRank62> {
+    /// Create a year calendar for a specific liturgical year
+    /// Only available for 1962 calendar
+    #[must_use]
+    pub fn instantiate_for_lit_year(
+        &self,
+        lit_year: i32,
+    ) -> YearCalendar<<FeastRank62 as FeastRankResolver>::FeastRankDescriptor> {
+        // First, figure out when Advent starts to determine which feasts belong to
+        // which year
+        let advent_season = self
+            .seasons
+            .iter()
+            .find(|s| s.name().to_lowercase().contains("advent"));
+        let advent = advent_season.expect("No Advent season found in calendar");
+        let first_advent = advent.begin().to_day(lit_year).unwrap();
+        let next_first_advent = advent.begin().to_day(lit_year + 1).unwrap();
+
+        let seasons = {
+            // Create a mapping of season names to season objects for parent lookups
+            let season_map: std::collections::HashMap<String, &SeasonRule<DateRule>> = self
+                .seasons
+                .iter()
+                .map(|s| (s.name().to_string(), s))
+                .collect();
+
+            // Helper function to recursively resolve hierarchy
+            fn resolve_hierarchy_chain(
+                season: &SeasonRule<DateRule>,
+                season_map: &std::collections::HashMap<String, &SeasonRule<DateRule>>,
+                lit_year: i32,
+                visited: &mut std::collections::HashSet<String>,
+            ) -> SeasonRule<NaiveDate> {
+                // Prevent infinite loops
+                if visited.contains(season.name()) {
+                    return season.instantiate_for_lit_year(lit_year);
+                }
+                visited.insert(season.name().to_string());
+
+                let parent_season = season
+                    .parent_season()
+                    .as_ref()
+                    .and_then(|parent_name| season_map.get(parent_name))
+                    .map(|parent| resolve_hierarchy_chain(parent, season_map, lit_year, visited));
+
+                let result = season.instantiate_with_hierarchy(lit_year, parent_season.as_ref());
+                visited.remove(season.name());
+                result
+            }
+
+            // Instantiate seasons with proper hierarchy resolution
+            self.seasons
+                .iter()
+                .map(|s| {
+                    let mut visited = std::collections::HashSet::new();
+                    resolve_hierarchy_chain(s, &season_map, lit_year, &mut visited)
+                })
+                .collect()
+        };
+        let feasts = self
+            .feasts
+            .iter()
+            .map(|f| f.instantiate_for_lit_year_with_advent(lit_year))
+            .fold(HashMap::new(), |mut acc: HashMap<_, Vec<_>>, feast| {
+                acc.entry(feast.date_rule).or_default().push(feast);
+                acc
+            });
+
+        let octaves = self
+            .octaves
+            .iter()
+            .map(|o| o.instantiate_for_lit_year(lit_year))
+            .collect();
+
+        YearCalendarBuilder {
+            year: lit_year,
+            name: self.name.clone(),
+            seasons,
+            feasts,
+            octaves,
+            first_advent,
+            next_first_advent,
+            calendar_type: CalendarType::Calendar1962,
+        }
+        .generate_year_calendar::<FeastRank62>()
+    }
+}
+
+impl GenericCalendar<FeastRank54> {
+    /// Create a 1954 calendar year calendar for a specific liturgical year
+    /// Only available for 1954 calendar
+    #[must_use]
+    pub fn instantiate_for_lit_year(
+        &self,
+        lit_year: i32,
+    ) -> YearCalendar<<FeastRank54 as FeastRankResolver>::FeastRankDescriptor> {
+        // First, figure out when Advent starts to determine which feasts belong to
+        // which year
+        let advent_season = self
+            .seasons
+            .iter()
+            .find(|s| s.name().to_lowercase().contains("advent"));
+        let advent = advent_season.expect("No Advent season found in calendar");
+        let first_advent = advent.begin().to_day(lit_year).unwrap();
+        let next_first_advent = advent.begin().to_day(lit_year + 1).unwrap();
+
+        let seasons = {
+            // Create a mapping of season names to season objects for parent lookups
+            let season_map: std::collections::HashMap<String, &SeasonRule<DateRule>> = self
+                .seasons
+                .iter()
+                .map(|s| (s.name().to_string(), s))
+                .collect();
+
+            // Helper function to recursively resolve hierarchy
+            fn resolve_hierarchy_chain(
+                season: &SeasonRule<DateRule>,
+                season_map: &std::collections::HashMap<String, &SeasonRule<DateRule>>,
+                lit_year: i32,
+                visited: &mut std::collections::HashSet<String>,
+            ) -> SeasonRule<NaiveDate> {
+                // Prevent infinite loops
+                if visited.contains(season.name()) {
+                    return season.instantiate_for_lit_year(lit_year);
+                }
+                visited.insert(season.name().to_string());
+
+                let parent_season = season
+                    .parent_season()
+                    .as_ref()
+                    .and_then(|parent_name| season_map.get(parent_name))
+                    .map(|parent| resolve_hierarchy_chain(parent, season_map, lit_year, visited));
+
+                let result = season.instantiate_with_hierarchy(lit_year, parent_season.as_ref());
+                visited.remove(season.name());
+                result
+            }
+
+            // Instantiate seasons with proper hierarchy resolution
+            self.seasons
+                .iter()
+                .map(|s| {
+                    let mut visited = std::collections::HashSet::new();
+                    resolve_hierarchy_chain(s, &season_map, lit_year, &mut visited)
+                })
+                .collect()
+        };
+        let feasts = self
+            .feasts
+            .iter()
+            .map(|f| f.instantiate_for_lit_year_with_advent(lit_year))
+            .fold(HashMap::new(), |mut acc: HashMap<_, Vec<_>>, feast| {
+                if feast.date_rule.year() < lit_year {
+                    let mut feast_next_year = feast.clone();
+                    feast_next_year.date_rule = feast_next_year
+                        .date_rule
+                        .with_year(lit_year)
+                        .expect("Failed to adjust feast date to current year");
+                    acc.entry(feast_next_year.date_rule)
+                        .or_default()
+                        .push(feast_next_year);
+                }
+                acc.entry(feast.date_rule).or_default().push(feast);
+                // if the feast is in the previous year, also add it for the current year
+                acc
+            });
+
+        let octaves = self
+            .octaves
+            .iter()
+            .map(|o| o.instantiate_for_lit_year(lit_year))
+            .collect();
+
+        YearCalendarBuilder {
+            year: lit_year,
+            name: self.name.clone(),
+            seasons,
+            feasts,
+            octaves,
+            first_advent,
+            next_first_advent,
+            calendar_type: CalendarType::Calendar1954,
+        }
+        .generate_year_calendar::<FeastRank54>()
+    }
+}
+
+impl GenericCalendar<FeastRankOf> {
+    /// Create an Ordinary Form year calendar for a specific liturgical year
+    /// Only available for Ordinary Form calendar
+    #[must_use]
+    pub fn instantiate_for_lit_year(
+        &self,
+        lit_year: i32,
+    ) -> YearCalendar<<FeastRankOf as FeastRankResolver>::FeastRankDescriptor> {
+        // First, figure out when Advent starts to determine which feasts belong to
+        // which year
+        let advent_season = self
+            .seasons
+            .iter()
+            .find(|s| s.name().to_lowercase().contains("advent"));
+        let advent = advent_season.expect("No Advent season found in calendar");
+        let first_advent = advent.begin().to_day(lit_year).unwrap();
+        let next_first_advent = advent.begin().to_day(lit_year + 1).unwrap();
+
+        let seasons = {
+            // Create a mapping of season names to season objects for parent lookups
+            let season_map: std::collections::HashMap<String, &SeasonRule<DateRule>> = self
+                .seasons
+                .iter()
+                .map(|s| (s.name().to_string(), s))
+                .collect();
+
+            // Helper function to recursively resolve hierarchy
+            fn resolve_hierarchy_chain(
+                season: &SeasonRule<DateRule>,
+                season_map: &std::collections::HashMap<String, &SeasonRule<DateRule>>,
+                lit_year: i32,
+                visited: &mut std::collections::HashSet<String>,
+            ) -> SeasonRule<NaiveDate> {
+                // Prevent infinite loops
+                if visited.contains(season.name()) {
+                    return season.instantiate_for_lit_year(lit_year);
+                }
+                visited.insert(season.name().to_string());
+
+                let parent_season = season
+                    .parent_season()
+                    .as_ref()
+                    .and_then(|parent_name| season_map.get(parent_name))
+                    .map(|parent| resolve_hierarchy_chain(parent, season_map, lit_year, visited));
+
+                let result = season.instantiate_with_hierarchy(lit_year, parent_season.as_ref());
+                visited.remove(season.name());
+                result
+            }
+
+            // Instantiate seasons with proper hierarchy resolution
+            self.seasons
+                .iter()
+                .map(|s| {
+                    let mut visited = std::collections::HashSet::new();
+                    resolve_hierarchy_chain(s, &season_map, lit_year, &mut visited)
+                })
+                .collect()
+        };
+        let feasts = self
+            .feasts
+            .iter()
+            .map(|f| f.instantiate_for_lit_year_with_advent(lit_year))
+            .fold(HashMap::new(), |mut acc: HashMap<_, Vec<_>>, feast| {
+                acc.entry(feast.date_rule).or_default().push(feast);
+                acc
+            });
+
+        let octaves = self
+            .octaves
+            .iter()
+            .map(|o| o.instantiate_for_lit_year(lit_year))
+            .collect();
+
+        YearCalendarBuilder {
+            year: lit_year,
+            name: self.name.clone(),
+            seasons,
+            feasts,
+            octaves,
+            first_advent,
+            next_first_advent,
+            calendar_type: CalendarType::OrdinaryForm,
+        }
+        .generate_year_calendar::<FeastRankOf>()
+    }
+}
+
 #[cfg(test)]
 pub mod tests {
     pub use super::{GenericCalendar, feast_rule::FeastRule, season_rule::test::*};
+    use super::FeastRankOf;
 
     #[test]
     fn test_generic_calendar_accessors() {
         let toml_content = r#"
 name = "Test Calendar"
+cal_type = "OrdinaryForm"
 
 [[seasons]]
 name = "Season 1"
@@ -568,7 +608,7 @@ date_rule = "Fixed(9,20)"
 color = "white"
 "#;
 
-        let calendar = GenericCalendar::from_toml_str(toml_content).unwrap();
+        let calendar: GenericCalendar<FeastRankOf> = GenericCalendar::from_toml_str(toml_content).unwrap();
 
         assert_eq!(calendar.name(), "Test Calendar");
         assert_eq!(calendar.seasons().len(), 2);
@@ -581,7 +621,7 @@ color = "white"
     #[test]
     fn test_generic_calendar_from_toml_file_error() {
         // Test loading from non-existent file
-        let result = GenericCalendar::from_toml_file("non_existent_file.toml");
+        let result: Result<GenericCalendar<FeastRankOf>, _> = GenericCalendar::from_toml_file("non_existent_file.toml");
         assert!(result.is_err());
     }
 
@@ -592,7 +632,7 @@ color = "white"
         // files
         let base_toml = r#"
 name = "Base Calendar"
-
+cal_type = "OrdinaryForm"
 [[seasons]]
 name = "Season 1"
 begin = "Fixed(1,1)"
@@ -613,7 +653,7 @@ color = "white"
         fs::write(&base_path, base_toml).unwrap();
 
         // Test loading with no extensions
-        let calendar = GenericCalendar::from_toml_with_extensions(&base_path, &[]).unwrap();
+        let calendar: GenericCalendar<FeastRankOf> = GenericCalendar::from_toml_with_extensions(&base_path, &[]).unwrap();
         assert_eq!(calendar.feasts().len(), 1);
 
         // Clean up

@@ -1,4 +1,4 @@
-use calendar_calc::GenericCalendarHandle;
+use calendar_calc::GenericCalendarHandle62;
 use insta::{assert_snapshot, with_settings};
 use ordo::{ordo_repo::OrdoRepo, VespersOrdo};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator as _};
@@ -31,8 +31,8 @@ fn build_ordos_for_year_of_2025() {
         .expect("workspace parent")
         .join("calendar_calc/calendar_data/ef.toml");
 
-    let cal = GenericCalendarHandle::load_from_file(path).expect("load calendar");
-    let year = cal.create_year_calendar_62(2025);
+    let cal = GenericCalendarHandle62::load_from_file(path).expect("load calendar");
+    let year = cal.create_year_calendar(2025);
 
     let days = year.get_all_days();
     assert!(!days.is_empty(), "expected non-empty year");

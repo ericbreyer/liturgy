@@ -1,4 +1,5 @@
 name = "USA"
+cal_type = "OrdinaryForm"
 
 # ---------- Feasts ----------
 # US-specific feast days and memorials

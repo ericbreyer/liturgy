@@ -14,7 +14,8 @@ use axum::{
     response::{Json, Response},
     routing::{get, post},
 };
-use calendar_calc::{YearCalendarHandle, calender::GenericCalendarHandle};
+use calendar_calc::{calender::YearCalendarHandle, GenericCalendarHandle54, GenericCalendarHandle62, GenericCalendarHandleOf};
+use delegate::delegate;
 use indexmap::IndexMap;
 use ordo::{Vespers, VespersOrdo, ordo_repo::OrdoRepo};
 use serde::{Deserialize, Serialize};
@@ -31,6 +32,36 @@ use types::{DayDescription, DayRank62, TrivialDayRank};
 use crate::web::WebConfig;
 
 type SharedCalendarHandle = Arc<DynCalendarHandle>;
+
+pub enum DynGenericCalendarHandle {
+    SixtyTwo(GenericCalendarHandle62),
+    FiftyFour(GenericCalendarHandle54),
+    OrdinaryForm(GenericCalendarHandleOf),
+}
+
+impl DynGenericCalendarHandle {
+    delegate! {
+        to match self {
+            DynGenericCalendarHandle::SixtyTwo(cal) => cal,
+            DynGenericCalendarHandle::FiftyFour(cal) => cal,
+            DynGenericCalendarHandle::OrdinaryForm(cal) => cal,
+        } {
+            pub fn name(&self) -> &str;
+            pub fn commemoration_interpretation(&self) -> &str;
+            pub fn suggest_feast_names(&self, name: &str) -> Vec<(String, f32)>;
+
+            #[expr($.map(|(info, rank)| (
+                info.name.to_string(),
+                info.date_rule.to_string(),
+                rank.to_string(),
+                info.color.clone().to_string(),
+            )))]
+            pub fn get_feast_info(&self, name: &str) -> Result<(String, String, String, String), anyhow::Error>;
+        }
+    }
+
+}
+
 pub enum DynCalendarHandle {
     Trivial(YearCalendarHandle<TrivialDayRank>),
     SixtyTwo(YearCalendarHandle<DayRank62>),
@@ -101,7 +132,7 @@ impl DynCalendarHandle {
 /// Shared application state
 #[derive(Clone)]
 pub struct AppState {
-    pub gen_calendars: Arc<RwLock<IndexMap<String, GenericCalendarHandle>>>,
+    pub gen_calendars: Arc<RwLock<IndexMap<String, DynGenericCalendarHandle>>>,
     pub year_calendars: Arc<RwLock<HashMap<(String, i32), SharedCalendarHandle>>>,
     pub ordo_repo: Arc<RwLock<Option<OrdoRepo>>>,
     pub config: WebConfig,
@@ -364,6 +395,7 @@ async fn load_default_calendars(state: &AppState) -> Result<()> {
         ("54", "54.toml", vec![]),
         ("of", "of.toml", vec![]),
         ("ef", "ef.toml", vec![]),
+        ("monastic", "62-monastic.toml", vec![]),
         ("of-us", "of.toml", vec!["of-us-extensions.toml"]),
     ];
 
@@ -374,10 +406,28 @@ async fn load_default_calendars(state: &AppState) -> Result<()> {
             .map(|ext| format!("{}/{}", state.config.calendar_data_dir, ext))
             .collect();
         if std::path::Path::new(&path).exists() {
-            match GenericCalendarHandle::load_with_extensions(
-                &path,
-                extensions_paths.iter().collect::<Vec<_>>().as_slice(),
-            ) {
+            let gen_calendar = match name {
+                "54" => {
+                    GenericCalendarHandle54::load_with_extensions(
+                        &path,
+                        extensions_paths.iter().collect::<Vec<_>>().as_slice(),
+                    ).map(DynGenericCalendarHandle::FiftyFour)
+                }
+                "ef" | "monastic" => {
+                    GenericCalendarHandle62::load_with_extensions(
+                        &path,
+                        extensions_paths.iter().collect::<Vec<_>>().as_slice(),
+                    ).map(DynGenericCalendarHandle::SixtyTwo)
+                }
+                _ => {
+                    GenericCalendarHandleOf::load_with_extensions(
+                        &path,
+                        extensions_paths.iter().collect::<Vec<_>>().as_slice(),
+                    ).map(DynGenericCalendarHandle::OrdinaryForm)
+                }
+            };
+
+            match gen_calendar {
                 Ok(calendar) => {
                     calendars.insert(name.to_string(), calendar);
                     println!("✅ Loaded calendar: {name} from {path}");
@@ -419,11 +469,17 @@ async fn get_year_calendar(
     // Try to generate the year calendar if not found
     let gen_calendars = state.gen_calendars.read().await;
     if let Some(gen_calendar) = gen_calendars.get(name) {
-        // Choose which concrete year calendar to create based on calendar name
-        let year_calendar: DynCalendarHandle = match name {
-            "ef" => DynCalendarHandle::SixtyTwo(gen_calendar.create_year_calendar_62(year)),
-            "54" => DynCalendarHandle::Trivial(gen_calendar.create_year_calendar_54(year)),
-            _ => DynCalendarHandle::Trivial(gen_calendar.create_year_calendar_of(year)),
+        // Choose which concrete year calendar to create based on calendar type
+        let year_calendar: DynCalendarHandle = match gen_calendar {
+            DynGenericCalendarHandle::SixtyTwo(cal) => {
+                DynCalendarHandle::SixtyTwo(cal.create_year_calendar(year))
+            }
+            DynGenericCalendarHandle::FiftyFour(cal) => {
+                DynCalendarHandle::Trivial(cal.create_year_calendar(year))
+            }
+            DynGenericCalendarHandle::OrdinaryForm(cal) => {
+                DynCalendarHandle::Trivial(cal.create_year_calendar(year))
+            }
         };
         drop(gen_calendars);
         let arc_cal = Arc::new(year_calendar);
@@ -640,15 +696,14 @@ async fn api_search_feasts(
                 // For each fuzzy match, try to get feast info
                 for (feast_name, score) in feast_names.iter().take(6) {
                     // Limit to 6 results for cleaner display
-                    if let Ok((info, rankstr)) = calendar.get_feast_info(feast_name) {
+                    if let Ok((name, date, rank, color)) = calendar.get_feast_info(feast_name) {
                         let result = SearchResult {
                             name: feast_name.clone(),
-                            description: info.to_string(),
-                            date: info.date_rule.to_string().into(), /* Convert date rule to
-                                                                      * string */
-                            rank: rankstr.to_string(),
+                            description: name,
+                            date: Some(date),
+                            rank,
                             score: *score,
-                            color: info.color.clone().to_string(),
+                            color,
                         };
                         results.push(result);
                     } else {
@@ -678,11 +733,11 @@ async fn api_generate_calendar(
 
     match calendars.get(&name) {
         Some(calendar) => {
-            // Pick appropriate concrete year calendar based on calendar name
-            let year_calendar_csv = match name.as_str() {
-                "ef" => calendar.create_year_calendar_62(2025).generate_csv(),
-                "54" => calendar.create_year_calendar_54(2025).generate_csv(),
-                _ => calendar.create_year_calendar_of(2025).generate_csv(),
+            // Pick appropriate concrete year calendar based on calendar type
+            let year_calendar_csv = match calendar {
+                DynGenericCalendarHandle::SixtyTwo(cal) => cal.create_year_calendar(2025).generate_csv(),
+                DynGenericCalendarHandle::FiftyFour(cal) => cal.create_year_calendar(2025).generate_csv(),
+                DynGenericCalendarHandle::OrdinaryForm(cal) => cal.create_year_calendar(2025).generate_csv(),
             };
             let data = match params.format.as_deref() {
                 Some("csv") | None => year_calendar_csv,
@@ -800,7 +855,7 @@ mod tests {
         let response = api_list_calendars(State(state)).await;
         assert!(response.0.success);
         let data = response.0.data.unwrap();
-        assert_eq!(data.len(), 4); // Expecting 4 calendars (including 1954)
+        assert_eq!(data.len(), 5); // Expecting 4 calendars (including 1954)
         let mut expecting_to_see = HashSet::from([
             "1954 Roman Calendar",
             "1962 Roman Calendar",

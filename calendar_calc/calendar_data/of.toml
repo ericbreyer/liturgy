@@ -1,5 +1,6 @@
 name = "Ordinary Form of the Roman Calendar"
 commemoration_interpretation = "Optional Memorial"
+cal_type = "OrdinaryForm"
 # ---------- Seasons ----------
 # The liturgical year starts with the First Sunday of Advent
 
@@ -613,7 +614,7 @@ name = "St. Casimir"
 date_rule = "Fixed(3,4)"
 rank = "IV"
 color = "White"
-titles = []
+titles = ["Confessor"]
 day_type = "feast"
 
 [[feasts]]

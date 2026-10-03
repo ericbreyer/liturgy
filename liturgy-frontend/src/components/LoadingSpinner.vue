@@ -20,7 +20,6 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 .loading-container {
   display: flex;
   flex-direction: column;

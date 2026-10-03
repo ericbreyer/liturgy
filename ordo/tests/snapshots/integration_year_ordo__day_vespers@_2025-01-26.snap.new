@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"dominica-iii-after-epiphany\", \"dominica-of-time-after-epiphany\"]"
+expression: s.0
+---
+2025-01-26
+Second Vespers of Dominica III after Epiphany:
+Vespers:
+  Antiphons:   Ordinary of Time after Epiphany (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Ordinary of Time after Epiphany (or Psalter)
+  Hymn:        Ordinary of Time after Epiphany (or Psalter)
+  Verse:       Ordinary of Time after Epiphany (or Psalter)
+  Magnificat:  Proper
+  Collect:     Proper

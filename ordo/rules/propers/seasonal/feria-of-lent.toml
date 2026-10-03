@@ -1,0 +1,6 @@
+id = "feria-of-advent"
+name = "Feria of Advent"
+
+[vespers]
+magnificat_antiphon = "Proper"
+collect = "Proper"

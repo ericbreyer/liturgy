@@ -2,10 +2,15 @@ use std::fmt::Debug;
 mod office_component;
 pub mod ordo_repo;
 mod vespers;
+mod title_classification;
+mod location_formats;
+mod concurring_vespers;
+pub mod rule_provider;
+pub mod toml_rule_provider;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use types::{DayDescription, DayRank, DayRank62, TrivialDayRank};
+use types::{DayDescription, DayRank62, TrivialDayRank};
 
 pub use crate::{ordo_repo::OrdoRepo, vespers::Vespers};
 
@@ -28,7 +33,7 @@ impl Debug for Location {
             Location::Common(s) => write!(f, "Common of {s}"),
             Location::Proper => write!(f, "Proper"),
             Location::Psalter => write!(f, "Psalter"),
-            Location::Ordinary(s) => write!(f, "Psalter (Ordinary of {s})"),
+            Location::Ordinary(s) => write!(f, "Ordinary of {s} (or Psalter)"),
             Location::Sunday(Some(s)) => write!(f, "of Sunday ({s})"),
             Location::Sunday(None) => write!(f, "of Sunday"),
             Location::Octave(s) => write!(f, "of {s}"),

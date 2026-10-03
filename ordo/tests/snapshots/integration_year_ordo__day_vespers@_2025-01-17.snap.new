@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"st--anthony--abbot\", \"st--anthony\"]"
+expression: s.0
+---
+2025-01-17
+Vespers of St. Anthony, Abbot:
+Vespers:
+  Antiphons:   Ordinary of Time after Epiphany (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Martyrs
+  Hymn:        Common of Martyrs
+  Verse:       Common of Martyrs
+  Magnificat:  Common of Martyrs
+  Collect:     Proper

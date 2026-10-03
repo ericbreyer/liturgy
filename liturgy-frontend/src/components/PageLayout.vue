@@ -38,13 +38,11 @@ function handleBack() {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
-
 .page-layout {
-  /* width: var(--layout-fixed-width); */
-  max-width: 100vw; /* Fallback for very small screens */
+  width: 100%;
+  min-width: 0;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0;
   min-height: 100%;
   box-sizing: border-box;
 }
@@ -79,13 +77,14 @@ function handleBack() {
 .page-title {
   font-size: 24px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin: 0;
   flex: 1;
 }
 
 .page-content {
   flex: 1;
+  min-width: 0;
 }
 
 .external-links {
@@ -103,10 +102,6 @@ function handleBack() {
 }
 
 @media (max-width: 768px) {
-  .page-layout {
-    padding: 0 16px;
-  }
-
   .page-header {
     padding: 12px 0;
     margin-bottom: 16px;
@@ -123,10 +118,6 @@ function handleBack() {
 }
 
 @media (max-width: 480px) {
-  .page-layout {
-    padding: 0 12px;
-  }
-
   .page-header {
     flex-direction: column;
     align-items: flex-start;

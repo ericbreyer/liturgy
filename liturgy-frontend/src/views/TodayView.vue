@@ -254,7 +254,12 @@ async function loadDayInfo() {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
+
+.view-container {
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+}
 
 /* TodayView-specific overrides (keep truly local rules here) */
 .header-content {
@@ -267,6 +272,8 @@ async function loadDayInfo() {
 
 .header-text {
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .header-title {
@@ -291,7 +298,8 @@ async function loadDayInfo() {
 }
 
 .header-controls {
-  flex-shrink: 0;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .background-loading {
@@ -299,6 +307,7 @@ async function loadDayInfo() {
   top: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
   z-index: 1000;
 }
 
@@ -309,6 +318,7 @@ async function loadDayInfo() {
 }
 
 .content-area {
+  min-width: 0;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -350,7 +360,7 @@ async function loadDayInfo() {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
-    padding: 16px;
+    padding: 0;
   }
   .header-title {
     font-size: 24px;
@@ -366,9 +376,8 @@ async function loadDayInfo() {
 }
 
 @media (max-width: 480px) {
-  .header-content {
+  .view-header {
     padding: 12px;
-    border-radius: 4px;
   }
   .header-title {
     font-size: 20px;

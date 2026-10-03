@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"the-seven-holy-founders-of-the-order-of-servants-of-the-blessed-virgin-mary--confessors\", \"the-seven-holy-founders-of-the-order-of-servants-of-the-blessed-virgin-mary\"]"
+expression: s.0
+---
+2025-02-12
+Vespers of The Seven Holy Founders of the Order of Servants of the Blessed Virgin Mary, Confessors:
+Vespers:
+  Antiphons:   Ordinary of Time after Epiphany (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

@@ -40,7 +40,6 @@ const iconMap = {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 .error-display {
   display: flex;
   align-items: center;

@@ -69,7 +69,6 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 .skeleton-container {
   display: flex;
   flex-direction: column;

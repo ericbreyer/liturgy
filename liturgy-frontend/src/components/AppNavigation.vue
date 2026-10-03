@@ -235,8 +235,6 @@ export default {}
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
-
 .app-nav {
   background: var(--surface-primary);
   border-bottom: 1px solid var(--border-primary);
@@ -249,6 +247,7 @@ export default {}
 .nav-container {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   gap: 12px;
   max-width: var(--layout-fixed-width-wide);
   margin: 0 auto;
@@ -263,6 +262,7 @@ export default {}
 
 .nav-bottom-row {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
@@ -271,13 +271,14 @@ export default {}
 
 .nav-links {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   background: var(--surface-secondary);
   border-radius: 12px;
   padding: 6px;
   justify-content: center;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
 }
 
 /* hide mobile topbar by default on desktop */
@@ -289,7 +290,13 @@ export default {}
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
+  flex: 1 1 360px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nav-date-picker :deep(.date-selector) {
+  width: 100%;
 }
 
 .nav-date-picker.invisible {
@@ -297,8 +304,9 @@ export default {}
 }
 
 .nav-calendar-selection {
-  flex-shrink: 0;
-  min-width: 200px;
+  flex: 0 1 280px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 
@@ -344,9 +352,8 @@ export default {}
 
 .nav-label {
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 768px) {
@@ -362,11 +369,14 @@ export default {}
 
   .nav-date-picker {
     order: 1;
+    flex: none;
+    width: 100%;
     justify-content: center;
   }
 
   .nav-calendar-selection {
     order: 2;
+    flex: none;
     width: 100%;
     max-width: 400px;
     min-width: unset;
@@ -395,6 +405,7 @@ export default {}
     padding: 10px 14px;
     justify-content: flex-start;
     background: transparent;
+    min-width: 0;
   }
 
   .nav-label {
@@ -419,28 +430,6 @@ export default {}
     padding: 8px 0;
   }
 
-  .nav-label {
-    display: none; /* keep collapsed labels hidden on very small widths unless menu open */
-  }
-
-  /* When the mobile menu is open, show labels in the vertical list */
-  .nav-links.mobile-open .nav-label {
-    display: inline-block;
-    font-size: 14px;
-    color: var(--text-primary);
-  }
-
-  .nav-item {
-    flex-direction: row;
-    gap: 0;
-    justify-content: center;
-    padding: 12px 8px;
-    min-width: 48px;
-  }
-
-  .nav-icon {
-    font-size: 18px;
-  }
 }
 
 /* Mobile topbar and dropdown styles */
@@ -479,29 +468,5 @@ export default {}
     transform: rotate(90deg);
   }
 
-  /* Mobile dropdown: collapse nav-links into a vertical list */
-  .nav-links {
-    transition:
-      max-height 0.25s ease,
-      opacity 0.2s ease;
-    overflow: hidden;
-    max-height: 999px; /* default for wider screens */
-  }
-
-  .nav-links.mobile-open {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 8px;
-    max-height: 1000px;
-    opacity: 1;
-  }
-
-  /* When closed on narrow screens, we keep the existing layout; no extra rules needed */
-
-  .nav-item {
-    justify-content: flex-start;
-    padding: 10px 12px;
-  }
 }
 </style>

@@ -38,7 +38,6 @@ const sizeClasses = computed(() => ({
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 .feast-meta {
   display: flex;
   align-items: center;

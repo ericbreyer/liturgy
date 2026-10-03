@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import useSeo from '../composables/useSeo'
 import { api, type DayInfo } from '../services/api'
 import LiturgicalTable from '../components/LiturgicalTable.vue'
@@ -39,25 +39,29 @@ const {
   route,
 } = useDateNavigation('Today')
 
+function localDateString(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
 // Get week dates centered around displayed date
 const weekDates = computed(() => {
   if (!displayedDate.value) return []
 
   const centerDateString = displayedDate.value
   const [year, month, day] = centerDateString.split('-').map(Number)
-  const centerDate = new Date(year, month - 1, day)
   const dates = []
 
-  for (let i = -1; i <= 7; i++) {
-    const date = new Date(centerDate.getTime() + i * 24 * 60 * 60 * 1000)
+  for (let offset = -1; offset <= 7; offset++) {
+    const date = new Date(year, month - 1, day + offset)
+    const dateString = localDateString(date)
     dates.push({
-      dateString: date.toISOString().split('T')[0],
+      dateString,
       displayDate: date.toLocaleDateString('en-US', {
         weekday: 'short',
         month: 'short',
         day: 'numeric',
       }),
-      isSelected: date.toISOString().split('T')[0] === centerDateString,
+      isSelected: dateString === centerDateString,
     })
   }
   return dates
@@ -69,45 +73,38 @@ const displayedCalendarInfos = computed(() => {
 })
 
 async function loadWeekInfo() {
-  // Prevent multiple simultaneous calls
-  if (loading.value) {
-    return
-  }
+  abortController.value?.abort()
+  abortController.value = null
 
   if (selectedCalendars.value.length === 0) {
+    loading.value = false
     displayedWeekData.value = null
     displayedCalendars.value = []
     return
   }
 
-  // Cancel previous request and create a controller for this request
-  if (abortController.value) {
-    try {
-      abortController.value.abort()
-    } catch (e) {
-      // ignore
-    }
-  }
+  const requestedDate = selectedDate.value
+  const requestedCalendars = [...selectedCalendars.value]
   const currentController = new AbortController()
   abortController.value = currentController
   try {
     loading.value = true
+    error.value = ''
     const newWeekMap: Record<string, Record<string, DayInfo>> = {}
 
     // Compute dates around the NEW selectedDate, not the old displayedDate
-    const [year, month, day] = selectedDate.value.split('-').map(Number)
-    const centerDate = new Date(year, month - 1, day)
+    const [year, month, day] = requestedDate.split('-').map(Number)
 
     // Create per-date promises so we can fetch all dates in parallel (each date still parallelizes calendars)
     const datePromises: Array<Promise<{ dateString: string; dayMap: Record<string, DayInfo> | null }>> = []
-    for (let i = -1; i <= 7; i++) {
-      const currentDate = new Date(centerDate.getTime() + i * 24 * 60 * 60 * 1000)
-      const dateString = currentDate.toISOString().split('T')[0]
+    for (let offset = -1; offset <= 7; offset++) {
+      const currentDate = new Date(year, month - 1, day + offset)
+      const dateString = localDateString(currentDate)
 
       const datePromise = (async () => {
         const dayMap: Record<string, DayInfo> = {}
 
-        const promises = selectedCalendars.value.map(async (calendarName) => {
+        const promises = requestedCalendars.map(async (calendarName) => {
           const [dayYear, dayMonth, dayDay] = dateString.split('-').map(Number)
           try {
             const dayInfo = await api.getDayInfo(
@@ -148,22 +145,23 @@ async function loadWeekInfo() {
       if (dr.dayMap) newWeekMap[dr.dateString] = dr.dayMap
     }
 
-    if (!abortController.value.signal.aborted) {
+    if (abortController.value === currentController && !currentController.signal.aborted) {
       // Only update displayed state when new data is successfully loaded
       displayedWeekData.value = newWeekMap
-      displayedCalendars.value = [...selectedCalendars.value]
-      displayedDate.value = selectedDate.value
+      displayedCalendars.value = requestedCalendars
+      displayedDate.value = requestedDate
 
       // Also update the original weekInfoMap for compatibility
       weekInfoMap.value = newWeekMap
     }
   } catch (err: any) {
-    if (err.name !== 'AbortError') {
+    if (abortController.value === currentController && !currentController.signal.aborted && err.name !== 'AbortError') {
       error.value = err instanceof Error ? err.message : 'Could not load week info'
     }
   } finally {
-    if (!abortController.value?.signal.aborted) {
+    if (abortController.value === currentController) {
       loading.value = false
+      abortController.value = null
     }
   }
 }
@@ -205,6 +203,11 @@ onMounted(async () => {
       "Weekly liturgical calendar showing a 9-day window around the selected date, including feasts, ranks, and commemorations.",
     path: '/week',
   })
+})
+onUnmounted(() => {
+  abortController.value?.abort()
+  abortController.value = null
+  loading.value = false
 })
 </script>
 
@@ -263,13 +266,12 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 
 .view-container {
-  /* width: var(--layout-fixed-width); */
-  max-width: 100vw; /* Fallback for very small screens */
+  min-width: 0;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 var(--layout-padding);
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -291,6 +293,8 @@ onMounted(async () => {
 
 .header-text {
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .header-title {
@@ -315,7 +319,8 @@ onMounted(async () => {
 }
 
 .header-controls {
-  flex-shrink: 0;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .day-cards {
@@ -339,6 +344,7 @@ onMounted(async () => {
   top: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
   z-index: 1000;
 }
 
@@ -349,6 +355,7 @@ onMounted(async () => {
 }
 
 .content-area {
+  min-width: 0;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -392,7 +399,7 @@ onMounted(async () => {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
-    padding: 16px;
+    padding: 0;
   }
 
   .header-title {
@@ -416,9 +423,8 @@ onMounted(async () => {
 }
 
 @media (max-width: 480px) {
-  .header-content {
+  .view-header {
     padding: 12px;
-    border-radius: 8px;
   }
 
   .header-title {

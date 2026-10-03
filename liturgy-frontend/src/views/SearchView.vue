@@ -128,14 +128,14 @@ useSeo({
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 
 .search-view {
-  /* width: var(--layout-fixed-width); */
-  max-width: 100vw; /* Fallback for very small screens */
+  min-width: 0;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 var(--layout-padding);
+  padding: 0;
   box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .search-container {
@@ -159,7 +159,9 @@ useSeo({
   border: 2px solid var(--border-primary);
   border-radius: 8px;
   font-size: 16px;
-  min-width: 200px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .search-input:focus {
@@ -282,13 +284,15 @@ useSeo({
 
 .calendar-columns {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   align-items: flex-start;
 }
 
 .calendar-column {
-  flex: 1;
-  min-width: 280px;
+  flex: 1 1 280px;
+  min-width: 0;
+  max-width: 100%;
   background: var(--surface-secondary);
   border-radius: 12px;
   overflow: hidden;
@@ -325,7 +329,7 @@ useSeo({
 .results-grid {
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
 }
 
 .result-card {
@@ -348,6 +352,7 @@ useSeo({
 }
 
 .result-title {
+  min-width: 0;
   margin: 0;
   color: var(--text-primary);
   font-size: 16px;
@@ -422,7 +427,8 @@ useSeo({
   }
 
   .search-input {
-    min-width: 100%;
+    width: 100%;
+    flex: auto;
   }
 
   .calendar-columns {
@@ -431,7 +437,8 @@ useSeo({
   }
 
   .calendar-column {
-    min-width: 100%;
+    width: 100%;
+    flex: auto;
   }
 
   .result-header {
@@ -442,6 +449,22 @@ useSeo({
 
   .result-score {
     align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-container,
+  .search-help,
+  .calendar-results {
+    padding: 12px;
+  }
+
+  .search-box {
+    margin-bottom: 16px;
+  }
+
+  .calendar-columns {
+    gap: 12px;
   }
 }
 </style>

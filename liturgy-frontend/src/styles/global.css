@@ -24,6 +24,7 @@
 
   /* Layout tokens */
   --layout-max-width: 1200px;
+  --layout-fixed-width-wide: 1400px;
   --layout-padding: 1rem;
   --layout-gap: 1rem;
   --layout-fixed-width: 1200px;
@@ -80,14 +81,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-}
-
-/* Utility layout container used throughout components */
-.page-layout {
-  padding: var(--layout-padding);
-  max-width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
 }
 
 /* Fixed-width system with responsive fallbacks */
@@ -240,16 +233,7 @@ button {
   font-weight: 400;
 }
 
-main {
-  flex: 1;
-  padding: 20px;
-  max-width: var(--layout-fixed-width);
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-footer {
+.site-footer {
   background: var(--surface-primary);
   color: var(--text-secondary);
   text-align: center;
@@ -258,12 +242,12 @@ footer {
   border-top: 1px solid var(--border-primary);
 }
 
-footer p {
+.site-footer p {
   margin: 0;
   font-size: 13px;
 }
 
-footer code {
+.site-footer code {
   background: var(--surface-secondary);
   padding: 2px 4px;
   border-radius: 2px;
@@ -288,9 +272,6 @@ footer code {
   .header-subtitle {
     font-size: 11px;
   }
-  main {
-    padding: 16px;
-  }
 }
 
 /* End of global.css */
@@ -308,7 +289,6 @@ a,
   text-decoration: none;
   color: var(--accent-color);
   transition: 0.24s ease;
-  padding: 3px;
 }
 
 @media (hover: hover) {
@@ -316,13 +296,4 @@ a,
     background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
   }
 }
-
-@media (min-width: 1240px) {
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--layout-gap);
-  }
-}
-
 /* End app-level overrides */

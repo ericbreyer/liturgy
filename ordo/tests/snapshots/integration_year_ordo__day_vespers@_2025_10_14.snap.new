@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"st--callistus-i--pope-and-martyr\", \"st--callistus-i\"]"
+expression: s.0
+---
+2025-10-14
+Vespers of St. Callistus I, Pope and Martyr:
+Vespers:
+  Antiphons:   Ordinary of Time after Pentecost (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper

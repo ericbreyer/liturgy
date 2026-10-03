@@ -2067,3 +2067,13 @@ color = "Red"
 of_our_lord = true
 titles = []
 day_type = "feast"
+
+# January 1 is the Christmas octave day as well as a Marian solemnity.
+# The Holy Name optional memorial and other fixed Lord feasts stay sanctoral.
+# Movable Marian memorials remain sanctoral, not seasonal ferias.
+[cycle_overrides]
+"The Nativity of our Lord Jesus Christ" = "temporal"
+"Solemnity of Mary, the Holy Mother of God" = "temporal"
+"The Epiphany of the Lord" = "temporal"
+"Blessed Virgin Mary, Mother of the Church" = "sanctoral"
+"The Immaculate Heart of the Blessed Virgin Mary" = "sanctoral"

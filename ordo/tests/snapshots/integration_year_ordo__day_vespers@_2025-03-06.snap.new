@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"feria-v-after-start-of-lent\", \"feria-of-lent\"]"
+expression: s.0
+---
+2025-03-06
+Vespers of Feria V after start of Lent:
+Vespers:
+  Antiphons:   Ordinary of Quinquagesima (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Ordinary of Quinquagesima (or Psalter)
+  Hymn:        Ordinary of Quinquagesima (or Psalter)
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

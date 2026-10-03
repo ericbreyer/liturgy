@@ -1,0 +1,10 @@
+id = "ash-wednesday"
+name = "Ash Wednesday"
+
+[vespers]
+antiphons = "Ordinary of Quinquagesima"
+chapter = "Ordinary of Quinquagesima"
+hymn = "Ordinary of Quinquagesima"
+verse = "Proper"
+magnificat_antiphon = "Proper"
+collect = "Proper"

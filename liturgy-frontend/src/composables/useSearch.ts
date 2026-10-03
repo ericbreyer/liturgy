@@ -47,18 +47,18 @@ export function useSearch() {
     const query = state.value.query.trim()
     if (!query) return
 
+    abortController?.abort()
+    abortController = null
+
     // Check if any calendars are selected
     if (selectedCalendars.value.length === 0) {
       state.value.error = 'Please select at least one calendar to search'
+      state.value.loading = false
       return
     }
 
-    // Cancel any ongoing search
-    if (abortController) {
-      abortController.abort()
-    }
-
-    abortController = new AbortController()
+    const currentController = new AbortController()
+    abortController = currentController
     state.value.loading = true
     state.value.error = null
     state.value.hasSearched = true
@@ -70,7 +70,7 @@ export function useSearch() {
       const searchPromises = selectedCalendars.value.map(async (calendarName) => {
         try {
           console.log(`Searching in ${calendarName}...`)
-          const results = await api.searchFeasts(calendarName, query)
+          const results = await api.searchFeasts(calendarName, query, currentController.signal)
           console.log(`Found ${results.length} results in ${calendarName}:`, results)
           return results.map((result) => ({
             ...result,
@@ -85,7 +85,7 @@ export function useSearch() {
       const allResults = await Promise.all(searchPromises)
 
       // Check if request was aborted
-      if (abortController.signal.aborted) return
+      if (abortController !== currentController || currentController.signal.aborted) return
 
       // Flatten and deduplicate results
       const flatResults = allResults.flat()
@@ -94,13 +94,16 @@ export function useSearch() {
       console.log(`Final unique results:`, uniqueResults)
 
       state.value.results = uniqueResults
-      state.value.loading = false
     } catch (error) {
-      if (abortController.signal.aborted) return
+      if (abortController !== currentController || currentController.signal.aborted) return
 
       state.value.error = error instanceof Error ? error.message : 'Search failed'
-      state.value.loading = false
       state.value.results = []
+    } finally {
+      if (abortController === currentController) {
+        state.value.loading = false
+        abortController = null
+      }
     }
   }
 
@@ -109,6 +112,8 @@ export function useSearch() {
       abortController.abort()
     }
 
+    abortController = null
+    state.value.loading = false
     state.value.results = []
     state.value.error = null
     state.value.hasSearched = false

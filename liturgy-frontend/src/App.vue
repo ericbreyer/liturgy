@@ -27,6 +27,11 @@ const pageHeaders: Record<string, { title: string; subtitle: string; icon: strin
     subtitle: 'Find liturgies, saints, and celebrations',
     icon: '🔍',
   },
+  Nerd: {
+    title: 'Cycle Comparison',
+    subtitle: 'Sanctoral calendars',
+    icon: '📜',
+  },
   About: {
     title: 'About',
     subtitle: 'About this project and resources',
@@ -41,7 +46,7 @@ const currentHeader = computed(() => {
 </script>
 
 <template>
-  <div id="app">
+  <div class="app-shell">
     <header class="page-header">
       <div class="header-content">
         <h2 class="header-title">
@@ -54,7 +59,7 @@ const currentHeader = computed(() => {
 
     <AppNavigation />
 
-    <main>
+    <main class="app-main">
       <router-view />
     </main>
 
@@ -119,7 +124,21 @@ const currentHeader = computed(() => {
 </template>
 
 <style>
-@import './styles/liturgical.css';
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: 20px var(--layout-padding);
+}
 
 .site-footer {
   margin-top: 32px;
@@ -136,8 +155,9 @@ const currentHeader = computed(() => {
   gap: 16px;
   flex-wrap: wrap;
 }
-.footer-left { display:flex; gap:12px; align-items:center }
-.footer-links a { margin-left: 12px; color: var(--text-secondary); text-decoration: none }
+.footer-left { display:flex; gap:12px; align-items:center; flex-wrap:wrap; min-width:0 }
+.footer-links { display:flex; flex-wrap:wrap; gap:12px }
+.footer-links a { color: var(--text-secondary); text-decoration: none }
 .social-list {
   list-style: none;
   padding: 0;
@@ -148,6 +168,6 @@ const currentHeader = computed(() => {
 }
 .social-list a { color: var(--text-secondary); text-decoration: none; display:inline-flex; gap:8px; align-items:center }
 .icon { width: 18px; height: 18px }
-.footer-meta { color: var(--text-secondary); font-size: 13px; text-align: center; margin-top: 12px }
+.footer-meta { color: var(--text-secondary); font-size: 13px; text-align: center; margin-top: 12px; overflow-wrap:anywhere }
 .visually-hidden { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden }
 </style>

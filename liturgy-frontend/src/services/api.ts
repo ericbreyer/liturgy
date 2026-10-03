@@ -93,6 +93,18 @@ export interface SearchResult {
   color: string
 }
 
+export type SourceCycle = 'sanctoral' | 'temporal'
+
+export interface CycleFeast {
+  name: string
+  description: string
+  date_rule: string
+  date: string | null
+  rank: string
+  color: string
+  titles: string[]
+}
+
 export interface CalendarStats {
   year: number
   total_days: number
@@ -173,6 +185,21 @@ class ApiClient {
     throw new Error(response.error || 'Failed to fetch year calendar')
   }
 
+  async getCalendarCycle(
+    name: string,
+    cycle: SourceCycle,
+    year: number,
+    signal?: AbortSignal,
+  ): Promise<CycleFeast[]> {
+    const response = await this.fetch<CycleFeast[]>(
+      `/calendars/${encodeURIComponent(name)}/cycles/${cycle}/${year}`,
+      signal,
+    )
+    signal?.throwIfAborted()
+    if (response.success && response.data) return response.data
+    throw new Error(response.error || 'Failed to fetch calendar cycle')
+  }
+
   // Accept an optional AbortSignal so callers can cancel the request.
   async getDayInfo(
     name: string,
@@ -200,9 +227,10 @@ class ApiClient {
     return { ...this._metrics }
   }
 
-  async searchFeasts(name: string, query: string): Promise<SearchResult[]> {
+  async searchFeasts(name: string, query: string, signal?: AbortSignal): Promise<SearchResult[]> {
     const response = await this.fetch<SearchResult[]>(
       `/calendars/${name}/search?q=${encodeURIComponent(query)}`,
+      signal,
     )
     if (response.success && response.data) {
       return response.data

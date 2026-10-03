@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"st--raphael-archangel\"]"
+expression: s.0
+---
+2025-10-24
+Vespers of St. Raphael Archangel:
+Vespers:
+  Antiphons:   Ordinary of Time after Pentecost (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

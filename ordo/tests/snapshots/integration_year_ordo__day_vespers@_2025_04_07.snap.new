@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"feria-ii-of-passion-week\", \"feria-of-passiontide\"]"
+expression: s.0
+---
+2025-04-07
+Vespers of Feria II of Passion Week:
+Vespers:
+  Antiphons:   Ordinary of Passiontide (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Ordinary of Passiontide (or Psalter)
+  Hymn:        Ordinary of Passiontide (or Psalter)
+  Verse:       Ordinary of Passiontide (or Psalter)
+  Magnificat:  Ordinary of Passiontide (or Psalter)
+  Collect:     of Sunday

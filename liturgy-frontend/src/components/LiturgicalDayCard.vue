@@ -82,7 +82,6 @@ function getCommemorationInterpretation(calendarName: string): string {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 
 /* Component-specific overrides only. Shared selectors (feast-title, liturgical-color-bar, commemoration-count, day-number) live in liturgical.css */
 .liturgical-day-card {

@@ -1,9 +1,4 @@
-use std::{
-    collections::HashMap,
-    env,
-    fs::{self, ReadDir},
-    path::{Path, PathBuf},
-};
+use std::path::Path;
 
 use anyhow::{Context, Result, bail};
 use serde::Deserialize;
@@ -12,15 +7,19 @@ use types::{CommemorationType, ConcuringVespersAction, DayRank62Office, Liturgic
 use crate::{
     Location,
     office_component::{OfficeComponentFamily, map_office_component, populate_defaults},
+    rule_provider::{RuleProvider, office_key_for_rank},
+    toml_rule_provider::TomlRuleProvider,
+    title_classification::TitleClassifier,
+    concurring_vespers::ConcurringVespersResolution,
+    location_formats,
     vespers::{
         OrdinaryVespersSources, ProperVespersSources, Vespers, VespersCommemoration,
         VespersCommemorationOrdo, VespersOrdo,
     },
 };
 
-#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
-struct OrdoRuleToml {
+struct ProperRuleToml {
     id: Option<String>,
     name: Option<String>,
     common: Option<String>,
@@ -28,125 +27,45 @@ struct OrdoRuleToml {
     first_vespers: Option<ProperVespersSources>,
 }
 
-// Office representation: similar metadata to `OrdoRuleToml` but contains the
-// validated/owned `OrdinaryVespersSources` so the repo can retain additional
-// office-level metadata in the future.
-#[derive(Debug, Clone)]
-struct OrdoOffice {
-    vespers: OrdinaryVespersSources,
+#[derive(Debug, Deserialize)]
+struct OfficeRuleToml {
+    vespers: Option<OrdinaryVespersSources>,
 }
 
+/// The main ordo repository, decoupled from any specific rule storage implementation.
+///
+/// Uses a RuleProvider abstraction to support different data sources (TOML files,
+/// databases, APIs, etc.) without coupling the business logic to storage details.
 pub struct OrdoRepo {
-    feasts: HashMap<String, OrdoRuleToml>,
-    offices: HashMap<String, OrdoOffice>,
+    rules: Box<dyn RuleProvider>,
 }
 
 impl OrdoRepo {
+    /// Create an OrdoRepo with a custom RuleProvider.
+    pub fn with_provider(rules: Box<dyn RuleProvider>) -> Self {
+        OrdoRepo { rules }
+    }
+
+    /// Load rules from the filesystem using the TomlRuleProvider.
     pub fn load_from_dir<P: AsRef<Path>>(dir: P) -> Result<Self> {
-        let mut propers = HashMap::new();
-        let mut offices = HashMap::new();
-
-        // Resolve relative paths against the crate's manifest dir so tests can use
-        // relative paths.
-        let rules_dir: PathBuf = if dir.as_ref().is_absolute() {
-            dir.as_ref().to_path_buf()
-        } else {
-            let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-            let candidate1 = manifest.join(dir.as_ref());
-            let candidate2 = manifest
-                .parent()
-                .map(|p| p.join(dir.as_ref()))
-                .unwrap_or(candidate1.clone());
-            // Prefer the first candidate that exists, otherwise use candidate1
-            if candidate2.exists() {
-                candidate2
-            } else {
-                candidate1
-            }
-        };
-        eprintln!("OrdoRepo: loading rules from {}", rules_dir.display());
-
-        let Ok(subdirs) = fs::read_dir(rules_dir.join("propers")) else {
-            bail!(
-                "failed to read propers subdirectory in {}",
-                rules_dir.display()
-            );
-        };
-
-        propers.extend(
-            subdirs
-                .into_iter()
-                .flatten()
-                .map(|s| s.path())
-                .inspect(|p| eprintln!("OrdoRepo: processing proper dir {}", p.display()))
-                .filter(|s| s.is_dir())
-                .map(fs::read_dir)
-                .filter_map(Result::ok)
-                .flat_map(ReadDir::flatten)
-                .map(|e| e.path())
-                .filter(|p| p.extension().and_then(|s| s.to_str()) == Some("toml"))
-                .map(|p| fs::read_to_string(p.clone()).map(|s| (p, s)))
-                .inspect(|r| {
-                    if let Err(err) = r {
-                        panic!("OrdoRepo: failed to read proper file: {err}");
-                    }
-                })
-                .filter_map(Result::ok)
-                .map(|(p, s)| toml::from_str::<OrdoRuleToml>(&s).map(|r| (p, r)))
-                .inspect(|r| {
-                    if let Err(err) = r {
-                        panic!("OrdoRepo: failed to parse proper file: {err}");
-                    }
-                })
-                .filter_map(Result::ok)
-                .map(|(p, r)| {
-                    (
-                        slug(p.file_stem().and_then(|osstr| osstr.to_str()).unwrap()),
-                        r,
-                    )
-                }),
-        );
-
-        let Ok(entries) = fs::read_dir(rules_dir.join("offices")) else {
-            bail!(
-                "failed to read offices subdirectory in {}",
-                rules_dir.display()
-            );
-        };
-        offices.extend(
-            entries
-                .flatten()
-                .map(|e| e.path())
-                .filter(|p| p.extension().and_then(|s| s.to_str()) == Some("toml"))
-                .map(fs::read_to_string)
-                .inspect(|r| {
-                    if let Err(err) = r {
-                        eprintln!("OrdoRepo: failed to read proper file: {err}");
-                    }
-                })
-                .filter_map(Result::ok)
-                .map(|s| toml::from_str::<OrdoRuleToml>(&s))
-                .inspect(|r| {
-                    if let Err(err) = r {
-                        eprintln!("OrdoRepo: failed to parse proper file: {err}");
-                    }
-                })
-                .filter_map(Result::ok)
-                .filter_map(|r| (r.id.clone().or_else(|| r.name.clone()).map(|id| (id, r))))
-                .map(|(id, r)| (id, r.vespers.and_then(|v| v.validate().ok())))
-                .inspect(|(id, v)| {
-                    if v.is_none() {
-                        eprintln!("OrdoRepo: office {id} missing or invalid vespers table");
-                    }
-                })
-                .filter_map(|(id, v)| v.map(|v| (id, v)))
-                .map(|(id, v)| (slug(&id), OrdoOffice { vespers: v })),
-        );
-
+        let provider = TomlRuleProvider::load_from_dir(dir)?;
         Ok(OrdoRepo {
-            feasts: propers,
-            offices,
+            rules: Box::new(provider),
         })
+    }
+
+    /// Parse a proper rule from raw TOML string.
+    fn parse_proper_rule(toml_str: &str) -> Result<ProperRuleToml> {
+        toml::from_str(toml_str)
+            .context("failed to parse proper rule TOML")
+    }
+
+    /// Parse an office rule from raw TOML bytes.
+    fn parse_office_rule(toml_bytes: &[u8]) -> Result<OfficeRuleToml> {
+        let toml_str = std::str::from_utf8(toml_bytes)
+            .context("office rule TOML is not valid UTF-8")?;
+        toml::from_str(toml_str)
+            .context("failed to parse office rule TOML")
     }
 
     fn retrieve_vespers_components(
@@ -161,11 +80,11 @@ impl OrdoRepo {
             season,
             octave,
             if first_vespers {
-                |o| o.first_vespers.clone()
+                |o: &ProperRuleToml| o.first_vespers.clone()
             } else {
-                |o| o.vespers.clone()
+                |o: &ProperRuleToml| o.vespers.clone()
             },
-            |o| o.vespers.clone(),
+            |o: &OfficeRuleToml| o.vespers.clone().unwrap_or_default(),
         )
         .context(format!(
             "retrieving vespers components for day {} failed",
@@ -267,43 +186,33 @@ impl OrdoRepo {
         day: &LiturgicalUnit<types::DayRank62>,
         season: &str,
         octave: Option<&str>,
-        prop_comp_map: fn(&OrdoRuleToml) -> Option<F::ProperSourceType>,
-        ord_comp_map: fn(&OrdoOffice) -> F::OrdinarySourceType,
+        prop_comp_map: fn(&ProperRuleToml) -> Option<F::ProperSourceType>,
+        ord_comp_map: fn(&OfficeRuleToml) -> F::OrdinarySourceType,
     ) -> Result<(F::LocationType, Vec<String>)> {
         let feast_keys = get_feast_keys(day, season, octave);
 
-        let (proper, common) = feast_keys
-            .clone()
-            .into_iter()
-            .find_map(|fk| {
-                self.feasts
-                    .get(&fk)
-                    .map(|r| (prop_comp_map(r), r.common.as_deref()))
-            })
-            .unwrap_or((None, None));
+        let (proper, common) = if let Some(matched) = self.rules.get_proper_rule(&feast_keys)? {
+            let toml_str = std::str::from_utf8(&matched.toml_bytes)
+                .with_context(|| format!("proper rule '{}' is not valid UTF-8", matched.id))?;
+            let rule = Self::parse_proper_rule(toml_str)
+                .with_context(|| format!("parsing proper rule '{}' failed", matched.id))?;
+            (prop_comp_map(&rule), matched.common.or(rule.common))
+        } else {
+            (Option::<F::ProperSourceType>::None, None)
+        };
 
         // Ensure `common` is owned so we can safely pass a reference below without
         // returning a reference to a temporary.
-        let common = common.map_or_else(
-            || Self::obtain_common(day),
-            std::string::ToString::to_string,
-        );
+        let common = common.unwrap_or_else(|| Self::obtain_common(day));
 
-        // office: use the canonical office kind (Sunday, Feastial, Semifestial,
-        // Ordinary, Ferial)
-        let office_key = match day.rank.office {
-            DayRank62Office::Sunday => "office-sunday".to_string(),
-            DayRank62Office::Feastial => "office-feastial".to_string(),
-            DayRank62Office::Semifestial => "office-semifestial".to_string(),
-            DayRank62Office::Ordinary => "office-ordinary".to_string(),
-            DayRank62Office::Ferial => "office-ferial".to_string(),
-        };
+        // Get the office key for this day's rank
+    let office_key = office_key_for_rank(&day.rank.office);
 
-        // retrieve office; it must exist and have a vespers table
-        let office_vespers =
-            ord_comp_map(self.offices.get(&office_key).unwrap_or_else(|| {
-                panic!("office {office_key} must exist and have vespers table")
-            }));
+        // Retrieve the office rule from the provider
+        let office_toml_bytes = self.rules.get_office_rule(office_key)
+            .context(format!("office rule '{}' not found", office_key))?;
+        let office_rule = Self::parse_office_rule(&office_toml_bytes)?;
+        let office_vespers = ord_comp_map(&office_rule);
 
         get_components_proper_and_ordinary_generic::<F>(
             proper.unwrap_or_default(),
@@ -518,4 +427,156 @@ fn into_location_with_inherited(
         }
         _ => bail!("unrecognized location token: {}", loc),
     })
+}
+
+#[cfg(test)]
+mod proper_resolution_tests {
+    use super::*;
+    use crate::rule_provider::MatchedProperRule;
+
+    const OFFICE: &str = r#"
+[vespers]
+antiphons = "Psalter"
+psalms = "Psalter"
+chapter = "Common"
+hymn = "Ferial"
+verse = "Common"
+magnificat_antiphon = "Ferial"
+collect = "Common"
+"#;
+
+    struct FixtureProvider {
+        proper: Option<MatchedProperRule>,
+    }
+
+    impl RuleProvider for FixtureProvider {
+        fn get_proper_rule(&self, _: &[String]) -> Result<Option<MatchedProperRule>> {
+            Ok(self.proper.clone())
+        }
+
+        fn get_office_rule(&self, key: &str) -> Result<Vec<u8>> {
+            assert_eq!(key, "office-feastial");
+            Ok(OFFICE.as_bytes().to_vec())
+        }
+
+        fn list_proper_keys(&self) -> Result<Vec<String>> {
+            Ok(Vec::new())
+        }
+
+        fn list_office_keys(&self) -> Result<Vec<String>> {
+            Ok(vec!["office-feastial".to_string()])
+        }
+    }
+
+    fn day() -> LiturgicalUnit<types::DayRank62> {
+        LiturgicalUnit {
+            desc: "Fixture Saint".into(),
+            rank: types::DayRank62::new(types::DayRank62Office::Feastial, "I"),
+            date: "2026-12-25".parse().unwrap(),
+            color: "White".into(),
+            day_kind: types::DayKind::Feast("Fixture Saint".into()),
+            titles: vec!["Confessor".into()],
+        }
+    }
+
+    fn repo(proper: Option<&str>) -> OrdoRepo {
+        OrdoRepo::with_provider(Box::new(FixtureProvider {
+            proper: proper.map(|raw| MatchedProperRule {
+                id: "fixture-proper".to_string(),
+                common: None,
+                toml_bytes: raw.as_bytes().to_vec(),
+            }),
+        }))
+    }
+
+    #[test]
+    fn partial_proper_overrides_only_specified_components() {
+        let repo = repo(Some(r#"
+common = "Fixture Common"
+[vespers]
+antiphons = "Proper"
+collect = "Proper"
+"#));
+        let (office, _) = repo.retrieve_vespers_components(&day(), "Advent", None, false).unwrap();
+        assert_eq!(office.antiphons, Location::Proper);
+        assert_eq!(office.collect, Location::Proper);
+        assert_eq!(office.psalms, Location::Psalter);
+        assert_eq!(office.chapter, Location::Common("Fixture Common".to_string()));
+        assert_eq!(office.verse, Location::Common("Fixture Common".to_string()));
+        assert_eq!(office.hymn, Location::Ordinary("Advent".to_string()));
+    }
+
+    #[test]
+    fn first_and_ordinary_vespers_use_their_own_proper_sections() {
+        let repo = repo(Some(r#"
+[first_vespers]
+antiphons = "Proper"
+[vespers]
+collect = "Proper"
+"#));
+        let (first, _) = repo.retrieve_vespers_components(&day(), "Christmas", None, true).unwrap();
+        let (ordinary, _) = repo.retrieve_vespers_components(&day(), "Christmas", None, false).unwrap();
+        assert_eq!(first.antiphons, Location::Proper);
+        assert_eq!(first.collect, Location::Common("Confessors (Non-Bishop)".to_string()));
+        assert_eq!(ordinary.antiphons, Location::Psalter);
+        assert_eq!(ordinary.collect, Location::Proper);
+    }
+
+    #[test]
+    fn missing_match_or_office_section_keeps_ordinary_fallbacks() {
+        for proper in [None, Some("common = 'Fixture Common'"), Some("[vespers]\ncollect = 'Proper'")] {
+            let repo = repo(proper);
+            let (office, _) = repo.retrieve_vespers_components(&day(), "Advent", Some("Christmas"), true).unwrap();
+            assert_eq!(office.antiphons, Location::Psalter);
+            assert_eq!(office.hymn, Location::Octave("Christmas".to_string()));
+            let expected_common = if proper == Some("common = 'Fixture Common'") {
+                "Fixture Common"
+            } else {
+                "Confessors (Non-Bishop)"
+            };
+            assert_eq!(office.collect, Location::Common(expected_common.to_string()));
+        }
+    }
+
+    #[test]
+    fn invalid_proper_data_reports_the_rule_instead_of_silently_falling_back() {
+        for raw in [vec![0xff], b"[vespers".to_vec()] {
+            let repo = OrdoRepo::with_provider(Box::new(FixtureProvider {
+                proper: Some(MatchedProperRule {
+                    id: "broken-proper".to_string(),
+                    common: None,
+                    toml_bytes: raw,
+                }),
+            }));
+            let error = repo.retrieve_vespers_components(&day(), "Advent", None, false).unwrap_err();
+            assert!(format!("{error:#}").contains("broken-proper"));
+        }
+    }
+
+    #[test]
+    fn provider_common_takes_precedence_over_embedded_and_inferred_common() {
+        let repo = OrdoRepo::with_provider(Box::new(FixtureProvider {
+            proper: Some(MatchedProperRule {
+                id: "fixture-proper".to_string(),
+                common: Some("Provider Common".to_string()),
+                toml_bytes: b"common = 'Embedded Common'\n[vespers]\nchapter = 'Common'".to_vec(),
+            }),
+        }));
+        let (office, _) = repo.retrieve_vespers_components(&day(), "Advent", None, false).unwrap();
+        assert_eq!(office.chapter, Location::Common("Provider Common".to_string()));
+        assert_eq!(office.collect, Location::Common("Provider Common".to_string()));
+    }
+
+    #[test]
+    fn canonical_christmas_rule_supplies_first_and_second_vespers() {
+        let repo = OrdoRepo::load_from_dir(Path::new(env!("CARGO_MANIFEST_DIR")).join("rules")).unwrap();
+        let mut christmas = day();
+        christmas.desc = "The Nativity of our Lord Jesus Christ".into();
+        let (first, _) = repo.retrieve_vespers_components(&christmas, "Christmas", None, true).unwrap();
+        let (second, _) = repo.retrieve_vespers_components(&christmas, "Christmas", None, false).unwrap();
+        assert_eq!(first.psalms, Location::Sunday(Some("w.116".to_string())));
+        assert_eq!(second.psalms, Location::Proper);
+        assert_eq!(first.antiphons, Location::Proper);
+        assert_eq!(second.antiphons, Location::Proper);
+    }
 }

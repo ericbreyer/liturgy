@@ -94,25 +94,25 @@ describe('useDateNavigation', () => {
     })
   })
 
-  it('should go to previous week (Week view)', () => {
+  it('should roll back one day (Week view)', () => {
     const { goToPrevious } = useDateNavigation('Week')
 
     goToPrevious()
 
     expect(mockPush).toHaveBeenCalledWith({
       name: 'Week',
-      query: { date: '2024-12-18' },
+      query: { date: '2024-12-24' },
     })
   })
 
-  it('should go to next week (Week view)', () => {
+  it('should roll forward one day (Week view)', () => {
     const { goToNext } = useDateNavigation('Week')
 
     goToNext()
 
     expect(mockPush).toHaveBeenCalledWith({
       name: 'Week',
-      query: { date: '2025-01-01' },
+      query: { date: '2024-12-26' },
     })
   })
 

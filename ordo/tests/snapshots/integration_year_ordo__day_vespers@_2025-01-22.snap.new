@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"ss--vincent-and-anastasius--martyrs\", \"ss--vincent-and-anastasius\"]"
+expression: s.0
+---
+2025-01-22
+Vespers of Ss. Vincent and Anastasius, Martyrs:
+Vespers:
+  Antiphons:   Ordinary of Time after Epiphany (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Martyrs
+  Hymn:        Common of Martyrs
+  Verse:       Common of Martyrs
+  Magnificat:  Common of Martyrs
+  Collect:     Proper

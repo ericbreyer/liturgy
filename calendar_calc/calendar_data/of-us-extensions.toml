@@ -195,3 +195,7 @@ rank = "I"
 color = "White"
 titles = []
 day_type = "feast"
+
+# This particular feria is an observance, not a saint's feast.
+[cycle_overrides]
+"Day of Prayer for the Legal Protection of Unborn Children" = "temporal"

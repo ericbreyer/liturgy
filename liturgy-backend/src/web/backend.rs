@@ -15,6 +15,7 @@ use axum::{
     routing::{get, post},
 };
 use calendar_calc::{calender::YearCalendarHandle, GenericCalendarHandle54, GenericCalendarHandle62, GenericCalendarHandleOf};
+use calendar_calc::calender::generic_calendar::{CalendarCycle, CycleFeast};
 use delegate::delegate;
 use indexmap::IndexMap;
 use ordo::{Vespers, VespersOrdo, ordo_repo::OrdoRepo};
@@ -49,6 +50,7 @@ impl DynGenericCalendarHandle {
             pub fn name(&self) -> &str;
             pub fn commemoration_interpretation(&self) -> &str;
             pub fn suggest_feast_names(&self, name: &str) -> Vec<(String, f32)>;
+            pub fn cycle_feasts(&self, cycle: CalendarCycle, year: i32) -> Vec<CycleFeast>;
 
             #[expr($.map(|(info, rank)| (
                 info.name.to_string(),
@@ -261,6 +263,7 @@ fn create_api_router() -> Router<AppState> {
         .route("/calendars", get(api_list_calendars))
         .route("/calendars/{name}", get(api_get_calendar))
         .route("/calendars/{name}/year/{year}", get(api_get_year))
+        .route("/calendars/{name}/cycles/{cycle}/{year}", get(api_get_cycle))
         .route(
             "/calendars/{name}/day/{year}/{month}/{day}",
             get(api_get_day),
@@ -585,6 +588,28 @@ async fn api_get_calendar(
     }
 }
 
+async fn api_get_cycle(
+    Path((name, cycle, year)): Path<(String, String, String)>,
+    State(state): State<AppState>,
+) -> Json<ApiResponse<Vec<CycleFeast>>> {
+    let Ok(parsed_year) = year.parse::<i32>() else {
+        return Json(ApiResponse::error(format!("Invalid year: {year}; expected 1..9999")));
+    };
+    if !(1..=9999).contains(&parsed_year) {
+        return Json(ApiResponse::error(format!("Invalid year: {year}; expected 1..9999")));
+    }
+    let cycle = match cycle.as_str() {
+        "sanctoral" => CalendarCycle::Sanctoral,
+        "temporal" => CalendarCycle::Temporal,
+        _ => return Json(ApiResponse::error(format!("Unknown cycle: '{cycle}'"))),
+    };
+    let calendars = state.gen_calendars.read().await;
+    match calendars.get(&name) {
+        Some(calendar) => Json(ApiResponse::success(calendar.cycle_feasts(cycle, parsed_year))),
+        None => Json(ApiResponse::error(format!("Calendar '{name}' not found"))),
+    }
+}
+
 #[derive(Serialize)]
 struct YearCalendarData {
     calendar_name: String,
@@ -825,6 +850,133 @@ mod tests {
     use test_case::{test_case, test_matrix};
 
     use super::*;
+
+    async fn cycle_route_response(state: &AppState, path: &str) -> Value {
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let router = create_router(state.clone());
+        let server = tokio::spawn(async move { axum::serve(listener, router).await.unwrap() });
+        let response = reqwest::get(format!("http://{address}{path}")).await.unwrap();
+        let response_status = response.status();
+        let body = response.json().await;
+        server.abort();
+        assert_eq!(response_status, reqwest::StatusCode::OK);
+        body.unwrap()
+    }
+
+    async fn cycle_test_state() -> AppState {
+        let state = AppState::new(WebConfig {
+            calendar_data_dir: format!("{}/../calendar_calc/calendar_data", env!("CARGO_MANIFEST_DIR")),
+            frontend_dir: None,
+            ..Default::default()
+        });
+        load_default_calendars(&state).await.unwrap();
+        assert_eq!(state.gen_calendars.read().await.len(), 5);
+        state
+    }
+
+    #[test_matrix(["54", "ef", "monastic", "of", "of-us"], ["sanctoral", "temporal"], [1, 2026, 9999])]
+    #[tokio::test]
+    async fn test_api_cycle_loaded_calendars(name: &str, cycle: &str, year: i32) {
+        let state = cycle_test_state().await;
+        let response = cycle_route_response(&state, &format!("/api/calendars/{name}/cycles/{cycle}/{year}")).await;
+        assert_eq!(response["success"], true, "{response}");
+        assert!(response["error"].is_null());
+        let feasts: Vec<CycleFeast> = serde_json::from_value(response["data"].clone()).unwrap();
+        assert!(!feasts.is_empty());
+        assert!(state.year_calendars.read().await.is_empty());
+    }
+
+    #[test_case("missing/cycles/sanctoral/2026", "Calendar 'missing' not found"; "unknown calendar")]
+    #[test_case("of/cycles/unknown/2026", "Unknown cycle: 'unknown'"; "unknown cycle")]
+    #[test_case("of/cycles/Sanctoral/2026", "Unknown cycle: 'Sanctoral'"; "case sensitive cycle")]
+    #[test_case("of/cycles/sanctoral/0", "Invalid year: 0; expected 1..9999"; "zero year")]
+    #[test_case("of/cycles/temporal/-1", "Invalid year: -1; expected 1..9999"; "negative year")]
+    #[test_case("of/cycles/temporal/10000", "Invalid year: 10000; expected 1..9999"; "year above maximum")]
+    #[test_case("of/cycles/sanctoral/2147483647", "Invalid year: 2147483647; expected 1..9999"; "maximum integer")]
+    #[test_case("of/cycles/sanctoral/2147483648", "Invalid year: 2147483648; expected 1..9999"; "integer overflow")]
+    #[test_case("of/cycles/sanctoral/not-a-year", "Invalid year: not-a-year; expected 1..9999"; "nonnumeric year")]
+    #[tokio::test]
+    async fn test_api_cycle_errors(path: &str, error: &str) {
+        let state = cycle_test_state().await;
+        let response = cycle_route_response(&state, &format!("/api/calendars/{path}")).await;
+        assert_eq!(response["success"], false);
+        assert!(response["data"].is_null());
+        assert_eq!(response["error"], error);
+        assert!(state.year_calendars.read().await.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_api_cycle_extensions() {
+        let state = cycle_test_state().await;
+        let base = cycle_route_response(&state, "/api/calendars/of/cycles/sanctoral/2026").await;
+        let extended = cycle_route_response(&state, "/api/calendars/of-us/cycles/sanctoral/2026").await;
+        assert_eq!(base["success"], true);
+        assert_eq!(extended["success"], true);
+        let base: Vec<CycleFeast> = serde_json::from_value(base["data"].clone()).unwrap();
+        let extended: Vec<CycleFeast> = serde_json::from_value(extended["data"].clone()).unwrap();
+        assert!(!base.iter().any(|feast| feast.name == "St. Elizabeth Ann Seton"));
+        let feast = extended.iter().find(|feast| feast.name == "St. Elizabeth Ann Seton").unwrap();
+        assert_eq!(feast.date.as_deref(), Some("2026-01-04"));
+        assert_eq!(feast.titles, ["Religious"]);
+        assert!(state.year_calendars.read().await.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_api_cycle_source_definitions() {
+        let state = AppState::new(WebConfig {
+            frontend_dir: None,
+            ..Default::default()
+        });
+        let calendar = GenericCalendarHandleOf::load_from_str(r#"
+name = "Source Test"
+cal_type = "OrdinaryForm"
+[[feasts]]
+name = "Suppressed Saint"
+date_rule = "Fixed(12,25)"
+rank = "III"
+color = "red"
+titles = ["Martyr"]
+[[feasts]]
+name = "Christmas"
+date_rule = "PreviousYear(Fixed(12,25))"
+rank = "I"
+color = "white"
+[[feasts]]
+name = "Easter"
+date_rule = "Easter"
+rank = "I"
+color = "white"
+[cycle_overrides]
+Christmas = "temporal"
+"#).unwrap();
+        state.gen_calendars.write().await.insert(
+            "source-test".to_string(), DynGenericCalendarHandle::OrdinaryForm(calendar),
+        );
+
+        let sanctoral = cycle_route_response(&state, "/api/calendars/source-test/cycles/sanctoral/2026").await;
+        assert_eq!(sanctoral["success"], true);
+        assert!(sanctoral["error"].is_null());
+        let feasts: Vec<CycleFeast> = serde_json::from_value(sanctoral["data"].clone()).unwrap();
+        assert_eq!(feasts.len(), 1);
+        assert_eq!(feasts[0].name, "Suppressed Saint");
+        assert_eq!(feasts[0].date.as_deref(), Some("2026-12-25"));
+        assert_eq!(feasts[0].description, "Suppressed Saint, Martyr");
+        assert_eq!(feasts[0].color, "red");
+        assert_eq!(feasts[0].titles, ["Martyr"]);
+        assert!(!feasts[0].rank.is_empty());
+        assert!(!feasts[0].date_rule.is_empty());
+
+        let temporal = cycle_route_response(&state, "/api/calendars/source-test/cycles/temporal/2026").await;
+        assert_eq!(temporal["success"], true);
+        let feasts: Vec<CycleFeast> = serde_json::from_value(temporal["data"].clone()).unwrap();
+        assert_eq!(feasts.len(), 2);
+        assert_eq!(feasts[0].name, "Easter");
+        assert_eq!(feasts[0].date.as_deref(), Some("2026-04-05"));
+        assert_eq!(feasts[1].name, "Christmas");
+        assert_eq!(feasts[1].date.as_deref(), Some("2026-12-25"));
+        assert!(state.year_calendars.read().await.is_empty());
+    }
 
     #[tokio::test]
     async fn test_load_default_calendars() {

@@ -53,6 +53,7 @@ function handleSelectNone() {
         @click="showCalendarDropdown = !showCalendarDropdown"
         class="dropdown-toggle"
         :disabled="loading"
+        :aria-expanded="showCalendarDropdown"
       >
         <span>{{ selectedCalendars.length }} of {{ calendars.length }} calendars selected</span>
         <span class="dropdown-arrow" :class="{ open: showCalendarDropdown }">▼</span>
@@ -102,7 +103,12 @@ function handleSelectNone() {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
+.calendar-selection {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 .calendar-selection h3 {
   margin-top: 0;
   margin-bottom: 15px;
@@ -125,6 +131,10 @@ function handleSelectNone() {
 
 .dropdown-toggle {
   width: 100%;
+  min-width: 0;
+  gap: 8px;
+  text-align: left;
+  white-space: normal;
   padding: 12px 16px;
   background: #222;
   border: 1px solid #444;
@@ -148,6 +158,7 @@ function handleSelectNone() {
 }
 
 .dropdown-arrow {
+  flex-shrink: 0;
   transition: transform 0.2s ease;
   color: var(--text-secondary);
 }
@@ -167,6 +178,9 @@ function handleSelectNone() {
   border-radius: 0 0 4px 4px;
   z-index: 1000;
   padding: 12px;
+  max-height: 60vh;
+  max-height: 60dvh;
+  overflow-y: auto;
 }
 
 .dropdown-content .selection-buttons {
@@ -184,11 +198,15 @@ function handleSelectNone() {
 
 .selection-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 15px;
 }
 
 .select-btn {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
   padding: 8px 12px;
   background: #6c757d;
   color: white;
@@ -222,7 +240,12 @@ function handleSelectNone() {
   background: #222;
 }
 
+.checkbox-label input {
+  flex-shrink: 0;
+}
+
 .checkbox-text {
+  min-width: 0;
   font-size: 14px;
   color: var(--text-primary);
 }
@@ -239,33 +262,18 @@ function handleSelectNone() {
     margin-bottom: 16px;
   }
 
-  .dropdown-toggle {
-    padding: 12px 16px;
-    font-size: 14px;
-  }
-
-  .dropdown-content {
-    padding: 12px;
-  }
-
-  .calendar-checkboxes {
-    flex-direction: column;
+  .calendar-expanded .calendar-checkboxes {
     max-height: 300px;
     overflow-y: auto;
   }
 
   .checkbox-label {
-    flex: 1;
+    flex-shrink: 0;
     padding: 10px;
     margin: 2px 0;
   }
 
-  .checkbox-text {
-    font-size: 14px;
-  }
-
   .selection-buttons {
-    flex-direction: row;
     gap: 8px;
   }
 
@@ -280,12 +288,10 @@ function handleSelectNone() {
   .dropdown-toggle {
     padding: 14px 16px;
     font-size: 16px;
-    width: 100%;
   }
 
   .dropdown-content {
     padding: 16px;
-    margin: 0 -12px;
     border-radius: 0;
   }
 

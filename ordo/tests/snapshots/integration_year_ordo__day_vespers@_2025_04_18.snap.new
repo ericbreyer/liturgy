@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"feria-vi-of-holy-week\", \"feria-of-holy-week\"]"
+expression: s.0
+---
+2025-04-18
+Vespers of Feria VI of Holy Week:
+Vespers:
+  Antiphons:   Ordinary of Holy Week (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Ordinary of Holy Week (or Psalter)
+  Hymn:        Ordinary of Holy Week (or Psalter)
+  Verse:       Ordinary of Holy Week (or Psalter)
+  Magnificat:  Ordinary of Holy Week (or Psalter)
+  Collect:     of Sunday

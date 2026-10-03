@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"feria-v-week-v-after-epiphany\", \"feria-of-time-after-epiphany\"]"
+expression: s.0
+---
+2025-02-13
+Vespers of Feria V week V after Epiphany:
+Vespers:
+  Antiphons:   Psalter
+  Psalms:      Psalter
+  Chapter:     Ordinary of Time after Epiphany (or Psalter)
+  Hymn:        Ordinary of Time after Epiphany (or Psalter)
+  Verse:       Ordinary of Time after Epiphany (or Psalter)
+  Magnificat:  Ordinary of Time after Epiphany (or Psalter)
+  Collect:     of Sunday

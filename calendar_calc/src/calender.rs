@@ -21,7 +21,7 @@ use types::{DayDescription, LiturgicalUnit};
 use crate::calender::generic_calendar::CalendarTypeProvider;
 use crate::calender::{
     feast_rank::{FeastRank54, FeastRank62, FeastRankOf, FeastRankResolver},
-    generic_calendar::{FeastRule, GenericCalendar},
+    generic_calendar::{CalendarCycle, CycleFeast, FeastRule, GenericCalendar},
     year_calendar::YearCalendar,
 };
 
@@ -94,6 +94,11 @@ impl<R: FeastRankResolver + CalendarTypeProvider> GenericCalendarHandle<R> {
     #[must_use]
     pub fn commemoration_interpretation(&self) -> &str {
         &self.0.commemoration_interpretation
+    }
+
+    #[must_use]
+    pub fn cycle_feasts(&self, cycle: CalendarCycle, year: i32) -> Vec<CycleFeast> {
+        self.0.cycle_feasts(cycle, year)
     }
 }
 

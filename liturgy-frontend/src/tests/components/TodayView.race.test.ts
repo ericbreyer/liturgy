@@ -1,21 +1,23 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { ref } from 'vue'
-
-vi.useFakeTimers()
+import { nextTick, ref } from 'vue'
+import { createHead } from '@vueuse/head'
 
 describe('TodayView race conditions', () => {
-  let selectedDateRef: any = ref('2025-09-13')
+  const selectedDateRef = ref('2025-09-13')
+  let wrapper: ReturnType<typeof mount> | undefined
 
   beforeEach(() => {
+    vi.useFakeTimers()
+    vi.resetModules()
     selectedDateRef.value = '2025-09-13'
 
     // Use runtime mocks so they can close over selectedDateRef
     vi.doMock('../../composables/useCalendarSelection', () => ({
       useCalendarSelection: () => ({
-        selectedCalendars: { value: ['default'] },
+        selectedCalendars: ref(['default']),
         loadCalendars: () => Promise.resolve(),
-        selectedCalendarInfos: { value: [{ name: 'default', commemoration_interpretation: 'Commemorations' }] },
+        selectedCalendarInfos: ref([{ name: 'default', commemoration_interpretation: 'Commemorations' }]),
       }),
     }))
 
@@ -53,7 +55,7 @@ describe('TodayView race conditions', () => {
             if (signal) {
               signal.addEventListener('abort', () => {
                 clearTimeout(t)
-                const err: any = new Error('Aborted')
+                const err = new Error('Aborted')
                 err.name = 'AbortError'
                 reject(err)
               })
@@ -65,27 +67,34 @@ describe('TodayView race conditions', () => {
   })
 
   afterEach(() => {
+    wrapper?.unmount()
+    wrapper = undefined
+    vi.clearAllTimers()
+    vi.useRealTimers()
     vi.resetAllMocks()
   })
 
   it('applies only latest response when switching dates quickly', async () => {
     // Import inside test to ensure mocks applied
     const TodayView = (await import('../../views/TodayView.vue')).default
-    const wrapper = mount(TodayView, { attachTo: document.body })
+    wrapper = mount(TodayView, { global: { plugins: [createHead()] } })
 
     // Let mount trigger the first load (for day 13)
     await Promise.resolve()
 
     // Immediately switch to day 14
     selectedDateRef.value = '2025-09-14'
+    await nextTick()
 
     // Advance timers so the fast (day 14) resolves first
-    vi.advanceTimersByTime(60)
-    await Promise.resolve()
+    await vi.advanceTimersByTimeAsync(60)
+    await nextTick()
+    expect(wrapper.text()).toContain('Feast 14')
+    expect(wrapper.text()).not.toContain('Feast 13')
 
     // Now advance more so the slow one would have resolved if not aborted
-    vi.advanceTimersByTime(200)
-    await Promise.resolve()
+    await vi.advanceTimersByTimeAsync(200)
+    await nextTick()
 
     // Check that the DOM contains 'Feast 14' and not 'Feast 13'
     const html = wrapper.html()

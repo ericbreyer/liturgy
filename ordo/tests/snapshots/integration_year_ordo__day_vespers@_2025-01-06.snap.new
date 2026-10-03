@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"the-epiphany-of-our-lord\"]"
+expression: s.0
+---
+2025-01-06
+Second Vespers of The Epiphany of our Lord:
+Vespers:
+  Antiphons:   Proper
+  Psalms:      of Sunday
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

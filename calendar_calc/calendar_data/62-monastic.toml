@@ -1840,3 +1840,11 @@ rank = "I"
 of_our_lord = true
 color = "White"
 day_type = "feast"
+
+# Fixed Christmas/Epiphany observances belong to the temporal cycle.
+[cycle_overrides]
+"The Epiphany of our Lord" = "temporal"
+"Commemoration of the Baptism of our Lord Jesus Christ" = "temporal"
+"Vigil of the Nativity of our Lord Jesus Christ" = "temporal"
+"The Nativity of our Lord Jesus Christ" = "temporal"
+"Octave Day of the Nativity of our Lord Jesus Christ" = "temporal"

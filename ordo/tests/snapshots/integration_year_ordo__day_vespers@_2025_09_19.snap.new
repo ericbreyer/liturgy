@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"st--januarius--bishop--and-companions--martyrs\", \"st--januarius\"]"
+expression: s.0
+---
+2025-09-19
+Vespers of St. Januarius, Bishop, and Companions, Martyrs:
+Vespers:
+  Antiphons:   Ordinary of Time after Pentecost (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper

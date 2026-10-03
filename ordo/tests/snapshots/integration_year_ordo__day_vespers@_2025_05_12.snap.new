@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"ss--nereus--achilleus--domitilla-and-pancras--virgin-and-martyrs\", \"ss--nereus\"]"
+expression: s.0
+---
+2025-05-12
+Vespers of Ss. Nereus, Achilleus, Domitilla and Pancras, Virgin and Martyrs:
+Vespers:
+  Antiphons:   Ordinary of Eastertide (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Martyrs
+  Hymn:        Common of Martyrs
+  Verse:       Common of Martyrs
+  Magnificat:  Common of Martyrs
+  Collect:     Proper

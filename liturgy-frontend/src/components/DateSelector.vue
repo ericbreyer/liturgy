@@ -203,6 +203,7 @@ function goToToday() {
           @change="updateDate"
           :disabled="loading"
           class="date-picker"
+          :aria-label="variant === 'month' ? 'Select month' : 'Select date'"
           :class="{ compact: compact }"
         />
       </div>
@@ -237,12 +238,13 @@ function goToToday() {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 
 .date-selector {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .date-selector.compact {
@@ -261,12 +263,8 @@ function goToToday() {
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
-}
-
-.date-controls.compact {
-  /* compact mode reduces spacing and may change wrapping on small screens */
-  gap: 8px;
-  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .nav-btn {
@@ -306,10 +304,6 @@ function goToToday() {
   display: inline-block;
 }
 
-.nav-btn .label {
-  display: inline-block;
-}
-
 .nav-btn:hover:not(:disabled) {
   background: #5a6268;
 }
@@ -323,17 +317,20 @@ function goToToday() {
   display: flex;
   align-items: center;
   position: relative;
-  flex: 1;
-  min-width: 150px;
+  flex: 1 1 180px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .date-input-container.compact {
-  min-width: 100px;
-  flex: 0 1 auto;
+  flex: 1 1 160px;
 }
 
 .date-picker {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 10px 12px;
   border: 1px solid #444;
   border-radius: 6px;
@@ -344,28 +341,17 @@ function goToToday() {
 
 .date-picker.compact {
   padding: 8px 12px;
-  font-size: 14px;
-  border: 1px solid #444;
-  border-radius: 6px;
-  background: #222;
-  color: var(--text-primary);
   text-align: center;
-  min-width: 120px;
 }
 
-.date-picker:focus,
-.date-picker.compact:focus {
+.date-picker:focus {
   outline: none;
   border-color: var(--accent-color);
 }
 
-.mobile-date {
-  display: none;
-  font-size: 14px;
-  color: var(--text-primary);
+.date-picker::-webkit-date-and-time-value {
+  min-width: 0;
   text-align: center;
-  min-width: 72px;
-  align-self: center;
 }
 
 .today-btn {
@@ -396,69 +382,26 @@ function goToToday() {
 
 /* Desktop / tablet adjustments */
 @media (max-width: 768px) {
-  .date-controls:not(.compact) {
-    align-items: stretch;
-  }
-
-  .date-controls:not(.compact) .nav-btn,
-  .date-controls:not(.compact) .today-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .date-input-container:not(.compact) {
-    min-width: unset;
-  }
-
-  /* add mobile-style topbar background and padding on smaller screens */
   .date-controls {
-    gap: 0.5rem;
     padding: 12px;
     background: #222;
     border-radius: 8px;
   }
 
-  .date-controls.compact {
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    max-width: 280px;
-    margin: 0 auto;
-  }
-
-  .nav-btn {
-    padding: 10px 14px;
-    font-size: 0.875rem;
-    min-width: 90px;
-    flex: 1;
-  }
-
-  .date-picker {
-    padding: 10px 12px;
-    font-size: 0.875rem;
-    min-width: 140px;
-  }
-
-  .today-btn {
-    padding: 10px 14px;
-    font-size: 0.875rem;
-    flex: 1;
-  }
-
-  .date-input-container {
-    flex: 2;
-    min-width: 140px;
+  .date-controls .date-picker {
+    font-size: 16px;
   }
 }
 
 /* Mobile: glyph-only mode (apply regardless of .compact) */
 @media (max-width: 480px) {
   .date-controls {
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
     align-items: center;
-    justify-content: space-between;
     gap: 8px;
     padding: 8px 10px;
-    max-width: 420px;
+    width: 100%;
     margin: 0 auto;
   }
   /* show glyphs on mobile */
@@ -485,97 +428,13 @@ function goToToday() {
     font-size: 18px;
   }
 
-  /* keep date input in the DOM but visually hidden (sr-only) so focus/click opens native picker */
-  /* Keep the native date input visible on mobile so users can interact with it directly.
-     Instead of off-screen sr-only hiding, make it a flexible inline element that fits the
-     compact/topbar mobile layout. The JS openDatePicker fallback still toggles .visible-picker
-     classes but the input should be usable without extra toggles on modern mobile browsers. */
-  .date-controls .date-input-container {
-    position: relative;
-    left: auto;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    flex: 2 1 auto;
-    min-width: 120px;
-    order: 0;
-    margin: 0 8px;
-  }
-
   .date-controls .date-picker {
-    position: relative;
-    left: auto;
-    width: 100%;
-    height: auto;
-    overflow: visible;
-    opacity: 1;
-    visibility: visible;
-    min-width: 120px;
-  }
-
-  /* classes used to temporarily reveal the input when opening the picker
-     support both adding the class to the container (.date-input-container.visible-picker)
-     or to a parent (.date-controls.visible-picker) depending on script timing. */
-  .visible-picker .date-input-container,
-  .date-input-container.visible-picker,
-  .date-controls.visible-picker .date-input-container {
-    position: static !important;
-    left: auto !important;
-    width: auto !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  .visible-picker-input,
-  .date-picker.visible-picker-input {
-    position: static !important;
-    left: auto !important;
-    width: auto !important;
-    height: auto !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  /* small adjustments for when buttons should be full width (non-compact) */
-  .date-controls:not(.compact) {
-    align-items: stretch;
-    gap: 8px;
-    padding: 16px;
-  }
-
-  .date-controls:not(.compact) .nav-btn {
-    width: 40%;
-    margin: 0;
-    padding: 12px;
-    font-size: 16px;
-  }
-
-  .date-controls:not(.compact) .date-input-container {
-    /* keep picker centered between prev/next by giving it order 0 and allowing flex growth */
-    order: 0;
-    margin: 0 8px;
-    width: auto;
-    flex: 1 1 auto;
-  }
-
-  .date-controls:not(.compact) .date-picker {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-  }
-
-  /* center the picker between the circular nav buttons */
-  .date-controls .nav-btn {
-    flex: 0 0 44px;
+    padding: 10px 6px;
   }
 
   .date-controls .today-btn {
-    flex: 0 0 44px;
-  }
-
-  h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
+    grid-column: 1 / -1;
+    justify-self: center;
   }
 }
 </style>

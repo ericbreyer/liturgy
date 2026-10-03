@@ -12,12 +12,15 @@ import FeastMeta from '../components/FeastMeta.vue'
 import { useCalendarSelection } from '../composables/useCalendarSelection'
 import { useDateNavigation } from '../composables/useDateNavigation'
 import { getColorValue, getCalendarName, getRankValue } from '../utils/liturgical'
+import { formatDate, getCurrentDate } from '../utils/dateUtils'
 
 const monthInfoMap = ref<Record<string, Record<string, DayInfo>>>({})
 const loading = ref(false)
 const error = ref<string>('')
 const selectedDetailDate = ref<string | null>(null)
 const hoveredDate = ref<string | null>(null)
+let monthLoadController: AbortController | null = null
+let isUnmounted = false
 
 // Router for URL persistence
 const router = useRouter()
@@ -38,6 +41,10 @@ const {
   route,
 } = useDateNavigation('Month')
 
+function calendarDateString(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
 // Get month year and days for calendar grid
 const monthData = computed(() => {
   const [year, month] = selectedDate.value.split('-').map(Number)
@@ -55,11 +62,11 @@ const monthData = computed(() => {
   for (let i = startDay - 1; i >= 0; i--) {
     const day = daysInPrevMonth - i
     const date = new Date(prevYear, prevMonth - 1, day)
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = calendarDateString(date)
     days.push({
       day,
       date: dateString,
-      isToday: dateString === new Date().toISOString().split('T')[0],
+      isToday: dateString === getCurrentDate(),
       isSelected: dateString === selectedDate.value,
       isOtherMonth: true,
       isPrevMonth: true,
@@ -69,11 +76,11 @@ const monthData = computed(() => {
   // current month days
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month - 1, day)
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = calendarDateString(date)
     days.push({
       day,
       date: dateString,
-      isToday: dateString === new Date().toISOString().split('T')[0],
+      isToday: dateString === getCurrentDate(),
       isSelected: dateString === selectedDate.value,
       isOtherMonth: false,
     })
@@ -85,11 +92,11 @@ const monthData = computed(() => {
   const totalCells = Math.ceil(days.length / 7) * 7
   for (let day = 1; days.length < totalCells; day++) {
     const date = new Date(nextYear, nextMonth - 1, day)
-    const dateString = date.toISOString().split('T')[0]
+    const dateString = calendarDateString(date)
     days.push({
       day,
       date: dateString,
-      isToday: dateString === new Date().toISOString().split('T')[0],
+      isToday: dateString === getCurrentDate(),
       isSelected: dateString === selectedDate.value,
       isOtherMonth: true,
       isNextMonth: true,
@@ -198,18 +205,18 @@ function getDetailedDayInfo(date: string) {
 }
 
 async function loadMonthData() {
-  if (selectedCalendars.value.length === 0 || monthDates.value.length === 0) return
-
-  // Cancel previous request and create a controller for this load
-  if ((window as any)._monthLoadController) {
-    try {
-      ;(window as any)._monthLoadController.abort()
-    } catch (e) {
-      // ignore
-    }
+  if (isUnmounted) return
+  monthLoadController?.abort()
+  monthLoadController = null
+  const requestedCalendars = [...selectedCalendars.value]
+  const requestedDates = [...monthDates.value]
+  if (requestedCalendars.length === 0 || requestedDates.length === 0) {
+    monthInfoMap.value = {}
+    loading.value = false
+    return
   }
   const currentController = new AbortController()
-  ;(window as any)._monthLoadController = currentController
+  monthLoadController = currentController
 
   loading.value = true
   error.value = ''
@@ -220,14 +227,14 @@ async function loadMonthData() {
     // Build per-date promises so all dates are loaded in parallel (each date still parallelizes calendars)
     const datePromises: Array<Promise<{ date: string; dayMap: Record<string, DayInfo> | null }>> =
       []
-    for (const date of monthDates.value) {
+    for (const date of requestedDates) {
       const datePromise = (async () => {
         if (currentController.signal.aborted) return { date, dayMap: null }
 
         const dayMap: Record<string, DayInfo> = {}
 
         // Fire all calendar requests for this date in parallel
-        const calPromises = selectedCalendars.value.map(async (calendar) => {
+        const calPromises = requestedCalendars.map(async (calendar) => {
           const [year, month, day] = date.split('-').map(Number)
           try {
             const dayInfo = await api.getDayInfo(
@@ -264,18 +271,20 @@ async function loadMonthData() {
     }
 
     const dateResults = await Promise.all(datePromises)
+    if (monthLoadController !== currentController || currentController.signal.aborted) return
     for (const dr of dateResults) {
       if (dr.dayMap) monthInfoMap.value[dr.date] = dr.dayMap
     }
     console.debug('[MonthView] finished loadMonthData')
   } catch (err) {
+    if (monthLoadController !== currentController || currentController.signal.aborted) return
     console.error('Error loading month data:', err)
     error.value = err instanceof Error ? err.message : 'Could not load month info'
   } finally {
     // Only clear loading if this controller is still the most recent
-    if ((window as any)._monthLoadController === currentController) {
+    if (monthLoadController === currentController) {
       loading.value = false
-      ;(window as any)._monthLoadController = null
+      monthLoadController = null
     }
   }
 }
@@ -304,38 +313,27 @@ watch(
 
 onMounted(async () => {
   await loadCalendars(router, currentRoute)
+  if (isUnmounted) return
   if (syncWithRoute) syncWithRoute(currentRoute)
   if (selectedCalendars.value.length > 0) loadMonthData()
-  // Set SEO for the month view using computed monthData
-  useSeo({
-    title: computed(() => `${monthData.value.monthName} ${monthData.value.year}`),
-    description: computed(
-      () => `Monthly liturgical calendar for ${monthData.value.monthName} ${monthData.value.year}. View feasts, commemorations, and liturgical colors for each day.`,
-    ),
-    path: computed(() => `/month`),
-  })
 })
 
-// When a day is selected for details, update per-day SEO so the detail panel can be indexed
-watch(
-  selectedDetailDate,
-  (newDate) => {
-    if (!newDate) return
-    // Build a human title using the first feast if available
-    const feasts = getDayFeasts(newDate)
-    const primary = feasts && feasts.length > 0 ? feasts[0].title : `Liturgical calendar for ${newDate}`
-    useSeo({
-      title: `${primary}`,
-      description: `Liturgical details for ${newDate}: ${feasts
-        .map((f) => f.title)
-        .slice(0, 3)
-        .join(', ')}`,
-      path: `/today?date=${newDate}`,
-    })
-  },
-)
+useSeo({
+  title: computed(() => selectedDetailDate.value
+    ? getDayFeasts(selectedDetailDate.value)[0]?.title || `Liturgical calendar for ${selectedDetailDate.value}`
+    : `${monthData.value.monthName} ${monthData.value.year}`),
+  description: computed(() => selectedDetailDate.value
+    ? `Liturgical details for ${selectedDetailDate.value}: ${getDayFeasts(selectedDetailDate.value)
+      .map(feast => feast.title).slice(0, 3).join(', ')}`
+    : `Monthly liturgical calendar for ${monthData.value.monthName} ${monthData.value.year}. View feasts, commemorations, and liturgical colors for each day.`),
+  path: computed(() => selectedDetailDate.value ? `/today?date=${selectedDetailDate.value}` : '/month'),
+})
 
 onUnmounted(() => {
+  isUnmounted = true
+  monthLoadController?.abort()
+  monthLoadController = null
+  loading.value = false
   document.removeEventListener('keydown', handleKeyDown)
   document.removeEventListener('click', handleClickOutside)
 })
@@ -405,7 +403,7 @@ onUnmounted(() => {
                 <div class="day-number">
                   {{ day.day }}
                   <div class="day-name mobile-only">
-                    {{ new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' }) }}
+                    {{ formatDate(day.date).split(',')[0] }}
                   </div>
                 </div>
 
@@ -440,12 +438,7 @@ onUnmounted(() => {
         <div class="detail-header">
           <h3>
             {{
-              new Date(selectedDetailDate).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })
+              formatDate(selectedDetailDate)
             }}
           </h3>
           <button @click="closeDetailPanel" class="close-button">×</button>
@@ -511,20 +504,19 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 /* Note: view-header and feast-title-row are defined in liturgical.css; kept only component-specific overrides here. */
 
-.month-view {
-  padding: 0.5rem;
+.view-container {
+  min-width: 0;
   max-width: 100%;
-  margin: 0 auto;
-  overflow-x: auto;
+  padding: 0;
 }
 
-@media (max-width: 768px) {
-  .month-view {
-    padding: 0.25rem;
-  }
+.month-view {
+  padding: 0;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .month-header {
@@ -575,11 +567,11 @@ onUnmounted(() => {
   gap: var(--layout-gap);
   align-items: flex-start;
   width: 100%;
-  max-width: 100vw;
+  min-width: 0;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 var(--layout-padding);
+  padding: 0;
   box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
@@ -628,7 +620,8 @@ onUnmounted(() => {
 
 .weekday-headers {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
   background-color: var(--surface-interactive);
   color: var(--text-primary);
   width: 100%;
@@ -650,75 +643,15 @@ onUnmounted(() => {
   border-right: none;
 }
 
-/* Mobile landscape and small tablets */
-@media (max-width: 767px) and (min-width: 640px) {
-  .weekday-headers {
-    grid-template-columns: repeat(7, minmax(120px, 1fr));
-    max-width: 100%;
-  }
-}
-
-/* Mobile portrait: Hide weekday headers when stacked */
-@media (max-width: 639px) {
-  .weekday-headers {
-    display: none;
-  }
-}
-
-.weekday-header {
-  padding: 0.75rem;
-  text-align: center;
-  font-weight: 600;
-  font-size: 0.875rem;
-}
-
-/* 
-  RESPONSIVE CALENDAR GRID SYSTEM
-  
-  This calendar uses fixed dimensions with media queries to prevent "jumpiness" 
-  when switching between months or views with different content amounts.
-  
-  Breakpoints:
-  - 1200px+: Large desktop (180px columns, 160px height)
-  - 768-1199px: Tablet landscape (140px+ columns, 120px height) 
-  - 640-767px: Mobile landscape (120px+ columns, 100px height)
-  - <640px: Mobile portrait (stacked vertically, auto height)
-  
-  Fixed dimensions prevent layout shifts based on content while 
-  maintaining responsive behavior based on screen size.
-*/
-
 .calendar-days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: 100px;
   gap: 1px;
+  min-width: 0;
   width: 100%;
   box-sizing: border-box;
   background-color: var(--border-primary);
-}
-
-/* Mobile portrait: Stack days vertically for better readability */
-@media (max-width: 639px) {
-  .calendar-days {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    max-width: 100%;
-    padding: 0 0.5rem;
-  }
-
-  .calendar-day {
-    height: auto;
-    min-height: 80px;
-    padding: 0.75rem;
-    border-radius: 0.375rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .calendar-day.other-month {
-    display: none;
-  }
 }
 
 /* Day content styles - applies to all screen sizes */
@@ -838,6 +771,7 @@ onUnmounted(() => {
 }
 
 .calendar-day {
+  min-width: 0;
   min-height: 100px;
   background-color: var(--surface-secondary);
   cursor: pointer;
@@ -867,6 +801,10 @@ onUnmounted(() => {
 
 /* Responsive sizing */
 @media (min-width: 1200px) {
+  .calendar-days {
+    grid-auto-rows: 120px;
+  }
+
   .calendar-day {
     min-height: 120px;
   }
@@ -964,12 +902,6 @@ onUnmounted(() => {
   display: none;
 }
 
-@media (max-width: 640px) {
-  .mobile-only {
-    display: block;
-  }
-}
-
 .day-feasts {
   flex: 1;
   overflow: hidden;
@@ -1059,21 +991,26 @@ onUnmounted(() => {
 /* Detail Panel Styles */
 .detail-panel {
   position: fixed;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: var(--surface-primary);
   border-radius: 4px;
   border: 1px solid var(--border-primary);
-  max-width: 500px;
-  width: 90vw;
-  max-height: 70vh;
+  width: min(500px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
   overflow: hidden;
   z-index: 1000;
 }
 
 .detail-header {
   display: flex;
+  flex-shrink: 0;
+  gap: 0.75rem;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
@@ -1082,12 +1019,15 @@ onUnmounted(() => {
 }
 
 .detail-header h3 {
+  min-width: 0;
+  overflow-wrap: anywhere;
   margin: 0;
   color: var(--text-primary);
   font-size: 1.1rem;
 }
 
 .close-button {
+  flex-shrink: 0;
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -1108,21 +1048,22 @@ onUnmounted(() => {
 }
 
 .detail-content {
+  min-height: 0;
   padding: 1rem;
   overflow-y: auto;
-  max-height: calc(70vh - 4rem);
+  overflow-wrap: anywhere;
 }
 
 .calendar-details {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .calendar-detail {
   border: 1px solid var(--border-secondary);
   border-radius: 0.375rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background-color: var(--surface-primary);
 }
 
@@ -1201,6 +1142,12 @@ onUnmounted(() => {
   text-align: end;
 }
 
+.detail-content .feast-rank {
+  font-size: 0.85rem;
+  white-space: normal;
+  line-height: 1.4;
+}
+
 .no-detail {
   text-align: center;
   color: var(--text-muted);
@@ -1208,10 +1155,6 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .month-view {
-    padding: 0.5rem;
-  }
-
   .month-layout {
     flex-direction: column;
   }
@@ -1226,13 +1169,8 @@ onUnmounted(() => {
     text-align: center;
   }
 
-  .detail-panel {
-    width: 95vw;
-    max-height: 80vh;
-  }
-
   .calendar-days {
-    min-width: 280px;
+    grid-auto-rows: 80px;
   }
 
   .calendar-day {
@@ -1270,12 +1208,13 @@ onUnmounted(() => {
 }
 
 @media (max-width: 480px) {
-  .month-view {
-    padding: 0.25rem;
+  .detail-header,
+  .detail-content {
+    padding: 12px;
   }
 
   .calendar-days {
-    min-width: 260px;
+    grid-auto-rows: 70px;
   }
 
   .calendar-day {
@@ -1314,7 +1253,7 @@ onUnmounted(() => {
 
 @media (max-width: 320px) {
   .calendar-days {
-    min-width: 240px;
+    grid-auto-rows: 60px;
   }
 
   .calendar-day {

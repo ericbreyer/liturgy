@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"the-beheading-of-st--john-the-baptist\"]"
+expression: s.0
+---
+2025-08-29
+Vespers of The Beheading of St. John the Baptist:
+Vespers:
+  Antiphons:   Ordinary of Time after Pentecost (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

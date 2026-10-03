@@ -113,10 +113,12 @@ function getCommemorationInterpretation(calendarName: string): string {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 
 /* Table-specific layout; shared feast/feast-line/color-bar styles live in liturgical.css */
 .liturgical-table-container {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   overflow-x: auto;
   border-radius: 4px;
   border: 1px solid #333;
@@ -338,10 +340,7 @@ function getCommemorationInterpretation(calendarName: string): string {
 
 @media (max-width: 480px) {
   .liturgical-table-container {
-    margin: 0 -12px 16px -12px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
+    margin-bottom: 16px;
   }
 
 

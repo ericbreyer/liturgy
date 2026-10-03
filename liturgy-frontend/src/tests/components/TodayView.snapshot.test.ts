@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
+import { createHead } from '@vueuse/head'
 import TodayView from '../../views/TodayView.vue'
 
 // Mock composables and services used by TodayView
@@ -45,18 +46,18 @@ vi.mock('../../services/api', () => ({
           color: 'green',
         },
         commemorations: [
-          {
+          [{
             desc: 'Commemoration A',
             rank: 'Memorial',
             date: '2025-09-13',
             color: 'white',
-          },
-          {
+          }, 'Commemoration'],
+          [{
             desc: 'Commemoration B',
             rank: 'Optional',
             date: '2025-09-13',
             color: 'blue',
-          },
+          }, 'Commemoration'],
         ],
       },
     }),
@@ -65,9 +66,15 @@ vi.mock('../../services/api', () => ({
 
 describe('TodayView snapshot', () => {
   it('renders consistent DOM structure', async () => {
-    const wrapper = mount(TodayView, { attachTo: document.body })
-    // Wait a tick for async mounted hooks
-    await new Promise((r) => setTimeout(r, 0))
-    expect(wrapper.html()).toMatchSnapshot()
+    const wrapper = mount(TodayView, { global: { plugins: [createHead()] } })
+    try {
+      await flushPromises()
+      expect(wrapper.text()).toContain('Test Feast')
+      expect(wrapper.text()).toContain('Commemoration A')
+      expect(wrapper.text()).toContain('Commemoration B')
+      expect(wrapper.html()).toMatchSnapshot()
+    } finally {
+      wrapper.unmount()
+    }
   })
 })

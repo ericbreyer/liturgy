@@ -16,6 +16,8 @@ use crate::calender::{
 };
 mod feast_rule;
 mod season_rule;
+mod calendar_cycle;
+pub use calendar_cycle::{CalendarCycle, CycleFeast};
 
 /// Trait for getting the expected calendar type for a FeastRankResolver
 pub trait CalendarTypeProvider: FeastRankResolver {
@@ -63,6 +65,8 @@ pub struct GenericCalendar<T: FeastRankResolver = FeastRankOf> {
     #[serde(default)]
     pub octaves: Vec<SeasonRule<DateRule>>,
     pub feasts: Vec<FeastRule<DateRule>>,
+    #[serde(default)]
+    pub cycle_overrides: HashMap<ArcStr, CalendarCycle>,
     #[serde(skip)]
     _phantom: PhantomData<T>,
 }
@@ -135,6 +139,7 @@ impl<T: FeastRankResolver + CalendarTypeProvider> GenericCalendar<T> {
 
     /// Merge additional feasts from another calendar into this one
     pub fn merge_feasts(&mut self, other: GenericCalendar<T>) {
+        self.cycle_overrides.extend(other.cycle_overrides.clone());
         // merge strategy:
         // 1. if a feast with the same name and date_rule exists, replace it
         // 2. otherwise, add the new feast to the list

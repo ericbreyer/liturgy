@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"st--elizabeth-of-hungary--queen-and-widow\", \"st--elizabeth-of-hungary\"]"
+expression: s.0
+---
+2025-11-19
+Vespers of St. Elizabeth of Hungary, Queen and Widow:
+Vespers:
+  Antiphons:   Ordinary of Time after Pentecost (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common
+  Hymn:        Common
+  Verse:       Common
+  Magnificat:  Common
+  Collect:     Proper

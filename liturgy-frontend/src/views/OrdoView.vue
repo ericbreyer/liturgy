@@ -15,10 +15,9 @@
     <div v-if="loading">Loading…</div>
 
     <section v-if="vespers">
-      <h2>Vespers</h2>
-      <div class="vespers-text">{{ vespers.name }}</div>
-      <div class="ordo-grid">
-        <div class="ordo-card" v-for="[key, val] in ordoEntries" :key="key">
+      <h2>{{ vespers.name }}</h2>
+      <div class="ordo-list">
+        <div class="ordo-item" v-for="[key, val] in ordoEntries" :key="key">
           <div class="ordo-key">{{ labelForKey(key) }}</div>
           <div class="ordo-value">{{ formatLocation(val) }}</div>
         </div>
@@ -203,8 +202,11 @@ export default {
 <style scoped>
 .ordo-view {
   max-width: 900px;
+  min-width: 0;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .ordo-view h1 {
@@ -225,9 +227,14 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .controls select {
+  min-width: 0;
+  max-width: 100%;
   padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid var(--border-primary);
@@ -284,23 +291,22 @@ section h2 {
   color: var(--text-primary);
 }
 
-.ordo-grid {
+.ordo-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.9rem 1.2rem;
+  margin-top: 1rem;
 }
 
-.ordo-card {
-  background: var(--surface-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 8px;
-  padding: 0.9rem 1rem;
+.ordo-item {
   display: grid;
+  grid-template-columns: 20ch minmax(0, 1fr);
+  grid-template-areas: "key value";
+
   gap: 0.35rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
 }
 
 .ordo-key {
+  grid-area: key;
   font-weight: 700;
   color: var(--text-secondary);
   letter-spacing: 0.01em;
@@ -308,17 +314,10 @@ section h2 {
 }
 
 .ordo-value {
+  grid-area: value;
+  min-width: 0;
   color: var(--text-primary);
   font-size: 0.98rem;
-}
-
-.vespers-text {
-  font-family: 'Georgia', serif;
-  line-height: 1.8;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  color: var(--text-primary);
-  font-size: 0.95rem;
 }
 
 .sources {
@@ -328,5 +327,19 @@ section h2 {
 .sources li {
   margin-bottom: 0.5rem;
   color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+  section {
+    margin: 1rem 0;
+    padding: 12px;
+  }
+
+  .ordo-item {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "key" "value";
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
 }
 </style>

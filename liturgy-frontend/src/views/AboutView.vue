@@ -149,15 +149,15 @@
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 
 .about-view {
-  /* width: var(--layout-fixed-width); */
-  max-width: 100vw; /* Fallback for very small screens */
+  min-width: 0;
+  max-width: 100%;
   margin: 0 auto;
-  padding: var(--layout-padding);
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .hero-section {
@@ -206,7 +206,7 @@
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: 20px;
   margin-top: 20px;
 }
@@ -308,12 +308,14 @@
 }
 .social-item a {
   display: inline-flex;
+  max-width: 100%;
   gap: 8px;
   align-items: center;
   color: var(--text-primary);
   text-decoration: none;
 }
 .social-item svg {
+  flex-shrink: 0;
   display: inline-block;
   vertical-align: middle;
   color: var(--accent-color);
@@ -328,7 +330,7 @@
 
 @media (max-width: 768px) {
   .about-view {
-    padding: 16px;
+    padding: 0;
   }
 
   .hero-title {
@@ -341,6 +343,18 @@
 
   .section h2 {
     font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 24px 0;
+    margin-bottom: 24px;
+  }
+
+  .feature-card,
+  .calendar-item {
+    padding: 12px;
   }
 }
 </style>

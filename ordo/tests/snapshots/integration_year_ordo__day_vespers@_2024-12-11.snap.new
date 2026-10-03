@@ -1,0 +1,20 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"st--damasus-i--pope-and-confessor\", \"st--damasus-i\"]"
+expression: s.0
+---
+2024-12-11
+Vespers of St. Damasus I, Pope and Confessor:
+Vespers:
+  Antiphons:   Ordinary of Advent (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper
+  Commemoration of Feria IV week II of Advent:
+    Magnificat Antiphon: Proper
+    Verse: Ordinary of Advent (or Psalter)
+    Collect: Proper

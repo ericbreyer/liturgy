@@ -3028,3 +3028,13 @@ rank = "I"
 of_our_lord = true
 color = "White"
 day_type = "feast"
+
+# The Baptism commemoration completes Epiphany; the Passiontide Marian
+# commemoration remains sanctoral despite its Easter-relative date.
+[cycle_overrides]
+"The Epiphany of our Lord" = "temporal"
+"Commemoration of the Baptism of our Lord Jesus Christ" = "temporal"
+"Vigil of the Nativity of our Lord Jesus Christ" = "temporal"
+"The Nativity of our Lord Jesus Christ" = "temporal"
+"Octave Day of the Nativity of our Lord Jesus Christ" = "temporal"
+"Commemoration of the Seven Sorrows of the Blessed Virgin Mary" = "sanctoral"

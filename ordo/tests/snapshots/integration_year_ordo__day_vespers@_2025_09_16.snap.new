@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 49
+description: "[\"ss--cornelius--pope-and-cyprian--bishop--martyrs\", \"ss--cornelius\"]"
+expression: s.0
+---
+2025-09-16
+Vespers of Ss. Cornelius, Pope and Cyprian, Bishop, Martyrs:
+Vespers:
+  Antiphons:   Ordinary of Time after Pentecost (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper

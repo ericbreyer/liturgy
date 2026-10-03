@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 74
+description: "[\"st--marcellus-i--pope-and-martyr\", \"st--marcellus-i\"]"
+expression: s.0
+---
+2025-01-16
+Vespers of St. Marcellus I, Pope and Martyr:
+Vespers:
+  Antiphons:   Ordinary of Time after Epiphany (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Common of Confessor Bishops
+  Hymn:        Common of Confessor Bishops
+  Verse:       Common of Confessor Bishops
+  Magnificat:  Common of Confessor Bishops
+  Collect:     Proper

@@ -380,12 +380,14 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@import '../styles/liturgical.css';
 
 .view-container {
-  padding: 1rem;
+  padding: 0;
+  min-width: 0;
   max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .page-header {
@@ -424,7 +426,7 @@ onMounted(() => {
 .setting-label {
   font-weight: 600;
   color: var(--text-primary);
-  min-width: 120px;
+  min-width: 0;
 }
 
 .radio-group {
@@ -437,6 +439,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 0;
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 4px;
@@ -527,11 +531,12 @@ onMounted(() => {
 
 .feasts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
   gap: 1rem;
 }
 
 .feast-card {
+  min-width: 0;
   background: var(--surface-elevated);
   border-radius: 8px;
   padding: 1rem;
@@ -597,7 +602,7 @@ onMounted(() => {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .view-container {
-    padding: 0.5rem;
+    padding: 0;
   }
 
   .feasts-grid {
@@ -677,6 +682,7 @@ onMounted(() => {
 .control-group {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -703,5 +709,22 @@ onMounted(() => {
   background: var(--accent-color);
   color: white;
   border-color: var(--accent-color);
+}
+
+@media (max-width: 480px) {
+  .novena-category,
+  .novena-settings,
+  .controls-section {
+    padding: 12px;
+  }
+
+  .novena-sections,
+  .radio-group {
+    gap: 1rem;
+  }
+
+  .feast-header > * {
+    min-width: 0;
+  }
 }
 </style>

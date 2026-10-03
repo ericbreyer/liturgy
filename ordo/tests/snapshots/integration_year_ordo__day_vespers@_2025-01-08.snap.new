@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"feria-iv-of-epiphany\", \"feria-of-epiphanytide\"]"
+expression: s.0
+---
+2025-01-08
+Vespers of Feria IV of Epiphany:
+Vespers:
+  Antiphons:   Ordinary of Epiphanytide (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Ordinary of Epiphanytide (or Psalter)
+  Hymn:        Ordinary of Epiphanytide (or Psalter)
+  Verse:       Ordinary of Epiphanytide (or Psalter)
+  Magnificat:  Proper
+  Collect:     Proper

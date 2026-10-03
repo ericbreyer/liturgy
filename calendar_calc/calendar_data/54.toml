@@ -1585,10 +1585,11 @@ titles = ["Virgin"]
 
 
 [[feasts]]
-name = "St. Mary Magdalene Penitent"
+name = "St. Mary Magdalene"
 date_rule = "Fixed(7,22)"
 rank = "double"
 color = "white"
+titles = ["Penitent"]
 
 [[feasts]]
 name = "St. Apollinaris"
@@ -3218,3 +3219,14 @@ day_type = "vigil"
 rank = "minor"
 titles = ["Apostle"]
 color = "violet"
+
+# Fixed Christmas/Epiphany observances belong to the temporal cycle.
+# Marian feasts and St. Joseph's patronage remain sanctoral even when movable.
+[cycle_overrides]
+"The Nativity of Our Lord Jesus Christ" = "temporal"
+"The Circumcision of Our Lord" = "temporal"
+"Vigil of the Epiphany" = "temporal"
+"Epiphany of Our Lord" = "temporal"
+"Vigil of the Nativity of Our Lord Jesus Christ" = "temporal"
+"Seven Sorrows of the Blessed Virgin Mary" = "sanctoral"
+"Solemnity of St. Joseph" = "sanctoral"

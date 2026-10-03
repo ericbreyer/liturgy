@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"dominica-ii-of-christmas\", \"dominica-of-christmas\"]"
+expression: s.0
+---
+2024-12-29
+Second Vespers of Dominica II of Christmas:
+Vespers:
+  Antiphons:   of Christmas
+  Psalms:      of Christmas
+  Chapter:     Proper
+  Hymn:        Proper
+  Verse:       Proper
+  Magnificat:  Proper
+  Collect:     Proper

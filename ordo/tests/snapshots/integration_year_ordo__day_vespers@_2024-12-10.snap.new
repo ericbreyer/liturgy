@@ -1,0 +1,16 @@
+---
+source: ordo/tests/integration_year_ordo.rs
+assertion_line: 65
+description: "[\"feria-iii-week-ii-of-advent\", \"feria-of-advent\"]"
+expression: s.0
+---
+2024-12-10
+Vespers of Feria III week II of Advent:
+Vespers:
+  Antiphons:   Ordinary of Advent (or Psalter)
+  Psalms:      Psalter
+  Chapter:     Ordinary of Advent (or Psalter)
+  Hymn:        Ordinary of Advent (or Psalter)
+  Verse:       Ordinary of Advent (or Psalter)
+  Magnificat:  Proper
+  Collect:     Proper
